@@ -4,7 +4,8 @@ import 'package:nyaya/app/app.dart';
 
 void main() {
   testWidgets('AC-001 shows the Nyaya home shell', (WidgetTester tester) async {
-    await tester.pumpWidget(const NyayaApp());
+    await tester.pumpWidget(const NyayaApp(splashDuration: Duration.zero));
+    await tester.pumpAndSettle();
 
     expect(find.text('Nyaya'), findsOneWidget);
     expect(find.byKey(const ValueKey('home.headline')), findsOneWidget);
@@ -20,7 +21,8 @@ void main() {
   testWidgets('AC-002 lists the three adoption steps', (
     WidgetTester tester,
   ) async {
-    await tester.pumpWidget(const NyayaApp());
+    await tester.pumpWidget(const NyayaApp(splashDuration: Duration.zero));
+    await tester.pumpAndSettle();
 
     expect(find.text('Write the spec first'), findsOneWidget);
     expect(find.text('Record design decisions'), findsOneWidget);
