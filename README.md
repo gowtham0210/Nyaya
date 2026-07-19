@@ -40,3 +40,5 @@ This repo follows Flutter's current architecture guidance:
 
 The current app is intentionally small, but the structure is now ready for
 incremental feature work.
+
+flutter run

@@ -44,3 +44,7 @@ Use one of these values in specs and plans:
 - Product roadmap: [`roadmap.md`](roadmap.md)
 - Feature: [`001-home-shell`](features/001-home-shell/spec.md)
 - ADR: [`0001-adopt-spec-driven-development`](adr/0001-adopt-spec-driven-development.md)
+
+next we want to implement this design onboarding screen 3. write pixel perfect spec so that the design is implemented extractly the the ui should be captured perfectly. also express the designs guidelines in design.md file. now you're task is to look into the image and write spec folder the exisitng templates in specs/ folder check it and create 004-onboarding-screen-3
+
+implement onboarding screen 3 with given specs in specs/features/005-onboarding-screen-3 in this repo. assets has been updated in assets/onboarding folder you can use this
