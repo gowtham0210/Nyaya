@@ -6,10 +6,14 @@ class GetStartedButton extends StatelessWidget {
     super.key,
     required this.onTap,
     this.label = 'GET STARTED',
+    this.backgroundColor = gold,
+    this.trailing,
   });
 
   final VoidCallback onTap;
   final String label;
+  final Color backgroundColor;
+  final Widget? trailing;
 
   @override
   Widget build(BuildContext context) {
@@ -19,20 +23,29 @@ class GetStartedButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: onTap,
         style: ElevatedButton.styleFrom(
-          backgroundColor: gold,
+          backgroundColor: backgroundColor,
           foregroundColor: Colors.white,
           elevation: 0,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(30),
           ),
         ),
-        child: Text(
-          label,
-          style: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w700,
-            letterSpacing: 1.5,
-          ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              label,
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w700,
+                letterSpacing: 1.5,
+              ),
+            ),
+            if (trailing != null) ...[
+              const SizedBox(width: 6),
+              trailing!,
+            ],
+          ],
         ),
       ),
     );

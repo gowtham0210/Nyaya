@@ -46,3 +46,27 @@ app.*.map.json
 
 # Claude Code worktrees
 .claude/worktrees/
+
+
+# Flutter
+.dart_tool/
+.packages
+.pub/
+build/
+
+# Android
+android/app/debug/
+android/app/profile/
+android/app/release/
+
+# Firebase local configuration
+android/app/google-services.json
+ios/Runner/GoogleService-Info.plist
+
+# IDE
+.idea/
+*.iml
+
+# OS
+.DS_Store
+Thumbs.db

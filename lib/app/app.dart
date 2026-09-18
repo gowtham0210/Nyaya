@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../features/auth/presentation/sign_in_page.dart';
+import '../features/onboarding/presentation/welcome_page.dart';
 import '../features/splash/presentation/splash_bootstrap.dart';
 import 'app_session.dart';
 import 'post_sign_up_flow.dart';
@@ -24,7 +25,15 @@ class NyayaApp extends StatelessWidget {
         splashDuration: splashDuration,
         child: AppSession.isOnboarded
             ? Builder(builder: buildWiredHomePage)
-            : const SignInPage(),
+            : Builder(
+                builder: (context) => WelcomePage(
+                  onGetStarted: () => Navigator.of(context).push(
+                    MaterialPageRoute<void>(
+                      builder: (_) => const SignInPage(),
+                    ),
+                  ),
+                ),
+              ),
       ),
     );
   }
