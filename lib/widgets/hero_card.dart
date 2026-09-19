@@ -2,10 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../theme/app_colors.dart';
 
-/// Warm cream background (not dark navy) with the legal-scene photo
-/// blended in on the right — matches the reference hero design exactly.
-const _heroCream = Color(0xFFFDF3E9);
-
 class HeroCard extends StatelessWidget {
   const HeroCard({super.key, required this.onStartQuiz, required this.onExploreArticles});
 
@@ -18,7 +14,7 @@ class HeroCard extends StatelessWidget {
       height: 208,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(18),
-        color: _heroCream,
+        color: AppColors.beigeBorder,
         border: Border.all(color: AppColors.beigeBorder),
       ),
       clipBehavior: Clip.antiAlias,

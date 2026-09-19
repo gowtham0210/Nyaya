@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 
 import '../theme/app_colors.dart';
 import '../widgets/ask_nyaya_card.dart';
+import '../widgets/daily_questions_section.dart';
 import '../widgets/hero_card.dart';
 import '../widgets/learning_progress_card.dart';
 import '../widgets/nyaya_app_bar.dart';
 import '../widgets/nyaya_search_bar.dart';
 import '../widgets/quick_access_card.dart';
 import '../widgets/recommended_for_you_section.dart';
+import '../state/nyaya_tabs.dart';
 import 'placeholder_screen.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -19,6 +21,10 @@ class HomeScreen extends StatelessWidget {
         builder: (_) => PlaceholderScreen(title: title, subtitle: subtitle ?? 'This screen is coming soon.'),
       ),
     );
+  }
+
+  void _openArticles(BuildContext context) {
+    NyayaTabs.current.value = 3;
   }
 
   void _showComingSoon(BuildContext context, String feature) {
@@ -52,7 +58,7 @@ class HomeScreen extends StatelessWidget {
             const SizedBox(height: 16),
             HeroCard(
               onStartQuiz: () => _openPlaceholder(context, 'Quiz Journey'),
-              onExploreArticles: () => _openPlaceholder(context, 'Articles'),
+              onExploreArticles: () => _openArticles(context),
             ),
             const SizedBox(height: 22),
             const _SectionTitle(title: 'Continue Your Learning'),
@@ -83,7 +89,7 @@ class HomeScreen extends StatelessWidget {
                   child: QuickAccessCard(
                     icon: Icons.description_outlined,
                     label: 'Articles',
-                    onTap: () => _openPlaceholder(context, 'Articles'),
+                    onTap: () => _openArticles(context),
                   ),
                 ),
                 const SizedBox(width: 10),
@@ -106,6 +112,8 @@ class HomeScreen extends StatelessWidget {
                 ),
               ],
             ),
+            const SizedBox(height: 22),
+            const DailyQuestionsSection(),
             const SizedBox(height: 22),
             const RecommendedForYouSection(),
             const SizedBox(height: 18),
