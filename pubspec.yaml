@@ -39,6 +39,8 @@ dependencies:
   http: ^1.2.0
   # Persists the auth token between app launches.
   shared_preferences: ^2.3.2
+  # Professional typography (Playfair Display) loaded at build time.
+  google_fonts: ^6.2.1
 
 dev_dependencies:
   flutter_test:
@@ -70,6 +72,7 @@ flutter:
     - assets/images/rec_criminal_law.png
     - assets/images/rec_contract_act.png
     - assets/images/ask_nyaya_icon.png
+    - assets/images/articles_hero.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
