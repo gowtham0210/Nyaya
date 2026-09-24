@@ -3,11 +3,12 @@ import 'package:flutter/material.dart';
 import '../theme/app_colors.dart';
 
 /// Fixed card height so all Quick Access cards line up identically
-/// regardless of whether their label wraps to one or two lines.
-const double _cardHeight = 116;
+/// regardless of whether their label wraps to one, two, or (for longer
+/// translated labels, e.g. Tamil/Kannada) three lines.
+const double _cardHeight = 132;
 const double _iconContainerSize = 42;
 const double _iconSize = 23;
-const double _labelAreaHeight = 38;
+const double _labelAreaHeight = 54;
 
 class QuickAccessCard extends StatelessWidget {
   const QuickAccessCard({

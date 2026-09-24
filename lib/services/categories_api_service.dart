@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 
 import '../config/api_config.dart';
 import '../models/category.dart';
+import '../state/app_language.dart';
 import 'api_exceptions.dart';
 
 /// Calls the real NYAYA categories endpoints
@@ -32,7 +33,7 @@ class CategoriesApiService {
   Future<List<Category>> fetchCategories(String accessToken) async {
     try {
       final response = await http
-          .get(_uri('/categories'), headers: {'Authorization': 'Bearer $accessToken'})
+          .get(_uri('/categories'.withLang()), headers: {'Authorization': 'Bearer $accessToken'})
           .timeout(const Duration(seconds: 10));
       final body = _decode(response);
       _throwIfError(response, body);

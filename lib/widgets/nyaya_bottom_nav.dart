@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
+import '../localization/app_strings.dart';
 import '../theme/app_colors.dart';
 
 class NyayaBottomNav extends StatelessWidget {
@@ -11,11 +13,11 @@ class NyayaBottomNav extends StatelessWidget {
   static const _leaderboardIndex = 2;
 
   static const _items = [
-    (icon: Icons.home_rounded, label: 'Home'),
-    (icon: Icons.edit_document, label: 'Quizzes'),
-    (icon: Icons.emoji_events_rounded, label: 'Leaderboard'),
-    (icon: Icons.campaign, label: 'Articles'),
-    (icon: Icons.person_rounded, label: 'Profile'),
+    (icon: Icons.home_rounded, labelKey: 'nav_home'),
+    (icon: Icons.edit_document, labelKey: 'nav_quizzes'),
+    (icon: Icons.emoji_events_rounded, labelKey: 'nav_leaderboard'),
+    (icon: Icons.campaign, labelKey: 'nav_articles'),
+    (icon: Icons.person_rounded, labelKey: 'nav_profile'),
   ];
 
   @override
@@ -36,13 +38,14 @@ class NyayaBottomNav extends StatelessWidget {
           children: List.generate(_items.length, (i) {
             final selected = i == currentIndex;
             final item = _items[i];
+            final label = tr(item.labelKey);
             final isLeaderboard = i == _leaderboardIndex;
             final color = selected ? AppColors.navy : AppColors.muted;
             return Expanded(
               child: Semantics(
                 button: true,
                 selected: selected,
-                label: item.label,
+                label: label,
                 child: InkWell(
                   onTap: () => onTap(i),
                   child: Padding(
@@ -70,13 +73,13 @@ class NyayaBottomNav extends StatelessWidget {
                           child: FittedBox(
                             fit: BoxFit.scaleDown,
                             child: Text(
-                              item.label,
+                              label,
                               maxLines: 1,
-                              style: TextStyle(
-                                fontSize: 12.5,
+                              style: GoogleFonts.inter(
+                                fontSize: 11.5,
                                 color: color,
                                 fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
-                                fontFamily: 'serif',
+                                letterSpacing: 0.1,
                               ),
                             ),
                           ),

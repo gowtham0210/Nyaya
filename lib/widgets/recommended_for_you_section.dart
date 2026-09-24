@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 
+import '../config/api_config.dart';
+import '../localization/app_strings.dart';
 import '../repositories/categories_repository.dart';
+import '../state/app_language.dart';
+import '../screens/all_recommended_screen.dart';
 import '../screens/login_screen.dart';
 import '../screens/placeholder_screen.dart';
 import '../services/api_exceptions.dart';
@@ -12,11 +16,27 @@ enum _Status { loading, unauthenticated, error, empty, loaded }
 /// Local NYAYA visuals to pair with whatever categories the backend
 /// returns — cycled by a stable value (category id), never by matching
 /// category display text, since the backend has no image field.
-const _cardImages = [
+const categoryFallbackImages = [
   'assets/images/rec_constitution.png',
   'assets/images/rec_criminal_law.png',
   'assets/images/rec_contract_act.png',
 ];
+
+/// Splits a category name at the space that makes the two lines most even.
+(String, String) splitCategoryName(String name) {
+  var best = -1;
+  var bestWidth = name.length + 1;
+  for (var i = 0; i < name.length; i++) {
+    if (name[i] != ' ') continue;
+    final widest = i > name.length - i - 1 ? i : name.length - i - 1;
+    if (widest < bestWidth) {
+      bestWidth = widest;
+      best = i;
+    }
+  }
+  if (best == -1) return (name, '');
+  return (name.substring(0, best), name.substring(best + 1));
+}
 
 /// "Recommended for you" — entirely driven by GET /api/v1/categories via
 /// [CategoriesRepository]. There is no sample/fallback data: every state
@@ -39,6 +59,13 @@ class _RecommendedForYouSectionState extends State<RecommendedForYouSection> {
   void initState() {
     super.initState();
     _load();
+    AppLanguage.current.addListener(_load);
+  }
+
+  @override
+  void dispose() {
+    AppLanguage.current.removeListener(_load);
+    super.dispose();
   }
 
   Future<void> _load() async {
@@ -69,12 +96,6 @@ class _RecommendedForYouSectionState extends State<RecommendedForYouSection> {
     if (signedIn == true) _load();
   }
 
-  (String, String) _splitName(String name) {
-    final spaceIndex = name.indexOf(' ');
-    if (spaceIndex == -1) return (name, '');
-    return (name.substring(0, spaceIndex), name.substring(spaceIndex + 1));
-  }
-
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -82,13 +103,15 @@ class _RecommendedForYouSectionState extends State<RecommendedForYouSection> {
       children: [
         Row(
           children: [
-            const Text('Recommended for you', style: TextStyle(fontSize: 15.5, fontWeight: FontWeight.w700, color: AppColors.textPrimary)),
+            Text(tr('section_recommended_for_you'), style: const TextStyle(fontSize: 15.5, fontWeight: FontWeight.w700, color: AppColors.textPrimary)),
             const Spacer(),
             InkWell(
-              onTap: () => Navigator.of(context).push(
-                MaterialPageRoute(builder: (_) => const PlaceholderScreen(title: 'Recommended for you')),
-              ),
-              child: const Text('View All →', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: AppColors.gold)),
+              onTap: _status != _Status.loaded
+                  ? null
+                  : () => Navigator.of(context).push(
+                        MaterialPageRoute(builder: (_) => AllRecommendedScreen(items: _recommendations)),
+                      ),
+              child: Text(tr('button_view_all'), style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: AppColors.gold)),
             ),
           ],
         ),
@@ -106,21 +129,21 @@ class _RecommendedForYouSectionState extends State<RecommendedForYouSection> {
       case _Status.unauthenticated:
         return _StatusCard(
           icon: Icons.lock_outline,
-          message: 'Sign in to load your NYAYA categories.',
-          actionLabel: 'Sign in',
+          message: tr('msg_signin_categories'),
+          actionLabel: tr('button_sign_in'),
           onAction: _openSignIn,
         );
 
       case _Status.error:
         return _StatusCard(
           icon: Icons.wifi_off_rounded,
-          message: _errorMessage ?? 'Unable to load recommendations.',
-          actionLabel: 'Retry',
+          message: _errorMessage ?? tr('msg_error_recommendations_default'),
+          actionLabel: tr('button_retry'),
           onAction: _load,
         );
 
       case _Status.empty:
-        return const _StatusCard(icon: Icons.inbox_outlined, message: 'No categories available.');
+        return _StatusCard(icon: Icons.inbox_outlined, message: tr('msg_empty_categories'));
 
       case _Status.loaded:
         return ListView.separated(
@@ -130,12 +153,13 @@ class _RecommendedForYouSectionState extends State<RecommendedForYouSection> {
           separatorBuilder: (_, _) => const SizedBox(width: 12),
           itemBuilder: (context, index) {
             final entry = _recommendations[index];
-            final (line1, line2) = _splitName(entry.category.name);
+            final (line1, line2) = splitCategoryName(entry.category.name);
             return RecommendationCard(
-              imagePath: _cardImages[entry.category.id % _cardImages.length],
+              imagePath: categoryFallbackImages[entry.category.id % categoryFallbackImages.length],
+              imageUrl: entry.category.imageUrl == null ? null : '${ApiConfig.serverOrigin}${entry.category.imageUrl}',
               titleLine1: line1,
               titleLine2: line2,
-              modulesLabel: '${entry.moduleCount} ${entry.moduleCount == 1 ? 'Module' : 'Modules'}',
+              modulesLabel: '${entry.moduleCount} ${entry.moduleCount == 1 ? tr('word_module') : tr('word_modules')}',
               onTap: () => Navigator.of(context).push(
                 MaterialPageRoute(builder: (_) => PlaceholderScreen(title: entry.category.name)),
               ),

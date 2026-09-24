@@ -39,8 +39,16 @@ dependencies:
   http: ^1.2.0
   # Persists the auth token between app launches.
   shared_preferences: ^2.3.2
-  # Professional typography (Playfair Display) loaded at build time.
+  # Professional typography (Playfair Display + Inter) loaded at build time.
   google_fonts: ^6.2.1
+  # Real local daily-reminder notifications (Edit Profile > Preferences).
+  flutter_local_notifications: ^18.0.1
+  timezone: ^0.9.4
+  flutter_timezone: ^5.1.0
+  # Real profile-photo capture/selection for the avatar upload flow.
+  image_picker: ^1.1.2
+  # Opens the phone dialer, websites and email for Help & Resources.
+  url_launcher: ^6.3.1
 
 dev_dependencies:
   flutter_test:

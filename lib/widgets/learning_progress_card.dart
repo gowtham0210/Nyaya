@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../localization/app_strings.dart';
 import '../theme/app_colors.dart';
 
 class LearningProgressCard extends StatelessWidget {
@@ -100,7 +101,7 @@ class LearningProgressCard extends StatelessWidget {
                   textStyle: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700),
                   elevation: 0,
                 ),
-                child: const Text('Resume →'),
+                child: Text(tr('button_resume')),
               ),
             ],
           );

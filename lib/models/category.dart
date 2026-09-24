@@ -8,6 +8,7 @@ class Category {
     required this.name,
     required this.slug,
     required this.description,
+    this.imageUrl,
     required this.isActive,
   });
 
@@ -15,6 +16,9 @@ class Category {
   final String name;
   final String slug;
   final String? description;
+
+  /// Cover image path from the backend (e.g. /assets/categories/x.png).
+  final String? imageUrl;
   final bool isActive;
 
   factory Category.fromJson(Map<String, dynamic> json) {
@@ -23,6 +27,7 @@ class Category {
       name: json['name'] as String,
       slug: json['slug'] as String,
       description: json['description'] as String?,
+      imageUrl: json['imageUrl'] as String?,
       isActive: json['isActive'] as bool? ?? true,
     );
   }

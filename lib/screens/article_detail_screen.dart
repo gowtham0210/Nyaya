@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../localization/app_strings.dart';
 import '../models/article.dart';
 import '../state/nyaya_tabs.dart';
 import '../theme/app_colors.dart';
@@ -14,9 +15,6 @@ class ArticleDetailScreen extends StatelessWidget {
 
   final int number;
   final Article article;
-
-  static const _goldDark = Color(0xFFB9823A);
-  static const _navySecondary = Color(0xFF667183);
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +32,7 @@ class ArticleDetailScreen extends StatelessWidget {
         elevation: 0,
         foregroundColor: AppColors.navy,
         title: Text(
-          'Part ${article.part} · ${article.partTitle}',
+          '${tr('word_part')} ${article.part} · ${article.partTitle}',
           style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: AppColors.navy),
         ),
       ),
@@ -83,7 +81,7 @@ class ArticleDetailScreen extends StatelessWidget {
                           ),
                           child: Text(
                             article.articleRange,
-                            style: const TextStyle(fontSize: 10.5, fontWeight: FontWeight.w700, color: _goldDark),
+                            style: const TextStyle(fontSize: 10.5, fontWeight: FontWeight.w700, color: AppColors.goldDark),
                           ),
                         ),
                       ],
@@ -98,15 +96,15 @@ class ArticleDetailScreen extends StatelessWidget {
               _SectionCard(
                 icon: Icons.lightbulb_outline,
                 iconColor: AppColors.navy,
-                heading: 'What are ${article.title}?',
+                heading: "${tr('article_what_heading_prefix')} ${article.title}?",
                 child: Text(whatItMeans, style: const TextStyle(fontSize: 12.5, color: AppColors.textPrimary, height: 1.5)),
               ),
             if (whyItMatters != null && whyItMatters.trim().isNotEmpty) ...[
               const SizedBox(height: 12),
               _SectionCard(
                 icon: Icons.balance_outlined,
-                iconColor: _goldDark,
-                heading: 'Why are they important?',
+                iconColor: AppColors.goldDark,
+                heading: tr('article_why_heading'),
                 child: Text(whyItMatters, style: const TextStyle(fontSize: 12.5, color: AppColors.textPrimary, height: 1.5)),
               ),
             ],
@@ -114,8 +112,8 @@ class ArticleDetailScreen extends StatelessWidget {
               const SizedBox(height: 12),
               _SectionCard(
                 icon: Icons.checklist_rounded,
-                iconColor: _navySecondary,
-                heading: 'Key Features',
+                iconColor: AppColors.navySecondary,
+                heading: tr('article_key_features'),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [

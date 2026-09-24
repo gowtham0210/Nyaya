@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 
 import '../config/api_config.dart';
 import '../models/daily_question.dart';
+import '../state/app_language.dart';
 import 'api_exceptions.dart';
 
 /// Calls the real NYAYA daily-questions endpoint
@@ -28,7 +29,7 @@ class DailyQuestionsApiService {
   Future<List<DailyQuestion>> fetchRandom(String accessToken, {int count = 2}) async {
     try {
       final response = await http
-          .get(_uri('/daily-questions/random?count=$count'), headers: {'Authorization': 'Bearer $accessToken'})
+          .get(_uri('/daily-questions/random?count=$count'.withLang()), headers: {'Authorization': 'Bearer $accessToken'})
           .timeout(const Duration(seconds: 10));
       final body = _decode(response);
       _throwIfError(response, body);

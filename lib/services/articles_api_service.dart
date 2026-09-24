@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 
 import '../config/api_config.dart';
 import '../models/article.dart';
+import '../state/app_language.dart';
 import 'api_exceptions.dart';
 
 /// Calls the real NYAYA articles endpoint (nyaya_backend/src/routes/v1/articles.js
@@ -29,7 +30,7 @@ class ArticlesApiService {
   Future<List<Article>> fetchArticles(String accessToken) async {
     try {
       final response = await http
-          .get(_uri('/articles'), headers: {'Authorization': 'Bearer $accessToken'})
+          .get(_uri('/articles'.withLang()), headers: {'Authorization': 'Bearer $accessToken'})
           .timeout(const Duration(seconds: 10));
       final body = _decode(response);
       _throwIfError(response, body);

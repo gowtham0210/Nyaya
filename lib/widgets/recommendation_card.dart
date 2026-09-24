@@ -6,6 +6,7 @@ class RecommendationCard extends StatelessWidget {
   const RecommendationCard({
     super.key,
     required this.imagePath,
+    this.imageUrl,
     required this.titleLine1,
     required this.titleLine2,
     required this.modulesLabel,
@@ -16,6 +17,9 @@ class RecommendationCard extends StatelessWidget {
 
   /// Path to the real legal-visual asset (e.g. `assets/images/rec_constitution.png`).
   final String imagePath;
+
+  /// Optional remote cover image; [imagePath] is the fallback if it is absent or fails to load.
+  final String? imageUrl;
   final String titleLine1;
   final String titleLine2;
   final String modulesLabel;
@@ -55,7 +59,13 @@ class RecommendationCard extends StatelessWidget {
                   width: double.infinity,
                   color: AppColors.cardBackground,
                   padding: const EdgeInsets.all(10),
-                  child: Image.asset(imagePath, fit: BoxFit.contain),
+                  child: imageUrl == null
+                      ? Image.asset(imagePath, fit: BoxFit.contain)
+                      : Image.network(
+                          imageUrl!,
+                          fit: BoxFit.contain,
+                          errorBuilder: (context, error, stackTrace) => Image.asset(imagePath, fit: BoxFit.contain),
+                        ),
                 ),
               ),
               Padding(
@@ -64,8 +74,8 @@ class RecommendationCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text(titleLine1, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: AppColors.textPrimary)),
-                    Text(titleLine2, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: AppColors.textPrimary)),
+                    _TitleLine(titleLine1),
+                    _TitleLine(titleLine2),
                     const SizedBox(height: 4),
                     Row(
                       children: [
@@ -85,6 +95,26 @@ class RecommendationCard extends StatelessWidget {
           ),
         ),
         ),
+      ),
+    );
+  }
+}
+
+/// One title line that scales down slightly instead of wrapping, so cards
+/// stay the same height whatever the category name or language.
+class _TitleLine extends StatelessWidget {
+  const _TitleLine(this.text);
+
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      child: FittedBox(
+        fit: BoxFit.scaleDown,
+        alignment: Alignment.centerLeft,
+        child: Text(text, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: AppColors.textPrimary)),
       ),
     );
   }

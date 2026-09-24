@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
+import '../localization/app_strings.dart';
 import '../services/api_exceptions.dart';
 import '../services/auth_api_service.dart';
 import '../services/auth_storage.dart';
+import '../state/nyaya_tabs.dart';
 import '../theme/app_colors.dart';
 
 /// The NYAYA backend's `/categories` endpoint requires a signed-in user
@@ -44,7 +46,7 @@ class _LoginScreenState extends State<LoginScreen> {
       _errorMessage = null;
     });
     try {
-      final token = _isRegistering
+      final tokens = _isRegistering
           ? await _authApi.register(
               fullName: _fullNameController.text.trim(),
               email: _emailController.text.trim(),
@@ -54,7 +56,7 @@ class _LoginScreenState extends State<LoginScreen> {
               email: _emailController.text.trim(),
               password: _passwordController.text,
             );
-      await _authStorage.saveToken(token);
+      await _authStorage.saveTokens(tokens);
       if (mounted) Navigator.of(context).pop(true);
     } on ApiException catch (e) {
       setState(() => _errorMessage = e.message);
@@ -70,49 +72,47 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
-        backgroundColor: AppColors.cardBackground,
-        foregroundColor: AppColors.navy,
-        elevation: 0.5,
-        title: Text(_isRegistering ? 'Create Account' : 'Sign In', style: const TextStyle(fontWeight: FontWeight.w700)),
+        title: Text(_isRegistering ? tr('title_create_account') : tr('title_sign_in')),
       ),
+      bottomNavigationBar: const GlobalBottomNav(),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(20),
+          padding: const EdgeInsets.all(24),
           child: Form(
             key: _formKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Text(
-                  _isRegistering ? 'Sign up to see your NYAYA categories' : 'Sign in to see your NYAYA categories',
-                  style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w700, color: AppColors.textPrimary),
+                  _isRegistering ? tr('login_heading_register') : tr('login_heading_signin'),
+                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: AppColors.textPrimary),
                 ),
-                const SizedBox(height: 4),
-                const Text(
-                  'The "Recommended for you" section loads real categories from your NYAYA account.',
-                  style: TextStyle(fontSize: 12.5, color: AppColors.textSecondary),
+                const SizedBox(height: 5),
+                Text(
+                  tr('login_description'),
+                  style: const TextStyle(fontSize: 12.5, color: AppColors.textSecondary, height: 1.4),
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 24),
                 if (_isRegistering) ...[
                   TextFormField(
                     controller: _fullNameController,
-                    decoration: const InputDecoration(labelText: 'Full name'),
-                    validator: (v) => (v == null || v.trim().isEmpty) ? 'Required' : null,
+                    decoration: InputDecoration(labelText: tr('label_full_name')),
+                    validator: (v) => (v == null || v.trim().isEmpty) ? tr('validation_required') : null,
                   ),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: 14),
                 ],
                 TextFormField(
                   controller: _emailController,
                   keyboardType: TextInputType.emailAddress,
-                  decoration: const InputDecoration(labelText: 'Email'),
-                  validator: (v) => (v == null || !v.contains('@')) ? 'Enter a valid email' : null,
+                  decoration: InputDecoration(labelText: tr('label_email')),
+                  validator: (v) => (v == null || !v.contains('@')) ? tr('validation_email') : null,
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: 14),
                 TextFormField(
                   controller: _passwordController,
                   obscureText: true,
-                  decoration: const InputDecoration(labelText: 'Password'),
-                  validator: (v) => (v == null || v.length < 8) ? 'At least 8 characters' : null,
+                  decoration: InputDecoration(labelText: tr('label_password')),
+                  validator: (v) => (v == null || v.length < 8) ? tr('validation_password') : null,
                 ),
                 if (_errorMessage != null) ...[
                   const SizedBox(height: 12),
@@ -122,21 +122,17 @@ class _LoginScreenState extends State<LoginScreen> {
                 ElevatedButton(
                   onPressed: _isSubmitting ? null : _submit,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.navy,
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(vertical: 14),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                    elevation: 0,
+                    minimumSize: const Size(double.infinity, 52),
                   ),
                   child: _isSubmitting
                       ? const SizedBox(width: 18, height: 18, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
-                      : Text(_isRegistering ? 'Create account' : 'Sign in'),
+                      : Text(_isRegistering ? tr('button_create_account') : tr('button_sign_in')),
                 ),
                 const SizedBox(height: 12),
                 TextButton(
                   onPressed: _isSubmitting ? null : () => setState(() => _isRegistering = !_isRegistering),
                   child: Text(
-                    _isRegistering ? 'Already have an account? Sign in' : "Don't have an account? Create one",
+                    _isRegistering ? tr('link_have_account') : tr('link_no_account'),
                     style: const TextStyle(color: AppColors.gold, fontWeight: FontWeight.w600),
                   ),
                 ),

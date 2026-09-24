@@ -21,8 +21,8 @@ class ArticleAccordionItem extends StatelessWidget {
 
   static const _badgeColors = [
     AppColors.navy,
-    Color(0xFFB9823A), // goldDark
-    Color(0xFF667183), // navySecondary
+    AppColors.goldDark,
+    AppColors.navySecondary,
     AppColors.gold,
     AppColors.navyDark,
   ];

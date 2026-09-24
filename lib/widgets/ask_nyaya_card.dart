@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../localization/app_strings.dart';
 import '../theme/app_colors.dart';
 
 class AskNyayaCard extends StatelessWidget {
@@ -42,14 +43,14 @@ class AskNyayaCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        const Text(
-                          'Ask Nyaya',
-                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: AppColors.textPrimary),
+                        Text(
+                          tr('ask_nyaya_title'),
+                          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: AppColors.textPrimary),
                         ),
                         const SizedBox(height: 4),
-                        const Text(
-                          'Ask your legal questions in simple\nlanguage. Get clear answers.',
-                          style: TextStyle(fontSize: 12.5, color: AppColors.textSecondary, height: 1.4),
+                        Text(
+                          tr('ask_nyaya_desc'),
+                          style: const TextStyle(fontSize: 12.5, color: AppColors.textSecondary, height: 1.4),
                         ),
                       ],
                     ),
@@ -65,9 +66,9 @@ class AskNyayaCard extends StatelessWidget {
                     color: AppColors.soonRedBg,
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  child: const Text(
-                    'Soon',
-                    style: TextStyle(fontSize: 10, fontWeight: FontWeight.w700, color: AppColors.soonRed),
+                  child: Text(
+                    tr('badge_soon'),
+                    style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w700, color: AppColors.soonRed),
                   ),
                 ),
               ),

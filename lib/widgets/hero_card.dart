@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../localization/app_strings.dart';
 import '../theme/app_colors.dart';
 
 class HeroCard extends StatelessWidget {
@@ -11,87 +12,69 @@ class HeroCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 208,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(18),
         color: AppColors.beigeBorder,
         border: Border.all(color: AppColors.beigeBorder),
       ),
       clipBehavior: Clip.antiAlias,
-      child: Stack(
-        children: [
-          // The whole photo, uncropped — anchored right at the card's edge.
-          Align(
-            alignment: Alignment.centerRight,
-            child: FractionallySizedBox(
-              widthFactor: 0.42,
-              heightFactor: 0.94,
-              child: Image.asset(
-                'assets/images/legal_scene.png',
-                fit: BoxFit.contain,
-                alignment: Alignment.center,
-              ),
-            ),
-          ),
-          // Text + buttons fill the full card height so the buttons can sit
-          // lower via spaceBetween, instead of hugging the heading.
-          Positioned.fill(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(14, 14, 8, 14),
-              child: FractionallySizedBox(
-                widthFactor: 0.60,
-                alignment: Alignment.centerLeft,
+      // The card's height comes from its content (via IntrinsicHeight)
+      // instead of a fixed number, so it hugs short English text and
+      // grows only as much as a longer translation (Tamil/Kannada) needs
+      // — no leftover empty space, no overflow either way.
+      child: IntrinsicHeight(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Expanded(
+              flex: 6,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(14, 14, 10, 14),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const SizedBox(height: 10),
-                        const Text(
-                          'Law Made Easy,',
-                          style: TextStyle(
-                            color: AppColors.navy,
-                            fontSize: 18,
-                            fontWeight: FontWeight.w700,
-                            fontFamily: 'serif',
-                            height: 1.22,
-                          ),
-                        ),
-                        Text(
-                          'Justice Made',
-                          style: TextStyle(
-                            color: AppColors.gold,
-                            fontSize: 18,
-                            fontWeight: FontWeight.w700,
-                            fontFamily: 'serif',
-                            height: 1.22,
-                          ),
-                        ),
-                        Text(
-                          'Accessible.',
-                          style: TextStyle(
-                            color: AppColors.gold,
-                            fontSize: 18,
-                            fontWeight: FontWeight.w700,
-                            fontFamily: 'serif',
-                            height: 1.22,
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          'Explore laws, test your knowledge, and become your own legal expert.',
-                          style: TextStyle(
-                            color: AppColors.textSecondary,
-                            fontSize: 10.5,
-                            fontWeight: FontWeight.w500,
-                            height: 1.35,
-                          ),
-                        ),
-                      ],
+                    Text(
+                      tr('hero_line1'),
+                      style: const TextStyle(
+                        color: AppColors.navy,
+                        fontSize: 17,
+                        fontWeight: FontWeight.w700,
+                        fontFamily: 'serif',
+                        height: 1.2,
+                      ),
                     ),
+                    Text(
+                      tr('hero_line2'),
+                      style: TextStyle(
+                        color: AppColors.gold,
+                        fontSize: 17,
+                        fontWeight: FontWeight.w700,
+                        fontFamily: 'serif',
+                        height: 1.2,
+                      ),
+                    ),
+                    Text(
+                      tr('hero_line3'),
+                      style: TextStyle(
+                        color: AppColors.gold,
+                        fontSize: 17,
+                        fontWeight: FontWeight.w700,
+                        fontFamily: 'serif',
+                        height: 1.2,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      tr('hero_desc'),
+                      style: TextStyle(
+                        color: AppColors.textSecondary,
+                        fontSize: 10.5,
+                        fontWeight: FontWeight.w500,
+                        height: 1.35,
+                      ),
+                    ),
+                    const SizedBox(height: 14),
                     Wrap(
                       spacing: 6,
                       runSpacing: 6,
@@ -108,7 +91,7 @@ class HeroCard extends StatelessWidget {
                             textStyle: const TextStyle(fontSize: 11, fontWeight: FontWeight.w700),
                             elevation: 0,
                           ),
-                          child: const Text('Start a Quiz →'),
+                          child: Text(tr('button_start_quiz')),
                         ),
                         OutlinedButton(
                           onPressed: onExploreArticles,
@@ -122,7 +105,7 @@ class HeroCard extends StatelessWidget {
                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(9)),
                             textStyle: const TextStyle(fontSize: 11, fontWeight: FontWeight.w600),
                           ),
-                          child: const Text('Explore Articles'),
+                          child: Text(tr('button_explore_articles')),
                         ),
                       ],
                     ),
@@ -130,8 +113,22 @@ class HeroCard extends StatelessWidget {
                 ),
               ),
             ),
-          ),
-        ],
+            Expanded(
+              flex: 4,
+              child: ClipRRect(
+                borderRadius: const BorderRadius.only(
+                  topRight: Radius.circular(17),
+                  bottomRight: Radius.circular(17),
+                ),
+                child: Image.asset(
+                  'assets/images/legal_scene.png',
+                  fit: BoxFit.cover,
+                  alignment: Alignment.center,
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../localization/app_strings.dart';
 import '../theme/app_colors.dart';
 
 class NyayaSearchBar extends StatelessWidget {
@@ -32,8 +33,8 @@ class NyayaSearchBar extends StatelessWidget {
                 const SizedBox(width: 10),
                 Expanded(
                   child: Text(
-                    'Search Laws, Rights & Recent Updates',
-                    style: TextStyle(color: AppColors.muted, fontSize: 13),
+                    tr('search_bar_placeholder'),
+                    style: const TextStyle(color: AppColors.muted, fontSize: 13),
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),

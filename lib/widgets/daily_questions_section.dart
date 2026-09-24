@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../localization/app_strings.dart';
 import '../models/daily_question.dart';
+import '../state/app_language.dart';
 import '../repositories/daily_questions_repository.dart';
 import '../screens/login_screen.dart';
 import '../services/api_exceptions.dart';
@@ -30,6 +32,13 @@ class _DailyQuestionsSectionState extends State<DailyQuestionsSection> {
   void initState() {
     super.initState();
     _load();
+    AppLanguage.current.addListener(_load);
+  }
+
+  @override
+  void dispose() {
+    AppLanguage.current.removeListener(_load);
+    super.dispose();
   }
 
   Future<void> _load() async {
@@ -90,11 +99,11 @@ class _DailyQuestionsSectionState extends State<DailyQuestionsSection> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text('Daily Questions', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: AppColors.navy)),
+                    Text(tr('title_daily_questions'), style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: AppColors.navy)),
                     const SizedBox(height: 3),
-                    const Text(
-                      "Sharpen your mind with today's random questions",
-                      style: TextStyle(fontSize: 11.5, color: AppColors.textPrimary, fontWeight: FontWeight.w500),
+                    Text(
+                      tr('daily_questions_subtitle'),
+                      style: const TextStyle(fontSize: 11.5, color: AppColors.textPrimary, fontWeight: FontWeight.w500),
                     ),
                   ],
                 ),
@@ -104,7 +113,7 @@ class _DailyQuestionsSectionState extends State<DailyQuestionsSection> {
                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                   decoration: BoxDecoration(color: AppColors.goldLight, borderRadius: BorderRadius.circular(20)),
                   child: Text(
-                    '${_questions.length} ${_questions.length == 1 ? 'Question' : 'Questions'}',
+                    '${_questions.length} ${_questions.length == 1 ? tr('word_question') : tr('word_questions')}',
                     style: const TextStyle(fontSize: 10.5, fontWeight: FontWeight.w700, color: AppColors.navy),
                   ),
                 ),
@@ -128,21 +137,21 @@ class _DailyQuestionsSectionState extends State<DailyQuestionsSection> {
       case _Status.unauthenticated:
         return _StatusRow(
           icon: Icons.lock_outline,
-          message: 'Sign in to see today\'s questions.',
-          actionLabel: 'Sign in',
+          message: tr('msg_signin_daily'),
+          actionLabel: tr('button_sign_in'),
           onAction: _openSignIn,
         );
 
       case _Status.error:
         return _StatusRow(
           icon: Icons.wifi_off_rounded,
-          message: _errorMessage ?? 'Unable to load questions.',
-          actionLabel: 'Retry',
+          message: _errorMessage ?? tr('msg_error_daily_default'),
+          actionLabel: tr('button_retry'),
           onAction: _load,
         );
 
       case _Status.empty:
-        return const _StatusRow(icon: Icons.inbox_outlined, message: 'No questions available yet.');
+        return _StatusRow(icon: Icons.inbox_outlined, message: tr('msg_empty_daily'));
 
       case _Status.loaded:
         return Column(

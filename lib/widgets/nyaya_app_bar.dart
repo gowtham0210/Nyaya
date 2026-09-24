@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../localization/app_strings.dart';
+import '../screens/help_resources_screen.dart';
 import '../theme/app_colors.dart';
 
 class NyayaAppBar extends StatefulWidget implements PreferredSizeWidget {
@@ -77,7 +79,7 @@ class _NyayaAppBarState extends State<NyayaAppBar> {
                             autofocus: true,
                             style: const TextStyle(fontSize: 13, color: AppColors.textPrimary),
                             decoration: InputDecoration(
-                              hintText: widget.searchHint ?? 'Search',
+                              hintText: widget.searchHint ?? tr('label_search'),
                               hintStyle: const TextStyle(fontSize: 13, color: AppColors.muted),
                               border: InputBorder.none,
                               isDense: true,
@@ -140,6 +142,25 @@ class _NyayaAppBarState extends State<NyayaAppBar> {
                   ),
                   const SizedBox(width: 10),
                 ],
+                Semantics(
+                  button: true,
+                  label: tr('help_res_title'),
+                  child: InkWell(
+                    onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const HelpResourcesScreen())),
+                    borderRadius: BorderRadius.circular(10),
+                    child: Container(
+                      width: 42,
+                      height: 42,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(color: AppColors.beigeBorder),
+                      ),
+                      child: const Icon(Icons.call_outlined, color: AppColors.navy, size: 21),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 10),
                 Semantics(
                   button: true,
                   label: 'Notifications',

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../localization/app_strings.dart';
 import '../models/article.dart';
+import '../state/app_language.dart';
 import '../repositories/articles_repository.dart';
 import '../services/api_exceptions.dart';
 import '../theme/app_colors.dart';
@@ -42,10 +44,12 @@ class _ArticlesScreenState extends State<ArticlesScreen> {
   void initState() {
     super.initState();
     _load();
+    AppLanguage.current.addListener(_load);
   }
 
   @override
   void dispose() {
+    AppLanguage.current.removeListener(_load);
     _searchController.dispose();
     super.dispose();
   }
@@ -104,9 +108,9 @@ class _ArticlesScreenState extends State<ArticlesScreen> {
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: NyayaAppBar(
-        onNotificationTap: () => _openPlaceholder('Notifications'),
+        onNotificationTap: () => _openPlaceholder(tr('label_notifications')),
         searchController: _searchController,
-        searchHint: 'Search articles by title or topic',
+        searchHint: tr('articles_search_hint'),
         onSearchChanged: (value) => setState(() => _query = value),
       ),
       body: SafeArea(
@@ -157,12 +161,12 @@ class _ArticlesScreenState extends State<ArticlesScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    'Learn & Stay Updated',
+                    tr('articles_hero_title'),
                     style: GoogleFonts.playfairDisplay(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w800),
                   ),
                   const SizedBox(height: 3),
                   Text(
-                    'Stay informed. Understand the law.',
+                    tr('articles_hero_subtitle'),
                     style: TextStyle(color: Colors.white.withValues(alpha: 0.85), fontSize: 10.5),
                   ),
                 ],
@@ -187,8 +191,8 @@ class _ArticlesScreenState extends State<ArticlesScreen> {
         ),
         child: Row(
           children: [
-            _tabButton('Articles', Icons.menu_book_outlined, _Tab.articles),
-            _tabButton('Legal Updates', Icons.campaign_outlined, _Tab.legalUpdates),
+            _tabButton(tr('nav_articles'), Icons.menu_book_outlined, _Tab.articles),
+            _tabButton(tr('tab_legal_updates'), Icons.balance_rounded, _Tab.legalUpdates),
           ],
         ),
       ),
@@ -260,26 +264,26 @@ class _ArticlesScreenState extends State<ArticlesScreen> {
       case _Status.unauthenticated:
         return _StatusCard(
           icon: Icons.lock_outline,
-          message: 'Sign in to read the articles.',
-          actionLabel: 'Sign in',
+          message: tr('msg_signin_articles'),
+          actionLabel: tr('button_sign_in'),
           onAction: _openSignIn,
         );
 
       case _Status.error:
         return _StatusCard(
           icon: Icons.wifi_off_rounded,
-          message: _errorMessage ?? 'Unable to load articles.',
-          actionLabel: 'Retry',
+          message: _errorMessage ?? tr('msg_error_articles_default'),
+          actionLabel: tr('button_retry'),
           onAction: _load,
         );
 
       case _Status.empty:
-        return const _StatusCard(icon: Icons.inbox_outlined, message: 'No articles available.');
+        return _StatusCard(icon: Icons.inbox_outlined, message: tr('msg_empty_articles'));
 
       case _Status.loaded:
         final visible = _visibleArticles;
         if (visible.isEmpty) {
-          return const _StatusCard(icon: Icons.search_off_rounded, message: 'No articles match your search.');
+          return _StatusCard(icon: Icons.search_off_rounded, message: tr('msg_no_search_results'));
         }
         var number = 0;
         return Padding(
@@ -291,7 +295,7 @@ class _ArticlesScreenState extends State<ArticlesScreen> {
                 Padding(
                   padding: const EdgeInsets.only(top: 6, bottom: 8),
                   child: Text(
-                    'Part ${part.$1} · ${part.$2}',
+                    '${tr('word_part')} ${part.$1} · ${part.$2}',
                     style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: AppColors.navy),
                   ),
                 ),
