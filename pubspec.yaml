@@ -81,6 +81,8 @@ flutter:
     - assets/images/rec_contract_act.png
     - assets/images/ask_nyaya_icon.png
     - assets/images/articles_hero.png
+    - assets/images/articles_hero_photo.png
+    - assets/images/profile_hero_photo.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

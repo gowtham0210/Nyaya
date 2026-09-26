@@ -139,18 +139,26 @@ class _ArticlesScreenState extends State<ArticlesScreen> {
       child: Container(
         height: 128,
         clipBehavior: Clip.antiAlias,
-        decoration: BoxDecoration(color: AppColors.navy, borderRadius: BorderRadius.circular(18)),
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(18)),
         child: Stack(
+          fit: StackFit.expand,
           children: [
-            Align(
-              alignment: Alignment.centerRight,
-              child: FractionallySizedBox(
-                widthFactor: 0.62,
-                heightFactor: 1.0,
-                child: Image.asset(
-                  'assets/images/articles_hero.png',
-                  fit: BoxFit.contain,
-                  alignment: Alignment.centerRight,
+            Image.asset(
+              'assets/images/articles_hero_photo.png',
+              fit: BoxFit.cover,
+              alignment: Alignment.center,
+            ),
+            DecoratedBox(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.centerLeft,
+                  end: Alignment.centerRight,
+                  colors: [
+                    AppColors.navy.withValues(alpha: 0.85),
+                    AppColors.navy.withValues(alpha: 0.35),
+                    Colors.transparent,
+                  ],
+                  stops: const [0.0, 0.55, 1.0],
                 ),
               ),
             ),

@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 
 import '../localization/app_strings.dart';
@@ -179,6 +181,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 }
 
+// The profile card's accent color — swapped in for gold on this card only,
+// per request, while gold takes over the spots that used to be blue.
+const _kProfileBlue = Color(0xFF142440);
+
 class _ProfileCard extends StatelessWidget {
   const _ProfileCard({required this.profile, required this.onEdit});
 
@@ -196,16 +202,29 @@ class _ProfileCard extends StatelessWidget {
       width: double.infinity,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
-        gradient: const LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [AppColors.navy, AppColors.navyDark],
-        ),
         boxShadow: AppShadows.raised,
       ),
       clipBehavior: Clip.antiAlias,
       child: Stack(
         children: [
+          Positioned.fill(
+            child: ImageFiltered(
+              imageFilter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),
+              child: Image.asset(
+                'assets/images/profile_hero_photo.png',
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+          DecoratedBox(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [AppColors.navy.withValues(alpha: 0.82), AppColors.navyDark.withValues(alpha: 0.88)],
+              ),
+            ),
+          ),
           Positioned(
             right: -20,
             bottom: -22,
@@ -221,7 +240,7 @@ class _ProfileCard extends StatelessWidget {
                   children: [
                     Container(
                       padding: const EdgeInsets.all(3),
-                      decoration: BoxDecoration(shape: BoxShape.circle, border: Border.all(color: AppColors.gold, width: 2)),
+                      decoration: const BoxDecoration(shape: BoxShape.circle, border: Border.fromBorderSide(BorderSide(color: _kProfileBlue, width: 2))),
                       child: InitialsAvatar(name: profile.fullName, size: 68, avatarUrl: profile.avatarUrl),
                     ),
                     Positioned(
@@ -232,11 +251,11 @@ class _ProfileCard extends StatelessWidget {
                         height: 24,
                         alignment: Alignment.center,
                         decoration: const BoxDecoration(
-                          color: AppColors.navyDark,
+                          color: AppColors.gold,
                           shape: BoxShape.circle,
-                          border: Border.fromBorderSide(BorderSide(color: AppColors.gold, width: 1.5)),
+                          border: Border.fromBorderSide(BorderSide(color: _kProfileBlue, width: 1.5)),
                         ),
-                        child: const Icon(Icons.photo_camera_outlined, color: AppColors.gold, size: 12),
+                        child: const Icon(Icons.photo_camera_outlined, color: _kProfileBlue, size: 12),
                       ),
                     ),
                   ],
@@ -257,21 +276,20 @@ class _ProfileCard extends StatelessWidget {
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
                           decoration: BoxDecoration(
-                            color: AppColors.gold.withValues(alpha: 0.14),
+                            color: AppColors.gold,
                             borderRadius: BorderRadius.circular(20),
-                            border: Border.all(color: AppColors.gold.withValues(alpha: 0.6)),
                           ),
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              const Icon(Icons.verified_rounded, size: 13, color: AppColors.gold),
+                              const Icon(Icons.verified_rounded, size: 13, color: AppColors.navyDark),
                               const SizedBox(width: 5),
                               Flexible(
                                 child: Text(
                                   tr(professionKey),
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
-                                  style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: AppColors.goldLight),
+                                  style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w800, color: AppColors.navyDark),
                                 ),
                               ),
                             ],
@@ -294,7 +312,7 @@ class _ProfileCard extends StatelessWidget {
             right: 14,
             bottom: 14,
             child: Material(
-              color: AppColors.gold,
+              color: _kProfileBlue,
               borderRadius: BorderRadius.circular(20),
               child: InkWell(
                 borderRadius: BorderRadius.circular(20),
@@ -304,12 +322,12 @@ class _ProfileCard extends StatelessWidget {
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      const Icon(Icons.edit_outlined, size: 14, color: AppColors.navyDark),
+                      const Icon(Icons.edit_outlined, size: 14, color: AppColors.gold),
                       const SizedBox(width: 6),
                       Text(
                         tr('edit_profile'),
                         maxLines: 1,
-                        style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w800, color: AppColors.navyDark),
+                        style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w800, color: AppColors.gold),
                       ),
                     ],
                   ),
