@@ -935,4 +935,41 @@ class AppLocalizationsKn extends AppLocalizations {
 
   @override
   String get helpResOpenFailed => 'ಇದನ್ನು ನಿಮ್ಮ ಫೋನ್‌ನಲ್ಲಿ ತೆರೆಯಲಾಗಲಿಲ್ಲ.';
+
+  @override
+  String get searchHint =>
+      'ಕಾನೂನುಗಳು, ಹಕ್ಕುಗಳು ಮತ್ತು ಇತ್ತೀಚಿನ ಅಪ್‌ಡೇಟ್‌ಗಳನ್ನು ಹುಡುಕಿ';
+
+  @override
+  String get searchFilters => 'ಫಿಲ್ಟರ್‌ಗಳು';
+
+  @override
+  String searchFiltersActive(int count) {
+    return '$count ಫಿಲ್ಟರ್‌ಗಳು';
+  }
+
+  @override
+  String get searchClearFilters => 'ಫಿಲ್ಟರ್‌ಗಳನ್ನು ತೆರವುಗೊಳಿಸಿ';
+
+  @override
+  String get searchNoResults =>
+      'ಯಾವುದೂ ಹೊಂದಿಕೆಯಾಗಲಿಲ್ಲ. ಬೇರೆ ಪದಗಳನ್ನು ಪ್ರಯತ್ನಿಸಿ ಅಥವಾ ಫಿಲ್ಟರ್‌ಗಳನ್ನು ತೆರವುಗೊಳಿಸಿ.';
+
+  @override
+  String get filterTitle => 'ಫಿಲ್ಟರ್';
+
+  @override
+  String get filterContentType => 'ವಿಷಯ ಪ್ರಕಾರ';
+
+  @override
+  String get filterCategory => 'ವರ್ಗ';
+
+  @override
+  String get filterClearAll => 'ಎಲ್ಲವನ್ನೂ ತೆರವುಗೊಳಿಸಿ';
+
+  @override
+  String get filterApply => 'ಫಿಲ್ಟರ್‌ಗಳನ್ನು ಅನ್ವಯಿಸಿ';
+
+  @override
+  String get searchTypeCategories => 'ಕ್ವಿಜ್ ವಿಷಯಗಳು';
 }

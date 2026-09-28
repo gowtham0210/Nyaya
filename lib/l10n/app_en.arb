@@ -464,5 +464,23 @@
         "type": "int"
       }
     }
-  }
+  },
+  "searchHint": "Search laws, rights and recent updates",
+  "searchFilters": "Filters",
+  "searchFiltersActive": "{count, plural, =1{1 filter} other{{count} filters}}",
+  "@searchFiltersActive": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "searchClearFilters": "Clear filters",
+  "searchNoResults": "Nothing matches. Try other words or clear the filters.",
+  "filterTitle": "Filter",
+  "filterContentType": "Content type",
+  "filterCategory": "Category",
+  "filterClearAll": "Clear all",
+  "filterApply": "Apply filters",
+  "searchTypeCategories": "Quiz topics"
 }

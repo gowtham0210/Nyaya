@@ -262,5 +262,16 @@
   "helpResHours": "ಸಮಯ: {hours}",
   "helpResSource": "ಮೂಲ: {name}",
   "helpResEmpty": "ಈ ಆಯ್ಕೆಗೆ ಪರಿಶೀಲಿಸಿದ ಸಂಪರ್ಕಗಳಿಲ್ಲ. ಬೇರೆ ಪ್ರಕಾರ ಅಥವಾ ರಾಜ್ಯವನ್ನು ಪ್ರಯತ್ನಿಸಿ.",
-  "helpResOpenFailed": "ಇದನ್ನು ನಿಮ್ಮ ಫೋನ್‌ನಲ್ಲಿ ತೆರೆಯಲಾಗಲಿಲ್ಲ."
+  "helpResOpenFailed": "ಇದನ್ನು ನಿಮ್ಮ ಫೋನ್‌ನಲ್ಲಿ ತೆರೆಯಲಾಗಲಿಲ್ಲ.",
+  "searchHint": "ಕಾನೂನುಗಳು, ಹಕ್ಕುಗಳು ಮತ್ತು ಇತ್ತೀಚಿನ ಅಪ್‌ಡೇಟ್‌ಗಳನ್ನು ಹುಡುಕಿ",
+  "searchFilters": "ಫಿಲ್ಟರ್‌ಗಳು",
+  "searchFiltersActive": "{count} ಫಿಲ್ಟರ್‌ಗಳು",
+  "searchClearFilters": "ಫಿಲ್ಟರ್‌ಗಳನ್ನು ತೆರವುಗೊಳಿಸಿ",
+  "searchNoResults": "ಯಾವುದೂ ಹೊಂದಿಕೆಯಾಗಲಿಲ್ಲ. ಬೇರೆ ಪದಗಳನ್ನು ಪ್ರಯತ್ನಿಸಿ ಅಥವಾ ಫಿಲ್ಟರ್‌ಗಳನ್ನು ತೆರವುಗೊಳಿಸಿ.",
+  "filterTitle": "ಫಿಲ್ಟರ್",
+  "filterContentType": "ವಿಷಯ ಪ್ರಕಾರ",
+  "filterCategory": "ವರ್ಗ",
+  "filterClearAll": "ಎಲ್ಲವನ್ನೂ ತೆರವುಗೊಳಿಸಿ",
+  "filterApply": "ಫಿಲ್ಟರ್‌ಗಳನ್ನು ಅನ್ವಯಿಸಿ",
+  "searchTypeCategories": "ಕ್ವಿಜ್ ವಿಷಯಗಳು"
 }

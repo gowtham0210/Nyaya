@@ -34,6 +34,7 @@ class HomePage extends StatefulWidget {
     this.onAskNyayaPressed,
     this.onRecommendedSelected,
     this.onViewAllRecommendedPressed,
+    this.onSearchPressed,
   });
 
   final HomeViewModel viewModel;
@@ -54,6 +55,7 @@ class HomePage extends StatefulWidget {
   final VoidCallback? onAskNyayaPressed;
   final ValueChanged<CategoryData>? onRecommendedSelected;
   final VoidCallback? onViewAllRecommendedPressed;
+  final VoidCallback? onSearchPressed;
 
   static const pageBackground = Color(0xFFF8F6F2);
   static const heroBackground = Color(0xFF11233B);
@@ -96,6 +98,13 @@ class _HomePageState extends State<HomePage> {
               onNotificationsPressed: _orPlaceholder(
                 widget.onNotificationsPressed,
                 l10n.featureComingSoon(l10n.homeNotifications),
+              ),
+            ),
+            const SizedBox(height: 16),
+            _SearchBar(
+              onPressed: _orPlaceholder(
+                widget.onSearchPressed,
+                l10n.commonComingSoon,
               ),
             ),
             const SizedBox(height: 20),
@@ -225,6 +234,56 @@ class _HomePageState extends State<HomePage> {
     ValueChanged<T>? callback,
     String Function(T item) message,
   ) => callback ?? (item) => showMessage(context, message(item));
+}
+
+/// Looks like a search field; opens search (spec 033).
+class _SearchBar extends StatelessWidget {
+  const _SearchBar({required this.onPressed});
+
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    final hint = context.l10n.searchHint;
+    return Semantics(
+      key: const ValueKey('home.search'),
+      button: true,
+      label: hint,
+      child: Material(
+        color: Colors.white,
+        shape: const StadiumBorder(
+          side: BorderSide(color: HomePage.cardBorder),
+        ),
+        child: InkWell(
+          customBorder: const StadiumBorder(),
+          onTap: onPressed,
+          child: ExcludeSemantics(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
+              child: Row(
+                children: [
+                  const Icon(Icons.search_rounded, color: HomePage.mutedIcon),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Text(
+                      hint,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        fontSize: 15,
+                        color: HomePage.supportText,
+                      ),
+                    ),
+                  ),
+                  const Icon(Icons.tune_rounded, color: HomePage.mutedIcon),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 }
 
 class _HeaderRow extends StatelessWidget {

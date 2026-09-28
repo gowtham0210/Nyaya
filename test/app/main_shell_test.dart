@@ -162,6 +162,7 @@ void main() {
           )
           .first,
     );
+    await tester.pumpAndSettle();
 
     await tester.tap(viewAll);
     await tester.pumpAndSettle();
@@ -458,6 +459,22 @@ void main() {
     await tester.tap(call);
 
     expect(openedLinks, [Uri.parse('tel:181')]);
+  });
+
+  testWidgets('033 Home search finds and opens an article', (tester) async {
+    await pumpMainShell(tester);
+
+    await tester.tap(find.byKey(const ValueKey('home.search')));
+    await tester.pumpAndSettle();
+    await tester.enterText(
+      find.byKey(const ValueKey('search.field')),
+      'equality',
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Right to Equality'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Why it matters'), findsOneWidget);
   });
 
   testWidgets('030 About shows the app version', (tester) async {

@@ -46,7 +46,7 @@ Also: move theme colors/shadows to `lib/core/presentation/`, add assets under `a
 | 5 | 021-profile (#33) | `profile_screen`, `edit_profile_screen`, `initials_avatar`, `profile_api_service` | Real logout replaces test hack; language picker |
 | 6 | 029-daily-reminders (#36), 030-privacy-about (#37) | notifications, privacy & security, about, `logout_screen` | Drop change-password (no passwords with OTP) |
 | 7 | 031-help-support (#38), 032-help-resources (#39) | `help_resources_*`, `help_support_screen` | From Profile |
-| 8 | 024-search-filters | `filter_sheet`, `filter_results_screen`, `nyaya_search_bar` | Needs 017 |
+| 8 | 033-search-filters (#40) | `filter_sheet`, `filter_results_screen`, `nyaya_search_bar` | Needs 017 |
 | 9 | 025-leaderboard | — (placeholder in Nisha) | New design needed |
 
 Not ported: `login_screen`, `auth_api_service`, `auth_storage`, `placeholder_screen`, `main.dart`, desktop/web folders.

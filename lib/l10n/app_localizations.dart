@@ -1690,6 +1690,72 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Couldn\'t open this on your phone.'**
   String get helpResOpenFailed;
+
+  /// No description provided for @searchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search laws, rights and recent updates'**
+  String get searchHint;
+
+  /// No description provided for @searchFilters.
+  ///
+  /// In en, this message translates to:
+  /// **'Filters'**
+  String get searchFilters;
+
+  /// No description provided for @searchFiltersActive.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 filter} other{{count} filters}}'**
+  String searchFiltersActive(int count);
+
+  /// No description provided for @searchClearFilters.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear filters'**
+  String get searchClearFilters;
+
+  /// No description provided for @searchNoResults.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing matches. Try other words or clear the filters.'**
+  String get searchNoResults;
+
+  /// No description provided for @filterTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Filter'**
+  String get filterTitle;
+
+  /// No description provided for @filterContentType.
+  ///
+  /// In en, this message translates to:
+  /// **'Content type'**
+  String get filterContentType;
+
+  /// No description provided for @filterCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Category'**
+  String get filterCategory;
+
+  /// No description provided for @filterClearAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear all'**
+  String get filterClearAll;
+
+  /// No description provided for @filterApply.
+  ///
+  /// In en, this message translates to:
+  /// **'Apply filters'**
+  String get filterApply;
+
+  /// No description provided for @searchTypeCategories.
+  ///
+  /// In en, this message translates to:
+  /// **'Quiz topics'**
+  String get searchTypeCategories;
 }
 
 class _AppLocalizationsDelegate

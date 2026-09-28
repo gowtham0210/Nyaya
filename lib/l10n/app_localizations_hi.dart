@@ -928,4 +928,40 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get helpResOpenFailed => 'इसे आपके फ़ोन पर नहीं खोला जा सका।';
+
+  @override
+  String get searchHint => 'कानून, अधिकार और नवीनतम अपडेट खोजें';
+
+  @override
+  String get searchFilters => 'फ़िल्टर';
+
+  @override
+  String searchFiltersActive(int count) {
+    return '$count फ़िल्टर';
+  }
+
+  @override
+  String get searchClearFilters => 'फ़िल्टर हटाएँ';
+
+  @override
+  String get searchNoResults =>
+      'कुछ मेल नहीं खाता। दूसरे शब्द आज़माएँ या फ़िल्टर हटाएँ।';
+
+  @override
+  String get filterTitle => 'फ़िल्टर';
+
+  @override
+  String get filterContentType => 'सामग्री का प्रकार';
+
+  @override
+  String get filterCategory => 'श्रेणी';
+
+  @override
+  String get filterClearAll => 'सभी साफ़ करें';
+
+  @override
+  String get filterApply => 'फ़िल्टर लागू करें';
+
+  @override
+  String get searchTypeCategories => 'क्विज़ विषय';
 }

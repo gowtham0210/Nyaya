@@ -935,4 +935,40 @@ class AppLocalizationsTe extends AppLocalizations {
 
   @override
   String get helpResOpenFailed => 'దీన్ని మీ ఫోన్‌లో తెరవలేకపోయాం.';
+
+  @override
+  String get searchHint => 'చట్టాలు, హక్కులు & తాజా అప్‌డేట్‌లను శోధించండి';
+
+  @override
+  String get searchFilters => 'ఫిల్టర్లు';
+
+  @override
+  String searchFiltersActive(int count) {
+    return '$count ఫిల్టర్లు';
+  }
+
+  @override
+  String get searchClearFilters => 'ఫిల్టర్లను క్లియర్ చేయండి';
+
+  @override
+  String get searchNoResults =>
+      'ఏదీ సరిపోలలేదు. వేరే పదాలు ప్రయత్నించండి లేదా ఫిల్టర్లను క్లియర్ చేయండి.';
+
+  @override
+  String get filterTitle => 'ఫిల్టర్';
+
+  @override
+  String get filterContentType => 'కంటెంట్ రకం';
+
+  @override
+  String get filterCategory => 'వర్గం';
+
+  @override
+  String get filterClearAll => 'అన్నీ క్లియర్ చేయండి';
+
+  @override
+  String get filterApply => 'ఫిల్టర్లను వర్తింపజేయండి';
+
+  @override
+  String get searchTypeCategories => 'క్విజ్ అంశాలు';
 }

@@ -926,4 +926,46 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get helpResOpenFailed => 'Couldn\'t open this on your phone.';
+
+  @override
+  String get searchHint => 'Search laws, rights and recent updates';
+
+  @override
+  String get searchFilters => 'Filters';
+
+  @override
+  String searchFiltersActive(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count filters',
+      one: '1 filter',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get searchClearFilters => 'Clear filters';
+
+  @override
+  String get searchNoResults =>
+      'Nothing matches. Try other words or clear the filters.';
+
+  @override
+  String get filterTitle => 'Filter';
+
+  @override
+  String get filterContentType => 'Content type';
+
+  @override
+  String get filterCategory => 'Category';
+
+  @override
+  String get filterClearAll => 'Clear all';
+
+  @override
+  String get filterApply => 'Apply filters';
+
+  @override
+  String get searchTypeCategories => 'Quiz topics';
 }

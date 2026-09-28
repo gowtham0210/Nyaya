@@ -938,4 +938,41 @@ class AppLocalizationsTa extends AppLocalizations {
 
   @override
   String get helpResOpenFailed => 'இதை உங்கள் தொலைபேசியில் திறக்க முடியவில்லை.';
+
+  @override
+  String get searchHint =>
+      'சட்டங்கள், உரிமைகள் & சமீபத்திய புதுப்பிப்புகளைத் தேடுங்கள்';
+
+  @override
+  String get searchFilters => 'வடிகட்டிகள்';
+
+  @override
+  String searchFiltersActive(int count) {
+    return '$count வடிகட்டிகள்';
+  }
+
+  @override
+  String get searchClearFilters => 'வடிகட்டிகளை அழி';
+
+  @override
+  String get searchNoResults =>
+      'எதுவும் பொருந்தவில்லை. வேறு சொற்களை முயற்சிக்கவும் அல்லது வடிகட்டிகளை அழிக்கவும்.';
+
+  @override
+  String get filterTitle => 'வடிகட்டி';
+
+  @override
+  String get filterContentType => 'உள்ளடக்க வகை';
+
+  @override
+  String get filterCategory => 'வகை';
+
+  @override
+  String get filterClearAll => 'அனைத்தையும் அழி';
+
+  @override
+  String get filterApply => 'வடிகட்டிகளைப் பயன்படுத்து';
+
+  @override
+  String get searchTypeCategories => 'வினாடி வினா தலைப்புகள்';
 }

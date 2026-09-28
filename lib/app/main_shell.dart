@@ -39,6 +39,8 @@ import '../features/profile/presentation/profile_view_model.dart';
 import '../features/quiz_question/presentation/quiz_question_page.dart';
 import '../features/quiz_result/presentation/quiz_result_page.dart';
 import '../features/quiz_result/presentation/quiz_result_view_model.dart';
+import '../features/search/presentation/search_page.dart';
+import '../features/search/presentation/search_view_model.dart';
 import '../features/settings/data/app_version.dart';
 import '../features/settings/data/reminder_scheduler.dart';
 import '../features/settings/data/security_repository.dart';
@@ -265,6 +267,35 @@ class _MainShellState extends State<MainShell> {
         .whenComplete(viewModel.dispose);
   }
 
+  void _openSearch(BuildContext context) {
+    final viewModel = SearchViewModel(
+      categories: _categoriesViewModel,
+      articles: _articlesViewModel,
+      legalUpdates: _legalUpdatesViewModel,
+    );
+    Navigator.of(context)
+        .push(
+          MaterialPageRoute<void>(
+            builder: (pageContext) => SearchPage(
+              viewModel: viewModel,
+              // Category screens don't exist yet; same message as on Home.
+              onCategorySelected: (category) => showMessage(
+                pageContext,
+                pageContext.l10n.featureComingSoon(category.label),
+              ),
+              onArticleOpened: (article, number) =>
+                  Navigator.of(pageContext).push(
+                    MaterialPageRoute<void>(
+                      builder: (_) =>
+                          ArticleDetailPage(number: number, article: article),
+                    ),
+                  ),
+            ),
+          ),
+        )
+        .whenComplete(viewModel.dispose);
+  }
+
   void _openAbout(BuildContext context) {
     Navigator.of(context).push(
       MaterialPageRoute<void>(
@@ -382,6 +413,7 @@ class _MainShellState extends State<MainShell> {
           ),
         ),
       ),
+      onSearchPressed: () => _openSearch(context),
       onViewAllLegalUpdatesPressed: () => Navigator.of(context).push(
         MaterialPageRoute<void>(
           builder: (_) => LegalUpdatesPage(viewModel: _legalUpdatesViewModel),

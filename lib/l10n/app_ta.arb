@@ -262,5 +262,16 @@
   "helpResHours": "நேரம்: {hours}",
   "helpResSource": "ஆதாரம்: {name}",
   "helpResEmpty": "இந்தத் தேர்வுக்குச் சரிபார்க்கப்பட்ட தொடர்புகள் இல்லை. வேறு வகை அல்லது மாநிலத்தை முயற்சிக்கவும்.",
-  "helpResOpenFailed": "இதை உங்கள் தொலைபேசியில் திறக்க முடியவில்லை."
+  "helpResOpenFailed": "இதை உங்கள் தொலைபேசியில் திறக்க முடியவில்லை.",
+  "searchHint": "சட்டங்கள், உரிமைகள் & சமீபத்திய புதுப்பிப்புகளைத் தேடுங்கள்",
+  "searchFilters": "வடிகட்டிகள்",
+  "searchFiltersActive": "{count} வடிகட்டிகள்",
+  "searchClearFilters": "வடிகட்டிகளை அழி",
+  "searchNoResults": "எதுவும் பொருந்தவில்லை. வேறு சொற்களை முயற்சிக்கவும் அல்லது வடிகட்டிகளை அழிக்கவும்.",
+  "filterTitle": "வடிகட்டி",
+  "filterContentType": "உள்ளடக்க வகை",
+  "filterCategory": "வகை",
+  "filterClearAll": "அனைத்தையும் அழி",
+  "filterApply": "வடிகட்டிகளைப் பயன்படுத்து",
+  "searchTypeCategories": "வினாடி வினா தலைப்புகள்"
 }
