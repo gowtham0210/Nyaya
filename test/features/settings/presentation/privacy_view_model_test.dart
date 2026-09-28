@@ -42,4 +42,30 @@ void main() {
     expect(viewModel.loggingOut, isFalse);
     expect(viewModel.logoutError, isA<ApiOfflineException>());
   });
+
+  test('a failed load is the error state and load() recovers', () async {
+    var online = false;
+    final viewModel = viewModelWith((_) async {
+      if (!online) {
+        throw http.ClientException('offline');
+      }
+      return http.Response('{"activeSessions":1}', 200);
+    });
+
+    await viewModel.load();
+    expect(viewModel.state, isA<Failed<int>>());
+
+    online = true;
+    await viewModel.load();
+    expect((viewModel.state as Loaded<int>).data, 1);
+  });
+
+  test('closing during log out does not throw', () async {
+    final viewModel = viewModelWith((_) async => http.Response('{}', 200));
+
+    final logout = viewModel.logoutAll();
+    viewModel.dispose();
+
+    expect(await logout, isTrue);
+  });
 }

@@ -17,7 +17,8 @@ class PrivacyPage extends StatefulWidget {
 
   final PrivacyViewModel viewModel;
 
-  /// Called after every session ended; the app returns to sign-in.
+  /// Called after every session ended, even if the page has closed; the
+  /// app returns to sign-in.
   final Future<void> Function() onSignedOut;
 
   @override

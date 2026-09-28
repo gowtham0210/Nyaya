@@ -2,14 +2,22 @@ import 'package:flutter/material.dart';
 
 import '../../../core/localization/l10n.dart';
 import '../../../core/presentation/widgets/nyaya_widgets.dart';
+import '../data/app_version.dart';
 import 'widgets/settings_scaffold.dart';
 
 /// About Nyaya (spec 030): what the app is for, and its version.
-class AboutPage extends StatelessWidget {
+class AboutPage extends StatefulWidget {
   const AboutPage({super.key, required this.loadVersion});
 
-  /// e.g. `1.0.0 (1)`; the shell reads it from the platform (ADR 0004).
-  final Future<String> Function() loadVersion;
+  final AppVersionReader loadVersion;
+
+  @override
+  State<AboutPage> createState() => _AboutPageState();
+}
+
+class _AboutPageState extends State<AboutPage> {
+  // Read once, not on every rebuild.
+  late final Future<String> _version = widget.loadVersion();
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +62,7 @@ class AboutPage extends StatelessWidget {
         const SizedBox(height: 6),
         Center(
           child: FutureBuilder<String>(
-            future: loadVersion(),
+            future: _version,
             builder: (context, snapshot) => Text(
               snapshot.hasData ? l10n.aboutVersion(snapshot.data!) : '',
               key: const ValueKey('about.version'),

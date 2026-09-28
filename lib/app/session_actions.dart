@@ -5,13 +5,20 @@ import '../features/auth/presentation/sign_in_page.dart';
 import 'app_services.dart';
 import 'app_session.dart';
 
-/// Revokes the backend session and signs out of Firebase (both
+/// Revokes the backend session (unless [revokeBackendSession] is false,
+/// e.g. after logging out everywhere) and signs out of Firebase (both
 /// best-effort), clears the local session, then returns to sign-in with a
 /// fresh navigation stack. Shows [message] there when given.
-Future<void> endSession(BuildContext context, {String? message}) async {
+Future<void> endSession(
+  BuildContext context, {
+  String? message,
+  bool revokeBackendSession = true,
+}) async {
   final navigator = Navigator.of(context, rootNavigator: true);
   final messenger = ScaffoldMessenger.maybeOf(context);
-  await AppServices.authRepository.logout();
+  if (revokeBackendSession) {
+    await AppServices.authRepository.logout();
+  }
   try {
     await FirebaseAuth.instance.signOut();
   } catch (_) {

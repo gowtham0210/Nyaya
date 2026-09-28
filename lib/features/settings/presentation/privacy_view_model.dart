@@ -27,7 +27,7 @@ class PrivacyViewModel extends LoadStateNotifier<int> {
   Future<bool> logoutAll() async {
     _loggingOut = true;
     _logoutError = null;
-    notifyListeners();
+    notifyIfActive();
     try {
       await _repository.logoutAll();
       return true;
@@ -36,7 +36,7 @@ class PrivacyViewModel extends LoadStateNotifier<int> {
       return false;
     } finally {
       _loggingOut = false;
-      notifyListeners();
+      notifyIfActive();
     }
   }
 }

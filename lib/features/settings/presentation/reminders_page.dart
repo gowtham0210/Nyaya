@@ -2,12 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../core/localization/l10n.dart';
 import 'reminders_view_model.dart';
-
-const _pageBackground = Color(0xFFF8F6F2);
-const _navy = Color(0xFF11233B);
-const _gold = Color(0xFFB9823A);
-const _cardBorder = Color(0xFFECE5DB);
-const _danger = Color(0xFFD64545);
+import 'widgets/settings_scaffold.dart';
 
 /// Daily practice reminders (spec 029): a switch and a time.
 class RemindersPage extends StatefulWidget {
@@ -54,81 +49,73 @@ class _RemindersPageState extends State<RemindersPage> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    return Scaffold(
-      backgroundColor: _pageBackground,
-      appBar: AppBar(
-        backgroundColor: _pageBackground,
-        foregroundColor: _navy,
-        surfaceTintColor: Colors.transparent,
-        title: Text(l10n.profileReminders),
-      ),
-      body: ListenableBuilder(
-        listenable: widget.viewModel,
-        builder: (context, _) {
-          final viewModel = widget.viewModel;
-          final settings = viewModel.settings;
-          final time = TimeOfDay(hour: settings.hour, minute: settings.minute);
-          return ListView(
-            padding: const EdgeInsets.fromLTRB(24, 8, 24, 24),
-            children: [
-              Material(
-                color: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
-                  side: const BorderSide(color: _cardBorder),
+    return ListenableBuilder(
+      listenable: widget.viewModel,
+      builder: (context, _) {
+        final viewModel = widget.viewModel;
+        final settings = viewModel.settings;
+        final time = TimeOfDay(hour: settings.hour, minute: settings.minute);
+        final canChange = viewModel.ready && !viewModel.busy;
+        return SettingsScaffold(
+          title: l10n.profileReminders,
+          children: [
+            SettingsCard(
+              children: [
+                SwitchListTile(
+                  key: const ValueKey('reminders.toggle'),
+                  value: settings.enabled,
+                  activeThumbColor: settingsGold,
+                  title: Text(l10n.remindersToggle),
+                  subtitle: Text(l10n.remindersToggleSubtitle),
+                  onChanged: canChange
+                      ? (enabled) => viewModel.setEnabled(enabled, _text())
+                      : null,
                 ),
-                clipBehavior: Clip.antiAlias,
-                child: Column(
-                  children: [
-                    SwitchListTile(
-                      key: const ValueKey('reminders.toggle'),
-                      value: settings.enabled,
-                      activeThumbColor: _gold,
-                      title: Text(l10n.remindersToggle),
-                      subtitle: Text(l10n.remindersToggleSubtitle),
-                      onChanged: viewModel.ready && !viewModel.busy
-                          ? (enabled) => viewModel.setEnabled(enabled, _text())
-                          : null,
+                ListTile(
+                  key: const ValueKey('reminders.time'),
+                  leading: const Icon(Icons.schedule_rounded),
+                  title: Text(l10n.remindersTime),
+                  trailing: Text(
+                    MaterialLocalizations.of(context).formatTimeOfDay(time),
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                      color: settingsNavy,
                     ),
-                    const Divider(height: 1, color: _cardBorder),
-                    ListTile(
-                      key: const ValueKey('reminders.time'),
-                      leading: const Icon(Icons.schedule_rounded),
-                      title: Text(l10n.remindersTime),
-                      trailing: Text(
-                        MaterialLocalizations.of(context).formatTimeOfDay(time),
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700,
-                          color: _navy,
-                        ),
-                      ),
-                      onTap: viewModel.ready && !viewModel.busy
-                          ? _pickTime
-                          : null,
-                    ),
-                  ],
+                  ),
+                  onTap: canChange ? _pickTime : null,
                 ),
+              ],
+            ),
+            if (viewModel.failed)
+              _Warning(
+                l10n.remindersFailed,
+                key: const ValueKey('reminders.failed'),
               ),
-              if (viewModel.failed) ...[
-                const SizedBox(height: 16),
-                Text(
-                  l10n.remindersFailed,
-                  key: const ValueKey('reminders.failed'),
-                  style: const TextStyle(color: _danger, height: 1.4),
-                ),
-              ],
-              if (viewModel.permissionDenied) ...[
-                const SizedBox(height: 16),
-                Text(
-                  l10n.remindersPermissionDenied,
-                  key: const ValueKey('reminders.denied'),
-                  style: const TextStyle(color: _danger, height: 1.4),
-                ),
-              ],
-            ],
-          );
-        },
+            if (viewModel.permissionDenied)
+              _Warning(
+                l10n.remindersPermissionDenied,
+                key: const ValueKey('reminders.denied'),
+              ),
+          ],
+        );
+      },
+    );
+  }
+}
+
+class _Warning extends StatelessWidget {
+  const _Warning(this.text, {super.key});
+
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 16),
+      child: Text(
+        text,
+        style: const TextStyle(color: settingsDanger, height: 1.4),
       ),
     );
   }

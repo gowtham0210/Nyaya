@@ -43,6 +43,9 @@ is lost, or see what the app is and its version.
 - FR-005: Privacy shall say there's no password to change.
 - FR-006: About shall show the app name, tagline, description, features
   and "Version x.y.z (build)".
+- FR-007: Signing out after logging out everywhere shall work even if the
+  learner left the page, and shall not try to revoke the session again.
+- FR-008: About reads the version once.
 
 ## Acceptance Criteria
 

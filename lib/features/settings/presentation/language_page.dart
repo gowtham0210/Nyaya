@@ -2,11 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../core/localization/app_language.dart';
 import '../../../core/localization/l10n.dart';
-
-const _pageBackground = Color(0xFFF8F6F2);
-const _navy = Color(0xFF11233B);
-const _gold = Color(0xFFB9823A);
-const _cardBorder = Color(0xFFECE5DB);
+import 'widgets/settings_scaffold.dart';
 
 /// Picks the app language (spec 028). Names show in their own scripts.
 class LanguagePage extends StatelessWidget {
@@ -24,41 +20,21 @@ class LanguagePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    return Scaffold(
-      backgroundColor: _pageBackground,
-      appBar: AppBar(
-        backgroundColor: _pageBackground,
-        foregroundColor: _navy,
-        surfaceTintColor: Colors.transparent,
-        title: Text(l10n.profileLanguage),
-      ),
-      body: ListView(
-        padding: const EdgeInsets.fromLTRB(24, 8, 24, 24),
-        children: [
-          Material(
-            color: Colors.white,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20),
-              side: const BorderSide(color: _cardBorder),
-            ),
-            clipBehavior: Clip.antiAlias,
-            child: Column(
-              children: [
-                for (final (index, locale)
-                    in AppLanguage.supported.indexed) ...[
-                  if (index > 0) const Divider(height: 1, color: _cardBorder),
-                  _LanguageTile(
-                    code: locale.languageCode,
-                    name: AppLanguage.nativeName(l10n, locale.languageCode),
-                    selected: locale.languageCode == current.languageCode,
-                    onTap: () => onSelected(locale.languageCode),
-                  ),
-                ],
-              ],
-            ),
-          ),
-        ],
-      ),
+    return SettingsScaffold(
+      title: l10n.profileLanguage,
+      children: [
+        SettingsCard(
+          children: [
+            for (final locale in AppLanguage.supported)
+              _LanguageTile(
+                code: locale.languageCode,
+                name: AppLanguage.nativeName(l10n, locale.languageCode),
+                selected: locale.languageCode == current.languageCode,
+                onTap: () => onSelected(locale.languageCode),
+              ),
+          ],
+        ),
+      ],
     );
   }
 }
@@ -89,14 +65,14 @@ class _LanguageTile extends StatelessWidget {
             style: TextStyle(
               fontSize: 17,
               fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
-              color: _navy,
+              color: settingsNavy,
             ),
           ),
           trailing: selected
               ? Icon(
                   Icons.check_circle_rounded,
                   key: ValueKey('language.$code.check'),
-                  color: _gold,
+                  color: settingsGold,
                 )
               : null,
           onTap: onTap,

@@ -78,7 +78,7 @@ class MainShell extends StatefulWidget {
   final ReminderScheduler? reminderScheduler;
 
   /// Reads the app version for About; defaults to the platform's.
-  final Future<String> Function()? loadAppVersion;
+  final AppVersionReader? loadAppVersion;
 
   @override
   State<MainShell> createState() => _MainShellState();
@@ -217,15 +217,19 @@ class _MainShellState extends State<MainShell> {
       case ProfileEntry.privacy:
         _openPrivacy(context);
       case ProfileEntry.about:
-        Navigator.of(context).push(
-          MaterialPageRoute<void>(
-            builder: (_) =>
-                AboutPage(loadVersion: widget.loadAppVersion ?? readAppVersion),
-          ),
-        );
+        _openAbout(context);
       default:
         showMessage(context, context.l10n.commonComingSoon);
     }
+  }
+
+  void _openAbout(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (_) =>
+            AboutPage(loadVersion: widget.loadAppVersion ?? readAppVersion),
+      ),
+    );
   }
 
   void _openPrivacy(BuildContext context) {
@@ -235,9 +239,12 @@ class _MainShellState extends State<MainShell> {
     Navigator.of(context)
         .push(
           MaterialPageRoute<void>(
-            builder: (pageContext) => PrivacyPage(
+            builder: (_) => PrivacyPage(
               viewModel: viewModel,
-              onSignedOut: () => endSession(pageContext),
+              // The Profile tab's context outlives the page; the backend
+              // already ended every session.
+              onSignedOut: () =>
+                  endSession(context, revokeBackendSession: false),
             ),
           ),
         )

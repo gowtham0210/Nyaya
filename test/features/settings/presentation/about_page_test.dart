@@ -27,4 +27,25 @@ void main() {
 
     expect(find.text('संस्करण 1.0.0 (1)'), findsOneWidget);
   });
+
+  testWidgets('reads the version once and fits large text', (tester) async {
+    tester.platformDispatcher.textScaleFactorTestValue = 1.6;
+    addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
+    var reads = 0;
+    await pumpLocalized(
+      tester,
+      AboutPage(
+        loadVersion: () async {
+          reads++;
+          return '1.0.0 (1)';
+        },
+      ),
+      locale: const Locale('en'),
+    );
+    tester.view.physicalSize = const Size(320, 640);
+    await tester.pumpAndSettle();
+
+    expect(tester.takeException(), isNull);
+    expect(reads, 1);
+  });
 }

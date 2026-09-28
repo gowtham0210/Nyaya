@@ -51,6 +51,14 @@ abstract class LoadStateNotifier<T> extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// [notifyListeners], unless disposed (a page may close mid-request).
+  @protected
+  void notifyIfActive() {
+    if (!_disposed) {
+      notifyListeners();
+    }
+  }
+
   @override
   void dispose() {
     _disposed = true;

@@ -114,4 +114,32 @@ void main() {
 
     expect(find.text('सक्रिय सत्र'), findsOneWidget);
   });
+
+  testWidgets('a failed count shows Retry, which reloads', (tester) async {
+    online = false;
+    final viewModel = PrivacyViewModel(
+      repository: SecurityRepository(
+        ApiClient(
+          httpClient: MockClient((_) async {
+            if (!online) {
+              throw http.ClientException('offline');
+            }
+            return http.Response('{"activeSessions":4}', 200);
+          }),
+        ),
+      ),
+    );
+    addTearDown(viewModel.dispose);
+    await pumpLocalized(
+      tester,
+      PrivacyPage(viewModel: viewModel, onSignedOut: () async {}),
+      locale: const Locale('en'),
+    );
+
+    online = true;
+    await tester.tap(find.byKey(const ValueKey('loadState.retry')));
+    await tester.pumpAndSettle();
+
+    expect(find.text('4'), findsOneWidget);
+  });
 }
