@@ -15,7 +15,14 @@ const wordmarkAsset = 'assets/branding/wordmark.png';
 const starAsset = 'assets/icons/star.png';
 
 class BrandLockup extends StatelessWidget {
-  const BrandLockup({super.key});
+  const BrandLockup({super.key, this.keyPrefix});
+
+  /// When set, the logo, wordmark, divider and tagline get
+  /// `'$keyPrefix.logo'`-style keys so screens can locate them in tests.
+  final String? keyPrefix;
+
+  Key? _key(String part) =>
+      keyPrefix == null ? null : ValueKey('$keyPrefix.$part');
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +42,7 @@ class BrandLockup extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         SizedBox(
+          key: _key('logo'),
           width: logoWidth,
           height: logoHeight,
           child: Image.asset(
@@ -45,6 +53,7 @@ class BrandLockup extends StatelessWidget {
         ),
         SizedBox(height: _clamp(height * 0.006, 4, 8)),
         SizedBox(
+          key: _key('wordmark'),
           width: wordmarkWidth,
           height: wordmarkHeight,
           child: Image.asset(
@@ -55,12 +64,14 @@ class BrandLockup extends StatelessWidget {
         ),
         SizedBox(height: 8),
         SizedBox(
+          key: _key('divider'),
           width: dividerWidth,
           child: const NyayaDivider(),
         ),
         SizedBox(height: 8),
         Text(
           'LAW BASED QUIZ APP',
+          key: _key('tagline'),
           textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.labelLarge?.copyWith(
                 color: gold,

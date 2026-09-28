@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:nyaya/app/app.dart';
+import 'package:nyaya/features/onboarding/presentation/welcome_page.dart';
 import 'package:nyaya/features/splash/presentation/splash_page.dart';
 
 void main() {
@@ -130,7 +131,7 @@ void main() {
     semantics.dispose();
   });
 
-  testWidgets('NyayaApp waits for tap after the loading bar completes', (
+  testWidgets('NyayaApp waits for tap, then shows Welcome on a fresh install', (
     WidgetTester tester,
   ) async {
     tester.view.reset();
@@ -148,7 +149,7 @@ void main() {
     );
 
     expect(find.byKey(const ValueKey('splash.screen')), findsOneWidget);
-    expect(find.byKey(const ValueKey('home.headline')), findsNothing);
+    expect(find.byType(WelcomePage), findsNothing);
 
     await tester.pump(const Duration(milliseconds: 10));
     await tester.pump();
@@ -159,12 +160,12 @@ void main() {
     expect(progress.value, 1);
     expect(find.byKey(const ValueKey('splash.screen')), findsOneWidget);
     expect(find.byKey(const ValueKey('splash.tap_target')), findsOneWidget);
-    expect(find.byKey(const ValueKey('home.headline')), findsNothing);
+    expect(find.byType(WelcomePage), findsNothing);
 
     await tester.tap(find.byKey(const ValueKey('splash.tap_target')));
     await tester.pumpAndSettle();
 
-    expect(find.byKey(const ValueKey('home.headline')), findsOneWidget);
-    expect(find.text('Spec-driven Flutter baseline'), findsOneWidget);
+    // A fresh install is not onboarded, so the splash hands off to Welcome.
+    expect(find.byType(WelcomePage), findsOneWidget);
   });
 }

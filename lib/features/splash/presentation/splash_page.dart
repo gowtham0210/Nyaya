@@ -36,6 +36,7 @@ class SplashPage extends StatelessWidget {
         child: Stack(
           children: [
             const Positioned.fill(
+              key: ValueKey('splash.wave'),
               child: BackgroundWave(),
             ),
             Positioned(
@@ -125,6 +126,7 @@ class SplashPage extends StatelessWidget {
                             child: const ExcludeSemantics(
                               child: BrandLockup(
                                 key: ValueKey('splash.brand'),
+                                keyPrefix: 'splash',
                               ),
                             ),
                           ),
