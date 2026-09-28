@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/presentation/widgets/nyaya_bottom_nav.dart';
+import '../../../core/presentation/widgets/nyaya_icon.dart';
 import '../../../core/presentation/widgets/nyaya_widgets.dart';
 import 'home_view_model.dart';
 
@@ -41,7 +43,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: pageBackground,
-      bottomNavigationBar: _HomeBottomNavigationBar(
+      bottomNavigationBar: NyayaBottomNavBar(
         items: viewModel.navigationItems,
         activeIndex: viewModel.activeNavigationIndex,
         onSelected: (index) {
@@ -605,7 +607,7 @@ class _CategoryTile extends StatelessWidget {
                 border: Border.all(color: HomePage.cardBorder),
               ),
               alignment: Alignment.center,
-              child: _HomeIcon(
+              child: NyayaIcon(
                 type: category.icon,
                 size: 38,
                 color: HomePage.heroBackground,
@@ -837,7 +839,7 @@ class _PopularQuizCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(18),
                 ),
                 alignment: Alignment.center,
-                child: _HomeIcon(
+                child: NyayaIcon(
                   type: quiz.icon,
                   size: 40,
                   color: Color(quiz.tileForegroundHex),
@@ -975,187 +977,3 @@ class _RatingPill extends StatelessWidget {
   }
 }
 
-class _HomeBottomNavigationBar extends StatelessWidget {
-  const _HomeBottomNavigationBar({
-    required this.items,
-    required this.activeIndex,
-    required this.onSelected,
-  });
-
-  final List<HomeNavItemData> items;
-  final int activeIndex;
-  final ValueChanged<int> onSelected;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      key: const ValueKey('home.bottomNav'),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        border: const Border(top: BorderSide(color: HomePage.cardBorder)),
-        boxShadow: [
-          BoxShadow(
-            color: HomePage.heroBackground.withValues(alpha: 0.06),
-            blurRadius: 20,
-            offset: const Offset(0, -6),
-          ),
-        ],
-      ),
-      child: SafeArea(
-        top: false,
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
-          child: Row(
-            children: [
-              for (var i = 0; i < items.length; i++)
-                Expanded(
-                  child: _NavItem(
-                    item: items[i],
-                    isActive: i == activeIndex,
-                    onTap: () => onSelected(i),
-                  ),
-                ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _NavItem extends StatelessWidget {
-  const _NavItem({
-    required this.item,
-    required this.isActive,
-    required this.onTap,
-  });
-
-  final HomeNavItemData item;
-  final bool isActive;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final color = isActive ? HomePage.heroBackground : HomePage.mutedIcon;
-
-    return InkWell(
-      key: ValueKey('home.nav.${item.id}'),
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(16),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 6),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            _HomeIcon(
-              type: item.icon,
-              size: 24,
-              color: color,
-              accentColor: color,
-            ),
-            const SizedBox(height: 6),
-            Text(
-              item.label,
-              style: TextStyle(
-                fontSize: 12,
-                fontWeight: isActive ? FontWeight.w700 : FontWeight.w500,
-                color: color,
-              ),
-            ),
-            const SizedBox(height: 8),
-            AnimatedContainer(
-              key: isActive
-                  ? ValueKey('home.nav.${item.id}.active')
-                  : ValueKey('home.nav.${item.id}.inactive'),
-              duration: const Duration(milliseconds: 180),
-              curve: Curves.easeOut,
-              width: isActive ? 28 : 12,
-              height: 3,
-              decoration: BoxDecoration(
-                color: isActive ? HomePage.heroHighlight : Colors.transparent,
-                borderRadius: BorderRadius.circular(999),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _HomeIcon extends StatelessWidget {
-  const _HomeIcon({
-    required this.type,
-    required this.size,
-    required this.color,
-    required this.accentColor,
-  });
-
-  final HomeIconType type;
-  final double size;
-  final Color color;
-  final Color accentColor;
-
-  @override
-  Widget build(BuildContext context) {
-    switch (type) {
-      case HomeIconType.book:
-        return Icon(Icons.menu_book_rounded, size: size, color: color);
-      case HomeIconType.gavel:
-        return Transform.rotate(
-          angle: -0.35,
-          child: Icon(Icons.gavel_rounded, size: size, color: color),
-        );
-      case HomeIconType.scales:
-        return Icon(Icons.balance_rounded, size: size, color: color);
-      case HomeIconType.document:
-        return Stack(
-          alignment: Alignment.center,
-          children: [
-            Icon(Icons.description_outlined, size: size, color: color),
-            Positioned(
-              right: size * 0.06,
-              bottom: size * 0.02,
-              child: Icon(
-                Icons.edit_outlined,
-                size: size * 0.38,
-                color: accentColor,
-              ),
-            ),
-          ],
-        );
-      case HomeIconType.community:
-        return Icon(Icons.groups_outlined, size: size, color: color);
-      case HomeIconType.temple:
-        return Icon(Icons.account_balance_outlined, size: size, color: color);
-      case HomeIconType.handcuffs:
-        return Icon(Icons.link_rounded, size: size, color: color);
-      case HomeIconType.contract:
-        return Stack(
-          alignment: Alignment.center,
-          children: [
-            Icon(Icons.article_outlined, size: size, color: color),
-            Positioned(
-              right: size * 0.04,
-              bottom: 0,
-              child: Icon(
-                Icons.verified_user_outlined,
-                size: size * 0.34,
-                color: accentColor,
-              ),
-            ),
-          ],
-        );
-      case HomeIconType.navHome:
-        return Icon(Icons.home_rounded, size: size, color: color);
-      case HomeIconType.navCategories:
-        return Icon(Icons.grid_view_rounded, size: size, color: color);
-      case HomeIconType.navLeaderboard:
-        return Icon(Icons.emoji_events_outlined, size: size, color: color);
-      case HomeIconType.navBookmarks:
-        return Icon(Icons.bookmark_border_rounded, size: size, color: color);
-      case HomeIconType.navProfile:
-        return Icon(Icons.person_outline_rounded, size: size, color: color);
-    }
-  }
-}

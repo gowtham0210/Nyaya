@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import '../features/auth/data/auth_repository.dart';
 import '../features/auth/data/auth_token_store.dart';
 import '../features/auth/presentation/sign_in_page.dart';
+import '../features/categories/presentation/categories_page.dart';
+import '../features/categories/presentation/categories_view_model.dart';
 import '../features/goal_selection/presentation/goal_selection_page.dart';
 import '../features/home/presentation/home_page.dart';
 import '../features/home/presentation/home_view_model.dart';
@@ -31,20 +33,19 @@ Widget buildWiredHomePage(BuildContext context) {
         ),
       ),
     ),
+    onViewAllCategoriesPressed: () => _openCategories(context),
     // Temporary: the Profile tab doubles as a Logout action for testing
     // Signup/OTP repeatedly. Replace once a real Profile screen exists.
     onNavigationSelected: (index) {
+      if (index == 1) {
+        _openCategories(context);
+        return;
+      }
       if (index == _profileNavIndex) {
         logout(context);
         return;
       }
-      ScaffoldMessenger.of(context)
-        ..hideCurrentSnackBar()
-        ..showSnackBar(
-          SnackBar(
-            content: Text('${viewModel.navigationItems[index].label} coming soon.'),
-          ),
-        );
+      _showComingSoon(context, viewModel.navigationItems[index].label);
     },
   );
 }
@@ -65,6 +66,40 @@ Future<void> logout(BuildContext context) async {
     MaterialPageRoute<void>(builder: (_) => const SignInPage()),
     (route) => false,
   );
+}
+
+/// Provisional wire until Leaderboard/Bookmarks/Profile exist.
+void _openCategories(BuildContext context) {
+  Navigator.of(context).push(
+    MaterialPageRoute<void>(
+      builder: (categoriesContext) => CategoriesPage(
+        viewModel: const CategoriesViewModel(),
+        onNavigationSelected: (index) {
+          if (index == 0) {
+            Navigator.of(categoriesContext).pop();
+            return;
+          }
+          if (index == 1) {
+            return;
+          }
+          if (index == _profileNavIndex) {
+            logout(categoriesContext);
+            return;
+          }
+          _showComingSoon(
+            categoriesContext,
+            const CategoriesViewModel().navigationItems[index].label,
+          );
+        },
+      ),
+    ),
+  );
+}
+
+void _showComingSoon(BuildContext context, String label) {
+  ScaffoldMessenger.of(context)
+    ..hideCurrentSnackBar()
+    ..showSnackBar(SnackBar(content: Text('$label coming soon.')));
 }
 
 /// The sample session ignores the quiz id for its questions, but uses it to

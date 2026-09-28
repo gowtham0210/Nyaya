@@ -1,3 +1,8 @@
+import '../../../core/presentation/widgets/nyaya_icon.dart';
+
+export '../../../core/presentation/widgets/nyaya_icon.dart'
+    show HomeIconType, HomeNavItemData;
+
 class HomeViewModel {
   const HomeViewModel();
 
@@ -126,22 +131,6 @@ enum QuizDifficulty {
   final String label;
 }
 
-enum HomeIconType {
-  book,
-  gavel,
-  scales,
-  document,
-  community,
-  temple,
-  handcuffs,
-  contract,
-  navHome,
-  navCategories,
-  navLeaderboard,
-  navBookmarks,
-  navProfile,
-}
-
 class HomeCategoryData {
   const HomeCategoryData({
     required this.id,
@@ -190,14 +179,3 @@ class PopularQuizData {
   final HomeIconType icon;
 }
 
-class HomeNavItemData {
-  const HomeNavItemData({
-    required this.id,
-    required this.label,
-    required this.icon,
-  });
-
-  final String id;
-  final String label;
-  final HomeIconType icon;
-}

@@ -70,3 +70,5 @@ ios/Runner/GoogleService-Info.plist
 # OS
 .DS_Store
 Thumbs.db
+# Golden test failure output
+test/**/failures/
