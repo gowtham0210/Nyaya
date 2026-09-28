@@ -1,0 +1,19 @@
+{
+  "@@locale": "te",
+  "appTitle": "న్యాయ",
+  "languageEnglish": "English",
+  "languageHindi": "हिन्दी",
+  "languageTamil": "தமிழ்",
+  "languageTelugu": "తెలుగు",
+  "languageKannada": "ಕನ್ನಡ",
+  "commonRetry": "మళ్లీ ప్రయత్నించండి",
+  "commonCancel": "రద్దు చేయండి",
+  "commonSave": "సేవ్ చేయండి",
+  "commonSeeAll": "అన్నీ చూడండి",
+  "commonComingSoon": "త్వరలో వస్తుంది",
+  "featureComingSoon": "{feature} త్వరలో వస్తుంది.",
+  "errorOffline": "న్యాయ సర్వర్‌ను చేరుకోలేకపోయాము. మీ కనెక్షన్‌ను తనిఖీ చేసి మళ్లీ ప్రయత్నించండి.",
+  "errorSessionExpired": "మీ సెషన్ ముగిసింది. దయచేసి మళ్లీ సైన్ ఇన్ చేయండి.",
+  "errorGeneric": "ఏదో తప్పు జరిగింది. దయచేసి మళ్లీ ప్రయత్నించండి.",
+  "emptyNothingHere": "ఇక్కడ ఇంకా ఏమీ లేదు."
+}

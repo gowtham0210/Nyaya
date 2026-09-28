@@ -1,0 +1,19 @@
+{
+  "@@locale": "ta",
+  "appTitle": "நியாயா",
+  "languageEnglish": "English",
+  "languageHindi": "हिन्दी",
+  "languageTamil": "தமிழ்",
+  "languageTelugu": "తెలుగు",
+  "languageKannada": "ಕನ್ನಡ",
+  "commonRetry": "மீண்டும் முயற்சி",
+  "commonCancel": "ரத்து செய்",
+  "commonSave": "சேமி",
+  "commonSeeAll": "அனைத்தையும் காண்க",
+  "commonComingSoon": "விரைவில் வருகிறது",
+  "featureComingSoon": "{feature} விரைவில் வருகிறது.",
+  "errorOffline": "நியாயா சேவையகத்தை அடைய முடியவில்லை. இணைப்பைச் சரிபார்த்து மீண்டும் முயற்சிக்கவும்.",
+  "errorSessionExpired": "உங்கள் அமர்வு முடிந்தது. மீண்டும் உள்நுழையவும்.",
+  "errorGeneric": "ஏதோ தவறு நடந்தது. மீண்டும் முயற்சிக்கவும்.",
+  "emptyNothingHere": "இங்கே இன்னும் எதுவும் இல்லை."
+}

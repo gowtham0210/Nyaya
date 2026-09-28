@@ -1,0 +1,26 @@
+{
+  "@@locale": "en",
+  "appTitle": "Nyaya",
+  "languageEnglish": "English",
+  "languageHindi": "हिन्दी",
+  "languageTamil": "தமிழ்",
+  "languageTelugu": "తెలుగు",
+  "languageKannada": "ಕನ್ನಡ",
+  "commonRetry": "Retry",
+  "commonCancel": "Cancel",
+  "commonSave": "Save",
+  "commonSeeAll": "See all",
+  "commonComingSoon": "Coming soon",
+  "featureComingSoon": "{feature} coming soon.",
+  "@featureComingSoon": {
+    "placeholders": {
+      "feature": {
+        "type": "String"
+      }
+    }
+  },
+  "errorOffline": "Can't reach the Nyaya server. Check your connection and try again.",
+  "errorSessionExpired": "Your session has ended. Please sign in again.",
+  "errorGeneric": "Something went wrong. Please try again.",
+  "emptyNothingHere": "Nothing here yet."
+}

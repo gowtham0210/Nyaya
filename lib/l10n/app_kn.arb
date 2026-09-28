@@ -1,0 +1,19 @@
+{
+  "@@locale": "kn",
+  "appTitle": "ನ್ಯಾಯ",
+  "languageEnglish": "English",
+  "languageHindi": "हिन्दी",
+  "languageTamil": "தமிழ்",
+  "languageTelugu": "తెలుగు",
+  "languageKannada": "ಕನ್ನಡ",
+  "commonRetry": "ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ",
+  "commonCancel": "ರದ್ದುಮಾಡಿ",
+  "commonSave": "ಉಳಿಸಿ",
+  "commonSeeAll": "ಎಲ್ಲವನ್ನೂ ನೋಡಿ",
+  "commonComingSoon": "ಶೀಘ್ರದಲ್ಲಿ ಬರುತ್ತಿದೆ",
+  "featureComingSoon": "{feature} ಶೀಘ್ರದಲ್ಲಿ ಬರುತ್ತಿದೆ.",
+  "errorOffline": "ನ್ಯಾಯ ಸರ್ವರ್ ತಲುಪಲು ಆಗುತ್ತಿಲ್ಲ. ನಿಮ್ಮ ಸಂಪರ್ಕ ಪರಿಶೀಲಿಸಿ ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.",
+  "errorSessionExpired": "ನಿಮ್ಮ ಸೆಷನ್ ಮುಗಿದಿದೆ. ದಯವಿಟ್ಟು ಮತ್ತೆ ಸೈನ್ ಇನ್ ಮಾಡಿ.",
+  "errorGeneric": "ಏನೋ ತಪ್ಪಾಗಿದೆ. ದಯವಿಟ್ಟು ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.",
+  "emptyNothingHere": "ಇಲ್ಲಿ ಇನ್ನೂ ಏನೂ ಇಲ್ಲ."
+}

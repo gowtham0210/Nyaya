@@ -1,0 +1,19 @@
+{
+  "@@locale": "hi",
+  "appTitle": "न्याय",
+  "languageEnglish": "English",
+  "languageHindi": "हिन्दी",
+  "languageTamil": "தமிழ்",
+  "languageTelugu": "తెలుగు",
+  "languageKannada": "ಕನ್ನಡ",
+  "commonRetry": "पुनः प्रयास करें",
+  "commonCancel": "रद्द करें",
+  "commonSave": "सहेजें",
+  "commonSeeAll": "सभी देखें",
+  "commonComingSoon": "शीघ्र आ रहा है",
+  "featureComingSoon": "{feature} जल्द आ रहा है।",
+  "errorOffline": "न्याय सर्वर तक नहीं पहुँच पा रहे। अपना कनेक्शन जाँचें और पुनः प्रयास करें।",
+  "errorSessionExpired": "आपका सत्र समाप्त हो गया है। कृपया फिर से साइन इन करें।",
+  "errorGeneric": "कुछ गलत हो गया। कृपया पुनः प्रयास करें।",
+  "emptyNothingHere": "अभी यहाँ कुछ नहीं है।"
+}

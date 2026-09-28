@@ -1,0 +1,62 @@
+// ignore: unused_import
+import 'package:intl/intl.dart' as intl;
+import 'app_localizations.dart';
+
+// ignore_for_file: type=lint
+
+/// The translations for Hindi (`hi`).
+class AppLocalizationsHi extends AppLocalizations {
+  AppLocalizationsHi([String locale = 'hi']) : super(locale);
+
+  @override
+  String get appTitle => 'न्याय';
+
+  @override
+  String get languageEnglish => 'English';
+
+  @override
+  String get languageHindi => 'हिन्दी';
+
+  @override
+  String get languageTamil => 'தமிழ்';
+
+  @override
+  String get languageTelugu => 'తెలుగు';
+
+  @override
+  String get languageKannada => 'ಕನ್ನಡ';
+
+  @override
+  String get commonRetry => 'पुनः प्रयास करें';
+
+  @override
+  String get commonCancel => 'रद्द करें';
+
+  @override
+  String get commonSave => 'सहेजें';
+
+  @override
+  String get commonSeeAll => 'सभी देखें';
+
+  @override
+  String get commonComingSoon => 'शीघ्र आ रहा है';
+
+  @override
+  String featureComingSoon(String feature) {
+    return '$feature जल्द आ रहा है।';
+  }
+
+  @override
+  String get errorOffline =>
+      'न्याय सर्वर तक नहीं पहुँच पा रहे। अपना कनेक्शन जाँचें और पुनः प्रयास करें।';
+
+  @override
+  String get errorSessionExpired =>
+      'आपका सत्र समाप्त हो गया है। कृपया फिर से साइन इन करें।';
+
+  @override
+  String get errorGeneric => 'कुछ गलत हो गया। कृपया पुनः प्रयास करें।';
+
+  @override
+  String get emptyNothingHere => 'अभी यहाँ कुछ नहीं है।';
+}
