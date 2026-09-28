@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 
-const settingsNavy = Color(0xFF11233B);
-const settingsGold = Color(0xFFB9823A);
-const settingsSupportText = Color(0xFF5E6878);
-const settingsDanger = Color(0xFFD64545);
+const brandNavy = Color(0xFF11233B);
+const brandGold = Color(0xFFB9823A);
+const brandSupportText = Color(0xFF5E6878);
+const brandDanger = Color(0xFFD64545);
 const _pageBackground = Color(0xFFF8F6F2);
 const _cardBorder = Color(0xFFECE5DB);
 
-/// The shared frame for Profile's settings and help screens: title bar and a
+/// The shared frame for detail screens opened from Profile: title bar and a
 /// padded, scrolling list.
-class SettingsScaffold extends StatelessWidget {
-  const SettingsScaffold({
+class DetailScaffold extends StatelessWidget {
+  const DetailScaffold({
     super.key,
     required this.title,
     required this.children,
@@ -25,7 +25,7 @@ class SettingsScaffold extends StatelessWidget {
       backgroundColor: _pageBackground,
       appBar: AppBar(
         backgroundColor: _pageBackground,
-        foregroundColor: settingsNavy,
+        foregroundColor: brandNavy,
         surfaceTintColor: Colors.transparent,
         title: Text(title),
       ),
@@ -38,8 +38,8 @@ class SettingsScaffold extends StatelessWidget {
 }
 
 /// A white rounded card; [children] are separated by dividers.
-class SettingsCard extends StatelessWidget {
-  const SettingsCard({super.key, required this.children});
+class DetailCard extends StatelessWidget {
+  const DetailCard({super.key, required this.children});
 
   final List<Widget> children;
 
@@ -66,8 +66,8 @@ class SettingsCard extends StatelessWidget {
 }
 
 /// A section heading above a card.
-class SettingsHeading extends StatelessWidget {
-  const SettingsHeading(this.text, {super.key});
+class DetailHeading extends StatelessWidget {
+  const DetailHeading(this.text, {super.key});
 
   final String text;
 
@@ -82,7 +82,7 @@ class SettingsHeading extends StatelessWidget {
           style: const TextStyle(
             fontSize: 17,
             fontWeight: FontWeight.w700,
-            color: settingsNavy,
+            color: brandNavy,
           ),
         ),
       ),

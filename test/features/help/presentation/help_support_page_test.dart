@@ -118,4 +118,40 @@ void main() {
 
     expect(find.text('अनुरोध भेजें'), findsOneWidget);
   });
+
+  testWidgets('a failed list shows Retry, which reloads', (tester) async {
+    backend.online = false;
+    await pumpPage(tester);
+    await scrollTo(tester, find.byKey(const ValueKey('loadState.retry')));
+
+    backend.online = true;
+    await tester.tap(find.byKey(const ValueKey('loadState.retry')));
+    await tester.pumpAndSettle();
+
+    await scrollTo(tester, find.text("You haven't sent any requests yet."));
+    expect(find.text("You haven't sent any requests yet."), findsOneWidget);
+  });
+
+  testWidgets('long messages wrap and fit large text', (tester) async {
+    final long = List.filled(
+      20,
+      'The OTP never arrives on my phone.',
+    ).join(' ');
+    backend.requests.add({
+      'id': 1,
+      'subject': 'OTP',
+      'message': long,
+      'status': 'open',
+      'createdAt': '2026-09-20T10:00:00.000Z',
+    });
+    tester.platformDispatcher.textScaleFactorTestValue = 1.6;
+    addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
+    await pumpPage(tester);
+    tester.view.physicalSize = const Size(320, 640);
+    await tester.pumpAndSettle();
+    await scrollTo(tester, find.text(long));
+
+    expect(tester.takeException(), isNull);
+    expect(tester.widget<Text>(find.text(long)).maxLines, isNull);
+  });
 }

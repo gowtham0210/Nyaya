@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../core/localization/l10n.dart';
 import '../../../core/presentation/widgets/nyaya_widgets.dart';
 import '../data/app_version.dart';
-import '../../../core/presentation/widgets/settings_scaffold.dart';
+import '../../../core/presentation/widgets/detail_scaffold.dart';
 
 /// About Nyaya (spec 030): what the app is for, and its version.
 class AboutPage extends StatefulWidget {
@@ -29,7 +29,7 @@ class _AboutPageState extends State<AboutPage> {
       (Icons.quiz_outlined, l10n.aboutFeatureQuizzes),
       (Icons.language_rounded, l10n.aboutFeatureLanguages),
     ];
-    return SettingsScaffold(
+    return DetailScaffold(
       title: l10n.profileAbout,
       children: [
         Center(
@@ -48,7 +48,7 @@ class _AboutPageState extends State<AboutPage> {
               fontSize: 26,
               fontWeight: FontWeight.w800,
               fontFamily: 'serif',
-              color: settingsNavy,
+              color: brandNavy,
             ),
           ),
         ),
@@ -56,7 +56,7 @@ class _AboutPageState extends State<AboutPage> {
           child: Text(
             l10n.aboutTagline,
             textAlign: TextAlign.center,
-            style: const TextStyle(color: settingsGold),
+            style: const TextStyle(color: brandGold),
           ),
         ),
         const SizedBox(height: 6),
@@ -66,25 +66,21 @@ class _AboutPageState extends State<AboutPage> {
             builder: (context, snapshot) => Text(
               snapshot.hasData ? l10n.aboutVersion(snapshot.data!) : '',
               key: const ValueKey('about.version'),
-              style: const TextStyle(color: settingsSupportText),
+              style: const TextStyle(color: brandSupportText),
             ),
           ),
         ),
         const SizedBox(height: 16),
         Text(
           l10n.aboutDescription,
-          style: const TextStyle(
-            fontSize: 15,
-            height: 1.5,
-            color: settingsNavy,
-          ),
+          style: const TextStyle(fontSize: 15, height: 1.5, color: brandNavy),
         ),
-        SettingsHeading(l10n.aboutFeaturesTitle),
-        SettingsCard(
+        DetailHeading(l10n.aboutFeaturesTitle),
+        DetailCard(
           children: [
             for (final (icon, text) in features)
               ListTile(
-                leading: Icon(icon, color: settingsGold),
+                leading: Icon(icon, color: brandGold),
                 title: Text(text),
               ),
           ],

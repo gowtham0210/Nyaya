@@ -35,6 +35,12 @@ void main() {
                   'status': 'escalated',
                   'createdAt': '2026-09-01T10:00:00.000Z',
                 },
+                {
+                  'id': 4,
+                  'subject': 'Undated',
+                  'message': 'Fourth',
+                  'status': 'pending',
+                },
               ],
             }),
             200,
@@ -45,31 +51,30 @@ void main() {
 
     final requests = await repository.fetchRequests();
 
-    expect(requests.map((r) => r.subject), ['New', 'Odd', 'Old']);
+    // Undated requests go last, with no made-up date.
+    expect(requests.map((r) => r.subject), ['New', 'Odd', 'Old', 'Undated']);
     expect(requests.first.status, SupportStatus.inProgress);
-    expect(requests.last.status, SupportStatus.resolved);
+    expect(requests[2].status, SupportStatus.resolved);
+    // Only the four known statuses map; anything else is open.
     expect(requests[1].status, SupportStatus.open);
+    expect(requests.last.status, SupportStatus.open);
+    expect(requests.last.createdAt, isNull);
     expect(requests.first.createdAt, DateTime.utc(2026, 9, 20, 10).toLocal());
   });
 
-  test('sends a request and returns it', () async {
+  test('sends a request', () async {
     late http.Request sent;
     final repository = SupportRepository(
       ApiClient(
         httpClient: MockClient((request) async {
           sent = request;
-          return http.Response(
-            '{"id":9,"subject":"Help","message":"Cannot log in","status":"open"}',
-            201,
-          );
+          // An odd reply must not turn a stored request into a failure.
+          return http.Response('{"ok":true}', 201);
         }),
       ),
     );
 
-    final request = await repository.send(
-      subject: 'Help',
-      message: 'Cannot log in',
-    );
+    await repository.send(subject: 'Help', message: 'Cannot log in');
 
     expect(sent.method, 'POST');
     expect(sent.url.path, '/api/v1/users/me/support-requests');
@@ -77,9 +82,5 @@ void main() {
       'subject': 'Help',
       'message': 'Cannot log in',
     });
-    expect(request.id, 9);
-    expect(request.status, SupportStatus.open);
-    // No createdAt from the backend: treat it as just sent.
-    expect(DateTime.now().difference(request.createdAt).inMinutes, lessThan(1));
   });
 }

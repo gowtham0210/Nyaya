@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 import '../../../core/localization/l10n.dart';
 import '../../../core/presentation/show_message.dart';
 import '../../../core/presentation/widgets/load_state_view.dart';
-import '../../../core/presentation/widgets/settings_scaffold.dart';
+import '../../../core/presentation/widgets/detail_scaffold.dart';
 import '../data/link_opener.dart';
 import 'help_resources_view_model.dart';
 
@@ -47,12 +47,12 @@ class _HelpResourcesPageState extends State<HelpResourcesPage> {
       listenable: widget.viewModel,
       builder: (context, _) {
         final viewModel = widget.viewModel;
-        return SettingsScaffold(
+        return DetailScaffold(
           title: l10n.profileHelpResources,
           children: [
             Text(
               l10n.helpResSubtitle,
-              style: const TextStyle(color: settingsSupportText, height: 1.4),
+              style: const TextStyle(color: brandSupportText, height: 1.4),
             ),
             const SizedBox(height: 12),
             _EmergencyNote(onCall: () => _open(telLink('112'))),
@@ -137,7 +137,7 @@ class _EmergencyNote extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
       key: const ValueKey('helpRes.emergency'),
-      color: settingsDanger.withValues(alpha: 0.08),
+      color: brandDanger.withValues(alpha: 0.08),
       borderRadius: BorderRadius.circular(14),
       child: InkWell(
         borderRadius: BorderRadius.circular(14),
@@ -146,18 +146,18 @@ class _EmergencyNote extends StatelessWidget {
           padding: const EdgeInsets.all(12),
           child: Row(
             children: [
-              const Icon(Icons.emergency_outlined, color: settingsDanger),
+              const Icon(Icons.emergency_outlined, color: brandDanger),
               const SizedBox(width: 10),
               Expanded(
                 child: Text(
                   context.l10n.helpResEmergency,
                   style: const TextStyle(
-                    color: settingsDanger,
+                    color: brandDanger,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
               ),
-              const Icon(Icons.call_rounded, color: settingsDanger),
+              const Icon(Icons.call_rounded, color: brandDanger),
             ],
           ),
         ),
@@ -183,7 +183,7 @@ class _ResourceCard extends StatelessWidget {
     final source = resource.source;
     final hours = resource.hours;
     final key = 'helpRes.${resource.id}';
-    return SettingsCard(
+    return DetailCard(
       key: ValueKey(key),
       children: [
         Padding(
@@ -196,7 +196,7 @@ class _ResourceCard extends StatelessWidget {
                 style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w700,
-                  color: settingsNavy,
+                  color: brandNavy,
                 ),
               ),
               const SizedBox(height: 8),
@@ -205,7 +205,7 @@ class _ResourceCard extends StatelessWidget {
                 runSpacing: 6,
                 children: [
                   if (resource.isNational)
-                    _Chip(l10n.helpResNational, color: settingsGold),
+                    _Chip(l10n.helpResNational, color: brandGold),
                   if (resource.isVerified && verifiedAt != null)
                     _Chip(
                       l10n.helpResVerified(
@@ -216,7 +216,7 @@ class _ResourceCard extends StatelessWidget {
                   else
                     _Chip(
                       l10n.helpResNeedsVerification,
-                      color: settingsSupportText,
+                      color: brandSupportText,
                     ),
                 ],
               ),
@@ -231,7 +231,7 @@ class _ResourceCard extends StatelessWidget {
                 const SizedBox(height: 4),
                 Text(
                   l10n.helpResHours(hours),
-                  style: const TextStyle(color: settingsSupportText),
+                  style: const TextStyle(color: brandSupportText),
                 ),
               ],
               if (callNumber != null) ...[
@@ -242,7 +242,7 @@ class _ResourceCard extends StatelessWidget {
                   icon: const Icon(Icons.call_rounded, size: 18),
                   label: Text(l10n.helpResCall(callNumber)),
                   style: FilledButton.styleFrom(
-                    backgroundColor: settingsNavy,
+                    backgroundColor: brandNavy,
                     minimumSize: const Size.fromHeight(48),
                   ),
                 ),

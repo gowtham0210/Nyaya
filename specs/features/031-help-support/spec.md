@@ -33,10 +33,12 @@ Learners can't reach the Nyaya team from the app.
 
 - FR-001: The form shall require a subject and a message of 10+ characters.
 - FR-002: Send shall post the request, confirm with "Your request has been
-  sent.", clear the form and refresh the list.
+  sent.", clear the form and refresh the list. Send stays disabled until
+  the refresh ends.
 - FR-003: A failed send shall keep the text and show the localized reason.
-- FR-004: Past requests shall show newest first, each with subject,
-  message, a localized status and a localized date.
+- FR-004: Past requests shall show newest first, each with subject, the
+  full message (wrapping), a localized status and a localized date; an
+  undated request shows no date and sorts last.
 - FR-005: The list shall show loading, empty and error-with-Retry states.
 
 ## Acceptance Criteria

@@ -246,7 +246,7 @@
   "supportStatusResolved": "हल हो गया",
   "supportStatusClosed": "बंद",
   "validationRequired": "आवश्यक",
-  "supportMessageTooShort": "कृपया कम से कम 10 अक्षर लिखें",
+  "supportMessageTooShort": "कृपया कम से कम {min} अक्षर लिखें",
   "helpResSubtitle": "अपने राज्य में सत्यापित कानूनी सहायता संपर्क खोजें।",
   "helpResState": "राज्य",
   "helpResCategory": "सहायता का प्रकार",

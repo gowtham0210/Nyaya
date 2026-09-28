@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../core/localization/app_language.dart';
 import '../../../core/localization/l10n.dart';
-import '../../../core/presentation/widgets/settings_scaffold.dart';
+import '../../../core/presentation/widgets/detail_scaffold.dart';
 
 /// Picks the app language (spec 028). Names show in their own scripts.
 class LanguagePage extends StatelessWidget {
@@ -20,10 +20,10 @@ class LanguagePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    return SettingsScaffold(
+    return DetailScaffold(
       title: l10n.profileLanguage,
       children: [
-        SettingsCard(
+        DetailCard(
           children: [
             for (final locale in AppLanguage.supported)
               _LanguageTile(
@@ -65,14 +65,14 @@ class _LanguageTile extends StatelessWidget {
             style: TextStyle(
               fontSize: 17,
               fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
-              color: settingsNavy,
+              color: brandNavy,
             ),
           ),
           trailing: selected
               ? Icon(
                   Icons.check_circle_rounded,
                   key: ValueKey('language.$code.check'),
-                  color: settingsGold,
+                  color: brandGold,
                 )
               : null,
           onTap: onTap,

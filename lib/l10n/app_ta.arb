@@ -246,7 +246,7 @@
   "supportStatusResolved": "தீர்க்கப்பட்டது",
   "supportStatusClosed": "மூடப்பட்டது",
   "validationRequired": "தேவை",
-  "supportMessageTooShort": "குறைந்தது 10 எழுத்துகளை எழுதவும்",
+  "supportMessageTooShort": "குறைந்தது {min} எழுத்துகளை எழுதவும்",
   "helpResSubtitle": "உங்கள் மாநிலத்தில் சரிபார்க்கப்பட்ட சட்ட உதவி தொடர்புகளைக் கண்டறியுங்கள்.",
   "helpResState": "மாநிலம்",
   "helpResCategory": "உதவி வகை",

@@ -867,7 +867,9 @@ class AppLocalizationsHi extends AppLocalizations {
   String get validationRequired => 'आवश्यक';
 
   @override
-  String get supportMessageTooShort => 'कृपया कम से कम 10 अक्षर लिखें';
+  String supportMessageTooShort(int min) {
+    return 'कृपया कम से कम $min अक्षर लिखें';
+  }
 
   @override
   String get helpResSubtitle =>

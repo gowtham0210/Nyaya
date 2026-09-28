@@ -246,7 +246,7 @@
   "supportStatusResolved": "పరిష్కరించబడింది",
   "supportStatusClosed": "మూసివేయబడింది",
   "validationRequired": "తప్పనిసరి",
-  "supportMessageTooShort": "దయచేసి కనీసం 10 అక్షరాలు రాయండి",
+  "supportMessageTooShort": "దయచేసి కనీసం {min} అక్షరాలు రాయండి",
   "helpResSubtitle": "మీ రాష్ట్రంలో ధృవీకరించబడిన న్యాయ సహాయ సంప్రదింపులను కనుగొనండి.",
   "helpResState": "రాష్ట్రం",
   "helpResCategory": "సహాయ రకం",

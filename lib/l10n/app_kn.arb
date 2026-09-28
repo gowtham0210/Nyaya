@@ -246,7 +246,7 @@
   "supportStatusResolved": "ಪರಿಹರಿಸಲಾಗಿದೆ",
   "supportStatusClosed": "ಮುಚ್ಚಲಾಗಿದೆ",
   "validationRequired": "ಅಗತ್ಯ",
-  "supportMessageTooShort": "ದಯವಿಟ್ಟು ಕನಿಷ್ಠ 10 ಅಕ್ಷರಗಳನ್ನು ಬರೆಯಿರಿ",
+  "supportMessageTooShort": "ದಯವಿಟ್ಟು ಕನಿಷ್ಠ {min} ಅಕ್ಷರಗಳನ್ನು ಬರೆಯಿರಿ",
   "helpResSubtitle": "ನಿಮ್ಮ ರಾಜ್ಯದಲ್ಲಿ ಪರಿಶೀಲಿಸಿದ ಕಾನೂನು ಸಹಾಯ ಸಂಪರ್ಕಗಳನ್ನು ಹುಡುಕಿ.",
   "helpResState": "ರಾಜ್ಯ",
   "helpResCategory": "ಸಹಾಯದ ಪ್ರಕಾರ",

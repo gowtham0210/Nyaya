@@ -1592,8 +1592,8 @@ abstract class AppLocalizations {
   /// No description provided for @supportMessageTooShort.
   ///
   /// In en, this message translates to:
-  /// **'Please write at least 10 characters'**
-  String get supportMessageTooShort;
+  /// **'Please write at least {min} characters'**
+  String supportMessageTooShort(int min);
 
   /// No description provided for @helpResSubtitle.
   ///

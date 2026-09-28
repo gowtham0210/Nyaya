@@ -874,7 +874,9 @@ class AppLocalizationsKn extends AppLocalizations {
   String get validationRequired => 'ಅಗತ್ಯ';
 
   @override
-  String get supportMessageTooShort => 'ದಯವಿಟ್ಟು ಕನಿಷ್ಠ 10 ಅಕ್ಷರಗಳನ್ನು ಬರೆಯಿರಿ';
+  String supportMessageTooShort(int min) {
+    return 'ದಯವಿಟ್ಟು ಕನಿಷ್ಠ $min ಅಕ್ಷರಗಳನ್ನು ಬರೆಯಿರಿ';
+  }
 
   @override
   String get helpResSubtitle =>

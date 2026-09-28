@@ -4,7 +4,8 @@ import 'package:intl/intl.dart';
 import '../../../core/localization/l10n.dart';
 import '../../../core/presentation/show_message.dart';
 import '../../../core/presentation/widgets/load_state_view.dart';
-import '../../../core/presentation/widgets/settings_scaffold.dart';
+import '../../../core/presentation/widgets/detail_scaffold.dart';
+import 'support_validation.dart';
 import 'support_view_model.dart';
 
 /// Help & Support (spec 031): send a request to the team and see past ones.
@@ -18,8 +19,6 @@ class HelpSupportPage extends StatefulWidget {
 }
 
 class _HelpSupportPageState extends State<HelpSupportPage> {
-  static const _minMessageLength = 10;
-
   final _formKey = GlobalKey<FormState>();
   final _subject = TextEditingController();
   final _message = TextEditingController();
@@ -62,10 +61,10 @@ class _HelpSupportPageState extends State<HelpSupportPage> {
       builder: (context, _) {
         final viewModel = widget.viewModel;
         final error = viewModel.sendError;
-        return SettingsScaffold(
+        return DetailScaffold(
           title: l10n.profileHelpSupport,
           children: [
-            SettingsHeading(l10n.supportContactTitle),
+            DetailHeading(l10n.supportContactTitle),
             Form(
               key: _formKey,
               child: Column(
@@ -76,9 +75,7 @@ class _HelpSupportPageState extends State<HelpSupportPage> {
                     controller: _subject,
                     textCapitalization: TextCapitalization.sentences,
                     decoration: InputDecoration(labelText: l10n.supportSubject),
-                    validator: (value) => (value ?? '').trim().isEmpty
-                        ? l10n.validationRequired
-                        : null,
+                    validator: (value) => validateSupportSubject(l10n, value),
                   ),
                   const SizedBox(height: 12),
                   TextFormField(
@@ -91,25 +88,13 @@ class _HelpSupportPageState extends State<HelpSupportPage> {
                       labelText: l10n.supportMessage,
                       alignLabelWithHint: true,
                     ),
-                    validator: (value) {
-                      final text = (value ?? '').trim();
-                      if (text.isEmpty) {
-                        return l10n.validationRequired;
-                      }
-                      if (text.length < _minMessageLength) {
-                        return l10n.supportMessageTooShort;
-                      }
-                      return null;
-                    },
+                    validator: (value) => validateSupportMessage(l10n, value),
                   ),
                   if (error != null) ...[
                     const SizedBox(height: 12),
                     Text(
                       failureMessage(l10n, error),
-                      style: const TextStyle(
-                        color: settingsDanger,
-                        height: 1.4,
-                      ),
+                      style: const TextStyle(color: brandDanger, height: 1.4),
                     ),
                   ],
                   const SizedBox(height: 16),
@@ -127,14 +112,14 @@ class _HelpSupportPageState extends State<HelpSupportPage> {
                         : const Icon(Icons.send_rounded, size: 18),
                     label: Text(l10n.supportSend),
                     style: FilledButton.styleFrom(
-                      backgroundColor: settingsNavy,
+                      backgroundColor: brandNavy,
                       minimumSize: const Size.fromHeight(52),
                     ),
                   ),
                 ],
               ),
             ),
-            SettingsHeading(l10n.supportRequestsTitle),
+            DetailHeading(l10n.supportRequestsTitle),
             LoadStateView<List<SupportRequest>>(
               state: viewModel.state,
               onRetry: viewModel.load,
@@ -165,7 +150,7 @@ class _RequestCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final (label, color) = switch (request.status) {
-      SupportStatus.open => (l10n.supportStatusOpen, settingsGold),
+      SupportStatus.open => (l10n.supportStatusOpen, brandGold),
       SupportStatus.inProgress => (
         l10n.supportStatusInProgress,
         const Color(0xFF2F6FED),
@@ -174,11 +159,11 @@ class _RequestCard extends StatelessWidget {
         l10n.supportStatusResolved,
         const Color(0xFF1FA35B),
       ),
-      SupportStatus.closed => (l10n.supportStatusClosed, settingsSupportText),
+      SupportStatus.closed => (l10n.supportStatusClosed, brandSupportText),
     };
     final locale = Localizations.localeOf(context).toLanguageTag();
     return MergeSemantics(
-      child: SettingsCard(
+      child: DetailCard(
         children: [
           Padding(
             padding: const EdgeInsets.all(16),
@@ -194,7 +179,7 @@ class _RequestCard extends StatelessWidget {
                         style: const TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.w700,
-                          color: settingsNavy,
+                          color: brandNavy,
                         ),
                       ),
                     ),
@@ -224,21 +209,18 @@ class _RequestCard extends StatelessWidget {
                 const SizedBox(height: 6),
                 Text(
                   request.message,
-                  maxLines: 3,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    height: 1.4,
-                    color: settingsSupportText,
-                  ),
+                  style: const TextStyle(height: 1.4, color: brandSupportText),
                 ),
-                const SizedBox(height: 8),
-                Text(
-                  DateFormat.yMMMd(locale).format(request.createdAt),
-                  style: const TextStyle(
-                    fontSize: 12,
-                    color: settingsSupportText,
+                if (request.createdAt case final createdAt?) ...[
+                  const SizedBox(height: 8),
+                  Text(
+                    DateFormat.yMMMd(locale).format(createdAt),
+                    style: const TextStyle(
+                      fontSize: 12,
+                      color: brandSupportText,
+                    ),
                   ),
-                ),
+                ],
               ],
             ),
           ),

@@ -4,7 +4,7 @@ import '../../../core/localization/l10n.dart';
 import '../../../core/presentation/load_state.dart';
 import '../../../core/presentation/widgets/load_state_view.dart';
 import 'privacy_view_model.dart';
-import '../../../core/presentation/widgets/settings_scaffold.dart';
+import '../../../core/presentation/widgets/detail_scaffold.dart';
 
 /// Privacy & security (spec 030): active sessions and logging out of every
 /// device. Accounts use phone + OTP, so there's no password to change.
@@ -47,7 +47,7 @@ class _PrivacyPageState extends State<PrivacyPage> {
           TextButton(
             key: const ValueKey('privacy.logoutAll.confirm'),
             onPressed: () => Navigator.of(dialogContext).pop(true),
-            style: TextButton.styleFrom(foregroundColor: settingsDanger),
+            style: TextButton.styleFrom(foregroundColor: brandDanger),
             child: Text(l10n.profileLogout),
           ),
         ],
@@ -69,11 +69,11 @@ class _PrivacyPageState extends State<PrivacyPage> {
       builder: (context, _) {
         final viewModel = widget.viewModel;
         final error = viewModel.logoutError;
-        return SettingsScaffold(
+        return DetailScaffold(
           title: l10n.profilePrivacy,
           children: [
-            SettingsHeading(l10n.privacySessionsTitle),
-            SettingsCard(
+            DetailHeading(l10n.privacySessionsTitle),
+            DetailCard(
               children: [
                 ListTile(
                   key: const ValueKey('privacy.sessions'),
@@ -87,19 +87,16 @@ class _PrivacyPageState extends State<PrivacyPage> {
               ],
             ),
             const SizedBox(height: 16),
-            SettingsCard(
+            DetailCard(
               children: [
                 ListTile(
                   key: const ValueKey('privacy.logoutAll'),
                   enabled: !viewModel.loggingOut,
-                  leading: const Icon(
-                    Icons.logout_rounded,
-                    color: settingsDanger,
-                  ),
+                  leading: const Icon(Icons.logout_rounded, color: brandDanger),
                   title: Text(
                     l10n.privacyLogoutAll,
                     style: const TextStyle(
-                      color: settingsDanger,
+                      color: brandDanger,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
@@ -111,7 +108,7 @@ class _PrivacyPageState extends State<PrivacyPage> {
               const SizedBox(height: 12),
               Text(
                 failureMessage(l10n, error),
-                style: const TextStyle(color: settingsDanger, height: 1.4),
+                style: const TextStyle(color: brandDanger, height: 1.4),
               ),
             ],
             const SizedBox(height: 20),
@@ -121,14 +118,14 @@ class _PrivacyPageState extends State<PrivacyPage> {
                 const Icon(
                   Icons.phone_android_rounded,
                   size: 18,
-                  color: settingsSupportText,
+                  color: brandSupportText,
                 ),
                 const SizedBox(width: 8),
                 Expanded(
                   child: Text(
                     l10n.privacyNoPassword,
                     style: const TextStyle(
-                      color: settingsSupportText,
+                      color: brandSupportText,
                       height: 1.4,
                     ),
                   ),
@@ -157,7 +154,7 @@ class _SessionCount extends StatelessWidget {
         style: const TextStyle(
           fontSize: 22,
           fontWeight: FontWeight.w800,
-          color: settingsNavy,
+          color: brandNavy,
         ),
       ),
       Failed() => IconButton(

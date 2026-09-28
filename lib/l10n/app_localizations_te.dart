@@ -874,7 +874,9 @@ class AppLocalizationsTe extends AppLocalizations {
   String get validationRequired => 'తప్పనిసరి';
 
   @override
-  String get supportMessageTooShort => 'దయచేసి కనీసం 10 అక్షరాలు రాయండి';
+  String supportMessageTooShort(int min) {
+    return 'దయచేసి కనీసం $min అక్షరాలు రాయండి';
+  }
 
   @override
   String get helpResSubtitle =>

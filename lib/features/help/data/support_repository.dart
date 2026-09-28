@@ -8,7 +8,7 @@ enum SupportStatus {
   closed;
 
   static SupportStatus fromBackend(String? value) => switch (value) {
-    'in_progress' || 'inProgress' || 'pending' => inProgress,
+    'in_progress' => inProgress,
     'resolved' => resolved,
     'closed' => closed,
     _ => open,
@@ -30,8 +30,8 @@ class SupportRequest {
   final String message;
   final SupportStatus status;
 
-  /// Local time.
-  final DateTime createdAt;
+  /// Local time; null when the backend sent none.
+  final DateTime? createdAt;
 }
 
 /// Support requests at `/users/me/support-requests`.
@@ -46,18 +46,25 @@ class SupportRepository {
     return [
       for (final item in body['items'] as List<dynamic>? ?? const [])
         _toRequest(item as Map<String, dynamic>),
-    ]..sort((a, b) => b.createdAt.compareTo(a.createdAt));
+    ]..sort(_newestFirst);
   }
 
-  Future<SupportRequest> send({
-    required String subject,
-    required String message,
-  }) async => _toRequest(
-    await _client.post(
-      '/users/me/support-requests',
-      body: {'subject': subject, 'message': message},
-    ),
-  );
+  /// Sends a request. The reply isn't read, so an odd reply can't make a
+  /// stored request look failed.
+  Future<void> send({required String subject, required String message}) =>
+      _client.post(
+        '/users/me/support-requests',
+        body: {'subject': subject, 'message': message},
+      );
+
+  /// Newest first; undated requests last.
+  static int _newestFirst(SupportRequest a, SupportRequest b) {
+    final aDate = a.createdAt, bDate = b.createdAt;
+    if (aDate == null || bDate == null) {
+      return (aDate == null ? 1 : 0) - (bDate == null ? 1 : 0);
+    }
+    return bDate.compareTo(aDate);
+  }
 
   static SupportRequest _toRequest(Map<String, dynamic> json) {
     final createdAt = DateTime.tryParse(json['createdAt'] as String? ?? '');
@@ -66,8 +73,7 @@ class SupportRepository {
       subject: json['subject'] as String,
       message: json['message'] as String? ?? '',
       status: SupportStatus.fromBackend(json['status'] as String?),
-      // A just-created request may come back without a date.
-      createdAt: createdAt?.toLocal() ?? DateTime.now(),
+      createdAt: createdAt?.toLocal(),
     );
   }
 }

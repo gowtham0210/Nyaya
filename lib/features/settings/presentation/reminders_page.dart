@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../core/localization/l10n.dart';
 import 'reminders_view_model.dart';
-import '../../../core/presentation/widgets/settings_scaffold.dart';
+import '../../../core/presentation/widgets/detail_scaffold.dart';
 
 /// Daily practice reminders (spec 029): a switch and a time.
 class RemindersPage extends StatefulWidget {
@@ -56,15 +56,15 @@ class _RemindersPageState extends State<RemindersPage> {
         final settings = viewModel.settings;
         final time = TimeOfDay(hour: settings.hour, minute: settings.minute);
         final canChange = viewModel.ready && !viewModel.busy;
-        return SettingsScaffold(
+        return DetailScaffold(
           title: l10n.profileReminders,
           children: [
-            SettingsCard(
+            DetailCard(
               children: [
                 SwitchListTile(
                   key: const ValueKey('reminders.toggle'),
                   value: settings.enabled,
-                  activeThumbColor: settingsGold,
+                  activeThumbColor: brandGold,
                   title: Text(l10n.remindersToggle),
                   subtitle: Text(l10n.remindersToggleSubtitle),
                   onChanged: canChange
@@ -80,7 +80,7 @@ class _RemindersPageState extends State<RemindersPage> {
                     style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w700,
-                      color: settingsNavy,
+                      color: brandNavy,
                     ),
                   ),
                   onTap: canChange ? _pickTime : null,
@@ -115,7 +115,7 @@ class _Warning extends StatelessWidget {
       padding: const EdgeInsets.only(top: 16),
       child: Text(
         text,
-        style: const TextStyle(color: settingsDanger, height: 1.4),
+        style: const TextStyle(color: brandDanger, height: 1.4),
       ),
     );
   }

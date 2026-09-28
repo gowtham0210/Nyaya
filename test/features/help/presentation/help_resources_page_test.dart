@@ -46,9 +46,7 @@ void main() {
     await tester.pumpAndSettle();
   }
 
-  testWidgets('shows the picked filters and matching contacts', (
-    tester,
-  ) async {
+  testWidgets('shows the picked filters and matching contacts', (tester) async {
     await pumpPage(tester, helpResourcesRoutes());
 
     expect(find.text('Tamil Nadu'), findsOneWidget);

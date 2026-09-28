@@ -877,7 +877,9 @@ class AppLocalizationsTa extends AppLocalizations {
   String get validationRequired => 'தேவை';
 
   @override
-  String get supportMessageTooShort => 'குறைந்தது 10 எழுத்துகளை எழுதவும்';
+  String supportMessageTooShort(int min) {
+    return 'குறைந்தது $min எழுத்துகளை எழுதவும்';
+  }
 
   @override
   String get helpResSubtitle =>

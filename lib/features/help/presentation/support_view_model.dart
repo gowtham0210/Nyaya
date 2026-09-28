@@ -23,13 +23,17 @@ class SupportViewModel extends LoadStateNotifier<List<SupportRequest>> {
   Object? get sendError => _sendError;
   Object? _sendError;
 
-  /// Sends a request; true on success, when it's added to the list.
+  /// Sends a request, then refreshes the list; true when sent. [sending]
+  /// stays true until the refresh ends, so it can't be sent twice.
   Future<bool> send({required String subject, required String message}) async {
     _sending = true;
     _sendError = null;
     notifyIfActive();
     try {
       await _repository.send(subject: subject.trim(), message: message.trim());
+      // A failed refresh shows Retry; the request was still sent.
+      await load();
+      return true;
     } catch (error) {
       _sendError = error;
       return false;
@@ -37,9 +41,5 @@ class SupportViewModel extends LoadStateNotifier<List<SupportRequest>> {
       _sending = false;
       notifyIfActive();
     }
-    // Sent. Refresh so the list shows it as stored; a failed refresh shows
-    // Retry but mustn't tempt the learner to send again.
-    await load();
-    return true;
   }
 }

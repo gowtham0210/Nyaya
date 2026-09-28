@@ -865,7 +865,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get validationRequired => 'Required';
 
   @override
-  String get supportMessageTooShort => 'Please write at least 10 characters';
+  String supportMessageTooShort(int min) {
+    return 'Please write at least $min characters';
+  }
 
   @override
   String get helpResSubtitle =>
