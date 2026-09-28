@@ -599,4 +599,22 @@ class AppLocalizationsTe extends AppLocalizations {
 
   @override
   String get resultBackToTopic => 'అంశానికి తిరిగి వెళ్ళండి';
+
+  @override
+  String get legalUpdatesTitle => 'లీగల్ అప్‌డేట్‌లు';
+
+  @override
+  String get legalUpdatesEmpty => 'లీగల్ అప్‌డేట్‌లు అందుబాటులో లేవు.';
+
+  @override
+  String get legalUpdatesCategoryJudgements => 'తీర్పులు';
+
+  @override
+  String get legalUpdatesCategoryLegislation => 'చట్టం';
+
+  @override
+  String get legalUpdatesCategoryReforms => 'సంస్కరణలు';
+
+  @override
+  String get legalUpdatesCategoryNotices => 'నోటీసులు';
 }

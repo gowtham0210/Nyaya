@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import '../../../core/localization/l10n.dart';
 import '../../../core/presentation/widgets/nyaya_icon.dart';
 import '../../../core/presentation/widgets/nyaya_widgets.dart';
+import '../../legal_updates/presentation/legal_updates_section.dart';
+import '../../legal_updates/presentation/legal_updates_view_model.dart';
 import 'daily_questions_view_model.dart';
 import 'home_view_model.dart';
 import 'widgets/daily_questions_section.dart';
@@ -12,6 +14,7 @@ class HomePage extends StatefulWidget {
     super.key,
     required this.viewModel,
     required this.dailyQuestions,
+    required this.legalUpdates,
     this.onNotificationsPressed,
     this.onStartQuizPressed,
     this.onResumePressed,
@@ -19,10 +22,12 @@ class HomePage extends StatefulWidget {
     this.onViewAllPopularPressed,
     this.onCategorySelected,
     this.onQuizSelected,
+    this.onViewAllLegalUpdatesPressed,
   });
 
   final HomeViewModel viewModel;
   final DailyQuestionsViewModel dailyQuestions;
+  final LegalUpdatesViewModel legalUpdates;
   final VoidCallback? onNotificationsPressed;
   final VoidCallback? onStartQuizPressed;
   final VoidCallback? onResumePressed;
@@ -30,6 +35,7 @@ class HomePage extends StatefulWidget {
   final VoidCallback? onViewAllPopularPressed;
   final ValueChanged<HomeCategoryData>? onCategorySelected;
   final ValueChanged<PopularQuizData>? onQuizSelected;
+  final VoidCallback? onViewAllLegalUpdatesPressed;
 
   static const pageBackground = Color(0xFFF8F6F2);
   static const heroBackground = Color(0xFF11233B);
@@ -50,6 +56,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     widget.dailyQuestions.load();
+    widget.legalUpdates.load();
   }
 
   @override
@@ -177,6 +184,23 @@ class _HomePageState extends State<HomePage> {
               ),
               const SizedBox(height: 16),
             ],
+            const SizedBox(height: 12),
+            _SectionHeader(
+              key: const ValueKey('home.section.legalUpdates'),
+              actionKey: const ValueKey('home.section.legalUpdates.viewAll'),
+              title: l10n.legalUpdatesTitle,
+              actionLabel: l10n.commonViewAll,
+              onPressed: () {
+                final callback = widget.onViewAllLegalUpdatesPressed;
+                if (callback != null) {
+                  callback();
+                  return;
+                }
+                _showPlaceholder(context, l10n.commonComingSoon);
+              },
+            ),
+            const SizedBox(height: 16),
+            LegalUpdatesSection(viewModel: widget.legalUpdates),
             const SizedBox(height: 12),
           ],
         ),
@@ -508,11 +532,13 @@ class _SectionHeader extends StatelessWidget {
     required this.title,
     required this.actionLabel,
     required this.onPressed,
+    this.actionKey,
   });
 
   final String title;
   final String actionLabel;
   final VoidCallback onPressed;
+  final Key? actionKey;
 
   @override
   Widget build(BuildContext context) {
@@ -530,6 +556,7 @@ class _SectionHeader extends StatelessWidget {
           ),
         ),
         TextButton(
+          key: actionKey,
           onPressed: onPressed,
           style: TextButton.styleFrom(
             foregroundColor: HomePage.heroHighlight,

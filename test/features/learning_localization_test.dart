@@ -9,6 +9,8 @@ import 'package:nyaya/features/home/data/daily_questions_repository.dart';
 import 'package:nyaya/features/home/presentation/daily_questions_view_model.dart';
 import 'package:nyaya/features/home/presentation/home_page.dart';
 import 'package:nyaya/features/home/presentation/home_view_model.dart';
+import 'package:nyaya/features/legal_updates/data/legal_updates_repository.dart';
+import 'package:nyaya/features/legal_updates/presentation/legal_updates_view_model.dart';
 import 'package:nyaya/features/quiz_question/presentation/quiz_question_page.dart';
 import 'package:nyaya/features/quiz_question/presentation/quiz_session_view_model.dart';
 import 'package:nyaya/features/quiz_result/presentation/quiz_result_page.dart';
@@ -53,11 +55,20 @@ void main() {
       ),
     );
     addTearDown(dailyQuestions.dispose);
+    final legalUpdates = LegalUpdatesViewModel(
+      repository: LegalUpdatesRepository(
+        fakeBackend({
+          '/legal-updates': {'items': []},
+        }),
+      ),
+    );
+    addTearDown(legalUpdates.dispose);
     await pumpLocalized(
       tester,
       HomePage(
         viewModel: const HomeViewModel(),
         dailyQuestions: dailyQuestions,
+        legalUpdates: legalUpdates,
       ),
       locale: const Locale('hi'),
     );
@@ -83,6 +94,8 @@ void main() {
       300,
       scrollable: page,
     );
+    // Lay out the new scroll offset before the next scroll.
+    await tester.pumpAndSettle();
     expect(find.text('दैनिक प्रश्न'), findsOneWidget);
     expect(find.text('1 प्रश्न'), findsOneWidget);
     expect(find.text('उत्तर देखें'), findsOneWidget);

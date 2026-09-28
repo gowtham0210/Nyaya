@@ -9,6 +9,8 @@ import 'package:nyaya/features/home/data/daily_questions_repository.dart';
 import 'package:nyaya/features/home/presentation/daily_questions_view_model.dart';
 import 'package:nyaya/features/home/presentation/home_page.dart';
 import 'package:nyaya/features/home/presentation/home_view_model.dart';
+import 'package:nyaya/features/legal_updates/data/legal_updates_repository.dart';
+import 'package:nyaya/features/legal_updates/presentation/legal_updates_view_model.dart';
 
 import '../../../support/fake_backend.dart';
 
@@ -48,12 +50,21 @@ void main() {
       repository: DailyQuestionsRepository(client),
     );
     addTearDown(dailyQuestions.dispose);
+    final legalUpdates = LegalUpdatesViewModel(
+      repository: LegalUpdatesRepository(
+        fakeBackend({
+          '/legal-updates': {'items': []},
+        }),
+      ),
+    );
+    addTearDown(legalUpdates.dispose);
 
     await tester.pumpWidget(
       MaterialApp(
         home: HomePage(
           viewModel: const HomeViewModel(),
           dailyQuestions: dailyQuestions,
+          legalUpdates: legalUpdates,
         ),
       ),
     );

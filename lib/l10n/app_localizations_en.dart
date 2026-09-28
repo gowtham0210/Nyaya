@@ -597,4 +597,22 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get resultBackToTopic => 'Back to topic';
+
+  @override
+  String get legalUpdatesTitle => 'Legal Updates';
+
+  @override
+  String get legalUpdatesEmpty => 'No legal updates yet.';
+
+  @override
+  String get legalUpdatesCategoryJudgements => 'Judgements';
+
+  @override
+  String get legalUpdatesCategoryLegislation => 'Legislation';
+
+  @override
+  String get legalUpdatesCategoryReforms => 'Reforms';
+
+  @override
+  String get legalUpdatesCategoryNotices => 'Notices';
 }

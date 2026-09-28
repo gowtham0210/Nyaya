@@ -9,6 +9,9 @@ import '../features/home/data/daily_questions_repository.dart';
 import '../features/home/presentation/daily_questions_view_model.dart';
 import '../features/home/presentation/home_page.dart';
 import '../features/home/presentation/home_view_model.dart';
+import '../features/legal_updates/data/legal_updates_repository.dart';
+import '../features/legal_updates/presentation/legal_updates_page.dart';
+import '../features/legal_updates/presentation/legal_updates_view_model.dart';
 import '../features/quiz_question/presentation/quiz_question_page.dart';
 import '../features/quiz_result/presentation/quiz_result_page.dart';
 import '../features/quiz_result/presentation/quiz_result_view_model.dart';
@@ -45,12 +48,16 @@ class _MainShellState extends State<MainShell> {
   late final _dailyQuestionsViewModel = DailyQuestionsViewModel(
     repository: DailyQuestionsRepository(_apiClient),
   );
+  late final _legalUpdatesViewModel = LegalUpdatesViewModel(
+    repository: LegalUpdatesRepository(_apiClient),
+  );
 
   @override
   void dispose() {
     _controller.dispose();
     _categoriesViewModel.dispose();
     _dailyQuestionsViewModel.dispose();
+    _legalUpdatesViewModel.dispose();
     super.dispose();
   }
 
@@ -105,6 +112,7 @@ class _MainShellState extends State<MainShell> {
     return HomePage(
       viewModel: const HomeViewModel(),
       dailyQuestions: _dailyQuestionsViewModel,
+      legalUpdates: _legalUpdatesViewModel,
       // Provisional wire until the Topics tab exists.
       onResumePressed: () => Navigator.of(context).push(
         MaterialPageRoute<void>(
@@ -116,6 +124,11 @@ class _MainShellState extends State<MainShell> {
       ),
       onViewAllCategoriesPressed: () =>
           _controller.select(MainTab.categories.index),
+      onViewAllLegalUpdatesPressed: () => Navigator.of(context).push(
+        MaterialPageRoute<void>(
+          builder: (_) => LegalUpdatesPage(viewModel: _legalUpdatesViewModel),
+        ),
+      ),
     );
   }
 }

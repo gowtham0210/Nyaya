@@ -600,4 +600,22 @@ class AppLocalizationsKn extends AppLocalizations {
 
   @override
   String get resultBackToTopic => 'ವಿಷಯಕ್ಕೆ ಹಿಂತಿರುಗಿ';
+
+  @override
+  String get legalUpdatesTitle => 'ಕಾನೂನು ಅಪ್‌ಡೇಟ್‌ಗಳು';
+
+  @override
+  String get legalUpdatesEmpty => 'ಯಾವುದೇ ಕಾನೂನು ಅಪ್‌ಡೇಟ್‌ಗಳು ಲಭ್ಯವಿಲ್ಲ.';
+
+  @override
+  String get legalUpdatesCategoryJudgements => 'ತೀರ್ಪುಗಳು';
+
+  @override
+  String get legalUpdatesCategoryLegislation => 'ಶಾಸನ';
+
+  @override
+  String get legalUpdatesCategoryReforms => 'ಸುಧಾರಣೆಗಳು';
+
+  @override
+  String get legalUpdatesCategoryNotices => 'ಸೂಚನೆಗಳು';
 }

@@ -167,5 +167,11 @@
   "resultWrongCount": "{count} தவறு",
   "resultWeakList": "{count, plural, =1{1 கேள்வி உங்கள் பலவீனப் பட்டியலில் சேர்க்கப்பட்டது.} other{{count} கேள்விகள் உங்கள் பலவீனப் பட்டியலில் சேர்க்கப்பட்டன.}}",
   "resultReviewAnswers": "பதில்களை மதிப்பாய்வு செய்",
-  "resultBackToTopic": "தலைப்புக்குத் திரும்பு"
+  "resultBackToTopic": "தலைப்புக்குத் திரும்பு",
+  "legalUpdatesTitle": "சட்ட புதுப்பிப்புகள்",
+  "legalUpdatesEmpty": "சட்ட புதுப்பிப்புகள் எதுவும் இல்லை.",
+  "legalUpdatesCategoryJudgements": "தீர்ப்புகள்",
+  "legalUpdatesCategoryLegislation": "சட்டமியற்றுதல்",
+  "legalUpdatesCategoryReforms": "சீர்திருத்தங்கள்",
+  "legalUpdatesCategoryNotices": "அறிவிப்புகள்"
 }

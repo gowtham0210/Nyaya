@@ -167,5 +167,11 @@
   "resultWrongCount": "{count} गलत",
   "resultWeakList": "{count, plural, =1{1 प्रश्न आपकी कमज़ोर सूची में जोड़ा गया।} other{{count} प्रश्न आपकी कमज़ोर सूची में जोड़े गए।}}",
   "resultReviewAnswers": "उत्तर देखें",
-  "resultBackToTopic": "विषय पर वापस"
+  "resultBackToTopic": "विषय पर वापस",
+  "legalUpdatesTitle": "कानूनी अपडेट",
+  "legalUpdatesEmpty": "कोई कानूनी अपडेट उपलब्ध नहीं है।",
+  "legalUpdatesCategoryJudgements": "न्यायादेश",
+  "legalUpdatesCategoryLegislation": "विधान",
+  "legalUpdatesCategoryReforms": "सुधार",
+  "legalUpdatesCategoryNotices": "सूचनाएं"
 }

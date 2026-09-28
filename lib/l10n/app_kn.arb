@@ -167,5 +167,11 @@
   "resultWrongCount": "{count} ತಪ್ಪು",
   "resultWeakList": "{count, plural, =1{1 ಪ್ರಶ್ನೆಯನ್ನು ನಿಮ್ಮ ದುರ್ಬಲ ಪಟ್ಟಿಗೆ ಸೇರಿಸಲಾಗಿದೆ.} other{{count} ಪ್ರಶ್ನೆಗಳನ್ನು ನಿಮ್ಮ ದುರ್ಬಲ ಪಟ್ಟಿಗೆ ಸೇರಿಸಲಾಗಿದೆ.}}",
   "resultReviewAnswers": "ಉತ್ತರಗಳನ್ನು ಪರಿಶೀಲಿಸಿ",
-  "resultBackToTopic": "ವಿಷಯಕ್ಕೆ ಹಿಂತಿರುಗಿ"
+  "resultBackToTopic": "ವಿಷಯಕ್ಕೆ ಹಿಂತಿರುಗಿ",
+  "legalUpdatesTitle": "ಕಾನೂನು ಅಪ್‌ಡೇಟ್‌ಗಳು",
+  "legalUpdatesEmpty": "ಯಾವುದೇ ಕಾನೂನು ಅಪ್‌ಡೇಟ್‌ಗಳು ಲಭ್ಯವಿಲ್ಲ.",
+  "legalUpdatesCategoryJudgements": "ತೀರ್ಪುಗಳು",
+  "legalUpdatesCategoryLegislation": "ಶಾಸನ",
+  "legalUpdatesCategoryReforms": "ಸುಧಾರಣೆಗಳು",
+  "legalUpdatesCategoryNotices": "ಸೂಚನೆಗಳು"
 }

@@ -597,4 +597,22 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get resultBackToTopic => 'विषय पर वापस';
+
+  @override
+  String get legalUpdatesTitle => 'कानूनी अपडेट';
+
+  @override
+  String get legalUpdatesEmpty => 'कोई कानूनी अपडेट उपलब्ध नहीं है।';
+
+  @override
+  String get legalUpdatesCategoryJudgements => 'न्यायादेश';
+
+  @override
+  String get legalUpdatesCategoryLegislation => 'विधान';
+
+  @override
+  String get legalUpdatesCategoryReforms => 'सुधार';
+
+  @override
+  String get legalUpdatesCategoryNotices => 'सूचनाएं';
 }

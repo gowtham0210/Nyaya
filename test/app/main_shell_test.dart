@@ -22,6 +22,17 @@ void main() {
         home: MainShell(
           apiClient: fakeBackend({
             '/categories': {'items': []},
+            '/legal-updates': {
+              'items': [
+                {
+                  'id': 1,
+                  'category': 'Notices',
+                  'title': 'Court holiday notice',
+                  'summary': 'Courts close on Friday.',
+                  'updateDate': '2026-09-25',
+                },
+              ],
+            },
           }),
         ),
       ),
@@ -67,6 +78,35 @@ void main() {
 
     expect(find.byKey(const ValueKey('nav.categories.active')), findsOneWidget);
     expect(find.byKey(const ValueKey('categories.search')), findsOneWidget);
+  });
+
+  testWidgets('020 AC-005 View All legal updates opens the full list', (
+    tester,
+  ) async {
+    await pumpMainShell(tester);
+    final viewAll = find.byKey(
+      const ValueKey('home.section.legalUpdates.viewAll'),
+    );
+    await tester.scrollUntilVisible(
+      viewAll,
+      300,
+      scrollable: find
+          .descendant(
+            of: find.byKey(const ValueKey('home.scroll')),
+            matching: find.byType(Scrollable),
+          )
+          .first,
+    );
+
+    await tester.tap(viewAll);
+    await tester.pumpAndSettle();
+
+    expect(find.byKey(const ValueKey('legalUpdates.list')), findsOneWidget);
+    expect(find.text('Court holiday notice'), findsOneWidget);
+
+    await tester.tap(find.byType(BackButton));
+    await tester.pumpAndSettle();
+    expect(find.byKey(const ValueKey('home.scroll')), findsOneWidget);
   });
 
   testWidgets('AC-006 unbuilt tabs show the coming-soon state', (tester) async {

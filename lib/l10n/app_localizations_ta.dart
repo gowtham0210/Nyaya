@@ -601,4 +601,22 @@ class AppLocalizationsTa extends AppLocalizations {
 
   @override
   String get resultBackToTopic => 'தலைப்புக்குத் திரும்பு';
+
+  @override
+  String get legalUpdatesTitle => 'சட்ட புதுப்பிப்புகள்';
+
+  @override
+  String get legalUpdatesEmpty => 'சட்ட புதுப்பிப்புகள் எதுவும் இல்லை.';
+
+  @override
+  String get legalUpdatesCategoryJudgements => 'தீர்ப்புகள்';
+
+  @override
+  String get legalUpdatesCategoryLegislation => 'சட்டமியற்றுதல்';
+
+  @override
+  String get legalUpdatesCategoryReforms => 'சீர்திருத்தங்கள்';
+
+  @override
+  String get legalUpdatesCategoryNotices => 'அறிவிப்புகள்';
 }

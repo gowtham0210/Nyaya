@@ -296,5 +296,11 @@
     }
   },
   "resultReviewAnswers": "Review answers",
-  "resultBackToTopic": "Back to topic"
+  "resultBackToTopic": "Back to topic",
+  "legalUpdatesTitle": "Legal Updates",
+  "legalUpdatesEmpty": "No legal updates yet.",
+  "legalUpdatesCategoryJudgements": "Judgements",
+  "legalUpdatesCategoryLegislation": "Legislation",
+  "legalUpdatesCategoryReforms": "Reforms",
+  "legalUpdatesCategoryNotices": "Notices"
 }

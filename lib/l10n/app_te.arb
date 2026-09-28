@@ -167,5 +167,11 @@
   "resultWrongCount": "{count} తప్పు",
   "resultWeakList": "{count, plural, =1{1 ప్రశ్న మీ బలహీన జాబితాలో చేర్చబడింది.} other{{count} ప్రశ్నలు మీ బలహీన జాబితాలో చేర్చబడ్డాయి.}}",
   "resultReviewAnswers": "సమాధానాలను సమీక్షించండి",
-  "resultBackToTopic": "అంశానికి తిరిగి వెళ్ళండి"
+  "resultBackToTopic": "అంశానికి తిరిగి వెళ్ళండి",
+  "legalUpdatesTitle": "లీగల్ అప్‌డేట్‌లు",
+  "legalUpdatesEmpty": "లీగల్ అప్‌డేట్‌లు అందుబాటులో లేవు.",
+  "legalUpdatesCategoryJudgements": "తీర్పులు",
+  "legalUpdatesCategoryLegislation": "చట్టం",
+  "legalUpdatesCategoryReforms": "సంస్కరణలు",
+  "legalUpdatesCategoryNotices": "నోటీసులు"
 }

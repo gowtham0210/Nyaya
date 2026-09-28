@@ -1120,6 +1120,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Back to topic'**
   String get resultBackToTopic;
+
+  /// No description provided for @legalUpdatesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Legal Updates'**
+  String get legalUpdatesTitle;
+
+  /// No description provided for @legalUpdatesEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No legal updates yet.'**
+  String get legalUpdatesEmpty;
+
+  /// No description provided for @legalUpdatesCategoryJudgements.
+  ///
+  /// In en, this message translates to:
+  /// **'Judgements'**
+  String get legalUpdatesCategoryJudgements;
+
+  /// No description provided for @legalUpdatesCategoryLegislation.
+  ///
+  /// In en, this message translates to:
+  /// **'Legislation'**
+  String get legalUpdatesCategoryLegislation;
+
+  /// No description provided for @legalUpdatesCategoryReforms.
+  ///
+  /// In en, this message translates to:
+  /// **'Reforms'**
+  String get legalUpdatesCategoryReforms;
+
+  /// No description provided for @legalUpdatesCategoryNotices.
+  ///
+  /// In en, this message translates to:
+  /// **'Notices'**
+  String get legalUpdatesCategoryNotices;
 }
 
 class _AppLocalizationsDelegate
