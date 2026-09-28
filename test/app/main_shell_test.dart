@@ -1,7 +1,13 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:nyaya/app/app_session.dart';
 import 'package:nyaya/app/main_shell.dart';
+import 'package:nyaya/core/network/api_client.dart';
+import 'package:nyaya/features/settings/presentation/language_page.dart';
+import 'package:http/http.dart' as http;
+import 'package:http/testing.dart';
 import 'package:nyaya/core/localization/l10n.dart';
 import 'package:nyaya/features/auth/presentation/sign_in_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -222,6 +228,75 @@ void main() {
           .text,
       'Asha Rao',
     );
+  });
+
+  testWidgets('028 picking Hindi switches the app and reloads content', (
+    tester,
+  ) async {
+    SharedPreferences.setMockInitialValues({});
+    final language = ValueNotifier(const Locale('en'));
+    addTearDown(language.dispose);
+    final categoryLangs = <String?>[];
+    final routes = <String, Object>{
+      '/categories': {'items': []},
+      ...profileRoutes(),
+    };
+    tester.view.physicalSize = const Size(393, 852);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+    await tester.pumpWidget(
+      ValueListenableBuilder<Locale>(
+        valueListenable: language,
+        builder: (context, locale, _) => MaterialApp(
+          locale: locale,
+          supportedLocales: AppLocalizations.supportedLocales,
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          home: MainShell(
+            language: language,
+            selectLanguage: (code) async => language.value = Locale(code),
+            apiClient: ApiClient(
+              languageCode: () => language.value.languageCode,
+              httpClient: MockClient((request) async {
+                final path = request.url.path.replaceFirst('/api/v1', '');
+                if (path == '/categories') {
+                  categoryLangs.add(request.url.queryParameters['lang']);
+                }
+                final route = routes[path];
+                return route == null
+                    ? http.Response('{}', 404)
+                    : http.Response(jsonEncode(route), 200);
+              }),
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    expect(categoryLangs, [null]);
+
+    await tester.tap(find.byKey(const ValueKey('nav.profile')));
+    await tester.pumpAndSettle();
+    final entry = find.byKey(const ValueKey('profile.entry.language'));
+    await tester.scrollUntilVisible(
+      entry,
+      200,
+      scrollable: find
+          .descendant(
+            of: find.byKey(const ValueKey('profile.scroll')),
+            matching: find.byType(Scrollable),
+          )
+          .first,
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(entry);
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('हिन्दी'));
+    await tester.pumpAndSettle();
+
+    // Back on Profile, now in Hindi, with content reloaded in Hindi.
+    expect(find.byType(LanguagePage), findsNothing);
+    expect(find.text('मेरे आंकड़े'), findsOneWidget);
+    expect(categoryLangs, [null, 'hi']);
   });
 
   testWidgets('AC-006 unbuilt tabs show the coming-soon state', (tester) async {

@@ -1,5 +1,7 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
+import '../core/localization/app_language.dart';
 import '../core/localization/l10n.dart';
 import '../core/network/api_client.dart';
 import '../features/articles/data/articles_repository.dart';
@@ -20,6 +22,7 @@ import '../features/legal_updates/data/legal_updates_repository.dart';
 import '../features/legal_updates/presentation/legal_updates_page.dart';
 import '../features/legal_updates/presentation/legal_updates_view_model.dart';
 import '../core/presentation/load_state.dart';
+import '../core/presentation/load_state_notifier.dart';
 import '../features/profile/data/photo_picker.dart';
 import '../features/profile/data/profile_repository.dart';
 import '../features/profile/presentation/edit_profile_page.dart';
@@ -29,6 +32,7 @@ import '../features/profile/presentation/profile_view_model.dart';
 import '../features/quiz_question/presentation/quiz_question_page.dart';
 import '../features/quiz_result/presentation/quiz_result_page.dart';
 import '../features/quiz_result/presentation/quiz_result_view_model.dart';
+import '../features/settings/presentation/language_page.dart';
 import '../features/shell/presentation/coming_soon_tab.dart';
 import '../features/shell/presentation/tab_shell_page.dart';
 import '../features/topic_detail/presentation/topic_detail_page.dart';
@@ -43,10 +47,21 @@ enum MainTab { home, categories, leaderboard, articles, profile }
 
 /// The signed-in app: five tabs under one bottom nav (spec 016).
 class MainShell extends StatefulWidget {
-  const MainShell({super.key, this.apiClient});
+  const MainShell({
+    super.key,
+    this.apiClient,
+    this.language,
+    this.selectLanguage,
+  });
 
   /// Backend client for the tabs' data; tests pass a fake.
   final ApiClient? apiClient;
+
+  /// The app language; defaults to [AppLanguage.current].
+  final ValueListenable<Locale>? language;
+
+  /// Saves a picked language; defaults to [AppLanguage.select].
+  final Future<void> Function(String languageCode)? selectLanguage;
 
   @override
   State<MainShell> createState() => _MainShellState();
@@ -55,6 +70,8 @@ class MainShell extends StatefulWidget {
 class _MainShellState extends State<MainShell> {
   final _controller = TabShellController();
   late final ApiClient _apiClient = widget.apiClient ?? AppServices.apiClient;
+  late final ValueListenable<Locale> _language =
+      widget.language ?? AppLanguage.current;
 
   // Tab view models live as long as the shell so each tab keeps its data.
   late final _categoriesViewModel = CategoriesViewModel(
@@ -77,7 +94,26 @@ class _MainShellState extends State<MainShell> {
   );
 
   @override
+  void initState() {
+    super.initState();
+    _language.addListener(_reloadContent);
+  }
+
+  /// Backend content comes in the app language, so reload what's shown.
+  void _reloadContent() {
+    for (final viewModel in <LoadStateNotifier<Object?>>[
+      _categoriesViewModel,
+      _dailyQuestionsViewModel,
+      _legalUpdatesViewModel,
+      _articlesViewModel,
+    ]) {
+      viewModel.reloadIfStarted();
+    }
+  }
+
+  @override
   void dispose() {
+    _language.removeListener(_reloadContent);
     _controller.dispose();
     _categoriesViewModel.dispose();
     _dailyQuestionsViewModel.dispose();
@@ -154,9 +190,27 @@ class _MainShellState extends State<MainShell> {
     switch (entry) {
       case ProfileEntry.editProfile:
         _openEditProfile(context);
+      case ProfileEntry.language:
+        _openLanguage(context);
       default:
         showMessage(context, context.l10n.commonComingSoon);
     }
+  }
+
+  void _openLanguage(BuildContext context) {
+    final select = widget.selectLanguage ?? AppLanguage.select;
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (pageContext) => LanguagePage(
+          current: _language.value,
+          onSelected: (code) async {
+            final navigator = Navigator.of(pageContext);
+            await select(code);
+            navigator.pop();
+          },
+        ),
+      ),
+    );
   }
 
   void _openEditProfile(BuildContext context) {

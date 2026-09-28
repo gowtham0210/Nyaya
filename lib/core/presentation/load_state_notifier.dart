@@ -8,6 +8,7 @@ abstract class LoadStateNotifier<T> extends ChangeNotifier {
   var _disposed = false;
   var _loadId = 0;
   Future<void>? _firstLoad;
+  var _started = false;
 
   LoadState<T> get state => _state;
   LoadState<T> _state = const Loading();
@@ -22,9 +23,18 @@ abstract class LoadStateNotifier<T> extends ChangeNotifier {
   /// the first load. Use [load] to refresh or retry.
   Future<void> ensureLoaded() => _firstLoad ??= load();
 
+  /// Reloads only if something has loaded before, e.g. after the language
+  /// changes; screens not opened yet load fresh when they open.
+  Future<void> reloadIfStarted() async {
+    if (_started) {
+      await load();
+    }
+  }
+
   /// Loads the data. When loads overlap (Retry during a load), only the
   /// latest one's result is kept.
   Future<void> load() async {
+    _started = true;
     final loadId = ++_loadId;
     _setState(const Loading());
     final result = await LoadState.run(fetch, isEmpty: isEmpty);
