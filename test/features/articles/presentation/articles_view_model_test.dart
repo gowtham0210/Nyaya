@@ -83,4 +83,13 @@ void main() {
     expect(viewModel.isExpanded(2), isFalse);
     expect(notified, 3);
   });
+
+  test('AC-002 reloading collapses the expanded article', () async {
+    final viewModel = viewModelWith(fakeBackend({'/articles': oneArticle}));
+    viewModel.toggle(1);
+
+    await viewModel.load();
+
+    expect(viewModel.isExpanded(1), isFalse);
+  });
 }

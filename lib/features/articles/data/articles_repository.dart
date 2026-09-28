@@ -40,12 +40,18 @@ class ArticlesRepository {
     final items = [
       for (final item in body['items'] as List<dynamic>? ?? const [])
         item as Map<String, dynamic>,
-    ]..sort((a, b) => _order(a).compareTo(_order(b)));
+    ]..sort(_byDisplayOrder);
     return [for (final item in items) _toArticle(item)];
   }
 
-  static int _order(Map<String, dynamic> json) =>
-      (json['displayOrder'] as num?)?.toInt() ?? 0;
+  /// Display order, then id; articles without an order go last.
+  static int _byDisplayOrder(Map<String, dynamic> a, Map<String, dynamic> b) {
+    final byOrder = _order(a).compareTo(_order(b));
+    return byOrder != 0 ? byOrder : (a['id'] as int).compareTo(b['id'] as int);
+  }
+
+  static num _order(Map<String, dynamic> json) =>
+      (json['displayOrder'] as num?) ?? double.infinity;
 
   static Article _toArticle(Map<String, dynamic> json) => Article(
     id: json['id'] as int,

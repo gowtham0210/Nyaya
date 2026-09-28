@@ -43,7 +43,7 @@ through quizzes.
   (`whatItMeans`, else `description`) and a "Read article" button; tapping
   again collapses it.
 - FR-004: "Read article" shall open a detail screen with the title, article
-  range, and the sections What it means, Why it matters and Key features;
+  range, description, and the sections What it means, Why it matters and Key features;
   empty sections are hidden.
 - FR-005: No articles shows an empty state; a failure shows the shared
   failure message with Retry.
@@ -59,7 +59,10 @@ through quizzes.
   button with expanded state.
 - AC-005: "Read article" opens the detail with all non-empty sections.
 - AC-006: Empty and error-with-Retry states render.
-- AC-007: Strings are localized (e.g. Hindi).
+- AC-007: Strings are localized (e.g. Hindi); articles load with `lang`.
+- AC-008: A blank part shows only its title; articles without an order go
+  last; an expanded article fits large text on a small phone; the list
+  shows a spinner while loading.
 
 ## Test Traceability
 

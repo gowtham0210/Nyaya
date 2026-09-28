@@ -52,4 +52,25 @@ void main() {
     expect(articles.first.whatItMeans, isNull);
     expect(articles.first.keyFeatures, isEmpty);
   });
+
+  test(
+    'AC-001 ties and missing order sort by id; missing order goes last',
+    () async {
+      final repository = ArticlesRepository(
+        fakeBackend({
+          '/articles': {
+            'items': [
+              {'id': 9, 'title': 'No order'},
+              {'id': 5, 'title': 'B', 'displayOrder': 1},
+              {'id': 4, 'title': 'A', 'displayOrder': 1},
+            ],
+          },
+        }),
+      );
+
+      final articles = await repository.fetchArticles();
+
+      expect(articles.map((a) => a.id), [4, 5, 9]);
+    },
+  );
 }

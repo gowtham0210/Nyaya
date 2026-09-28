@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
+import 'package:http/testing.dart';
+import 'package:nyaya/core/network/api_client.dart';
 import 'package:nyaya/features/articles/data/articles_repository.dart';
 import 'package:nyaya/features/articles/presentation/articles_page.dart';
 import 'package:nyaya/features/articles/presentation/articles_view_model.dart';
@@ -150,5 +152,78 @@ void main() {
 
     expect(find.text('सीखें और अपडेट रहें'), findsOneWidget);
     expect(find.text('भाग I · The Union'), findsOneWidget);
+  });
+
+  testWidgets('FR-001 shows a spinner while loading', (tester) async {
+    viewModel = ArticlesViewModel(
+      repository: ArticlesRepository(
+        ApiClient(
+          httpClient: MockClient(
+            (_) => Future.delayed(
+              const Duration(seconds: 1),
+              () => http.Response('{"items":[]}', 200),
+            ),
+          ),
+        ),
+      ),
+    );
+    addTearDown(viewModel.dispose);
+    await tester.pumpWidget(
+      MaterialApp(
+        home: ArticlesPage(viewModel: viewModel, onArticleOpened: (_, _) {}),
+      ),
+    );
+
+    expect(find.byKey(const ValueKey('loadState.loading')), findsOneWidget);
+    await tester.pump(const Duration(seconds: 1));
+    await tester.pumpAndSettle();
+  });
+
+  testWidgets('articles load in the current language', (tester) async {
+    final queries = <String?>[];
+    viewModel = ArticlesViewModel(
+      repository: ArticlesRepository(
+        ApiClient(
+          languageCode: () => 'hi',
+          httpClient: MockClient((request) async {
+            queries.add(request.url.queryParameters['lang']);
+            return http.Response('{"items":[]}', 200);
+          }),
+        ),
+      ),
+    );
+    addTearDown(viewModel.dispose);
+
+    await viewModel.load();
+
+    expect(queries, ['hi']);
+  });
+
+  testWidgets('a blank part shows only its title', (tester) async {
+    await pumpPage(tester, {
+      '/articles': {
+        'items': [
+          {'id': 1, 'part': '', 'partTitle': 'Preamble', 'title': 'Preamble'},
+        ],
+      },
+    });
+
+    expect(find.text('Preamble'), findsOneWidget);
+    expect(find.textContaining('Part'), findsNothing);
+  });
+
+  testWidgets('an expanded article fits large text on a small phone', (
+    tester,
+  ) async {
+    tester.platformDispatcher.textScaleFactorTestValue = 1.6;
+    addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
+    await pumpPage(tester, twoArticles);
+    tester.view.physicalSize = const Size(320, 640);
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byKey(const ValueKey('articles.item.2')));
+    await tester.pumpAndSettle();
+
+    expect(tester.takeException(), isNull);
   });
 }

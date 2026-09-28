@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/localization/l10n.dart';
+import 'article_text.dart';
 import 'articles_view_model.dart';
 
 const _pageBackground = Color(0xFFF8F6F2);
@@ -32,7 +33,7 @@ class ArticleDetailPage extends StatelessWidget {
         foregroundColor: _navy,
         surfaceTintColor: Colors.transparent,
         title: Text(
-          l10n.articlesPart(article.part, article.partTitle),
+          partLabel(l10n, article) ?? '',
           style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
         ),
       ),
@@ -41,7 +42,7 @@ class ArticleDetailPage extends StatelessWidget {
         padding: const EdgeInsets.fromLTRB(24, 8, 24, 24),
         children: [
           Text(
-            '$number. ${article.title}',
+            numberedTitle(number, article),
             style: const TextStyle(
               fontSize: 22,
               fontWeight: FontWeight.w800,

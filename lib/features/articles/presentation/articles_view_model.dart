@@ -17,6 +17,13 @@ class ArticlesViewModel extends LoadStateNotifier<List<Article>> {
   @override
   bool isEmpty(List<Article> articles) => articles.isEmpty;
 
+  /// Loads articles with none expanded.
+  @override
+  Future<void> load() {
+    _expandedId = null;
+    return super.load();
+  }
+
   bool isExpanded(int articleId) => _expandedId == articleId;
 
   /// Expands [articleId] (collapsing any other), or collapses it if open.

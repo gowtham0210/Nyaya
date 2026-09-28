@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../core/localization/l10n.dart';
 import '../../../core/presentation/widgets/load_state_view.dart';
+import 'article_text.dart';
 import 'articles_view_model.dart';
 import 'widgets/article_list_item.dart';
 
@@ -161,12 +162,16 @@ class _PartHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final label = partLabel(context.l10n, article);
+    if (label == null) {
+      return const SizedBox.shrink();
+    }
     return Padding(
       padding: EdgeInsets.only(top: first ? 0 : 12, bottom: 12),
       child: Semantics(
         header: true,
         child: Text(
-          context.l10n.articlesPart(article.part, article.partTitle),
+          label,
           style: const TextStyle(
             fontSize: 15,
             fontWeight: FontWeight.w700,

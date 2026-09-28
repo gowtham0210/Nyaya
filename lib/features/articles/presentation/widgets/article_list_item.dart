@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/localization/l10n.dart';
+import '../article_text.dart';
 import '../articles_view_model.dart';
 
 const _navy = Color(0xFF11233B);
@@ -28,7 +29,8 @@ class ArticleListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final badgeColor = _badgeColors[(number - 1) % _badgeColors.length];
-    final title = '$number. ${article.title}';
+    final title = numberedTitle(number, article);
+    final preview = previewText(article);
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -111,14 +113,15 @@ class ArticleListItem extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    article.whatItMeans ?? article.description,
-                    style: const TextStyle(
-                      fontSize: 14,
-                      height: 1.5,
-                      color: _supportText,
+                  if (preview.isNotEmpty)
+                    Text(
+                      preview,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        height: 1.5,
+                        color: _supportText,
+                      ),
                     ),
-                  ),
                   TextButton.icon(
                     key: ValueKey('articles.item.${article.id}.read'),
                     onPressed: onRead,
