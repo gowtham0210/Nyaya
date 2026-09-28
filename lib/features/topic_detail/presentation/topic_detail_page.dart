@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/localization/l10n.dart';
 import '../../../core/presentation/widgets/nyaya_widgets.dart';
 import 'topic_detail_view_model.dart';
 
@@ -32,6 +33,7 @@ class _TopicDetailPageState extends State<TopicDetailPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return Scaffold(
       backgroundColor: ivory,
       body: Stack(
@@ -64,7 +66,9 @@ class _TopicDetailPageState extends State<TopicDetailPage> {
                         key: const ValueKey('topic.back'),
                         onPressed: () => Navigator.maybePop(context),
                         icon: const Icon(Icons.arrow_back, color: navy),
-                        tooltip: 'Back',
+                        tooltip: MaterialLocalizations.of(
+                          context,
+                        ).backButtonTooltip,
                       ),
                       IconButton(
                         key: const ValueKey('topic.bookmark'),
@@ -76,8 +80,8 @@ class _TopicDetailPageState extends State<TopicDetailPage> {
                           color: gold,
                         ),
                         tooltip: _viewModel.isBookmarked
-                            ? 'Remove bookmark'
-                            : 'Bookmark topic',
+                            ? l10n.topicRemoveBookmark
+                            : l10n.topicBookmark,
                       ),
                     ],
                   ),
@@ -106,7 +110,7 @@ class _TopicDetailPageState extends State<TopicDetailPage> {
                         Row(
                           children: [
                             Text(
-                              '${_viewModel.quizCount} quizzes',
+                              l10n.quizCount(_viewModel.quizCount),
                               style: const TextStyle(
                                 color: bodyGrey,
                                 fontSize: 14,
@@ -156,7 +160,7 @@ class _TopicDetailPageState extends State<TopicDetailPage> {
                         ),
                         const SizedBox(height: 20),
                         Text(
-                          'Quizzes',
+                          l10n.topicQuizzesHeading,
                           style: Theme.of(context).textTheme.titleLarge
                               ?.copyWith(
                                 color: navy,
@@ -196,7 +200,9 @@ class _TopicDetailPageState extends State<TopicDetailPage> {
                       onPressed: () =>
                           widget.onContinueQuiz(_viewModel.continueQuizId),
                       child: Text(
-                        _viewModel.continueLabel,
+                        l10n
+                            .topicContinueQuiz(_viewModel.continueQuizNumber)
+                            .toUpperCase(),
                         style: const TextStyle(
                           fontWeight: FontWeight.w700,
                           letterSpacing: 1.5,
@@ -219,15 +225,16 @@ class _DifficultyChip extends StatelessWidget {
 
   final TopicDifficulty difficulty;
 
-  (String, Color) get _labelAndColor => switch (difficulty) {
-    TopicDifficulty.easy => ('EASY', _easyGreen),
-    TopicDifficulty.medium => ('MEDIUM', _mediumGold),
-    TopicDifficulty.hard => ('HARD', _hardRed),
+  Color get _color => switch (difficulty) {
+    TopicDifficulty.easy => _easyGreen,
+    TopicDifficulty.medium => _mediumGold,
+    TopicDifficulty.hard => _hardRed,
   };
 
   @override
   Widget build(BuildContext context) {
-    final (label, color) = _labelAndColor;
+    final label = _difficultyLabel(context.l10n, difficulty).toUpperCase();
+    final color = _color;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
       decoration: BoxDecoration(
@@ -291,19 +298,13 @@ class _QuizRow extends StatelessWidget {
   final TopicQuiz quiz;
   final VoidCallback onTap;
 
-  String get _difficultyLabel => switch (quiz.difficulty) {
-    TopicDifficulty.easy => 'Easy',
-    TopicDifficulty.medium => 'Medium',
-    TopicDifficulty.hard => 'Hard',
+  String _statusLabel(AppLocalizations l10n) => switch (quiz.status) {
+    QuizStatus.completed => l10n.quizStatusCompleted,
+    QuizStatus.inProgress => l10n.quizStatusInProgress,
+    QuizStatus.notStarted => l10n.quizStatusNotStarted,
   };
 
-  String get _statusLabel => switch (quiz.status) {
-    QuizStatus.completed => 'completed',
-    QuizStatus.inProgress => 'in progress',
-    QuizStatus.notStarted => 'not started',
-  };
-
-  Widget get _trailing => switch (quiz.status) {
+  Widget _trailing(AppLocalizations l10n) => switch (quiz.status) {
     QuizStatus.completed => Container(
       key: ValueKey('topic.quiz.completed.${quiz.id}'),
       width: 30,
@@ -321,9 +322,9 @@ class _QuizRow extends StatelessWidget {
         color: navy,
         borderRadius: BorderRadius.circular(20),
       ),
-      child: const Text(
-        'RESUME',
-        style: TextStyle(
+      child: Text(
+        l10n.commonResume.toUpperCase(),
+        style: const TextStyle(
           color: Colors.white,
           fontSize: 12,
           fontWeight: FontWeight.w700,
@@ -340,11 +341,16 @@ class _QuizRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    final difficulty = _difficultyLabel(l10n, quiz.difficulty);
     return Semantics(
       button: true,
-      label:
-          '${quiz.title}. ${quiz.questionCount} questions, '
-          '$_difficultyLabel. $_statusLabel',
+      label: l10n.topicQuizSemantics(
+        quiz.title,
+        quiz.questionCount,
+        difficulty,
+        _statusLabel(l10n),
+      ),
       child: InkWell(
         key: ValueKey('topic.quiz.${quiz.id}'),
         borderRadius: BorderRadius.circular(18),
@@ -398,14 +404,15 @@ class _QuizRow extends StatelessWidget {
                       ),
                       const SizedBox(height: 3),
                       Text(
-                        '${quiz.questionCount} Questions · $_difficultyLabel',
+                        '${l10n.questionCount(quiz.questionCount)} · '
+                        '$difficulty',
                         style: const TextStyle(color: bodyGrey, fontSize: 13),
                       ),
                     ],
                   ),
                 ),
                 const SizedBox(width: 10),
-                _trailing,
+                _trailing(l10n),
               ],
             ),
           ),
@@ -414,3 +421,10 @@ class _QuizRow extends StatelessWidget {
     );
   }
 }
+
+String _difficultyLabel(AppLocalizations l10n, TopicDifficulty difficulty) =>
+    switch (difficulty) {
+      TopicDifficulty.easy => l10n.difficultyEasy,
+      TopicDifficulty.medium => l10n.difficultyMedium,
+      TopicDifficulty.hard => l10n.difficultyHard,
+    };

@@ -14,15 +14,6 @@ class CategoriesViewModel extends ChangeNotifier {
 
   String get featureId => '013-categories';
 
-  String get title => 'Categories';
-
-  String get supportingCopy =>
-      'Explore topics and strengthen your legal knowledge.';
-
-  String get searchHint => 'Search categories';
-
-  String get emptySearchMessage => 'No categories match your search.';
-
   LoadState<List<CategoryData>> get state => _state;
   LoadState<List<CategoryData>> _state = const Loading();
 

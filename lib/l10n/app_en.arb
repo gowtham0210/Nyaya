@@ -29,8 +29,8 @@
   "navArticles": "Articles",
   "navProfile": "Profile",
   "comingSoonBody": "We're building this section. Check back soon.",
-  "categoryQuizCount": "{count, plural, =1{1 quiz} other{{count} quizzes}}",
-  "@categoryQuizCount": {
+  "quizCount": "{count, plural, =1{1 quiz} other{{count} quizzes}}",
+  "@quizCount": {
     "placeholders": {
       "count": {
         "type": "int"
@@ -131,5 +131,151 @@
   "authErrorCodeExpired": "This OTP has expired. Please request a new one.",
   "authErrorUserDisabled": "This account has been disabled. Please contact support.",
   "authErrorNotEnabled": "Phone sign-in isn't enabled for this app yet.",
-  "authErrorCredentialInUse": "This phone number is already linked to another account."
+  "authErrorCredentialInUse": "This phone number is already linked to another account.",
+  "commonContinue": "Continue",
+  "commonViewAll": "View All",
+  "commonResume": "Resume",
+  "questionCount": "{count, plural, =1{1 Question} other{{count} Questions}}",
+  "@questionCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "difficultyEasy": "Easy",
+  "difficultyMedium": "Medium",
+  "difficultyHard": "Hard",
+  "goalHeadingLead": "What brings you",
+  "goalHeadingAccent": "to Nyaya?",
+  "goalSubtitle": "Choose your goal — you can change it anytime.",
+  "goalFootnote": "You can switch goals later in Profile.",
+  "goalLearnLawTitle": "Learn law for life",
+  "goalLearnLawBody": "Everyday legal know-how for work, family and your rights",
+  "goalExamTitle": "Crack an exam",
+  "goalExamBody": "Sharpen exam-style MCQ practice and statute mastery",
+  "goalStudyTitle": "Study law",
+  "goalStudyBody": "Master your LLB subjects, concept by concept",
+  "homeHeroLead": "Test Your",
+  "homeHeroAccent": "Legal Knowledge.",
+  "homeHeroTrail": "Master Justice.",
+  "homeHeroSupport": "Quizzes on Law. Insights for Life.",
+  "homeStartQuiz": "Start Quiz",
+  "homeNotifications": "Notifications",
+  "homeExploreByCategory": "Explore by Category",
+  "homeContinueLearning": "Continue Learning",
+  "homePopularQuizzes": "Popular Quizzes",
+  "categoriesSubtitle": "Explore topics and strengthen your legal knowledge.",
+  "categoriesSearchHint": "Search categories",
+  "categoriesNoMatch": "No categories match your search.",
+  "categoriesFilters": "Filters",
+  "topicBookmark": "Bookmark topic",
+  "topicRemoveBookmark": "Remove bookmark",
+  "topicQuizzesHeading": "Quizzes",
+  "topicContinueQuiz": "Continue quiz {number}",
+  "@topicContinueQuiz": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "quizStatusCompleted": "completed",
+  "quizStatusInProgress": "in progress",
+  "quizStatusNotStarted": "not started",
+  "topicQuizSemantics": "{title}. {count, plural, =1{1 question} other{{count} questions}}, {difficulty}. {status}",
+  "@topicQuizSemantics": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      },
+      "difficulty": {
+        "type": "String"
+      },
+      "status": {
+        "type": "String"
+      }
+    }
+  },
+  "quizExit": "Exit quiz",
+  "quizCounter": "Question {current} of {total}",
+  "@quizCounter": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "quizSelectAnswer": "Select an answer",
+  "quizOptionLabel": "Option {letter}. {text}",
+  "@quizOptionLabel": {
+    "placeholders": {
+      "letter": {
+        "type": "String"
+      },
+      "text": {
+        "type": "String"
+      }
+    }
+  },
+  "quizYourAnswerCorrect": "Your answer, correct",
+  "quizYourAnswerWrong": "Your answer, wrong",
+  "quizCorrectAnswer": "Correct answer",
+  "quizVerdictCorrect": "Correct!",
+  "quizVerdictWrong": "Not quite",
+  "resultHeadline": "Well Done!",
+  "resultCompleted": "{topic} — completed",
+  "@resultCompleted": {
+    "placeholders": {
+      "topic": {
+        "type": "String"
+      }
+    }
+  },
+  "resultThisTopic": "this topic",
+  "resultScoreSemantics": "Your score: {score}, {percent}",
+  "@resultScoreSemantics": {
+    "placeholders": {
+      "score": {
+        "type": "String"
+      },
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "resultCorrect": "Correct",
+  "resultWrong": "Wrong",
+  "resultCorrectCount": "{count} correct",
+  "@resultCorrectCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "resultWrongCount": "{count} wrong",
+  "@resultWrongCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "resultWeakList": "{count, plural, =1{1 question added to your weak list.} other{{count} questions added to your weak list.}}",
+  "@resultWeakList": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "resultReviewAnswers": "Review answers",
+  "resultBackToTopic": "Back to topic"
 }

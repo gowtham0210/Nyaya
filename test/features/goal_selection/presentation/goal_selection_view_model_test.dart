@@ -12,19 +12,6 @@ void main() {
       'crack-an-exam',
       'study-law',
     ]);
-    expect(viewModel.goals.map((goal) => goal.title).toList(), const [
-      'Learn law for life',
-      'Crack an exam',
-      'Study law',
-    ]);
-    expect(
-      viewModel.goals.map((goal) => goal.description).toList(),
-      const [
-        'Everyday legal know-how for work, family and your rights',
-        'Sharpen exam-style MCQ practice and statute mastery',
-        'Master your LLB subjects, concept by concept',
-      ],
-    );
     expect(viewModel.selectedGoalId, 'learn-law-for-life');
   });
 

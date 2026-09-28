@@ -7,7 +7,7 @@ void main() {
 
     expect(session.featureId, '011-quiz-question');
     expect(session.questions, hasLength(12));
-    expect(session.counterLabel, 'Question 1 of 12');
+    expect(session.currentIndex, 0);
     expect(session.progress, closeTo(1 / 12, 0.001));
     expect(session.isAnswered, isFalse);
     expect(session.isComplete, isFalse);
@@ -59,7 +59,7 @@ void main() {
     session.answer(1);
     session.next();
 
-    expect(session.counterLabel, 'Question 2 of 12');
+    expect(session.currentIndex, 1);
     expect(session.isAnswered, isFalse);
     expect(session.isComplete, isFalse);
   });
@@ -88,6 +88,6 @@ void main() {
 
     session.next();
 
-    expect(session.counterLabel, 'Question 1 of 12');
+    expect(session.currentIndex, 0);
   });
 }

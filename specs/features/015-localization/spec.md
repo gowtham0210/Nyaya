@@ -61,6 +61,9 @@ only, so legal ideas are harder to follow.
 - AC-006: Splash (including screen-reader text), Welcome, onboarding,
   sign-in, sign-up and OTP render in a non-English locale with translated
   text (issue #27).
+- AC-009: Goal selection, Home, Categories, Topic detail, Quiz question and
+  Quiz result render UI text in a non-English locale (issue #28). Sample
+  learning content (topic, quiz and question text) stays as is.
 - AC-008: Auth error messages are the backend's own message or localized
   app text, never an English fallback.
 - AC-007: Sign-up shows localized professions but sends the backend a stable
@@ -74,6 +77,7 @@ only, so legal ideas are harder to follow.
 | AC-002–AC-005 | Unit | `test/core/localization/app_language_test.dart` |
 | AC-006 | Widget | `test/features/onboarding/presentation/onboarding_localization_test.dart`, `test/features/auth/presentation/auth_localization_test.dart` |
 | AC-007, AC-008 | Unit | `test/features/auth/presentation/auth_text_test.dart` |
+| AC-009 | Widget | `test/features/learning_localization_test.dart` |
 
 ## Open Questions
 
@@ -81,10 +85,18 @@ only, so legal ideas are harder to follow.
   string needs native review.** Reused from `nisha-frontend` tables: nav
   labels, Sign in, Retry, Cancel, Coming soon, Law Student, Lawyer /
   Advocate, and the Phone Number / Password / Profession / Full Name field
-  labels where her tables had them. Everything else was machine-drafted.
+  labels where her tables had them; for issue #28, View All, Resume,
+  Notifications, and the question-count and Quizzes words. Everything else
+  was machine-drafted.
 
 ## Notes
 
 - Issue #27 unified the Welcome/auth tagline "LAW BASIC QUIZ APP" to the
   splash's "LAW BASED QUIZ APP", and changed the sign-in password hint from
   "Create a strong password" to "Enter your password".
+- Issue #28: view models hold data only; pages build UI text from ARB.
+  Goals became a `Goal` enum (stable `id`, localized title) like
+  `Profession`. All-caps buttons use sentence-case keys upper-cased in code.
+  `categoryQuizCount` was renamed `quizCount`, shared by Categories and
+  Topic detail. Placeholder snackbars now say "… coming soon." instead of
+  "… is not wired yet.".

@@ -36,9 +36,6 @@ class QuizSessionViewModel {
 
   QuizQuestion get currentQuestion => questions[_currentIndex];
 
-  String get counterLabel =>
-      'Question ${_currentIndex + 1} of ${questions.length}';
-
   double get progress => (_currentIndex + 1) / questions.length;
 
   int? _selectedOption;

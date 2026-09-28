@@ -42,7 +42,7 @@ void main() {
     final viewModel = TopicDetailViewModel();
 
     expect(viewModel.continueQuizId, 'arrest-your-rights');
-    expect(viewModel.continueLabel, 'CONTINUE QUIZ 2');
+    expect(viewModel.continueQuizNumber, 2);
   });
 
   test('bookmark starts off and toggles', () {

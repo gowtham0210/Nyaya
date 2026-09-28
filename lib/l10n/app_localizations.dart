@@ -236,11 +236,11 @@ abstract class AppLocalizations {
   /// **'We\'re building this section. Check back soon.'**
   String get comingSoonBody;
 
-  /// No description provided for @categoryQuizCount.
+  /// No description provided for @quizCount.
   ///
   /// In en, this message translates to:
   /// **'{count, plural, =1{1 quiz} other{{count} quizzes}}'**
-  String categoryQuizCount(int count);
+  String quizCount(int count);
 
   /// No description provided for @categoriesEmpty.
   ///
@@ -727,6 +727,359 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'This phone number is already linked to another account.'**
   String get authErrorCredentialInUse;
+
+  /// No description provided for @commonContinue.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get commonContinue;
+
+  /// No description provided for @commonViewAll.
+  ///
+  /// In en, this message translates to:
+  /// **'View All'**
+  String get commonViewAll;
+
+  /// No description provided for @commonResume.
+  ///
+  /// In en, this message translates to:
+  /// **'Resume'**
+  String get commonResume;
+
+  /// No description provided for @questionCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 Question} other{{count} Questions}}'**
+  String questionCount(int count);
+
+  /// No description provided for @difficultyEasy.
+  ///
+  /// In en, this message translates to:
+  /// **'Easy'**
+  String get difficultyEasy;
+
+  /// No description provided for @difficultyMedium.
+  ///
+  /// In en, this message translates to:
+  /// **'Medium'**
+  String get difficultyMedium;
+
+  /// No description provided for @difficultyHard.
+  ///
+  /// In en, this message translates to:
+  /// **'Hard'**
+  String get difficultyHard;
+
+  /// No description provided for @goalHeadingLead.
+  ///
+  /// In en, this message translates to:
+  /// **'What brings you'**
+  String get goalHeadingLead;
+
+  /// No description provided for @goalHeadingAccent.
+  ///
+  /// In en, this message translates to:
+  /// **'to Nyaya?'**
+  String get goalHeadingAccent;
+
+  /// No description provided for @goalSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose your goal — you can change it anytime.'**
+  String get goalSubtitle;
+
+  /// No description provided for @goalFootnote.
+  ///
+  /// In en, this message translates to:
+  /// **'You can switch goals later in Profile.'**
+  String get goalFootnote;
+
+  /// No description provided for @goalLearnLawTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Learn law for life'**
+  String get goalLearnLawTitle;
+
+  /// No description provided for @goalLearnLawBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Everyday legal know-how for work, family and your rights'**
+  String get goalLearnLawBody;
+
+  /// No description provided for @goalExamTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Crack an exam'**
+  String get goalExamTitle;
+
+  /// No description provided for @goalExamBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Sharpen exam-style MCQ practice and statute mastery'**
+  String get goalExamBody;
+
+  /// No description provided for @goalStudyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Study law'**
+  String get goalStudyTitle;
+
+  /// No description provided for @goalStudyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Master your LLB subjects, concept by concept'**
+  String get goalStudyBody;
+
+  /// No description provided for @homeHeroLead.
+  ///
+  /// In en, this message translates to:
+  /// **'Test Your'**
+  String get homeHeroLead;
+
+  /// No description provided for @homeHeroAccent.
+  ///
+  /// In en, this message translates to:
+  /// **'Legal Knowledge.'**
+  String get homeHeroAccent;
+
+  /// No description provided for @homeHeroTrail.
+  ///
+  /// In en, this message translates to:
+  /// **'Master Justice.'**
+  String get homeHeroTrail;
+
+  /// No description provided for @homeHeroSupport.
+  ///
+  /// In en, this message translates to:
+  /// **'Quizzes on Law. Insights for Life.'**
+  String get homeHeroSupport;
+
+  /// No description provided for @homeStartQuiz.
+  ///
+  /// In en, this message translates to:
+  /// **'Start Quiz'**
+  String get homeStartQuiz;
+
+  /// No description provided for @homeNotifications.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications'**
+  String get homeNotifications;
+
+  /// No description provided for @homeExploreByCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Explore by Category'**
+  String get homeExploreByCategory;
+
+  /// No description provided for @homeContinueLearning.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue Learning'**
+  String get homeContinueLearning;
+
+  /// No description provided for @homePopularQuizzes.
+  ///
+  /// In en, this message translates to:
+  /// **'Popular Quizzes'**
+  String get homePopularQuizzes;
+
+  /// No description provided for @categoriesSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Explore topics and strengthen your legal knowledge.'**
+  String get categoriesSubtitle;
+
+  /// No description provided for @categoriesSearchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search categories'**
+  String get categoriesSearchHint;
+
+  /// No description provided for @categoriesNoMatch.
+  ///
+  /// In en, this message translates to:
+  /// **'No categories match your search.'**
+  String get categoriesNoMatch;
+
+  /// No description provided for @categoriesFilters.
+  ///
+  /// In en, this message translates to:
+  /// **'Filters'**
+  String get categoriesFilters;
+
+  /// No description provided for @topicBookmark.
+  ///
+  /// In en, this message translates to:
+  /// **'Bookmark topic'**
+  String get topicBookmark;
+
+  /// No description provided for @topicRemoveBookmark.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove bookmark'**
+  String get topicRemoveBookmark;
+
+  /// No description provided for @topicQuizzesHeading.
+  ///
+  /// In en, this message translates to:
+  /// **'Quizzes'**
+  String get topicQuizzesHeading;
+
+  /// No description provided for @topicContinueQuiz.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue quiz {number}'**
+  String topicContinueQuiz(int number);
+
+  /// No description provided for @quizStatusCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'completed'**
+  String get quizStatusCompleted;
+
+  /// No description provided for @quizStatusInProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'in progress'**
+  String get quizStatusInProgress;
+
+  /// No description provided for @quizStatusNotStarted.
+  ///
+  /// In en, this message translates to:
+  /// **'not started'**
+  String get quizStatusNotStarted;
+
+  /// No description provided for @topicQuizSemantics.
+  ///
+  /// In en, this message translates to:
+  /// **'{title}. {count, plural, =1{1 question} other{{count} questions}}, {difficulty}. {status}'**
+  String topicQuizSemantics(
+    String title,
+    int count,
+    String difficulty,
+    String status,
+  );
+
+  /// No description provided for @quizExit.
+  ///
+  /// In en, this message translates to:
+  /// **'Exit quiz'**
+  String get quizExit;
+
+  /// No description provided for @quizCounter.
+  ///
+  /// In en, this message translates to:
+  /// **'Question {current} of {total}'**
+  String quizCounter(int current, int total);
+
+  /// No description provided for @quizSelectAnswer.
+  ///
+  /// In en, this message translates to:
+  /// **'Select an answer'**
+  String get quizSelectAnswer;
+
+  /// No description provided for @quizOptionLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Option {letter}. {text}'**
+  String quizOptionLabel(String letter, String text);
+
+  /// No description provided for @quizYourAnswerCorrect.
+  ///
+  /// In en, this message translates to:
+  /// **'Your answer, correct'**
+  String get quizYourAnswerCorrect;
+
+  /// No description provided for @quizYourAnswerWrong.
+  ///
+  /// In en, this message translates to:
+  /// **'Your answer, wrong'**
+  String get quizYourAnswerWrong;
+
+  /// No description provided for @quizCorrectAnswer.
+  ///
+  /// In en, this message translates to:
+  /// **'Correct answer'**
+  String get quizCorrectAnswer;
+
+  /// No description provided for @quizVerdictCorrect.
+  ///
+  /// In en, this message translates to:
+  /// **'Correct!'**
+  String get quizVerdictCorrect;
+
+  /// No description provided for @quizVerdictWrong.
+  ///
+  /// In en, this message translates to:
+  /// **'Not quite'**
+  String get quizVerdictWrong;
+
+  /// No description provided for @resultHeadline.
+  ///
+  /// In en, this message translates to:
+  /// **'Well Done!'**
+  String get resultHeadline;
+
+  /// No description provided for @resultCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'{topic} — completed'**
+  String resultCompleted(String topic);
+
+  /// No description provided for @resultThisTopic.
+  ///
+  /// In en, this message translates to:
+  /// **'this topic'**
+  String get resultThisTopic;
+
+  /// No description provided for @resultScoreSemantics.
+  ///
+  /// In en, this message translates to:
+  /// **'Your score: {score}, {percent}'**
+  String resultScoreSemantics(String score, String percent);
+
+  /// No description provided for @resultCorrect.
+  ///
+  /// In en, this message translates to:
+  /// **'Correct'**
+  String get resultCorrect;
+
+  /// No description provided for @resultWrong.
+  ///
+  /// In en, this message translates to:
+  /// **'Wrong'**
+  String get resultWrong;
+
+  /// No description provided for @resultCorrectCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} correct'**
+  String resultCorrectCount(int count);
+
+  /// No description provided for @resultWrongCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} wrong'**
+  String resultWrongCount(int count);
+
+  /// No description provided for @resultWeakList.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 question added to your weak list.} other{{count} questions added to your weak list.}}'**
+  String resultWeakList(int count);
+
+  /// No description provided for @resultReviewAnswers.
+  ///
+  /// In en, this message translates to:
+  /// **'Review answers'**
+  String get resultReviewAnswers;
+
+  /// No description provided for @resultBackToTopic.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to topic'**
+  String get resultBackToTopic;
 }
 
 class _AppLocalizationsDelegate

@@ -28,7 +28,7 @@ A full-screen result summary after the last question. A gold score ring is the h
 - **Time stat** — omitted this phase. The quiz session tracks no elapsed time and the `onQuizCompleted` seam carries only outcomes; the mockup's Time column is dropped until a real timer feature exists.
 - Review answers screen (Phase 9) — REVIEW ANSWERS fires a callback wired provisionally (no-op) until it lands.
 - Retry / weak-list persistence (Phase 10): the strip is derived-and-displayed only; nothing is written.
-- Confetti/animation, share, ratings, streaks; result persistence; localization; score-band copy variants beyond the single "Well Done!" headline.
+- Confetti/animation, share, ratings, streaks; result persistence; score-band copy variants beyond the single "Well Done!" headline.
 
 ## Actors
 

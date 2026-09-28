@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/localization/l10n.dart';
 import '../../../core/presentation/widgets/nyaya_widgets.dart';
 import 'quiz_session_view_model.dart';
 
@@ -44,6 +45,7 @@ class _QuizQuestionPageState extends State<QuizQuestionPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final question = _session.currentQuestion;
     return Scaffold(
       backgroundColor: ivory,
@@ -58,11 +60,14 @@ class _QuizQuestionPageState extends State<QuizQuestionPage> {
                     key: const ValueKey('quiz.exit'),
                     onPressed: () => Navigator.maybePop(context),
                     icon: const Icon(Icons.close, color: navy),
-                    tooltip: 'Exit quiz',
+                    tooltip: l10n.quizExit,
                   ),
                   Expanded(
                     child: Text(
-                      _session.counterLabel,
+                      l10n.quizCounter(
+                        _session.currentIndex + 1,
+                        _session.questions.length,
+                      ),
                       textAlign: TextAlign.center,
                       style: const TextStyle(color: bodyGrey, fontSize: 15),
                     ),
@@ -127,8 +132,7 @@ class _QuizQuestionPageState extends State<QuizQuestionPage> {
                       ),
                     ),
                     const SizedBox(height: 16),
-                    for (final (index, option)
-                        in question.options.indexed) ...[
+                    for (final (index, option) in question.options.indexed) ...[
                       _OptionCard(
                         letter: String.fromCharCode(65 + index),
                         text: option,
@@ -162,9 +166,9 @@ class _QuizQuestionPageState extends State<QuizQuestionPage> {
                           ),
                         ),
                         onPressed: _next,
-                        child: const Text(
-                          'NEXT',
-                          style: TextStyle(
+                        child: Text(
+                          l10n.commonNext.toUpperCase(),
+                          style: const TextStyle(
                             fontWeight: FontWeight.w700,
                             letterSpacing: 2,
                           ),
@@ -177,9 +181,9 @@ class _QuizQuestionPageState extends State<QuizQuestionPage> {
                           color: _disabledGrey.withValues(alpha: 0.4),
                           borderRadius: BorderRadius.circular(30),
                         ),
-                        child: const Text(
-                          'SELECT AN ANSWER',
-                          style: TextStyle(
+                        child: Text(
+                          l10n.quizSelectAnswer.toUpperCase(),
+                          style: const TextStyle(
                             color: _disabledGrey,
                             fontWeight: FontWeight.w700,
                             letterSpacing: 2,
@@ -231,28 +235,30 @@ class _OptionCard extends StatelessWidget {
     final (fill, border, badge) = switch (state) {
       _OptionState.neutral => (Colors.white, _cardBorder, _LetterBadge.neutral),
       _OptionState.lockedCorrect => (
-          _correctTint,
-          _correctGreen,
-          _LetterBadge.check,
-        ),
+        _correctTint,
+        _correctGreen,
+        _LetterBadge.check,
+      ),
       _OptionState.lockedWrong => (_wrongTint, _wrongRed, _LetterBadge.cross),
       _OptionState.revealedCorrect => (
-          Colors.white,
-          _correctGreen,
-          _LetterBadge.neutral,
-        ),
+        Colors.white,
+        _correctGreen,
+        _LetterBadge.neutral,
+      ),
     };
 
+    final l10n = context.l10n;
     final stateLabel = switch (state) {
-      _OptionState.neutral => '',
-      _OptionState.lockedCorrect => '. Your answer, correct',
-      _OptionState.lockedWrong => '. Your answer, wrong',
-      _OptionState.revealedCorrect => '. Correct answer',
+      _OptionState.neutral => null,
+      _OptionState.lockedCorrect => l10n.quizYourAnswerCorrect,
+      _OptionState.lockedWrong => l10n.quizYourAnswerWrong,
+      _OptionState.revealedCorrect => l10n.quizCorrectAnswer,
     };
+    final optionLabel = l10n.quizOptionLabel(letter, text);
 
     return Semantics(
       button: true,
-      label: 'Option $letter. $text$stateLabel',
+      label: stateLabel == null ? optionLabel : '$optionLabel. $stateLabel',
       child: InkWell(
         key: ValueKey('quiz.option.$letter'),
         borderRadius: BorderRadius.circular(16),
@@ -313,8 +319,9 @@ class _OptionCard extends StatelessWidget {
           child: const Icon(Icons.close, color: Colors.white, size: 20),
         );
       case _LetterBadge.neutral:
-        final ringColor =
-            state == _OptionState.revealedCorrect ? _correctGreen : gold;
+        final ringColor = state == _OptionState.revealedCorrect
+            ? _correctGreen
+            : gold;
         return Container(
           width: 36,
           height: 36,
@@ -336,10 +343,10 @@ class _OptionCard extends StatelessWidget {
   }
 
   _LetterBadge badge() => switch (state) {
-        _OptionState.lockedCorrect => _LetterBadge.check,
-        _OptionState.lockedWrong => _LetterBadge.cross,
-        _ => _LetterBadge.neutral,
-      };
+    _OptionState.lockedCorrect => _LetterBadge.check,
+    _OptionState.lockedWrong => _LetterBadge.cross,
+    _ => _LetterBadge.neutral,
+  };
 }
 
 enum _LetterBadge { neutral, check, cross }
@@ -380,7 +387,9 @@ class _ExplanationCard extends StatelessWidget {
               ),
               const SizedBox(width: 8),
               Text(
-                isCorrect ? 'Correct!' : 'Not quite',
+                isCorrect
+                    ? context.l10n.quizVerdictCorrect
+                    : context.l10n.quizVerdictWrong,
                 style: TextStyle(
                   color: verdictColor,
                   fontSize: 17,
@@ -398,8 +407,7 @@ class _ExplanationCard extends StatelessWidget {
             const SizedBox(height: 10),
             Row(
               children: [
-                const Icon(Icons.menu_book_outlined,
-                    color: bodyGrey, size: 18),
+                const Icon(Icons.menu_book_outlined, color: bodyGrey, size: 18),
                 const SizedBox(width: 8),
                 Expanded(
                   child: Text(

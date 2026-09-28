@@ -79,7 +79,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get comingSoonBody => 'We\'re building this section. Check back soon.';
 
   @override
-  String categoryQuizCount(int count) {
+  String quizCount(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
@@ -352,4 +352,224 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get authErrorCredentialInUse =>
       'This phone number is already linked to another account.';
+
+  @override
+  String get commonContinue => 'Continue';
+
+  @override
+  String get commonViewAll => 'View All';
+
+  @override
+  String get commonResume => 'Resume';
+
+  @override
+  String questionCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Questions',
+      one: '1 Question',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get difficultyEasy => 'Easy';
+
+  @override
+  String get difficultyMedium => 'Medium';
+
+  @override
+  String get difficultyHard => 'Hard';
+
+  @override
+  String get goalHeadingLead => 'What brings you';
+
+  @override
+  String get goalHeadingAccent => 'to Nyaya?';
+
+  @override
+  String get goalSubtitle => 'Choose your goal — you can change it anytime.';
+
+  @override
+  String get goalFootnote => 'You can switch goals later in Profile.';
+
+  @override
+  String get goalLearnLawTitle => 'Learn law for life';
+
+  @override
+  String get goalLearnLawBody =>
+      'Everyday legal know-how for work, family and your rights';
+
+  @override
+  String get goalExamTitle => 'Crack an exam';
+
+  @override
+  String get goalExamBody =>
+      'Sharpen exam-style MCQ practice and statute mastery';
+
+  @override
+  String get goalStudyTitle => 'Study law';
+
+  @override
+  String get goalStudyBody => 'Master your LLB subjects, concept by concept';
+
+  @override
+  String get homeHeroLead => 'Test Your';
+
+  @override
+  String get homeHeroAccent => 'Legal Knowledge.';
+
+  @override
+  String get homeHeroTrail => 'Master Justice.';
+
+  @override
+  String get homeHeroSupport => 'Quizzes on Law. Insights for Life.';
+
+  @override
+  String get homeStartQuiz => 'Start Quiz';
+
+  @override
+  String get homeNotifications => 'Notifications';
+
+  @override
+  String get homeExploreByCategory => 'Explore by Category';
+
+  @override
+  String get homeContinueLearning => 'Continue Learning';
+
+  @override
+  String get homePopularQuizzes => 'Popular Quizzes';
+
+  @override
+  String get categoriesSubtitle =>
+      'Explore topics and strengthen your legal knowledge.';
+
+  @override
+  String get categoriesSearchHint => 'Search categories';
+
+  @override
+  String get categoriesNoMatch => 'No categories match your search.';
+
+  @override
+  String get categoriesFilters => 'Filters';
+
+  @override
+  String get topicBookmark => 'Bookmark topic';
+
+  @override
+  String get topicRemoveBookmark => 'Remove bookmark';
+
+  @override
+  String get topicQuizzesHeading => 'Quizzes';
+
+  @override
+  String topicContinueQuiz(int number) {
+    return 'Continue quiz $number';
+  }
+
+  @override
+  String get quizStatusCompleted => 'completed';
+
+  @override
+  String get quizStatusInProgress => 'in progress';
+
+  @override
+  String get quizStatusNotStarted => 'not started';
+
+  @override
+  String topicQuizSemantics(
+    String title,
+    int count,
+    String difficulty,
+    String status,
+  ) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count questions',
+      one: '1 question',
+    );
+    return '$title. $_temp0, $difficulty. $status';
+  }
+
+  @override
+  String get quizExit => 'Exit quiz';
+
+  @override
+  String quizCounter(int current, int total) {
+    return 'Question $current of $total';
+  }
+
+  @override
+  String get quizSelectAnswer => 'Select an answer';
+
+  @override
+  String quizOptionLabel(String letter, String text) {
+    return 'Option $letter. $text';
+  }
+
+  @override
+  String get quizYourAnswerCorrect => 'Your answer, correct';
+
+  @override
+  String get quizYourAnswerWrong => 'Your answer, wrong';
+
+  @override
+  String get quizCorrectAnswer => 'Correct answer';
+
+  @override
+  String get quizVerdictCorrect => 'Correct!';
+
+  @override
+  String get quizVerdictWrong => 'Not quite';
+
+  @override
+  String get resultHeadline => 'Well Done!';
+
+  @override
+  String resultCompleted(String topic) {
+    return '$topic — completed';
+  }
+
+  @override
+  String get resultThisTopic => 'this topic';
+
+  @override
+  String resultScoreSemantics(String score, String percent) {
+    return 'Your score: $score, $percent';
+  }
+
+  @override
+  String get resultCorrect => 'Correct';
+
+  @override
+  String get resultWrong => 'Wrong';
+
+  @override
+  String resultCorrectCount(int count) {
+    return '$count correct';
+  }
+
+  @override
+  String resultWrongCount(int count) {
+    return '$count wrong';
+  }
+
+  @override
+  String resultWeakList(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count questions added to your weak list.',
+      one: '1 question added to your weak list.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get resultReviewAnswers => 'Review answers';
+
+  @override
+  String get resultBackToTopic => 'Back to topic';
 }

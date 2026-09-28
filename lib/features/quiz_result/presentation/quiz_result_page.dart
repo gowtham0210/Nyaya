@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/localization/l10n.dart';
 import '../../../core/presentation/widgets/nyaya_widgets.dart';
 import 'quiz_result_view_model.dart';
 
@@ -24,6 +25,7 @@ class QuizResultPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return Scaffold(
       backgroundColor: ivory,
       body: Stack(
@@ -32,9 +34,7 @@ class QuizResultPage extends StatelessWidget {
           Positioned(
             top: 0,
             left: 0,
-            child: ExcludeSemantics(
-              child: DotPattern(width: 96, height: 96),
-            ),
+            child: ExcludeSemantics(child: DotPattern(width: 96, height: 96)),
           ),
           SafeArea(
             child: SingleChildScrollView(
@@ -49,7 +49,7 @@ class QuizResultPage extends StatelessWidget {
                   ),
                   const SizedBox(height: 28),
                   Text(
-                    viewModel.headline,
+                    l10n.resultHeadline,
                     textAlign: TextAlign.center,
                     style: const TextStyle(
                       fontFamily: 'serif',
@@ -62,7 +62,9 @@ class QuizResultPage extends StatelessWidget {
                   const ExcludeSemantics(child: ContentDivider()),
                   const SizedBox(height: 10),
                   Text(
-                    viewModel.subtitle,
+                    l10n.resultCompleted(
+                      viewModel.topicTitle ?? l10n.resultThisTopic,
+                    ),
                     textAlign: TextAlign.center,
                     style: const TextStyle(color: bodyGrey, fontSize: 16),
                   ),
@@ -77,12 +79,12 @@ class QuizResultPage extends StatelessWidget {
                   ],
                   const SizedBox(height: 28),
                   _PrimaryCta(
-                    label: 'REVIEW ANSWERS',
+                    label: l10n.resultReviewAnswers.toUpperCase(),
                     onPressed: onReviewAnswers,
                   ),
                   const SizedBox(height: 14),
                   _SecondaryCta(
-                    label: 'BACK TO TOPIC',
+                    label: l10n.resultBackToTopic.toUpperCase(),
                     onPressed: onBackToTopic,
                   ),
                 ],
@@ -105,7 +107,7 @@ class _ScoreRing extends StatelessWidget {
   Widget build(BuildContext context) {
     return Semantics(
       key: const ValueKey('result.ring'),
-      label: 'Your score: $scoreLabel, $percentLabel',
+      label: context.l10n.resultScoreSemantics(scoreLabel, percentLabel),
       child: ExcludeSemantics(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -179,11 +181,7 @@ class _Laurel extends StatelessWidget {
       transform: mirror
           ? Matrix4.diagonal3Values(-1, 1, 1)
           : Matrix4.identity(),
-      child: Icon(
-        Icons.eco,
-        color: gold.withValues(alpha: 0.85),
-        size: 44,
-      ),
+      child: Icon(Icons.eco, color: gold.withValues(alpha: 0.85), size: 44),
     );
   }
 }
@@ -196,6 +194,7 @@ class _StatsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 18),
       decoration: BoxDecoration(
@@ -219,8 +218,8 @@ class _StatsCard extends StatelessWidget {
               iconTint: _correctTint,
               count: correctCount,
               countColor: _correctGreen,
-              label: 'CORRECT',
-              semanticLabel: '$correctCount correct',
+              label: l10n.resultCorrect.toUpperCase(),
+              semanticLabel: l10n.resultCorrectCount(correctCount),
             ),
           ),
           Container(width: 1, height: 68, color: _cardBorder),
@@ -232,8 +231,8 @@ class _StatsCard extends StatelessWidget {
               iconTint: _wrongTint,
               count: wrongCount,
               countColor: _wrongRed,
-              label: 'WRONG',
-              semanticLabel: '$wrongCount wrong',
+              label: l10n.resultWrong.toUpperCase(),
+              semanticLabel: l10n.resultWrongCount(wrongCount),
             ),
           ),
         ],
@@ -272,7 +271,10 @@ class _StatColumn extends StatelessWidget {
             Container(
               width: 44,
               height: 44,
-              decoration: BoxDecoration(color: iconTint, shape: BoxShape.circle),
+              decoration: BoxDecoration(
+                color: iconTint,
+                shape: BoxShape.circle,
+              ),
               child: Icon(icon, color: iconColor, size: 24),
             ),
             const SizedBox(height: 10),
@@ -308,7 +310,6 @@ class _WeakStrip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final noun = count == 1 ? 'question' : 'questions';
     return Container(
       key: const ValueKey('result.weakstrip'),
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -322,7 +323,7 @@ class _WeakStrip extends StatelessWidget {
           const SizedBox(width: 10),
           Expanded(
             child: Text(
-              '$count $noun added to your weak list.',
+              context.l10n.resultWeakList(count),
               style: const TextStyle(color: bodyGrey, fontSize: 14),
             ),
           ),
@@ -354,10 +355,7 @@ class _PrimaryCta extends StatelessWidget {
         onPressed: onPressed,
         child: Text(
           label,
-          style: const TextStyle(
-            fontWeight: FontWeight.w700,
-            letterSpacing: 2,
-          ),
+          style: const TextStyle(fontWeight: FontWeight.w700, letterSpacing: 2),
         ),
       ),
     );
@@ -386,10 +384,7 @@ class _SecondaryCta extends StatelessWidget {
         onPressed: onPressed,
         child: Text(
           label,
-          style: const TextStyle(
-            fontWeight: FontWeight.w700,
-            letterSpacing: 2,
-          ),
+          style: const TextStyle(fontWeight: FontWeight.w700, letterSpacing: 2),
         ),
       ),
     );

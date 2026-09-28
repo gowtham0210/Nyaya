@@ -46,8 +46,8 @@ class TopicDetailViewModel {
 
   String get continueQuizId => _continueTarget.id;
 
-  String get continueLabel =>
-      'CONTINUE QUIZ ${quizzes.indexOf(_continueTarget) + 1}';
+  /// 1-based position of the quiz the Continue button opens.
+  int get continueQuizNumber => quizzes.indexOf(_continueTarget) + 1;
 
   TopicQuiz get _continueTarget => quizzes.firstWhere(
         (quiz) => quiz.status == QuizStatus.inProgress,

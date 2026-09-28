@@ -38,7 +38,7 @@ A calm celebratory summary on the ivory canvas, full-screen with no bottom nav. 
 - `correctCount` = outcomes where `isCorrect`; `wrongCount` = total − correct; `total` = outcomes length.
 - `scoreLabel` = "<correct>/<total>"; `percentLabel` = "<round(correct/total×100)>%".
 - `weakCount` = `wrongCount`; `showWeakStrip` = `weakCount > 0`.
-- `headline` = fixed "Well Done!" this phase.
+- The page shows the fixed "Well Done!" headline from ARB (spec 015).
 
 ## Interaction
 

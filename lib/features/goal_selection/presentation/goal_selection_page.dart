@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/localization/l10n.dart';
 import '../../../core/presentation/widgets/nyaya_widgets.dart';
 import '../../onboarding/presentation/widgets/page_indicator.dart';
 import 'goal_selection_view_model.dart';
@@ -11,7 +12,11 @@ const _radioBorder = Color(0xFFB9C0CA);
 const _templeAsset = 'assets/backgrounds/temple_bg.png';
 
 class GoalSelectionPage extends StatefulWidget {
-  const GoalSelectionPage({super.key, required this.onContinue, this.viewModel});
+  const GoalSelectionPage({
+    super.key,
+    required this.onContinue,
+    this.viewModel,
+  });
 
   final ValueChanged<String> onContinue;
   final GoalSelectionViewModel? viewModel;
@@ -26,6 +31,7 @@ class _GoalSelectionPageState extends State<GoalSelectionPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return Scaffold(
       backgroundColor: ivory,
       body: Stack(
@@ -44,9 +50,7 @@ class _GoalSelectionPageState extends State<GoalSelectionPage> {
           const Positioned(
             left: 16,
             top: 80,
-            child: ExcludeSemantics(
-              child: DotPattern(width: 60, height: 60),
-            ),
+            child: ExcludeSemantics(child: DotPattern(width: 60, height: 60)),
           ),
           Positioned(
             left: 60,
@@ -78,7 +82,9 @@ class _GoalSelectionPageState extends State<GoalSelectionPage> {
                         key: const ValueKey('goal.back'),
                         onPressed: () => Navigator.maybePop(context),
                         icon: const Icon(Icons.arrow_back, color: navy),
-                        tooltip: 'Back',
+                        tooltip: MaterialLocalizations.of(
+                          context,
+                        ).backButtonTooltip,
                       ),
                       const PageIndicator(
                         key: ValueKey('goal.progress'),
@@ -89,30 +95,30 @@ class _GoalSelectionPageState extends State<GoalSelectionPage> {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    'What brings you',
+                    l10n.goalHeadingLead,
                     key: const ValueKey('goal.heading.lead'),
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                          color: navy,
-                          fontFamily: 'serif',
-                          fontWeight: FontWeight.w700,
-                        ),
+                      color: navy,
+                      fontFamily: 'serif',
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                   Text(
-                    'to Nyaya?',
+                    l10n.goalHeadingAccent,
                     key: const ValueKey('goal.heading.accent'),
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                          color: gold,
-                          fontFamily: 'serif',
-                          fontWeight: FontWeight.w700,
-                        ),
+                      color: gold,
+                      fontFamily: 'serif',
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                   const SizedBox(height: 8),
-                  const Text(
-                    'Choose your goal — you can change it anytime.',
+                  Text(
+                    l10n.goalSubtitle,
                     textAlign: TextAlign.center,
-                    style: TextStyle(color: bodyGrey, fontSize: 14),
+                    style: const TextStyle(color: bodyGrey, fontSize: 14),
                   ),
                   const SizedBox(height: 20),
                   for (final goal in _viewModel.goals) ...[
@@ -137,9 +143,9 @@ class _GoalSelectionPageState extends State<GoalSelectionPage> {
                       ),
                       onPressed: () =>
                           widget.onContinue(_viewModel.selectedGoalId),
-                      child: const Text(
-                        'CONTINUE',
-                        style: TextStyle(
+                      child: Text(
+                        l10n.commonContinue.toUpperCase(),
+                        style: const TextStyle(
                           fontWeight: FontWeight.w700,
                           letterSpacing: 1.5,
                         ),
@@ -147,10 +153,10 @@ class _GoalSelectionPageState extends State<GoalSelectionPage> {
                     ),
                   ),
                   const SizedBox(height: 12),
-                  const Text(
-                    'You can switch goals later in Profile.',
+                  Text(
+                    l10n.goalFootnote,
                     textAlign: TextAlign.center,
-                    style: TextStyle(color: bodyGrey, fontSize: 13),
+                    style: const TextStyle(color: bodyGrey, fontSize: 13),
                   ),
                   const SizedBox(height: 24),
                 ],
@@ -170,23 +176,19 @@ class _GoalCard extends StatelessWidget {
     required this.onTap,
   });
 
-  final GoalOption goal;
+  final Goal goal;
   final bool selected;
   final VoidCallback onTap;
 
-  IconData get _iconData => switch (goal.icon) {
-        GoalIconType.scales => Icons.balance,
-        GoalIconType.trophy => Icons.emoji_events_outlined,
-        GoalIconType.graduationCap => Icons.school_outlined,
-      };
-
   @override
   Widget build(BuildContext context) {
+    final title = goal.title(context.l10n);
+    final description = goal.description(context.l10n);
     return Semantics(
       inMutuallyExclusiveGroup: true,
       selected: selected,
       button: true,
-      label: '${goal.title}. ${goal.description}',
+      label: '$title. $description',
       child: InkWell(
         key: ValueKey('goal.card.${goal.id}'),
         borderRadius: BorderRadius.circular(20),
@@ -217,7 +219,7 @@ class _GoalCard extends StatelessWidget {
                   color: _iconTileFill,
                   borderRadius: BorderRadius.circular(14),
                 ),
-                child: Icon(_iconData, color: navy, size: 30),
+                child: Icon(goal.icon, color: navy, size: 30),
               ),
               const SizedBox(width: 16),
               Expanded(
@@ -225,7 +227,7 @@ class _GoalCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      goal.title,
+                      title,
                       style: const TextStyle(
                         color: navy,
                         fontSize: 18,
@@ -234,7 +236,7 @@ class _GoalCard extends StatelessWidget {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      goal.description,
+                      description,
                       style: const TextStyle(color: bodyGrey, fontSize: 13),
                     ),
                   ],

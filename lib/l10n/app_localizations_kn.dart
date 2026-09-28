@@ -80,7 +80,7 @@ class AppLocalizationsKn extends AppLocalizations {
       'ನಾವು ಈ ವಿಭಾಗವನ್ನು ನಿರ್ಮಿಸುತ್ತಿದ್ದೇವೆ. ಶೀಘ್ರದಲ್ಲೇ ಮತ್ತೆ ನೋಡಿ.';
 
   @override
-  String categoryQuizCount(int count) {
+  String quizCount(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
@@ -353,4 +353,226 @@ class AppLocalizationsKn extends AppLocalizations {
   @override
   String get authErrorCredentialInUse =>
       'ಈ ಫೋನ್ ಸಂಖ್ಯೆ ಈಗಾಗಲೇ ಬೇರೆ ಖಾತೆಗೆ ಲಿಂಕ್ ಆಗಿದೆ.';
+
+  @override
+  String get commonContinue => 'ಮುಂದುವರಿಸಿ';
+
+  @override
+  String get commonViewAll => 'ಎಲ್ಲವನ್ನೂ ವೀಕ್ಷಿಸಿ';
+
+  @override
+  String get commonResume => 'ಮುಂದುವರಿಸಿ';
+
+  @override
+  String questionCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count ಪ್ರಶ್ನೆಗಳು',
+      one: '1 ಪ್ರಶ್ನೆ',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get difficultyEasy => 'ಸುಲಭ';
+
+  @override
+  String get difficultyMedium => 'ಮಧ್ಯಮ';
+
+  @override
+  String get difficultyHard => 'ಕಠಿಣ';
+
+  @override
+  String get goalHeadingLead => 'ನಿಮ್ಮನ್ನು ನ್ಯಾಯಕ್ಕೆ';
+
+  @override
+  String get goalHeadingAccent => 'ಕರೆತಂದದ್ದು ಏನು?';
+
+  @override
+  String get goalSubtitle =>
+      'ನಿಮ್ಮ ಗುರಿಯನ್ನು ಆಯ್ಕೆಮಾಡಿ — ಯಾವಾಗ ಬೇಕಾದರೂ ಬದಲಾಯಿಸಬಹುದು.';
+
+  @override
+  String get goalFootnote => 'ನಂತರ ಪ್ರೊಫೈಲ್‌ನಲ್ಲಿ ಗುರಿಯನ್ನು ಬದಲಾಯಿಸಬಹುದು.';
+
+  @override
+  String get goalLearnLawTitle => 'ಜೀವನಕ್ಕಾಗಿ ಕಾನೂನು ಕಲಿಯಿರಿ';
+
+  @override
+  String get goalLearnLawBody =>
+      'ಕೆಲಸ, ಕುಟುಂಬ ಮತ್ತು ನಿಮ್ಮ ಹಕ್ಕುಗಳಿಗಾಗಿ ದೈನಂದಿನ ಕಾನೂನು ಜ್ಞಾನ';
+
+  @override
+  String get goalExamTitle => 'ಪರೀಕ್ಷೆಯಲ್ಲಿ ಗೆಲ್ಲಿರಿ';
+
+  @override
+  String get goalExamBody =>
+      'ಪರೀಕ್ಷಾ ಶೈಲಿಯ MCQ ಅಭ್ಯಾಸ ಮತ್ತು ಕಾನೂನು ವಿಧಿಗಳ ಮೇಲೆ ಹಿಡಿತ ಸಾಧಿಸಿ';
+
+  @override
+  String get goalStudyTitle => 'ಕಾನೂನು ಅಧ್ಯಯನ';
+
+  @override
+  String get goalStudyBody =>
+      'ನಿಮ್ಮ LLB ವಿಷಯಗಳನ್ನು ಒಂದೊಂದೇ ಪರಿಕಲ್ಪನೆಯಾಗಿ ಕಲಿಯಿರಿ';
+
+  @override
+  String get homeHeroLead => 'ನಿಮ್ಮ';
+
+  @override
+  String get homeHeroAccent => 'ಕಾನೂನು ಜ್ಞಾನವನ್ನು ಪರೀಕ್ಷಿಸಿ.';
+
+  @override
+  String get homeHeroTrail => 'ನ್ಯಾಯದಲ್ಲಿ ಪರಿಣತಿ ಪಡೆಯಿರಿ.';
+
+  @override
+  String get homeHeroSupport => 'ಕಾನೂನಿನ ಕ್ವಿಜ್‌ಗಳು. ಜೀವನಕ್ಕೆ ಒಳನೋಟ.';
+
+  @override
+  String get homeStartQuiz => 'ಕ್ವಿಜ್ ಪ್ರಾರಂಭಿಸಿ';
+
+  @override
+  String get homeNotifications => 'ಅಧಿಸೂಚನೆಗಳು';
+
+  @override
+  String get homeExploreByCategory => 'ವರ್ಗವಾರು ಅನ್ವೇಷಿಸಿ';
+
+  @override
+  String get homeContinueLearning => 'ಕಲಿಕೆ ಮುಂದುವರಿಸಿ';
+
+  @override
+  String get homePopularQuizzes => 'ಜನಪ್ರಿಯ ಕ್ವಿಜ್‌ಗಳು';
+
+  @override
+  String get categoriesSubtitle =>
+      'ವಿಷಯಗಳನ್ನು ಅನ್ವೇಷಿಸಿ ಮತ್ತು ನಿಮ್ಮ ಕಾನೂನು ಜ್ಞಾನವನ್ನು ಬಲಪಡಿಸಿ.';
+
+  @override
+  String get categoriesSearchHint => 'ವರ್ಗಗಳನ್ನು ಹುಡುಕಿ';
+
+  @override
+  String get categoriesNoMatch => 'ನಿಮ್ಮ ಹುಡುಕಾಟಕ್ಕೆ ಹೊಂದುವ ವರ್ಗಗಳಿಲ್ಲ.';
+
+  @override
+  String get categoriesFilters => 'ಫಿಲ್ಟರ್‌ಗಳು';
+
+  @override
+  String get topicBookmark => 'ವಿಷಯವನ್ನು ಬುಕ್‌ಮಾರ್ಕ್ ಮಾಡಿ';
+
+  @override
+  String get topicRemoveBookmark => 'ಬುಕ್‌ಮಾರ್ಕ್ ತೆಗೆದುಹಾಕಿ';
+
+  @override
+  String get topicQuizzesHeading => 'ಕ್ವಿಜ್‌ಗಳು';
+
+  @override
+  String topicContinueQuiz(int number) {
+    return 'ಕ್ವಿಜ್ $number ಮುಂದುವರಿಸಿ';
+  }
+
+  @override
+  String get quizStatusCompleted => 'ಪೂರ್ಣಗೊಂಡಿದೆ';
+
+  @override
+  String get quizStatusInProgress => 'ಪ್ರಗತಿಯಲ್ಲಿದೆ';
+
+  @override
+  String get quizStatusNotStarted => 'ಪ್ರಾರಂಭಿಸಿಲ್ಲ';
+
+  @override
+  String topicQuizSemantics(
+    String title,
+    int count,
+    String difficulty,
+    String status,
+  ) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count ಪ್ರಶ್ನೆಗಳು',
+      one: '1 ಪ್ರಶ್ನೆ',
+    );
+    return '$title. $_temp0, $difficulty. $status';
+  }
+
+  @override
+  String get quizExit => 'ಕ್ವಿಜ್‌ನಿಂದ ನಿರ್ಗಮಿಸಿ';
+
+  @override
+  String quizCounter(int current, int total) {
+    return 'ಪ್ರಶ್ನೆ $current / $total';
+  }
+
+  @override
+  String get quizSelectAnswer => 'ಒಂದು ಉತ್ತರ ಆಯ್ಕೆಮಾಡಿ';
+
+  @override
+  String quizOptionLabel(String letter, String text) {
+    return 'ಆಯ್ಕೆ $letter. $text';
+  }
+
+  @override
+  String get quizYourAnswerCorrect => 'ನಿಮ್ಮ ಉತ್ತರ, ಸರಿ';
+
+  @override
+  String get quizYourAnswerWrong => 'ನಿಮ್ಮ ಉತ್ತರ, ತಪ್ಪು';
+
+  @override
+  String get quizCorrectAnswer => 'ಸರಿಯಾದ ಉತ್ತರ';
+
+  @override
+  String get quizVerdictCorrect => 'ಸರಿ!';
+
+  @override
+  String get quizVerdictWrong => 'ಸರಿಯಾಗಿಲ್ಲ';
+
+  @override
+  String get resultHeadline => 'ಶಾಭಾಷ್!';
+
+  @override
+  String resultCompleted(String topic) {
+    return '$topic — ಪೂರ್ಣಗೊಂಡಿದೆ';
+  }
+
+  @override
+  String get resultThisTopic => 'ಈ ವಿಷಯ';
+
+  @override
+  String resultScoreSemantics(String score, String percent) {
+    return 'ನಿಮ್ಮ ಅಂಕ: $score, $percent';
+  }
+
+  @override
+  String get resultCorrect => 'ಸರಿ';
+
+  @override
+  String get resultWrong => 'ತಪ್ಪು';
+
+  @override
+  String resultCorrectCount(int count) {
+    return '$count ಸರಿ';
+  }
+
+  @override
+  String resultWrongCount(int count) {
+    return '$count ತಪ್ಪು';
+  }
+
+  @override
+  String resultWeakList(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count ಪ್ರಶ್ನೆಗಳನ್ನು ನಿಮ್ಮ ದುರ್ಬಲ ಪಟ್ಟಿಗೆ ಸೇರಿಸಲಾಗಿದೆ.',
+      one: '1 ಪ್ರಶ್ನೆಯನ್ನು ನಿಮ್ಮ ದುರ್ಬಲ ಪಟ್ಟಿಗೆ ಸೇರಿಸಲಾಗಿದೆ.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get resultReviewAnswers => 'ಉತ್ತರಗಳನ್ನು ಪರಿಶೀಲಿಸಿ';
+
+  @override
+  String get resultBackToTopic => 'ವಿಷಯಕ್ಕೆ ಹಿಂತಿರುಗಿ';
 }

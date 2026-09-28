@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/localization/l10n.dart';
 import '../../../core/presentation/widgets/nyaya_icon.dart';
 import '../../../core/presentation/widgets/nyaya_widgets.dart';
 import 'home_view_model.dart';
@@ -38,6 +39,7 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return Scaffold(
       backgroundColor: pageBackground,
       body: SafeArea(
@@ -54,37 +56,40 @@ class HomePage extends StatelessWidget {
                   callback();
                   return;
                 }
-                _showPlaceholder(context, 'Notifications are not wired yet.');
+                _showPlaceholder(
+                  context,
+                  l10n.featureComingSoon(l10n.homeNotifications),
+                );
               },
             ),
             const SizedBox(height: 20),
             _HeroBanner(
-              leadLine: viewModel.heroLeadLine,
-              accentLine: viewModel.heroAccentLine,
-              trailLine: viewModel.heroTrailLine,
-              supportingCopy: viewModel.heroSupportingCopy,
-              ctaLabel: viewModel.heroCtaLabel,
+              leadLine: l10n.homeHeroLead,
+              accentLine: l10n.homeHeroAccent,
+              trailLine: l10n.homeHeroTrail,
+              supportingCopy: l10n.homeHeroSupport,
+              ctaLabel: l10n.homeStartQuiz,
               onPressed: () {
                 final callback = onStartQuizPressed;
                 if (callback != null) {
                   callback();
                   return;
                 }
-                _showPlaceholder(context, 'Quiz entry flow is not wired yet.');
+                _showPlaceholder(context, l10n.commonComingSoon);
               },
             ),
             const SizedBox(height: 28),
             _SectionHeader(
               key: const ValueKey('home.section.explore'),
-              title: 'Explore by Category',
-              actionLabel: 'View All',
+              title: l10n.homeExploreByCategory,
+              actionLabel: l10n.commonViewAll,
               onPressed: () {
                 final callback = onViewAllCategoriesPressed;
                 if (callback != null) {
                   callback();
                   return;
                 }
-                _showPlaceholder(context, 'Category list is not wired yet.');
+                _showPlaceholder(context, l10n.commonComingSoon);
               },
             ),
             const SizedBox(height: 16),
@@ -98,15 +103,15 @@ class HomePage extends StatelessWidget {
                 }
                 _showPlaceholder(
                   context,
-                  '${category.label} is not wired yet.',
+                  l10n.featureComingSoon(category.label),
                 );
               },
             ),
             const SizedBox(height: 30),
-            const Text(
-              'Continue Learning',
-              key: ValueKey('home.section.continue'),
-              style: TextStyle(
+            Text(
+              l10n.homeContinueLearning,
+              key: const ValueKey('home.section.continue'),
+              style: const TextStyle(
                 fontSize: 22,
                 fontWeight: FontWeight.w700,
                 color: heroBackground,
@@ -122,24 +127,21 @@ class HomePage extends StatelessWidget {
                   callback();
                   return;
                 }
-                _showPlaceholder(context, 'Resume flow is not wired yet.');
+                _showPlaceholder(context, l10n.commonComingSoon);
               },
             ),
             const SizedBox(height: 28),
             _SectionHeader(
               key: const ValueKey('home.section.popular'),
-              title: 'Popular Quizzes',
-              actionLabel: 'View All',
+              title: l10n.homePopularQuizzes,
+              actionLabel: l10n.commonViewAll,
               onPressed: () {
                 final callback = onViewAllPopularPressed;
                 if (callback != null) {
                   callback();
                   return;
                 }
-                _showPlaceholder(
-                  context,
-                  'Popular quizzes list is not wired yet.',
-                );
+                _showPlaceholder(context, l10n.commonComingSoon);
               },
             ),
             const SizedBox(height: 16),
@@ -152,7 +154,7 @@ class HomePage extends StatelessWidget {
                     callback(quiz);
                     return;
                   }
-                  _showPlaceholder(context, '${quiz.title} is not wired yet.');
+                  _showPlaceholder(context, l10n.featureComingSoon(quiz.title));
                 },
               ),
               const SizedBox(height: 16),
@@ -205,6 +207,7 @@ class _HeaderRow extends StatelessWidget {
               child: IconButton(
                 key: const ValueKey('home.notification.button'),
                 onPressed: onNotificationsPressed,
+                tooltip: context.l10n.homeNotifications,
                 icon: const Icon(
                   Icons.notifications_none_rounded,
                   size: 28,
@@ -267,12 +270,12 @@ class _HeaderBrand extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 2),
-              const FittedBox(
+              FittedBox(
                 alignment: Alignment.centerLeft,
                 fit: BoxFit.scaleDown,
                 child: Text(
-                  'LAW BASED QUIZ APP',
-                  style: TextStyle(
+                  context.l10n.brandTagline,
+                  style: const TextStyle(
                     color: HomePage.heroHighlight,
                     fontSize: 11,
                     fontWeight: FontWeight.w700,
@@ -668,7 +671,7 @@ class _ContinueLearningCard extends StatelessWidget {
                     ),
                     const SizedBox(height: 6),
                     Text(
-                      '${data.questionCount} Questions',
+                      context.l10n.questionCount(data.questionCount),
                       key: const ValueKey('home.continue.meta'),
                       style: const TextStyle(
                         fontSize: 14,
@@ -695,9 +698,15 @@ class _ContinueLearningCard extends StatelessWidget {
                       borderRadius: BorderRadius.circular(18),
                     ),
                   ),
-                  child: const Text(
-                    'Resume',
-                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700),
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Text(
+                      context.l10n.commonResume,
+                      style: const TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
                   ),
                 ),
               ),
@@ -857,7 +866,7 @@ class _PopularQuizCard extends StatelessWidget {
                       crossAxisAlignment: WrapCrossAlignment.center,
                       children: [
                         Text(
-                          '${quiz.questionCount} Questions',
+                          context.l10n.questionCount(quiz.questionCount),
                           style: const TextStyle(
                             fontSize: 14,
                             color: HomePage.supportText,
@@ -871,7 +880,7 @@ class _PopularQuizCard extends StatelessWidget {
                           ),
                         ),
                         Text(
-                          quiz.difficulty.label,
+                          _difficultyLabel(context.l10n, quiz.difficulty),
                           key: ValueKey('home.quiz.${quiz.id}.difficulty'),
                           style: TextStyle(
                             fontSize: 14,
@@ -959,3 +968,9 @@ class _RatingPill extends StatelessWidget {
   }
 }
 
+String _difficultyLabel(AppLocalizations l10n, QuizDifficulty difficulty) =>
+    switch (difficulty) {
+      QuizDifficulty.easy => l10n.difficultyEasy,
+      QuizDifficulty.medium => l10n.difficultyMedium,
+      QuizDifficulty.hard => l10n.difficultyHard,
+    };

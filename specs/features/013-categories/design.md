@@ -37,7 +37,7 @@ Shared constants from `nyaya_widgets.dart` and `nyaya_bottom_nav.dart` (navy/her
 
 - Tap category card → `onCategorySelected(categoryId)`.
 - Type in search → filters grid in place.
-- Tap filter button → placeholder ("Filters are not wired yet.") until filtering is scoped.
+- Tap filter button → placeholder ("Filters coming soon.") until filtering is scoped.
 - Tap bottom nav item → `onNavigationSelected(index)`.
 
 ## Validation Checklist

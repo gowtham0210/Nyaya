@@ -21,8 +21,6 @@ void main() {
     expect(vm.wrongCount, 3);
     expect(vm.scoreLabel, '9/12');
     expect(vm.percentLabel, '75%');
-    expect(vm.headline, 'Well Done!');
-    expect(vm.subtitle, 'Arrest & Your Rights — completed');
   });
 
   test('rounds the percent to the nearest whole number', () {

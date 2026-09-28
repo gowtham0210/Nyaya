@@ -1,24 +1,11 @@
 import '../../../core/presentation/widgets/nyaya_icon.dart';
 
-export '../../../core/presentation/widgets/nyaya_icon.dart'
-    show HomeIconType;
+export '../../../core/presentation/widgets/nyaya_icon.dart' show HomeIconType;
 
 class HomeViewModel {
   const HomeViewModel();
 
   String get featureId => '008-home-page';
-
-  String get appTitle => 'Nyaya';
-
-  String get heroLeadLine => 'Test Your';
-
-  String get heroAccentLine => 'Legal Knowledge.';
-
-  String get heroTrailLine => 'Master Justice.';
-
-  String get heroSupportingCopy => 'Quizzes on Law. Insights for Life.';
-
-  String get heroCtaLabel => 'Start Quiz';
 
   bool get hasUnreadNotifications => true;
 
@@ -95,15 +82,7 @@ class HomeViewModel {
   ];
 }
 
-enum QuizDifficulty {
-  easy('Easy'),
-  medium('Medium'),
-  hard('Hard');
-
-  const QuizDifficulty(this.label);
-
-  final String label;
-}
+enum QuizDifficulty { easy, medium, hard }
 
 class HomeCategoryData {
   const HomeCategoryData({
@@ -152,4 +131,3 @@ class PopularQuizData {
   final int tileForegroundHex;
   final HomeIconType icon;
 }
-

@@ -47,6 +47,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
   @override
   Widget build(BuildContext context) {
     final viewModel = widget.viewModel;
+    final l10n = context.l10n;
 
     return Scaffold(
       backgroundColor: CategoriesPage.pageBackground,
@@ -65,7 +66,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          viewModel.title,
+                          l10n.navCategories,
                           key: const ValueKey('categories.header.title'),
                           style: const TextStyle(
                             fontSize: 26,
@@ -77,7 +78,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
                         ),
                         const SizedBox(height: 6),
                         Text(
-                          viewModel.supportingCopy,
+                          l10n.categoriesSubtitle,
                           style: const TextStyle(
                             fontSize: 14,
                             color: CategoriesPage.supportText,
@@ -97,13 +98,15 @@ class _CategoriesPageState extends State<CategoriesPage> {
                   Expanded(
                     child: _SearchField(
                       controller: _searchController,
-                      hint: viewModel.searchHint,
+                      hint: l10n.categoriesSearchHint,
                     ),
                   ),
                   const SizedBox(width: 10),
                   _FilterButton(
-                    onTap: () =>
-                        _showPlaceholder(context, 'Filters are not wired yet.'),
+                    onTap: () => _showPlaceholder(
+                      context,
+                      l10n.featureComingSoon(l10n.categoriesFilters),
+                    ),
                   ),
                 ],
               ),
@@ -114,11 +117,11 @@ class _CategoriesPageState extends State<CategoriesPage> {
                   builder: (context, _) => LoadStateView<List<CategoryData>>(
                     state: viewModel.state,
                     onRetry: viewModel.load,
-                    emptyMessage: context.l10n.categoriesEmpty,
+                    emptyMessage: l10n.categoriesEmpty,
                     emptyIcon: Icons.grid_view_rounded,
                     builder: (context, categories) => _buildGrid(
                       viewModel.filter(categories, _searchController.text),
-                      viewModel.emptySearchMessage,
+                      l10n.categoriesNoMatch,
                     ),
                   ),
                 ),
@@ -155,7 +158,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
                   }
                   _showPlaceholder(
                     context,
-                    '${category.label} is not wired yet.',
+                    context.l10n.featureComingSoon(category.label),
                   );
                 },
               );
@@ -241,10 +244,11 @@ class _FilterButton extends StatelessWidget {
           border: Border.all(color: CategoriesPage.cardBorder),
         ),
         alignment: Alignment.center,
-        child: const Icon(
+        child: Icon(
           Icons.tune_rounded,
           color: CategoriesPage.heroBackground,
           size: 22,
+          semanticLabel: context.l10n.categoriesFilters,
         ),
       ),
     );
@@ -344,10 +348,12 @@ class _CategoryCard extends StatelessWidget {
                   child: quizCount == null
                       ? const SizedBox.shrink()
                       : Text(
-                          context.l10n.categoryQuizCount(quizCount),
+                          context.l10n.quizCount(quizCount),
                           key: ValueKey(
                             'categories.card.${category.slug}.meta',
                           ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                           style: const TextStyle(
                             fontSize: 13,
                             color: CategoriesPage.supportText,

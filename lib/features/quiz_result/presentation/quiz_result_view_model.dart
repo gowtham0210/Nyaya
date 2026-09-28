@@ -3,13 +3,12 @@ import '../../quiz_question/presentation/quiz_session_view_model.dart';
 /// Derives the quiz result summary from the outcomes reported when a session
 /// completes. Pure: no side effects, no persistence.
 class QuizResultViewModel {
-  QuizResultViewModel({
-    required this.outcomes,
-    this.topicTitle = 'this topic',
-  });
+  QuizResultViewModel({required this.outcomes, this.topicTitle});
 
   final List<QuizOutcome> outcomes;
-  final String topicTitle;
+
+  /// Null when the topic is unknown; the page then says "this topic".
+  final String? topicTitle;
 
   int get total => outcomes.length;
 
@@ -29,8 +28,4 @@ class QuizResultViewModel {
   int get weakCount => wrongCount;
 
   bool get showWeakStrip => weakCount > 0;
-
-  String get headline => 'Well Done!';
-
-  String get subtitle => '$topicTitle — completed';
 }
