@@ -482,5 +482,5 @@
   "filterCategory": "Category",
   "filterClearAll": "Clear all",
   "filterApply": "Apply filters",
-  "searchTypeCategories": "Quiz topics"
+  "searchTypeQuizTopics": "Quiz topics"
 }

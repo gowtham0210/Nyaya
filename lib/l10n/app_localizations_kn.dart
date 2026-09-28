@@ -971,5 +971,5 @@ class AppLocalizationsKn extends AppLocalizations {
   String get filterApply => 'ಫಿಲ್ಟರ್‌ಗಳನ್ನು ಅನ್ವಯಿಸಿ';
 
   @override
-  String get searchTypeCategories => 'ಕ್ವಿಜ್ ವಿಷಯಗಳು';
+  String get searchTypeQuizTopics => 'ಕ್ವಿಜ್ ವಿಷಯಗಳು';
 }

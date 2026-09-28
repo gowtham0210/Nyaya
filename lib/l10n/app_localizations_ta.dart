@@ -974,5 +974,5 @@ class AppLocalizationsTa extends AppLocalizations {
   String get filterApply => 'வடிகட்டிகளைப் பயன்படுத்து';
 
   @override
-  String get searchTypeCategories => 'வினாடி வினா தலைப்புகள்';
+  String get searchTypeQuizTopics => 'வினாடி வினா தலைப்புகள்';
 }

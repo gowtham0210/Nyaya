@@ -970,5 +970,5 @@ class AppLocalizationsTe extends AppLocalizations {
   String get filterApply => 'ఫిల్టర్లను వర్తింపజేయండి';
 
   @override
-  String get searchTypeCategories => 'క్విజ్ అంశాలు';
+  String get searchTypeQuizTopics => 'క్విజ్ అంశాలు';
 }

@@ -162,4 +162,22 @@ void main() {
 
     expect(find.text('कानून, अधिकार और नवीनतम अपडेट खोजें'), findsOneWidget);
   });
+
+  testWidgets('filters is a labelled button; fits large text', (tester) async {
+    tester.platformDispatcher.textScaleFactorTestValue = 1.6;
+    addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
+    await pumpPage(tester, searchRoutes());
+    tester.view.physicalSize = const Size(320, 640);
+    tester.view.devicePixelRatio = 1;
+    await tester.pumpAndSettle();
+
+    expect(
+      tester.getSemantics(find.byKey(const ValueKey('search.filters'))),
+      isSemantics(isButton: true, hasTapAction: true, tooltip: 'Filters'),
+    );
+    await tester.tap(find.byKey(const ValueKey('search.filters')));
+    await tester.pumpAndSettle();
+
+    expect(tester.takeException(), isNull);
+  });
 }

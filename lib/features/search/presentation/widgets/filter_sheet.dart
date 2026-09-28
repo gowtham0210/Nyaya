@@ -3,18 +3,18 @@ import 'package:flutter/material.dart';
 import '../../../../core/localization/l10n.dart';
 import '../../../../core/presentation/widgets/detail_scaffold.dart';
 import '../../../categories/presentation/categories_view_model.dart';
-import '../../domain/search.dart';
+import '../search.dart';
 
-/// What the filter sheet returns on Apply.
-class FilterChoice {
-  const FilterChoice({required this.types, required this.categoryIds});
+/// A content type's name, e.g. "Articles".
+String searchTypeLabel(AppLocalizations l10n, SearchContentType type) =>
+    switch (type) {
+      SearchContentType.quizTopics => l10n.searchTypeQuizTopics,
+      SearchContentType.articles => l10n.navArticles,
+      SearchContentType.legalUpdates => l10n.legalUpdatesTitle,
+    };
 
-  final Set<SearchContentType> types;
-  final Set<int> categoryIds;
-}
-
-/// Content type and category filters (spec 033). Pops a [FilterChoice] on
-/// Apply; closing it any other way changes nothing.
+/// Content type and category filters (spec 033). Pops the picked filters
+/// as a [SearchQuery] on Apply; closing it any other way changes nothing.
 class FilterSheet extends StatefulWidget {
   const FilterSheet({
     super.key,
@@ -24,7 +24,7 @@ class FilterSheet extends StatefulWidget {
 
   /// The backend's categories.
   final List<CategoryData> categories;
-  final FilterChoice initial;
+  final SearchQuery initial;
 
   @override
   State<FilterSheet> createState() => _FilterSheetState();
@@ -33,13 +33,6 @@ class FilterSheet extends StatefulWidget {
 class _FilterSheetState extends State<FilterSheet> {
   late final _types = {...widget.initial.types};
   late final _categoryIds = {...widget.initial.categoryIds};
-
-  static String typeLabel(AppLocalizations l10n, SearchContentType type) =>
-      switch (type) {
-        SearchContentType.categories => l10n.searchTypeCategories,
-        SearchContentType.articles => l10n.navArticles,
-        SearchContentType.legalUpdates => l10n.legalUpdatesTitle,
-      };
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +60,7 @@ class _FilterSheetState extends State<FilterSheet> {
                 for (final type in SearchContentType.values)
                   FilterChip(
                     key: ValueKey('filter.type.${type.name}'),
-                    label: Text(typeLabel(l10n, type)),
+                    label: Text(searchTypeLabel(l10n, type)),
                     selected: _types.contains(type),
                     onSelected: (on) => setState(
                       () => on ? _types.add(type) : _types.remove(type),
@@ -114,7 +107,7 @@ class _FilterSheetState extends State<FilterSheet> {
                     key: const ValueKey('filter.apply'),
                     style: FilledButton.styleFrom(backgroundColor: brandNavy),
                     onPressed: () => Navigator.of(context).pop(
-                      FilterChoice(
+                      SearchQuery(
                         types: {..._types},
                         categoryIds: {..._categoryIds},
                       ),

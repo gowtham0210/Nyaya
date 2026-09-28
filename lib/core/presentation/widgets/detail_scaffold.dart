@@ -5,7 +5,7 @@ const brandGold = Color(0xFFB9823A);
 const brandSupportText = Color(0xFF5E6878);
 const brandDanger = Color(0xFFD64545);
 const brandSuccess = Color(0xFF1FA35B);
-const _pageBackground = Color(0xFFF8F6F2);
+const brandBackground = Color(0xFFF8F6F2);
 const _cardBorder = Color(0xFFECE5DB);
 
 /// The shared frame for detail screens opened from Profile: title bar and a
@@ -23,9 +23,9 @@ class DetailScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: _pageBackground,
+      backgroundColor: brandBackground,
       appBar: AppBar(
-        backgroundColor: _pageBackground,
+        backgroundColor: brandBackground,
         foregroundColor: brandNavy,
         surfaceTintColor: Colors.transparent,
         title: Text(title),

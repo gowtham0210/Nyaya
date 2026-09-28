@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import '../../../core/localization/l10n.dart';
 import '../../../core/presentation/widgets/detail_scaffold.dart';
@@ -38,16 +39,10 @@ class _SearchPageState extends State<SearchPage> {
 
   Future<void> _openFilters(List<CategoryData> categories) async {
     final query = widget.viewModel.query;
-    final picked = await showModalBottomSheet<FilterChoice>(
+    final picked = await showModalBottomSheet<SearchQuery>(
       context: context,
       isScrollControlled: true,
-      builder: (_) => FilterSheet(
-        categories: categories,
-        initial: FilterChoice(
-          types: query.types,
-          categoryIds: query.categoryIds,
-        ),
-      ),
+      builder: (_) => FilterSheet(categories: categories, initial: query),
     );
     if (picked != null) {
       widget.viewModel.applyFilters(
@@ -66,9 +61,9 @@ class _SearchPageState extends State<SearchPage> {
         final viewModel = widget.viewModel;
         final filterCount = viewModel.query.filterCount;
         return Scaffold(
-          backgroundColor: const Color(0xFFF8F6F2),
+          backgroundColor: brandBackground,
           appBar: AppBar(
-            backgroundColor: const Color(0xFFF8F6F2),
+            backgroundColor: brandBackground,
             foregroundColor: brandNavy,
             surfaceTintColor: Colors.transparent,
             titleSpacing: 0,
@@ -89,7 +84,11 @@ class _SearchPageState extends State<SearchPage> {
                 onPressed: () => _openFilters(viewModel.availableCategories),
                 icon: Badge(
                   isLabelVisible: filterCount > 0,
-                  label: Text('$filterCount'),
+                  label: Text(
+                    NumberFormat.decimalPattern(
+                      Localizations.localeOf(context).toLanguageTag(),
+                    ).format(filterCount),
+                  ),
                   child: const Icon(Icons.tune_rounded),
                 ),
               ),
@@ -126,7 +125,6 @@ class _SearchPageState extends State<SearchPage> {
                   emptyIcon: Icons.search_off_rounded,
                   builder: (context, results) => _Results(
                     results: results,
-                    articleNumber: viewModel.articleNumber,
                     onCategorySelected: widget.onCategorySelected,
                     onArticleOpened: widget.onArticleOpened,
                   ),
@@ -143,13 +141,11 @@ class _SearchPageState extends State<SearchPage> {
 class _Results extends StatelessWidget {
   const _Results({
     required this.results,
-    required this.articleNumber,
     required this.onCategorySelected,
     required this.onArticleOpened,
   });
 
   final SearchResults results;
-  final int Function(Article article) articleNumber;
   final ValueChanged<CategoryData> onCategorySelected;
   final void Function(Article article, int number) onArticleOpened;
 
@@ -161,7 +157,7 @@ class _Results extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
       children: [
         if (results.categories.isNotEmpty) ...[
-          DetailHeading(l10n.searchTypeCategories),
+          DetailHeading(searchTypeLabel(l10n, SearchContentType.quizTopics)),
           DetailCard(
             children: [
               for (final category in results.categories)
@@ -175,22 +171,22 @@ class _Results extends StatelessWidget {
           ),
         ],
         if (results.articles.isNotEmpty) ...[
-          DetailHeading(l10n.navArticles),
+          DetailHeading(searchTypeLabel(l10n, SearchContentType.articles)),
           DetailCard(
             children: [
-              for (final article in results.articles)
+              for (final (:article, :number) in results.articles)
                 ListTile(
                   leading: const Icon(Icons.menu_book_outlined),
                   title: Text(article.title),
                   subtitle: Text(article.articleRange),
                   trailing: const Icon(Icons.chevron_right_rounded),
-                  onTap: () => onArticleOpened(article, articleNumber(article)),
+                  onTap: () => onArticleOpened(article, number),
                 ),
             ],
           ),
         ],
         if (results.legalUpdates.isNotEmpty) ...[
-          DetailHeading(l10n.legalUpdatesTitle),
+          DetailHeading(searchTypeLabel(l10n, SearchContentType.legalUpdates)),
           for (final update in results.legalUpdates) ...[
             LegalUpdateCard(update: update),
             const SizedBox(height: 12),

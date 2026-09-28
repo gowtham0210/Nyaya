@@ -31,8 +31,10 @@ Learners can't find a topic, article or update without browsing each tab.
 - Categories, articles and legal updates come from the shell's existing
   view models, so opening search fetches nothing new if the tabs loaded.
 - Articles and updates carry no category id, so a picked category matches
-  them when their text contains one of its key words (words over 3
-  letters, minus "laws"; e.g. "criminal" for "Criminal Law").
+  them when their text contains one of its key words as a whole word
+  (words of 3+ characters in any script, minus "law", "laws", "act",
+  "acts", "and", "the", "of"; e.g. "criminal" for "Criminal Law", "tax"
+  for "Tax Law"). A label with no such word matches as a whole phrase.
 
 ## Functional Requirements
 
@@ -47,8 +49,10 @@ Learners can't find a topic, article or update without browsing each tab.
   "Clear filters".
 - FR-005: No match shall show an empty state; a failed source shows the
   shared failure message with Retry, which reloads only what failed.
-- FR-006: Tapping an article opens its detail; tapping a quiz topic shows
-  a coming-soon message.
+- FR-006: Tapping an article opens its detail (numbered as in the Articles
+  tab); tapping a quiz topic shows a coming-soon message.
+- FR-007: Filters stay disabled until the categories load; the Filters
+  button and Home's search bar are labelled buttons.
 
 ## Acceptance Criteria
 

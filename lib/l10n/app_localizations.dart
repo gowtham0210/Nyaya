@@ -1751,11 +1751,11 @@ abstract class AppLocalizations {
   /// **'Apply filters'**
   String get filterApply;
 
-  /// No description provided for @searchTypeCategories.
+  /// No description provided for @searchTypeQuizTopics.
   ///
   /// In en, this message translates to:
   /// **'Quiz topics'**
-  String get searchTypeCategories;
+  String get searchTypeQuizTopics;
 }
 
 class _AppLocalizationsDelegate

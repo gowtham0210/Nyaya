@@ -5,7 +5,7 @@ import '../../categories/presentation/categories_view_model.dart';
 import '../../legal_updates/data/legal_updates_repository.dart';
 
 /// Kinds of content search covers.
-enum SearchContentType { categories, articles, legalUpdates }
+enum SearchContentType { quizTopics, articles, legalUpdates }
 
 /// What the learner searched for. Empty [types] means every kind; empty
 /// [categoryIds] means any category.
@@ -66,6 +66,9 @@ class SearchSources {
   final List<LegalUpdate> legalUpdates;
 }
 
+/// An article with its number in the Articles tab list.
+typedef NumberedArticle = ({Article article, int number});
+
 /// What matched, by kind.
 class SearchResults {
   const SearchResults({
@@ -75,7 +78,7 @@ class SearchResults {
   });
 
   final List<CategoryData> categories;
-  final List<Article> articles;
+  final List<NumberedArticle> articles;
   final List<LegalUpdate> legalUpdates;
 
   bool get isEmpty =>
@@ -85,9 +88,9 @@ class SearchResults {
 /// Matches [query] against [sources] (spec 033).
 ///
 /// Text matches names, titles and descriptions, ignoring case. A picked
-/// category keeps itself, and articles and updates that mention one of
-/// its key words (e.g. "criminal" for "Criminal Law"); the backend has no
-/// category on articles or updates.
+/// category keeps itself, and articles and updates that contain one of its
+/// key words as a whole word (e.g. "criminal" for "Criminal Law"); the
+/// backend has no category on articles or updates.
 SearchResults search(SearchSources sources, SearchQuery query) {
   final text = query.text.trim().toLowerCase();
   final picked = [
@@ -99,13 +102,22 @@ SearchResults search(SearchSources sources, SearchQuery query) {
   bool matchesText(List<String> fields) =>
       text.isEmpty || fields.any((f) => f.toLowerCase().contains(text));
 
-  bool mentionsPicked(List<String> fields) =>
-      picked.isEmpty ||
-      fields.any((f) => keywords.any(f.toLowerCase().contains));
+  bool mentionsPicked(List<String> fields) {
+    if (picked.isEmpty) {
+      return true;
+    }
+    final joined = fields.join(' ').toLowerCase();
+    final words = _words(joined).toSet();
+    return keywords.any(
+      (keyword) => keyword.contains(' ')
+          ? joined.contains(keyword)
+          : words.contains(keyword),
+    );
+  }
 
   return SearchResults(
     categories: [
-      if (query.includes(SearchContentType.categories))
+      if (query.includes(SearchContentType.quizTopics))
         for (final category in sources.categories)
           if (matchesText([category.label]) &&
               (picked.isEmpty || query.categoryIds.contains(category.id)))
@@ -113,10 +125,10 @@ SearchResults search(SearchSources sources, SearchQuery query) {
     ],
     articles: [
       if (query.includes(SearchContentType.articles))
-        for (final article in sources.articles)
+        for (final (index, article) in sources.articles.indexed)
           if (matchesText(_articleText(article)) &&
               mentionsPicked(_articleText(article)))
-            article,
+            (article: article, number: index + 1),
     ],
     legalUpdates: [
       if (query.includes(SearchContentType.legalUpdates))
@@ -141,8 +153,20 @@ List<String> _updateText(LegalUpdate update) => [
   update.category,
 ];
 
-/// Words that identify a category: longer than 3 letters, minus "law".
-Set<String> _keywords(CategoryData category) => {
-  for (final word in category.label.toLowerCase().split(RegExp(r'[^a-z]+')))
-    if (word.length > 3 && word != 'laws') word,
-};
+/// Words too common to identify a category.
+const _stopWords = {'law', 'laws', 'act', 'acts', 'and', 'the', 'of'};
+
+/// Words split on spaces and punctuation, in any script.
+Iterable<String> _words(String text) =>
+    text.split(RegExp(r'[\s\p{P}]+', unicode: true)).where((w) => w.isNotEmpty);
+
+/// A category's identifying words (3+ characters, not [_stopWords]); the
+/// whole label when none are left, e.g. "IT Act".
+Set<String> _keywords(CategoryData category) {
+  final label = category.label.toLowerCase();
+  final words = {
+    for (final word in _words(label))
+      if (word.runes.length >= 3 && !_stopWords.contains(word)) word,
+  };
+  return words.isEmpty ? {label.trim()} : words;
+}

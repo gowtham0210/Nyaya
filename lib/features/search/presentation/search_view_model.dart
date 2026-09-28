@@ -5,11 +5,9 @@ import '../../../core/presentation/load_state_notifier.dart';
 import '../../articles/presentation/articles_view_model.dart';
 import '../../categories/presentation/categories_view_model.dart';
 import '../../legal_updates/presentation/legal_updates_view_model.dart';
-import '../domain/search.dart';
+import 'search.dart';
 
-export '../domain/search.dart';
-
-enum SearchStatus { loading, ready, failed }
+export 'search.dart';
 
 /// Search and filters (spec 033) over the data the tabs already load; it
 /// shares their view models, so nothing is fetched twice.
@@ -39,26 +37,16 @@ class SearchViewModel extends ChangeNotifier {
   SearchQuery get query => _query;
   var _query = const SearchQuery();
 
-  /// Loading while any source loads; failed if any failed; else ready.
-  SearchStatus get status {
-    final states = [for (final source in _sources) source.state];
-    if (states.any((s) => s is Loading)) {
-      return SearchStatus.loading;
-    }
-    return states.any((s) => s is Failed)
-        ? SearchStatus.failed
-        : SearchStatus.ready;
-  }
-
-  /// [results] as a load state for `LoadStateView`: the first failure,
-  /// loading, empty when nothing matches, or the results.
+  /// [results] as a load state for `LoadStateView`: the first failure (so
+  /// Retry shows even while another source loads), loading, empty when
+  /// nothing matches, or the results.
   LoadState<SearchResults> get resultsState {
     for (final source in _sources) {
       if (source.state case Failed(:final error)) {
         return Failed(error);
       }
     }
-    if (status == SearchStatus.loading) {
+    if (_sources.any((source) => source.state is Loading)) {
       return const Loading();
     }
     final found = results;
@@ -67,10 +55,6 @@ class SearchViewModel extends ChangeNotifier {
 
   /// The backend's categories, for the filter sheet.
   List<CategoryData> get availableCategories => _data(_categories.state);
-
-  /// An article's number in the Articles tab (1-based, list order).
-  int articleNumber(Article article) =>
-      _data(_articles.state).indexOf(article) + 1;
 
   SearchResults get results => search(
     SearchSources(

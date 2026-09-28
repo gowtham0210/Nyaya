@@ -13,6 +13,7 @@ import '../../../support/home_fixture.dart';
 void main() {
   Future<void> pumpHomePage(
     WidgetTester tester, {
+    VoidCallback? onSearchPressed,
     Size size = const Size(393, 852),
     FakeViewPadding padding = const FakeViewPadding(top: 59, bottom: 34),
   }) async {
@@ -52,6 +53,7 @@ void main() {
           legalUpdates: legalUpdates,
           progress: sections.progress,
           categories: sections.categories,
+          onSearchPressed: onSearchPressed,
         ),
       ),
     );
@@ -170,5 +172,24 @@ void main() {
         tester.getBottomLeft(find.byKey(const ValueKey('home.hero'))).dy,
       ),
     );
+  });
+
+  testWidgets('033 the search bar is a labelled button that opens search', (
+    tester,
+  ) async {
+    var opened = 0;
+    await pumpHomePage(tester, onSearchPressed: () => opened++);
+    final bar = find.byKey(const ValueKey('home.search'));
+
+    expect(
+      tester.getSemantics(bar),
+      isSemantics(
+        isButton: true,
+        hasTapAction: true,
+        label: 'Search laws, rights and recent updates',
+      ),
+    );
+    await tester.tap(bar);
+    expect(opened, 1);
   });
 }

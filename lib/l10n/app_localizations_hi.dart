@@ -963,5 +963,5 @@ class AppLocalizationsHi extends AppLocalizations {
   String get filterApply => 'फ़िल्टर लागू करें';
 
   @override
-  String get searchTypeCategories => 'क्विज़ विषय';
+  String get searchTypeQuizTopics => 'क्विज़ विषय';
 }
