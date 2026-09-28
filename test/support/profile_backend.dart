@@ -1,3 +1,5 @@
+import 'help_resources_backend.dart';
+
 /// Canned backend routes for a signed-in learner's profile and stats.
 Map<String, Object> profileRoutes({
   String fullName = 'Asha Rao',
@@ -35,4 +37,5 @@ Map<String, Object> profileRoutes({
       },
     ],
   },
+  ...helpResourcesRoutes(),
 };

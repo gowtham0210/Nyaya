@@ -875,4 +875,62 @@ class AppLocalizationsTe extends AppLocalizations {
 
   @override
   String get supportMessageTooShort => 'దయచేసి కనీసం 10 అక్షరాలు రాయండి';
+
+  @override
+  String get helpResSubtitle =>
+      'మీ రాష్ట్రంలో ధృవీకరించబడిన న్యాయ సహాయ సంప్రదింపులను కనుగొనండి.';
+
+  @override
+  String get helpResState => 'రాష్ట్రం';
+
+  @override
+  String get helpResCategory => 'సహాయ రకం';
+
+  @override
+  String get helpResEmergency => 'అత్యవసర పరిస్థితిలో 112 డయల్ చేయండి.';
+
+  @override
+  String get helpResNational => 'జాతీయ హెల్ప్‌లైన్';
+
+  @override
+  String helpResVerified(String date) {
+    return 'మూలం ధృవీకరించబడింది $date';
+  }
+
+  @override
+  String get helpResNeedsVerification => 'ధృవీకరణ అవసరం';
+
+  @override
+  String helpResCall(String number) {
+    return '$number కు కాల్ చేయండి';
+  }
+
+  @override
+  String get helpResTollFree => 'టోల్-ఫ్రీ';
+
+  @override
+  String get helpResPhone => 'ఫోన్';
+
+  @override
+  String get helpResEmail => 'ఇమెయిల్';
+
+  @override
+  String get helpResWebsite => 'వెబ్‌సైట్';
+
+  @override
+  String helpResHours(String hours) {
+    return 'సమయం: $hours';
+  }
+
+  @override
+  String helpResSource(String name) {
+    return 'మూలం: $name';
+  }
+
+  @override
+  String get helpResEmpty =>
+      'ఈ ఎంపికకు ధృవీకరించబడిన సంప్రదింపులు లేవు. మరొక రకం లేదా రాష్ట్రాన్ని ప్రయత్నించండి.';
+
+  @override
+  String get helpResOpenFailed => 'దీన్ని మీ ఫోన్‌లో తెరవలేకపోయాం.';
 }

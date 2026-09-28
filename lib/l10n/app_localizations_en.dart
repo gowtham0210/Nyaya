@@ -866,4 +866,62 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get supportMessageTooShort => 'Please write at least 10 characters';
+
+  @override
+  String get helpResSubtitle =>
+      'Find verified legal help contacts in your state.';
+
+  @override
+  String get helpResState => 'State';
+
+  @override
+  String get helpResCategory => 'Kind of help';
+
+  @override
+  String get helpResEmergency => 'In an emergency, dial 112.';
+
+  @override
+  String get helpResNational => 'National helpline';
+
+  @override
+  String helpResVerified(String date) {
+    return 'Source verified $date';
+  }
+
+  @override
+  String get helpResNeedsVerification => 'Needs verification';
+
+  @override
+  String helpResCall(String number) {
+    return 'Call $number';
+  }
+
+  @override
+  String get helpResTollFree => 'Toll-free';
+
+  @override
+  String get helpResPhone => 'Phone';
+
+  @override
+  String get helpResEmail => 'Email';
+
+  @override
+  String get helpResWebsite => 'Website';
+
+  @override
+  String helpResHours(String hours) {
+    return 'Hours: $hours';
+  }
+
+  @override
+  String helpResSource(String name) {
+    return 'Source: $name';
+  }
+
+  @override
+  String get helpResEmpty =>
+      'No verified contacts for this choice. Try another kind of help or state.';
+
+  @override
+  String get helpResOpenFailed => 'Couldn\'t open this on your phone.';
 }

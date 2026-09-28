@@ -868,4 +868,62 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get supportMessageTooShort => 'कृपया कम से कम 10 अक्षर लिखें';
+
+  @override
+  String get helpResSubtitle =>
+      'अपने राज्य में सत्यापित कानूनी सहायता संपर्क खोजें।';
+
+  @override
+  String get helpResState => 'राज्य';
+
+  @override
+  String get helpResCategory => 'सहायता का प्रकार';
+
+  @override
+  String get helpResEmergency => 'आपातकाल में 112 डायल करें।';
+
+  @override
+  String get helpResNational => 'राष्ट्रीय हेल्पलाइन';
+
+  @override
+  String helpResVerified(String date) {
+    return 'स्रोत सत्यापित $date';
+  }
+
+  @override
+  String get helpResNeedsVerification => 'सत्यापन आवश्यक';
+
+  @override
+  String helpResCall(String number) {
+    return '$number पर कॉल करें';
+  }
+
+  @override
+  String get helpResTollFree => 'टोल-फ्री';
+
+  @override
+  String get helpResPhone => 'फ़ोन';
+
+  @override
+  String get helpResEmail => 'ईमेल';
+
+  @override
+  String get helpResWebsite => 'वेबसाइट';
+
+  @override
+  String helpResHours(String hours) {
+    return 'समय: $hours';
+  }
+
+  @override
+  String helpResSource(String name) {
+    return 'स्रोत: $name';
+  }
+
+  @override
+  String get helpResEmpty =>
+      'इस चयन के लिए कोई सत्यापित संपर्क नहीं। कोई दूसरा प्रकार या राज्य चुनें।';
+
+  @override
+  String get helpResOpenFailed => 'इसे आपके फ़ोन पर नहीं खोला जा सका।';
 }

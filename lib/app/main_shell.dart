@@ -11,7 +11,11 @@ import '../features/articles/presentation/articles_view_model.dart';
 import '../features/categories/data/categories_repository.dart';
 import '../features/categories/presentation/categories_page.dart';
 import '../features/categories/presentation/categories_view_model.dart';
+import '../features/help/data/help_resources_repository.dart';
+import '../features/help/data/link_opener.dart';
 import '../features/help/data/support_repository.dart';
+import '../features/help/presentation/help_resources_page.dart';
+import '../features/help/presentation/help_resources_view_model.dart';
 import '../features/help/presentation/help_support_page.dart';
 import '../features/help/presentation/support_view_model.dart';
 import '../features/home/data/daily_questions_repository.dart';
@@ -66,6 +70,7 @@ class MainShell extends StatefulWidget {
     this.selectLanguage,
     this.reminderScheduler,
     this.loadAppVersion,
+    this.openLink,
   });
 
   /// Backend client for the tabs' data; tests pass a fake.
@@ -82,6 +87,9 @@ class MainShell extends StatefulWidget {
 
   /// Reads the app version for About; defaults to the platform's.
   final AppVersionReader? loadAppVersion;
+
+  /// Opens phone, email and web links; defaults to the device's apps.
+  final LinkOpener? openLink;
 
   @override
   State<MainShell> createState() => _MainShellState();
@@ -208,7 +216,7 @@ class _MainShellState extends State<MainShell> {
   ShellTab _comingSoon(MainTab tab, String label, HomeIconType icon) =>
       _tab(tab, label, icon, (_) => ComingSoonTab(title: label, icon: icon));
 
-  /// Screens behind Profile's entries; unbuilt ones say they're coming.
+  /// Screens behind Profile's entries.
   void _openProfileEntry(BuildContext context, ProfileEntry entry) {
     switch (entry) {
       case ProfileEntry.editProfile:
@@ -223,9 +231,25 @@ class _MainShellState extends State<MainShell> {
         _openAbout(context);
       case ProfileEntry.helpSupport:
         _openHelpSupport(context);
-      default:
-        showMessage(context, context.l10n.commonComingSoon);
+      case ProfileEntry.helpResources:
+        _openHelpResources(context);
     }
+  }
+
+  void _openHelpResources(BuildContext context) {
+    final viewModel = HelpResourcesViewModel(
+      repository: HelpResourcesRepository(_apiClient),
+    );
+    Navigator.of(context)
+        .push(
+          MaterialPageRoute<void>(
+            builder: (_) => HelpResourcesPage(
+              viewModel: viewModel,
+              openLink: widget.openLink ?? openExternally,
+            ),
+          ),
+        )
+        .whenComplete(viewModel.dispose);
   }
 
   void _openHelpSupport(BuildContext context) {

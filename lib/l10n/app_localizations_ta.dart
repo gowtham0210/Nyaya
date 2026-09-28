@@ -878,4 +878,62 @@ class AppLocalizationsTa extends AppLocalizations {
 
   @override
   String get supportMessageTooShort => 'குறைந்தது 10 எழுத்துகளை எழுதவும்';
+
+  @override
+  String get helpResSubtitle =>
+      'உங்கள் மாநிலத்தில் சரிபார்க்கப்பட்ட சட்ட உதவி தொடர்புகளைக் கண்டறியுங்கள்.';
+
+  @override
+  String get helpResState => 'மாநிலம்';
+
+  @override
+  String get helpResCategory => 'உதவி வகை';
+
+  @override
+  String get helpResEmergency => 'அவசரநிலையில் 112 ஐ அழைக்கவும்.';
+
+  @override
+  String get helpResNational => 'தேசிய உதவி எண்';
+
+  @override
+  String helpResVerified(String date) {
+    return 'ஆதாரம் சரிபார்க்கப்பட்டது $date';
+  }
+
+  @override
+  String get helpResNeedsVerification => 'சரிபார்ப்பு தேவை';
+
+  @override
+  String helpResCall(String number) {
+    return '$number ஐ அழைக்கவும்';
+  }
+
+  @override
+  String get helpResTollFree => 'கட்டணமில்லா';
+
+  @override
+  String get helpResPhone => 'தொலைபேசி';
+
+  @override
+  String get helpResEmail => 'மின்னஞ்சல்';
+
+  @override
+  String get helpResWebsite => 'இணையதளம்';
+
+  @override
+  String helpResHours(String hours) {
+    return 'நேரம்: $hours';
+  }
+
+  @override
+  String helpResSource(String name) {
+    return 'ஆதாரம்: $name';
+  }
+
+  @override
+  String get helpResEmpty =>
+      'இந்தத் தேர்வுக்குச் சரிபார்க்கப்பட்ட தொடர்புகள் இல்லை. வேறு வகை அல்லது மாநிலத்தை முயற்சிக்கவும்.';
+
+  @override
+  String get helpResOpenFailed => 'இதை உங்கள் தொலைபேசியில் திறக்க முடியவில்லை.';
 }

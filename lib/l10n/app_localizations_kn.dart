@@ -875,4 +875,62 @@ class AppLocalizationsKn extends AppLocalizations {
 
   @override
   String get supportMessageTooShort => 'ದಯವಿಟ್ಟು ಕನಿಷ್ಠ 10 ಅಕ್ಷರಗಳನ್ನು ಬರೆಯಿರಿ';
+
+  @override
+  String get helpResSubtitle =>
+      'ನಿಮ್ಮ ರಾಜ್ಯದಲ್ಲಿ ಪರಿಶೀಲಿಸಿದ ಕಾನೂನು ಸಹಾಯ ಸಂಪರ್ಕಗಳನ್ನು ಹುಡುಕಿ.';
+
+  @override
+  String get helpResState => 'ರಾಜ್ಯ';
+
+  @override
+  String get helpResCategory => 'ಸಹಾಯದ ಪ್ರಕಾರ';
+
+  @override
+  String get helpResEmergency => 'ತುರ್ತು ಸಂದರ್ಭದಲ್ಲಿ 112 ಗೆ ಕರೆ ಮಾಡಿ.';
+
+  @override
+  String get helpResNational => 'ರಾಷ್ಟ್ರೀಯ ಸಹಾಯವಾಣಿ';
+
+  @override
+  String helpResVerified(String date) {
+    return 'ಮೂಲ ಪರಿಶೀಲಿಸಲಾಗಿದೆ $date';
+  }
+
+  @override
+  String get helpResNeedsVerification => 'ಪರಿಶೀಲನೆ ಅಗತ್ಯ';
+
+  @override
+  String helpResCall(String number) {
+    return '$number ಗೆ ಕರೆ ಮಾಡಿ';
+  }
+
+  @override
+  String get helpResTollFree => 'ಟೋಲ್-ಫ್ರೀ';
+
+  @override
+  String get helpResPhone => 'ಫೋನ್';
+
+  @override
+  String get helpResEmail => 'ಇಮೇಲ್';
+
+  @override
+  String get helpResWebsite => 'ವೆಬ್‌ಸೈಟ್';
+
+  @override
+  String helpResHours(String hours) {
+    return 'ಸಮಯ: $hours';
+  }
+
+  @override
+  String helpResSource(String name) {
+    return 'ಮೂಲ: $name';
+  }
+
+  @override
+  String get helpResEmpty =>
+      'ಈ ಆಯ್ಕೆಗೆ ಪರಿಶೀಲಿಸಿದ ಸಂಪರ್ಕಗಳಿಲ್ಲ. ಬೇರೆ ಪ್ರಕಾರ ಅಥವಾ ರಾಜ್ಯವನ್ನು ಪ್ರಯತ್ನಿಸಿ.';
+
+  @override
+  String get helpResOpenFailed => 'ಇದನ್ನು ನಿಮ್ಮ ಫೋನ್‌ನಲ್ಲಿ ತೆರೆಯಲಾಗಲಿಲ್ಲ.';
 }

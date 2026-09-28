@@ -246,5 +246,21 @@
   "supportStatusResolved": "పరిష్కరించబడింది",
   "supportStatusClosed": "మూసివేయబడింది",
   "validationRequired": "తప్పనిసరి",
-  "supportMessageTooShort": "దయచేసి కనీసం 10 అక్షరాలు రాయండి"
+  "supportMessageTooShort": "దయచేసి కనీసం 10 అక్షరాలు రాయండి",
+  "helpResSubtitle": "మీ రాష్ట్రంలో ధృవీకరించబడిన న్యాయ సహాయ సంప్రదింపులను కనుగొనండి.",
+  "helpResState": "రాష్ట్రం",
+  "helpResCategory": "సహాయ రకం",
+  "helpResEmergency": "అత్యవసర పరిస్థితిలో 112 డయల్ చేయండి.",
+  "helpResNational": "జాతీయ హెల్ప్‌లైన్",
+  "helpResVerified": "మూలం ధృవీకరించబడింది {date}",
+  "helpResNeedsVerification": "ధృవీకరణ అవసరం",
+  "helpResCall": "{number} కు కాల్ చేయండి",
+  "helpResTollFree": "టోల్-ఫ్రీ",
+  "helpResPhone": "ఫోన్",
+  "helpResEmail": "ఇమెయిల్",
+  "helpResWebsite": "వెబ్‌సైట్",
+  "helpResHours": "సమయం: {hours}",
+  "helpResSource": "మూలం: {name}",
+  "helpResEmpty": "ఈ ఎంపికకు ధృవీకరించబడిన సంప్రదింపులు లేవు. మరొక రకం లేదా రాష్ట్రాన్ని ప్రయత్నించండి.",
+  "helpResOpenFailed": "దీన్ని మీ ఫోన్‌లో తెరవలేకపోయాం."
 }

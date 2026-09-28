@@ -18,9 +18,11 @@ import '../support/profile_backend.dart';
 
 void main() {
   late FakeReminderScheduler reminderScheduler;
+  late List<Uri> openedLinks;
 
   Future<void> pumpMainShell(WidgetTester tester, {Locale? locale}) async {
     reminderScheduler = FakeReminderScheduler();
+    openedLinks = [];
     tester.view.physicalSize = const Size(393, 852);
     tester.view.devicePixelRatio = 1;
     addTearDown(() {
@@ -36,6 +38,10 @@ void main() {
         home: MainShell(
           reminderScheduler: reminderScheduler,
           loadAppVersion: () async => '9.9.9 (42)',
+          openLink: (uri) async {
+            openedLinks.add(uri);
+            return true;
+          },
           apiClient: fakeBackend({
             '/categories': {'items': []},
             ...profileRoutes(),
@@ -436,6 +442,22 @@ void main() {
       scrollable: find.byType(Scrollable).first,
     );
     expect(find.text('OTP never arrives'), findsOneWidget);
+  });
+
+  testWidgets('032 Help resources calls a contact', (tester) async {
+    await pumpMainShell(tester);
+    await openProfileEntry(tester, 'helpResources');
+
+    final call = find.byKey(const ValueKey('helpRes.1.call'));
+    await tester.scrollUntilVisible(
+      call,
+      200,
+      scrollable: find.byType(Scrollable).first,
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(call);
+
+    expect(openedLinks, [Uri.parse('tel:181')]);
   });
 
   testWidgets('030 About shows the app version', (tester) async {

@@ -413,5 +413,49 @@
   "supportStatusResolved": "Resolved",
   "supportStatusClosed": "Closed",
   "validationRequired": "Required",
-  "supportMessageTooShort": "Please write at least 10 characters"
+  "supportMessageTooShort": "Please write at least 10 characters",
+  "helpResSubtitle": "Find verified legal help contacts in your state.",
+  "helpResState": "State",
+  "helpResCategory": "Kind of help",
+  "helpResEmergency": "In an emergency, dial 112.",
+  "helpResNational": "National helpline",
+  "helpResVerified": "Source verified {date}",
+  "@helpResVerified": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "helpResNeedsVerification": "Needs verification",
+  "helpResCall": "Call {number}",
+  "@helpResCall": {
+    "placeholders": {
+      "number": {
+        "type": "String"
+      }
+    }
+  },
+  "helpResTollFree": "Toll-free",
+  "helpResPhone": "Phone",
+  "helpResEmail": "Email",
+  "helpResWebsite": "Website",
+  "helpResHours": "Hours: {hours}",
+  "@helpResHours": {
+    "placeholders": {
+      "hours": {
+        "type": "String"
+      }
+    }
+  },
+  "helpResSource": "Source: {name}",
+  "@helpResSource": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "helpResEmpty": "No verified contacts for this choice. Try another kind of help or state.",
+  "helpResOpenFailed": "Couldn't open this on your phone."
 }

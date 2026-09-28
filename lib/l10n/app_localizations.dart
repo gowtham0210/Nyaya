@@ -1594,6 +1594,102 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Please write at least 10 characters'**
   String get supportMessageTooShort;
+
+  /// No description provided for @helpResSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Find verified legal help contacts in your state.'**
+  String get helpResSubtitle;
+
+  /// No description provided for @helpResState.
+  ///
+  /// In en, this message translates to:
+  /// **'State'**
+  String get helpResState;
+
+  /// No description provided for @helpResCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Kind of help'**
+  String get helpResCategory;
+
+  /// No description provided for @helpResEmergency.
+  ///
+  /// In en, this message translates to:
+  /// **'In an emergency, dial 112.'**
+  String get helpResEmergency;
+
+  /// No description provided for @helpResNational.
+  ///
+  /// In en, this message translates to:
+  /// **'National helpline'**
+  String get helpResNational;
+
+  /// No description provided for @helpResVerified.
+  ///
+  /// In en, this message translates to:
+  /// **'Source verified {date}'**
+  String helpResVerified(String date);
+
+  /// No description provided for @helpResNeedsVerification.
+  ///
+  /// In en, this message translates to:
+  /// **'Needs verification'**
+  String get helpResNeedsVerification;
+
+  /// No description provided for @helpResCall.
+  ///
+  /// In en, this message translates to:
+  /// **'Call {number}'**
+  String helpResCall(String number);
+
+  /// No description provided for @helpResTollFree.
+  ///
+  /// In en, this message translates to:
+  /// **'Toll-free'**
+  String get helpResTollFree;
+
+  /// No description provided for @helpResPhone.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone'**
+  String get helpResPhone;
+
+  /// No description provided for @helpResEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Email'**
+  String get helpResEmail;
+
+  /// No description provided for @helpResWebsite.
+  ///
+  /// In en, this message translates to:
+  /// **'Website'**
+  String get helpResWebsite;
+
+  /// No description provided for @helpResHours.
+  ///
+  /// In en, this message translates to:
+  /// **'Hours: {hours}'**
+  String helpResHours(String hours);
+
+  /// No description provided for @helpResSource.
+  ///
+  /// In en, this message translates to:
+  /// **'Source: {name}'**
+  String helpResSource(String name);
+
+  /// No description provided for @helpResEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No verified contacts for this choice. Try another kind of help or state.'**
+  String get helpResEmpty;
+
+  /// No description provided for @helpResOpenFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t open this on your phone.'**
+  String get helpResOpenFailed;
 }
 
 class _AppLocalizationsDelegate
