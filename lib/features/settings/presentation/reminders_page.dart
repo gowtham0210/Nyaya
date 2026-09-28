@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../core/localization/l10n.dart';
 import 'reminders_view_model.dart';
-import 'widgets/settings_scaffold.dart';
+import '../../../core/presentation/widgets/settings_scaffold.dart';
 
 /// Daily practice reminders (spec 029): a switch and a time.
 class RemindersPage extends StatefulWidget {

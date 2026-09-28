@@ -11,6 +11,9 @@ import '../features/articles/presentation/articles_view_model.dart';
 import '../features/categories/data/categories_repository.dart';
 import '../features/categories/presentation/categories_page.dart';
 import '../features/categories/presentation/categories_view_model.dart';
+import '../features/help/data/support_repository.dart';
+import '../features/help/presentation/help_support_page.dart';
+import '../features/help/presentation/support_view_model.dart';
 import '../features/home/data/daily_questions_repository.dart';
 import '../features/home/data/progress_repository.dart';
 import '../features/home/presentation/daily_questions_view_model.dart';
@@ -218,9 +221,24 @@ class _MainShellState extends State<MainShell> {
         _openPrivacy(context);
       case ProfileEntry.about:
         _openAbout(context);
+      case ProfileEntry.helpSupport:
+        _openHelpSupport(context);
       default:
         showMessage(context, context.l10n.commonComingSoon);
     }
+  }
+
+  void _openHelpSupport(BuildContext context) {
+    final viewModel = SupportViewModel(
+      repository: SupportRepository(_apiClient),
+    );
+    Navigator.of(context)
+        .push(
+          MaterialPageRoute<void>(
+            builder: (_) => HelpSupportPage(viewModel: viewModel),
+          ),
+        )
+        .whenComplete(viewModel.dispose);
   }
 
   void _openAbout(BuildContext context) {

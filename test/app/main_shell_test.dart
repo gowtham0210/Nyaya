@@ -426,6 +426,18 @@ void main() {
     expect(AppSession.signedIn, isFalse);
   });
 
+  testWidgets('031 Help & support lists past requests', (tester) async {
+    await pumpMainShell(tester);
+    await openProfileEntry(tester, 'helpSupport');
+
+    await tester.scrollUntilVisible(
+      find.text('OTP never arrives'),
+      200,
+      scrollable: find.byType(Scrollable).first,
+    );
+    expect(find.text('OTP never arrives'), findsOneWidget);
+  });
+
   testWidgets('030 About shows the app version', (tester) async {
     await pumpMainShell(tester);
     await openProfileEntry(tester, 'about');

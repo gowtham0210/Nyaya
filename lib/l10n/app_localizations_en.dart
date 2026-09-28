@@ -827,4 +827,43 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get reminderChannelName => 'Daily practice reminder';
+
+  @override
+  String get supportContactTitle => 'Contact support';
+
+  @override
+  String get supportSubject => 'Subject';
+
+  @override
+  String get supportMessage => 'Message';
+
+  @override
+  String get supportSend => 'Send request';
+
+  @override
+  String get supportSent => 'Your request has been sent.';
+
+  @override
+  String get supportRequestsTitle => 'Your requests';
+
+  @override
+  String get supportRequestsEmpty => 'You haven\'t sent any requests yet.';
+
+  @override
+  String get supportStatusOpen => 'Open';
+
+  @override
+  String get supportStatusInProgress => 'In progress';
+
+  @override
+  String get supportStatusResolved => 'Resolved';
+
+  @override
+  String get supportStatusClosed => 'Closed';
+
+  @override
+  String get validationRequired => 'Required';
+
+  @override
+  String get supportMessageTooShort => 'Please write at least 10 characters';
 }

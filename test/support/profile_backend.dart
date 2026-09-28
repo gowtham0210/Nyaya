@@ -24,4 +24,15 @@ Map<String, Object> profileRoutes({
   '/users/me/categories-explored': {'categoriesExplored': 3},
   '/users/me/security': {'activeSessions': 2},
   '/users/me/logout-all': <String, Object>{},
+  '/users/me/support-requests': {
+    'items': [
+      {
+        'id': 1,
+        'subject': 'OTP never arrives',
+        'message': 'I tried three times.',
+        'status': 'open',
+        'createdAt': '2026-09-20T10:00:00.000Z',
+      },
+    ],
+  },
 };

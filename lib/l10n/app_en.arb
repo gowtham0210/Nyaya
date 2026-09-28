@@ -400,5 +400,18 @@
   "aboutFeatureQuizzes": "Quizzes that test what you've learned",
   "aboutFeatureLanguages": "Available in English, Hindi, Tamil, Telugu and Kannada",
   "remindersFailed": "Couldn't set the reminder. Please try again.",
-  "reminderChannelName": "Daily practice reminder"
+  "reminderChannelName": "Daily practice reminder",
+  "supportContactTitle": "Contact support",
+  "supportSubject": "Subject",
+  "supportMessage": "Message",
+  "supportSend": "Send request",
+  "supportSent": "Your request has been sent.",
+  "supportRequestsTitle": "Your requests",
+  "supportRequestsEmpty": "You haven't sent any requests yet.",
+  "supportStatusOpen": "Open",
+  "supportStatusInProgress": "In progress",
+  "supportStatusResolved": "Resolved",
+  "supportStatusClosed": "Closed",
+  "validationRequired": "Required",
+  "supportMessageTooShort": "Please write at least 10 characters"
 }

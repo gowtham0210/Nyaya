@@ -7,7 +7,7 @@ const settingsDanger = Color(0xFFD64545);
 const _pageBackground = Color(0xFFF8F6F2);
 const _cardBorder = Color(0xFFECE5DB);
 
-/// The shared frame for Profile's settings screens: title bar and a
+/// The shared frame for Profile's settings and help screens: title bar and a
 /// padded, scrolling list.
 class SettingsScaffold extends StatelessWidget {
   const SettingsScaffold({

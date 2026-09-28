@@ -835,4 +835,44 @@ class AppLocalizationsKn extends AppLocalizations {
 
   @override
   String get reminderChannelName => 'ದೈನಂದಿನ ಅಭ್ಯಾಸ ಜ್ಞಾಪನೆ';
+
+  @override
+  String get supportContactTitle => 'ಬೆಂಬಲವನ್ನು ಸಂಪರ್ಕಿಸಿ';
+
+  @override
+  String get supportSubject => 'ವಿಷಯ';
+
+  @override
+  String get supportMessage => 'ಸಂದೇಶ';
+
+  @override
+  String get supportSend => 'ವಿನಂತಿ ಕಳುಹಿಸಿ';
+
+  @override
+  String get supportSent => 'ನಿಮ್ಮ ವಿನಂತಿಯನ್ನು ಕಳುಹಿಸಲಾಗಿದೆ.';
+
+  @override
+  String get supportRequestsTitle => 'ನಿಮ್ಮ ವಿನಂತಿಗಳು';
+
+  @override
+  String get supportRequestsEmpty =>
+      'ನೀವು ಇನ್ನೂ ಯಾವುದೇ ವಿನಂತಿಗಳನ್ನು ಕಳುಹಿಸಿಲ್ಲ.';
+
+  @override
+  String get supportStatusOpen => 'ತೆರೆದಿದೆ';
+
+  @override
+  String get supportStatusInProgress => 'ಪ್ರಗತಿಯಲ್ಲಿದೆ';
+
+  @override
+  String get supportStatusResolved => 'ಪರಿಹರಿಸಲಾಗಿದೆ';
+
+  @override
+  String get supportStatusClosed => 'ಮುಚ್ಚಲಾಗಿದೆ';
+
+  @override
+  String get validationRequired => 'ಅಗತ್ಯ';
+
+  @override
+  String get supportMessageTooShort => 'ದಯವಿಟ್ಟು ಕನಿಷ್ಠ 10 ಅಕ್ಷರಗಳನ್ನು ಬರೆಯಿರಿ';
 }

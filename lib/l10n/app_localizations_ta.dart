@@ -838,4 +838,44 @@ class AppLocalizationsTa extends AppLocalizations {
 
   @override
   String get reminderChannelName => 'தினசரி பயிற்சி நினைவூட்டல்';
+
+  @override
+  String get supportContactTitle => 'ஆதரவைத் தொடர்பு கொள்ளவும்';
+
+  @override
+  String get supportSubject => 'பொருள்';
+
+  @override
+  String get supportMessage => 'செய்தி';
+
+  @override
+  String get supportSend => 'கோரிக்கையை அனுப்பு';
+
+  @override
+  String get supportSent => 'உங்கள் கோரிக்கை அனுப்பப்பட்டது.';
+
+  @override
+  String get supportRequestsTitle => 'உங்கள் கோரிக்கைகள்';
+
+  @override
+  String get supportRequestsEmpty =>
+      'நீங்கள் இன்னும் எந்தக் கோரிக்கையும் அனுப்பவில்லை.';
+
+  @override
+  String get supportStatusOpen => 'திறந்துள்ளது';
+
+  @override
+  String get supportStatusInProgress => 'நடைபெறுகிறது';
+
+  @override
+  String get supportStatusResolved => 'தீர்க்கப்பட்டது';
+
+  @override
+  String get supportStatusClosed => 'மூடப்பட்டது';
+
+  @override
+  String get validationRequired => 'தேவை';
+
+  @override
+  String get supportMessageTooShort => 'குறைந்தது 10 எழுத்துகளை எழுதவும்';
 }

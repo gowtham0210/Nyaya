@@ -233,5 +233,18 @@
   "aboutFeatureQuizzes": "आपने जो सीखा उसे परखने वाले क्विज़",
   "aboutFeatureLanguages": "अंग्रेज़ी, हिंदी, तमिल, तेलुगु और कन्नड़ में उपलब्ध",
   "remindersFailed": "अनुस्मारक सेट नहीं हो सका। कृपया फिर से प्रयास करें।",
-  "reminderChannelName": "दैनिक अभ्यास अनुस्मारक"
+  "reminderChannelName": "दैनिक अभ्यास अनुस्मारक",
+  "supportContactTitle": "सहायता से संपर्क करें",
+  "supportSubject": "विषय",
+  "supportMessage": "संदेश",
+  "supportSend": "अनुरोध भेजें",
+  "supportSent": "आपका अनुरोध भेज दिया गया है।",
+  "supportRequestsTitle": "आपके अनुरोध",
+  "supportRequestsEmpty": "आपने अभी तक कोई अनुरोध नहीं भेजा है।",
+  "supportStatusOpen": "खुला",
+  "supportStatusInProgress": "प्रगति में",
+  "supportStatusResolved": "हल हो गया",
+  "supportStatusClosed": "बंद",
+  "validationRequired": "आवश्यक",
+  "supportMessageTooShort": "कृपया कम से कम 10 अक्षर लिखें"
 }

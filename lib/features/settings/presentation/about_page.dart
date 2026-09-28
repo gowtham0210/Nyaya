@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../core/localization/l10n.dart';
 import '../../../core/presentation/widgets/nyaya_widgets.dart';
 import '../data/app_version.dart';
-import 'widgets/settings_scaffold.dart';
+import '../../../core/presentation/widgets/settings_scaffold.dart';
 
 /// About Nyaya (spec 030): what the app is for, and its version.
 class AboutPage extends StatefulWidget {

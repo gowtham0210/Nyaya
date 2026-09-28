@@ -829,4 +829,43 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get reminderChannelName => 'दैनिक अभ्यास अनुस्मारक';
+
+  @override
+  String get supportContactTitle => 'सहायता से संपर्क करें';
+
+  @override
+  String get supportSubject => 'विषय';
+
+  @override
+  String get supportMessage => 'संदेश';
+
+  @override
+  String get supportSend => 'अनुरोध भेजें';
+
+  @override
+  String get supportSent => 'आपका अनुरोध भेज दिया गया है।';
+
+  @override
+  String get supportRequestsTitle => 'आपके अनुरोध';
+
+  @override
+  String get supportRequestsEmpty => 'आपने अभी तक कोई अनुरोध नहीं भेजा है।';
+
+  @override
+  String get supportStatusOpen => 'खुला';
+
+  @override
+  String get supportStatusInProgress => 'प्रगति में';
+
+  @override
+  String get supportStatusResolved => 'हल हो गया';
+
+  @override
+  String get supportStatusClosed => 'बंद';
+
+  @override
+  String get validationRequired => 'आवश्यक';
+
+  @override
+  String get supportMessageTooShort => 'कृपया कम से कम 10 अक्षर लिखें';
 }

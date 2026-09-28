@@ -1516,6 +1516,84 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Daily practice reminder'**
   String get reminderChannelName;
+
+  /// No description provided for @supportContactTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact support'**
+  String get supportContactTitle;
+
+  /// No description provided for @supportSubject.
+  ///
+  /// In en, this message translates to:
+  /// **'Subject'**
+  String get supportSubject;
+
+  /// No description provided for @supportMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Message'**
+  String get supportMessage;
+
+  /// No description provided for @supportSend.
+  ///
+  /// In en, this message translates to:
+  /// **'Send request'**
+  String get supportSend;
+
+  /// No description provided for @supportSent.
+  ///
+  /// In en, this message translates to:
+  /// **'Your request has been sent.'**
+  String get supportSent;
+
+  /// No description provided for @supportRequestsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your requests'**
+  String get supportRequestsTitle;
+
+  /// No description provided for @supportRequestsEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'You haven\'t sent any requests yet.'**
+  String get supportRequestsEmpty;
+
+  /// No description provided for @supportStatusOpen.
+  ///
+  /// In en, this message translates to:
+  /// **'Open'**
+  String get supportStatusOpen;
+
+  /// No description provided for @supportStatusInProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'In progress'**
+  String get supportStatusInProgress;
+
+  /// No description provided for @supportStatusResolved.
+  ///
+  /// In en, this message translates to:
+  /// **'Resolved'**
+  String get supportStatusResolved;
+
+  /// No description provided for @supportStatusClosed.
+  ///
+  /// In en, this message translates to:
+  /// **'Closed'**
+  String get supportStatusClosed;
+
+  /// No description provided for @validationRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Required'**
+  String get validationRequired;
+
+  /// No description provided for @supportMessageTooShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Please write at least 10 characters'**
+  String get supportMessageTooShort;
 }
 
 class _AppLocalizationsDelegate

@@ -836,4 +836,43 @@ class AppLocalizationsTe extends AppLocalizations {
 
   @override
   String get reminderChannelName => 'రోజువారీ సాధన రిమైండర్';
+
+  @override
+  String get supportContactTitle => 'మద్దతును సంప్రదించండి';
+
+  @override
+  String get supportSubject => 'విషయం';
+
+  @override
+  String get supportMessage => 'సందేశం';
+
+  @override
+  String get supportSend => 'అభ్యర్థన పంపండి';
+
+  @override
+  String get supportSent => 'మీ అభ్యర్థన పంపబడింది.';
+
+  @override
+  String get supportRequestsTitle => 'మీ అభ్యర్థనలు';
+
+  @override
+  String get supportRequestsEmpty => 'మీరు ఇంకా ఏ అభ్యర్థనలు పంపలేదు.';
+
+  @override
+  String get supportStatusOpen => 'తెరిచి ఉంది';
+
+  @override
+  String get supportStatusInProgress => 'పురోగతిలో ఉంది';
+
+  @override
+  String get supportStatusResolved => 'పరిష్కరించబడింది';
+
+  @override
+  String get supportStatusClosed => 'మూసివేయబడింది';
+
+  @override
+  String get validationRequired => 'తప్పనిసరి';
+
+  @override
+  String get supportMessageTooShort => 'దయచేసి కనీసం 10 అక్షరాలు రాయండి';
 }

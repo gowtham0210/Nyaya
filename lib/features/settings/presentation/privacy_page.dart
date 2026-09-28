@@ -4,7 +4,7 @@ import '../../../core/localization/l10n.dart';
 import '../../../core/presentation/load_state.dart';
 import '../../../core/presentation/widgets/load_state_view.dart';
 import 'privacy_view_model.dart';
-import 'widgets/settings_scaffold.dart';
+import '../../../core/presentation/widgets/settings_scaffold.dart';
 
 /// Privacy & security (spec 030): active sessions and logging out of every
 /// device. Accounts use phone + OTP, so there's no password to change.

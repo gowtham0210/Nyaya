@@ -233,5 +233,18 @@
   "aboutFeatureQuizzes": "நீங்கள் கற்றதைச் சோதிக்கும் வினாடி வினாக்கள்",
   "aboutFeatureLanguages": "ஆங்கிலம், இந்தி, தமிழ், தெலுங்கு மற்றும் கன்னடத்தில் கிடைக்கும்",
   "remindersFailed": "நினைவூட்டலை அமைக்க முடியவில்லை. மீண்டும் முயற்சிக்கவும்.",
-  "reminderChannelName": "தினசரி பயிற்சி நினைவூட்டல்"
+  "reminderChannelName": "தினசரி பயிற்சி நினைவூட்டல்",
+  "supportContactTitle": "ஆதரவைத் தொடர்பு கொள்ளவும்",
+  "supportSubject": "பொருள்",
+  "supportMessage": "செய்தி",
+  "supportSend": "கோரிக்கையை அனுப்பு",
+  "supportSent": "உங்கள் கோரிக்கை அனுப்பப்பட்டது.",
+  "supportRequestsTitle": "உங்கள் கோரிக்கைகள்",
+  "supportRequestsEmpty": "நீங்கள் இன்னும் எந்தக் கோரிக்கையும் அனுப்பவில்லை.",
+  "supportStatusOpen": "திறந்துள்ளது",
+  "supportStatusInProgress": "நடைபெறுகிறது",
+  "supportStatusResolved": "தீர்க்கப்பட்டது",
+  "supportStatusClosed": "மூடப்பட்டது",
+  "validationRequired": "தேவை",
+  "supportMessageTooShort": "குறைந்தது 10 எழுத்துகளை எழுதவும்"
 }

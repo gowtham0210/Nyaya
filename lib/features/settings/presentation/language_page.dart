@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../core/localization/app_language.dart';
 import '../../../core/localization/l10n.dart';
-import 'widgets/settings_scaffold.dart';
+import '../../../core/presentation/widgets/settings_scaffold.dart';
 
 /// Picks the app language (spec 028). Names show in their own scripts.
 class LanguagePage extends StatelessWidget {
