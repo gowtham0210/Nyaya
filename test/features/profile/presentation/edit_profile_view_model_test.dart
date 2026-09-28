@@ -32,10 +32,11 @@ void main() {
       fullName: '  Asha R ',
       profession: 'Lawyer / Advocate',
     );
-    expect(viewModel.busy, isTrue);
+    expect(viewModel.saving, isTrue);
+    expect(viewModel.uploading, isFalse);
     expect(await saving, isTrue);
 
-    expect(viewModel.busy, isFalse);
+    expect(viewModel.saving, isFalse);
     expect(viewModel.error, isNull);
     expect(viewModel.profile.fullName, 'Asha R');
     expect(changed, 1);
@@ -61,9 +62,12 @@ void main() {
           http.Response('{"fullName":"Asha Rao","avatarUrl":"/u/7.jpg"}', 200),
     );
 
-    final ok = await viewModel.uploadPhoto(
+    final uploading = viewModel.uploadPhoto(
       const PickedPhoto(bytes: [1], filename: 'me.jpg'),
     );
+    expect(viewModel.uploading, isTrue);
+    expect(viewModel.saving, isFalse);
+    final ok = await uploading;
 
     expect(ok, isTrue);
     expect(viewModel.profile.avatarUrl, endsWith('/u/7.jpg'));

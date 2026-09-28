@@ -55,7 +55,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
       fullName: _nameController.text,
       profession: _profession?.value,
     );
-    if (saved) {
+    // The learner may have left while saving.
+    if (saved && mounted) {
       navigator.pop();
       messenger
         ..hideCurrentSnackBar()
@@ -88,7 +89,16 @@ class _EditProfilePageState extends State<EditProfilePage> {
     if (source == null) {
       return;
     }
-    final photo = await widget.pickPhoto(source);
+    final PickedPhoto? photo;
+    try {
+      photo = await widget.pickPhoto(source);
+    } catch (_) {
+      // Usually a denied camera or photos permission.
+      if (mounted) {
+        showMessage(context, l10n.editProfilePhotoFailed);
+      }
+      return;
+    }
     if (photo == null || !mounted) {
       return;
     }
@@ -121,10 +131,19 @@ class _EditProfilePageState extends State<EditProfilePage> {
               padding: const EdgeInsets.fromLTRB(24, 8, 24, 24),
               children: [
                 Center(
-                  child: InitialsAvatar(
-                    name: profile.fullName,
-                    avatarUrl: profile.avatarUrl,
-                    size: 96,
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      InitialsAvatar(
+                        name: profile.fullName,
+                        avatarUrl: profile.avatarUrl,
+                        size: 96,
+                      ),
+                      if (viewModel.uploading)
+                        const CircularProgressIndicator(
+                          key: ValueKey('editProfile.uploading'),
+                        ),
+                    ],
                   ),
                 ),
                 Center(
@@ -188,7 +207,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     backgroundColor: _navy,
                     minimumSize: const Size.fromHeight(52),
                   ),
-                  child: viewModel.busy
+                  child: viewModel.saving
                       ? const SizedBox.square(
                           dimension: 20,
                           child: CircularProgressIndicator(

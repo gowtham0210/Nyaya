@@ -3,7 +3,8 @@
 Status: Implemented
 Last Updated: 2026-09-29
 Owner: Gowtham
-Related ADRs: `../../adr/0002-data-layer.md`, `../../adr/0003-localization.md`
+Related ADRs: `../../adr/0002-data-layer.md`, `../../adr/0003-localization.md`,
+`../../adr/0004-platform-plugins.md`
 Source: GitHub issue #34 (parent #24). Ported from `nisha-frontend`
 (`edit_profile_screen`, `profile_api_service`). Extends `../021-profile/spec.md`.
 
@@ -41,6 +42,12 @@ Learners can't fix their name or profession, or add a photo.
 - FR-004: A failed save or upload shall show the localized failure message
   and keep the learner's edits.
 - FR-005: After any successful change, Profile reloads.
+- FR-006: If the picker fails (e.g. permission denied), the app shall say
+  so and upload nothing.
+- FR-007: Leaving the screen during a save shall not close any other
+  screen.
+- FR-008: Save shows a spinner only while saving; the avatar shows one
+  while a photo uploads.
 
 ## Acceptance Criteria
 

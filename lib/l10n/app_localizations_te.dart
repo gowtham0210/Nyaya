@@ -755,4 +755,8 @@ class AppLocalizationsTe extends AppLocalizations {
 
   @override
   String get editProfilePhotoUpdated => 'ఫోటో నవీకరించబడింది';
+
+  @override
+  String get editProfilePhotoFailed =>
+      'కెమెరా లేదా ఫోటోలు తెరవలేకపోయాం. న్యాయ అనుమతులను తనిఖీ చేయండి.';
 }

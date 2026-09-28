@@ -211,5 +211,6 @@
   "editProfileChangePhoto": "फ़ोटो बदलें",
   "editProfileCamera": "फ़ोटो लें",
   "editProfileGallery": "गैलरी से चुनें",
-  "editProfilePhotoUpdated": "फ़ोटो अपडेट हो गई"
+  "editProfilePhotoUpdated": "फ़ोटो अपडेट हो गई",
+  "editProfilePhotoFailed": "कैमरा या फ़ोटो नहीं खुल सके। न्याय की अनुमतियाँ जाँचें।"
 }

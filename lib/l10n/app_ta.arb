@@ -211,5 +211,6 @@
   "editProfileChangePhoto": "புகைப்படத்தை மாற்று",
   "editProfileCamera": "புகைப்படம் எடு",
   "editProfileGallery": "கேலரியிலிருந்து தேர்வு செய்",
-  "editProfilePhotoUpdated": "புகைப்படம் புதுப்பிக்கப்பட்டது"
+  "editProfilePhotoUpdated": "புகைப்படம் புதுப்பிக்கப்பட்டது",
+  "editProfilePhotoFailed": "கேமரா அல்லது புகைப்படங்களைத் திறக்க முடியவில்லை. நியாயாவின் அனுமதிகளைச் சரிபார்க்கவும்."
 }

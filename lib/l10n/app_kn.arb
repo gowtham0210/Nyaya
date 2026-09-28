@@ -211,5 +211,6 @@
   "editProfileChangePhoto": "ಫೋಟೋ ಬದಲಿಸಿ",
   "editProfileCamera": "ಫೋಟೋ ತೆಗೆಯಿರಿ",
   "editProfileGallery": "ಗ್ಯಾಲರಿಯಿಂದ ಆಯ್ಕೆಮಾಡಿ",
-  "editProfilePhotoUpdated": "ಫೋಟೋ ನವೀಕರಿಸಲಾಗಿದೆ"
+  "editProfilePhotoUpdated": "ಫೋಟೋ ನವೀಕರಿಸಲಾಗಿದೆ",
+  "editProfilePhotoFailed": "ಕ್ಯಾಮೆರಾ ಅಥವಾ ಫೋಟೋಗಳನ್ನು ತೆರೆಯಲಾಗಲಿಲ್ಲ. ನ್ಯಾಯದ ಅನುಮತಿಗಳನ್ನು ಪರಿಶೀಲಿಸಿ."
 }

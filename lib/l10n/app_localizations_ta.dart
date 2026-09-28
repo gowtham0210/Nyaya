@@ -757,4 +757,8 @@ class AppLocalizationsTa extends AppLocalizations {
 
   @override
   String get editProfilePhotoUpdated => 'புகைப்படம் புதுப்பிக்கப்பட்டது';
+
+  @override
+  String get editProfilePhotoFailed =>
+      'கேமரா அல்லது புகைப்படங்களைத் திறக்க முடியவில்லை. நியாயாவின் அனுமதிகளைச் சரிபார்க்கவும்.';
 }

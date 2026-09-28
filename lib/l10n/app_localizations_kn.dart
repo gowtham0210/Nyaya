@@ -756,4 +756,8 @@ class AppLocalizationsKn extends AppLocalizations {
 
   @override
   String get editProfilePhotoUpdated => 'ಫೋಟೋ ನವೀಕರಿಸಲಾಗಿದೆ';
+
+  @override
+  String get editProfilePhotoFailed =>
+      'ಕ್ಯಾಮೆರಾ ಅಥವಾ ಫೋಟೋಗಳನ್ನು ತೆರೆಯಲಾಗಲಿಲ್ಲ. ನ್ಯಾಯದ ಅನುಮತಿಗಳನ್ನು ಪರಿಶೀಲಿಸಿ.';
 }

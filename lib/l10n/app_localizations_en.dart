@@ -751,4 +751,8 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get editProfilePhotoUpdated => 'Photo updated';
+
+  @override
+  String get editProfilePhotoFailed =>
+      'Couldn\'t open the camera or photos. Check Nyaya\'s permissions.';
 }

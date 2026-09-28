@@ -752,4 +752,8 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get editProfilePhotoUpdated => 'फ़ोटो अपडेट हो गई';
+
+  @override
+  String get editProfilePhotoFailed =>
+      'कैमरा या फ़ोटो नहीं खुल सके। न्याय की अनुमतियाँ जाँचें।';
 }

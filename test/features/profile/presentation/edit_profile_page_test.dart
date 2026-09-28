@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -27,6 +28,7 @@ void main() {
     WidgetTester tester, {
     PhotoPicker? pickPhoto,
     Locale locale = const Locale('en'),
+    Completer<void>? gate,
   }) async {
     requests = [];
     online = true;
@@ -36,6 +38,7 @@ void main() {
         ApiClient(
           httpClient: MockClient((request) async {
             requests.add(request);
+            await gate?.future;
             if (!online) {
               throw http.ClientException('offline');
             }
@@ -184,5 +187,40 @@ void main() {
     await pumpPage(tester, locale: const Locale('hi'));
 
     expect(find.text('बदलाव सहेजें'), findsOneWidget);
+  });
+
+  testWidgets('a picker failure explains it and uploads nothing', (
+    tester,
+  ) async {
+    await pumpPage(tester, pickPhoto: (_) async => throw Exception('denied'));
+
+    await tester.tap(find.byKey(const ValueKey('editProfile.photo')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Take a photo'));
+    await tester.pumpAndSettle();
+
+    expect(
+      find.text(
+        "Couldn't open the camera or photos. Check Nyaya's permissions.",
+      ),
+      findsOneWidget,
+    );
+    expect(requests, isEmpty);
+  });
+
+  testWidgets('leaving before a save finishes keeps the page below', (
+    tester,
+  ) async {
+    final gate = Completer<void>();
+    await pumpPage(tester, gate: gate);
+
+    await tester.tap(find.byKey(const ValueKey('editProfile.save')));
+    await tester.pump();
+    Navigator.of(tester.element(find.byType(EditProfilePage))).pop();
+    await tester.pumpAndSettle();
+    gate.complete();
+    await tester.pumpAndSettle();
+
+    expect(find.text('open'), findsOneWidget);
   });
 }

@@ -210,6 +210,53 @@ void main() {
     expect(AppSession.signedIn, isFalse);
   });
 
+  testWidgets('027 a saved name shows on Profile', (tester) async {
+    final routes = <String, Object>{
+      '/categories': {'items': []},
+      ...profileRoutes(),
+    };
+    tester.view.physicalSize = const Size(393, 852);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+    await tester.pumpWidget(
+      MaterialApp(
+        home: MainShell(
+          apiClient: ApiClient(
+            httpClient: MockClient((request) async {
+              final path = request.url.path.replaceFirst('/api/v1', '');
+              if (request.method == 'PATCH' && path == '/users/me') {
+                final me = Map<String, Object?>.from(
+                  routes['/users/me']! as Map,
+                )..addAll(jsonDecode(request.body) as Map<String, Object?>);
+                routes['/users/me'] = me;
+                return http.Response(jsonEncode(me), 200);
+              }
+              final route = routes[path];
+              return route == null
+                  ? http.Response('{}', 404)
+                  : http.Response(jsonEncode(route), 200);
+            }),
+          ),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const ValueKey('nav.profile')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const ValueKey('profile.edit')));
+    await tester.pumpAndSettle();
+
+    await tester.enterText(
+      find.byKey(const ValueKey('editProfile.name')),
+      'Asha Renamed',
+    );
+    await tester.tap(find.byKey(const ValueKey('editProfile.save')));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Asha Renamed'), findsOneWidget);
+    expect(find.text('Profile updated'), findsOneWidget);
+  });
+
   testWidgets('027 Edit profile opens from Profile, pre-filled', (
     tester,
   ) async {

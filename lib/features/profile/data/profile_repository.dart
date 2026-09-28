@@ -1,5 +1,6 @@
 import '../../../core/network/api_client.dart';
 import '../../../core/network/api_config.dart';
+import 'photo_picker.dart';
 
 /// The signed-in learner, from `GET /users/me`.
 class UserProfile {
@@ -78,15 +79,12 @@ class ProfileRepository {
   );
 
   /// Uploads a new photo (`POST /users/me/avatar`, multipart `avatar`).
-  Future<UserProfile> uploadAvatar({
-    required List<int> bytes,
-    required String filename,
-  }) async => _toProfile(
+  Future<UserProfile> uploadAvatar(PickedPhoto photo) async => _toProfile(
     await _client.upload(
       '/users/me/avatar',
       field: 'avatar',
-      bytes: bytes,
-      filename: filename,
+      bytes: photo.bytes,
+      filename: photo.filename,
     ),
   );
 

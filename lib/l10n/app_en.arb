@@ -371,5 +371,6 @@
   "editProfileChangePhoto": "Change photo",
   "editProfileCamera": "Take a photo",
   "editProfileGallery": "Choose from gallery",
-  "editProfilePhotoUpdated": "Photo updated"
+  "editProfilePhotoUpdated": "Photo updated",
+  "editProfilePhotoFailed": "Couldn't open the camera or photos. Check Nyaya's permissions."
 }

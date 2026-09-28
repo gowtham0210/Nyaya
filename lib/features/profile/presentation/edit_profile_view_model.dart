@@ -21,9 +21,15 @@ class EditProfileViewModel extends ChangeNotifier {
   UserProfile get profile => _profile;
   UserProfile _profile;
 
-  /// True while saving or uploading.
-  bool get busy => _busy;
-  var _busy = false;
+  /// True while saving name and profession.
+  bool get saving => _running == _Action.save;
+
+  /// True while uploading a photo.
+  bool get uploading => _running == _Action.upload;
+
+  /// True while saving or uploading; the form waits.
+  bool get busy => _running != null;
+  _Action? _running;
 
   /// The last failure, cleared when the next attempt starts.
   Object? get error => _error;
@@ -33,6 +39,7 @@ class EditProfileViewModel extends ChangeNotifier {
   /// edits stay in the form.
   Future<bool> save({required String fullName, required String? profession}) =>
       _run(
+        _Action.save,
         () => _repository.updateProfile(
           fullName: fullName.trim(),
           profession: profession,
@@ -40,13 +47,11 @@ class EditProfileViewModel extends ChangeNotifier {
       );
 
   /// Uploads [photo]; true on success.
-  Future<bool> uploadPhoto(PickedPhoto photo) => _run(
-    () =>
-        _repository.uploadAvatar(bytes: photo.bytes, filename: photo.filename),
-  );
+  Future<bool> uploadPhoto(PickedPhoto photo) =>
+      _run(_Action.upload, () => _repository.uploadAvatar(photo));
 
-  Future<bool> _run(Future<UserProfile> Function() call) async {
-    _busy = true;
+  Future<bool> _run(_Action action, Future<UserProfile> Function() call) async {
+    _running = action;
     _error = null;
     notifyListeners();
     try {
@@ -57,7 +62,7 @@ class EditProfileViewModel extends ChangeNotifier {
       _error = error;
       return false;
     } finally {
-      _busy = false;
+      _running = null;
       // The page may close mid-request.
       if (!_disposed) {
         notifyListeners();
@@ -71,3 +76,5 @@ class EditProfileViewModel extends ChangeNotifier {
     super.dispose();
   }
 }
+
+enum _Action { save, upload }

@@ -1384,6 +1384,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Photo updated'**
   String get editProfilePhotoUpdated;
+
+  /// No description provided for @editProfilePhotoFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t open the camera or photos. Check Nyaya\'s permissions.'**
+  String get editProfilePhotoFailed;
 }
 
 class _AppLocalizationsDelegate
