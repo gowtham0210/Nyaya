@@ -59,4 +59,23 @@ class AppLocalizationsTe extends AppLocalizations {
 
   @override
   String get emptyNothingHere => 'ఇక్కడ ఇంకా ఏమీ లేదు.';
+
+  @override
+  String get navHome => 'హోమ్';
+
+  @override
+  String get navCategories => 'వర్గాలు';
+
+  @override
+  String get navLeaderboard => 'లీడర్‌బోర్డ్';
+
+  @override
+  String get navArticles => 'ఆర్టికల్స్';
+
+  @override
+  String get navProfile => 'ప్రొఫైల్';
+
+  @override
+  String get comingSoonBody =>
+      'మేము ఈ విభాగాన్ని రూపొందిస్తున్నాము. త్వరలో మళ్లీ చూడండి.';
 }

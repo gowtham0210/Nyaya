@@ -71,50 +71,53 @@ void main() {
     expect(find.byKey(const ValueKey('home.section.continue')), findsOneWidget);
     expect(find.byKey(const ValueKey('home.continue.card')), findsOneWidget);
     expect(find.text('Indian Constitution Quiz'), findsOneWidget);
-    expect(find.text('15 Questions'), findsOneWidget);
+    expect(
+      find.descendant(
+        of: find.byKey(const ValueKey('home.continue.card')),
+        matching: find.text('15 Questions'),
+      ),
+      findsOneWidget,
+    );
     expect(find.text('65%'), findsOneWidget);
     expect(find.text('Resume'), findsOneWidget);
   });
 
-  testWidgets('AC-006 through AC-010 show popular quizzes and fixed nav', (
-    WidgetTester tester,
-  ) async {
-    await pumpHomePage(tester, size: const Size(360, 780));
+  testWidgets(
+    'AC-006 through AC-008 and AC-010 show scrollable popular quizzes',
+    (WidgetTester tester) async {
+      await pumpHomePage(tester, size: const Size(360, 780));
 
-    await tester.scrollUntilVisible(
-      find.byKey(const ValueKey('home.section.popular')),
-      160,
-      scrollable: find.byType(Scrollable).first,
-    );
-    await tester.pumpAndSettle();
-    expect(find.byKey(const ValueKey('home.section.popular')), findsOneWidget);
-    expect(find.text('Fundamental Rights Quiz'), findsOneWidget);
-    expect(find.text('Medium'), findsOneWidget);
+      await tester.scrollUntilVisible(
+        find.byKey(const ValueKey('home.section.popular')),
+        160,
+        scrollable: find.byType(Scrollable).first,
+      );
+      await tester.pumpAndSettle();
+      expect(
+        find.byKey(const ValueKey('home.section.popular')),
+        findsOneWidget,
+      );
+      expect(find.text('Fundamental Rights Quiz'), findsOneWidget);
+      expect(find.text('Medium'), findsOneWidget);
 
-    await tester.scrollUntilVisible(
-      find.text('Indian Penal Code Quiz'),
-      140,
-      scrollable: find.byType(Scrollable).first,
-    );
-    await tester.pumpAndSettle();
-    expect(find.text('Indian Penal Code Quiz'), findsOneWidget);
-    expect(find.text('Hard'), findsOneWidget);
+      await tester.scrollUntilVisible(
+        find.text('Indian Penal Code Quiz'),
+        140,
+        scrollable: find.byType(Scrollable).first,
+      );
+      await tester.pumpAndSettle();
+      expect(find.text('Indian Penal Code Quiz'), findsOneWidget);
+      expect(find.text('Hard'), findsOneWidget);
 
-    await tester.scrollUntilVisible(
-      find.text('Contract Act Quiz'),
-      160,
-      scrollable: find.byType(Scrollable).first,
-    );
-    await tester.pumpAndSettle();
+      await tester.scrollUntilVisible(
+        find.text('Contract Act Quiz'),
+        160,
+        scrollable: find.byType(Scrollable).first,
+      );
+      await tester.pumpAndSettle();
 
-    expect(find.text('Contract Act Quiz'), findsOneWidget);
-    expect(find.text('Easy'), findsOneWidget);
-    expect(find.byKey(const ValueKey('home.bottomNav')), findsOneWidget);
-    expect(find.byKey(const ValueKey('home.nav.home.active')), findsOneWidget);
-    expect(find.text('Home'), findsOneWidget);
-    expect(find.text('Categories'), findsOneWidget);
-    expect(find.text('Leaderboard'), findsOneWidget);
-    expect(find.text('Bookmarks'), findsOneWidget);
-    expect(find.text('Profile'), findsOneWidget);
-  });
+      expect(find.text('Contract Act Quiz'), findsOneWidget);
+      expect(find.text('Easy'), findsOneWidget);
+    },
+  );
 }

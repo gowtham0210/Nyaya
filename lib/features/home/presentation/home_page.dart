@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../../core/presentation/widgets/nyaya_bottom_nav.dart';
 import '../../../core/presentation/widgets/nyaya_icon.dart';
 import '../../../core/presentation/widgets/nyaya_widgets.dart';
 import 'home_view_model.dart';
@@ -16,7 +15,6 @@ class HomePage extends StatelessWidget {
     this.onViewAllPopularPressed,
     this.onCategorySelected,
     this.onQuizSelected,
-    this.onNavigationSelected,
   });
 
   final HomeViewModel viewModel;
@@ -27,7 +25,6 @@ class HomePage extends StatelessWidget {
   final VoidCallback? onViewAllPopularPressed;
   final ValueChanged<HomeCategoryData>? onCategorySelected;
   final ValueChanged<PopularQuizData>? onQuizSelected;
-  final ValueChanged<int>? onNavigationSelected;
 
   static const pageBackground = Color(0xFFF8F6F2);
   static const heroBackground = Color(0xFF11233B);
@@ -43,21 +40,6 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: pageBackground,
-      bottomNavigationBar: NyayaBottomNavBar(
-        items: viewModel.navigationItems,
-        activeIndex: viewModel.activeNavigationIndex,
-        onSelected: (index) {
-          final callback = onNavigationSelected;
-          if (callback != null) {
-            callback(index);
-            return;
-          }
-          _showPlaceholder(
-            context,
-            '${viewModel.navigationItems[index].label} coming soon.',
-          );
-        },
-      ),
       body: SafeArea(
         bottom: false,
         child: ListView(

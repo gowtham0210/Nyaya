@@ -12,7 +12,7 @@ enum HomeIconType {
   navHome,
   navCategories,
   navLeaderboard,
-  navBookmarks,
+  navArticles,
   navProfile,
 }
 
@@ -99,8 +99,8 @@ class NyayaIcon extends StatelessWidget {
         return Icon(Icons.grid_view_rounded, size: size, color: color);
       case HomeIconType.navLeaderboard:
         return Icon(Icons.emoji_events_outlined, size: size, color: color);
-      case HomeIconType.navBookmarks:
-        return Icon(Icons.bookmark_border_rounded, size: size, color: color);
+      case HomeIconType.navArticles:
+        return Icon(Icons.article_outlined, size: size, color: color);
       case HomeIconType.navProfile:
         return Icon(Icons.person_outline_rounded, size: size, color: color);
     }

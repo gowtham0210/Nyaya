@@ -81,32 +81,6 @@ class CategoriesViewModel {
     ),
   ];
 
-  List<HomeNavItemData> get navigationItems => const [
-    HomeNavItemData(id: 'home', label: 'Home', icon: HomeIconType.navHome),
-    HomeNavItemData(
-      id: 'categories',
-      label: 'Categories',
-      icon: HomeIconType.navCategories,
-    ),
-    HomeNavItemData(
-      id: 'leaderboard',
-      label: 'Leaderboard',
-      icon: HomeIconType.navLeaderboard,
-    ),
-    HomeNavItemData(
-      id: 'bookmarks',
-      label: 'Bookmarks',
-      icon: HomeIconType.navBookmarks,
-    ),
-    HomeNavItemData(
-      id: 'profile',
-      label: 'Profile',
-      icon: HomeIconType.navProfile,
-    ),
-  ];
-
-  int get activeNavigationIndex => 1;
-
   List<CategoryData> filter(List<CategoryData> categories, String query) {
     final normalized = query.trim().toLowerCase();
     if (normalized.isEmpty) {

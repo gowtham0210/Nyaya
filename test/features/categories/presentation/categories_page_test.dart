@@ -7,7 +7,6 @@ void main() {
   Future<void> pumpCategoriesPage(
     WidgetTester tester, {
     ValueChanged<CategoryData>? onCategorySelected,
-    ValueChanged<int>? onNavigationSelected,
   }) async {
     tester.view.physicalSize = const Size(393, 852);
     tester.view.devicePixelRatio = 1;
@@ -21,22 +20,18 @@ void main() {
         home: CategoriesPage(
           viewModel: const CategoriesViewModel(),
           onCategorySelected: onCategorySelected,
-          onNavigationSelected: onNavigationSelected,
         ),
       ),
     );
     await tester.pumpAndSettle();
   }
 
-  testWidgets('AC-001 header and bottom nav render with Categories active', (
-    tester,
-  ) async {
+  testWidgets('AC-001 header renders', (tester) async {
     await pumpCategoriesPage(tester);
 
     expect(find.text('Categories'), findsWidgets);
-    expect(find.byKey(const ValueKey('home.bottomNav')), findsOneWidget);
     expect(
-      find.byKey(const ValueKey('home.nav.categories.active')),
+      find.byKey(const ValueKey('categories.header.title')),
       findsOneWidget,
     );
   });
@@ -102,20 +97,5 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(selected?.id, 'constitutional-law');
-  });
-
-  testWidgets('AC-006 tapping a different nav tab reports its index', (
-    tester,
-  ) async {
-    int? selectedIndex;
-    await pumpCategoriesPage(
-      tester,
-      onNavigationSelected: (index) => selectedIndex = index,
-    );
-
-    await tester.tap(find.byKey(const ValueKey('home.nav.home')));
-    await tester.pumpAndSettle();
-
-    expect(selectedIndex, 0);
   });
 }

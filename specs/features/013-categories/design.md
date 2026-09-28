@@ -27,7 +27,7 @@ A main-tab screen matching Home's ivory background and navy/gold palette: serif 
 - Centered icon + "No categories match your search" when filtered list is empty.
 
 ### 5. Bottom Nav
-- `NyayaBottomNavBar` with "Categories" tab active (index 1).
+- Owned by the tab shell (spec 016); Categories is tab index 1.
 
 ## Color and Type
 

@@ -15,5 +15,11 @@
   "errorOffline": "न्याय सर्वर तक नहीं पहुँच पा रहे। अपना कनेक्शन जाँचें और पुनः प्रयास करें।",
   "errorSessionExpired": "आपका सत्र समाप्त हो गया है। कृपया फिर से साइन इन करें।",
   "errorGeneric": "कुछ गलत हो गया। कृपया पुनः प्रयास करें।",
-  "emptyNothingHere": "अभी यहाँ कुछ नहीं है।"
+  "emptyNothingHere": "अभी यहाँ कुछ नहीं है।",
+  "navHome": "होम",
+  "navCategories": "श्रेणियाँ",
+  "navLeaderboard": "लीडरबोर्ड",
+  "navArticles": "लेख",
+  "navProfile": "प्रोफ़ाइल",
+  "comingSoonBody": "हम यह भाग बना रहे हैं। जल्द ही फिर देखें।"
 }

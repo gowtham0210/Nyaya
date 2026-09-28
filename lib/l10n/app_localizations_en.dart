@@ -59,4 +59,22 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get emptyNothingHere => 'Nothing here yet.';
+
+  @override
+  String get navHome => 'Home';
+
+  @override
+  String get navCategories => 'Categories';
+
+  @override
+  String get navLeaderboard => 'Leaderboard';
+
+  @override
+  String get navArticles => 'Articles';
+
+  @override
+  String get navProfile => 'Profile';
+
+  @override
+  String get comingSoonBody => 'We\'re building this section. Check back soon.';
 }

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../../core/presentation/widgets/nyaya_bottom_nav.dart';
 import '../../../core/presentation/widgets/nyaya_icon.dart';
 import '../../../core/presentation/widgets/nyaya_widgets.dart';
 import 'categories_view_model.dart';
@@ -10,12 +9,10 @@ class CategoriesPage extends StatefulWidget {
     super.key,
     required this.viewModel,
     this.onCategorySelected,
-    this.onNavigationSelected,
   });
 
   final CategoriesViewModel viewModel;
   final ValueChanged<CategoryData>? onCategorySelected;
-  final ValueChanged<int>? onNavigationSelected;
 
   static const pageBackground = Color(0xFFF8F6F2);
   static const heroBackground = Color(0xFF11233B);
@@ -59,21 +56,6 @@ class _CategoriesPageState extends State<CategoriesPage> {
 
     return Scaffold(
       backgroundColor: CategoriesPage.pageBackground,
-      bottomNavigationBar: NyayaBottomNavBar(
-        items: viewModel.navigationItems,
-        activeIndex: viewModel.activeNavigationIndex,
-        onSelected: (index) {
-          final callback = widget.onNavigationSelected;
-          if (callback != null) {
-            callback(index);
-            return;
-          }
-          _showPlaceholder(
-            context,
-            '${viewModel.navigationItems[index].label} coming soon.',
-          );
-        },
-      ),
       body: SafeArea(
         bottom: false,
         child: Padding(

@@ -1,7 +1,7 @@
 # 008-home-page Home Page
 
 Status: Draft
-Last Updated: 2026-05-10
+Last Updated: 2026-09-28
 Owner:
 Related ADRs: `../../adr/0001-adopt-spec-driven-development.md`
 
@@ -78,19 +78,19 @@ After authentication and onboarding, users need a polished home page that immedi
   - rating chip with star icon and rating value
   - trailing chevron/navigation affordance
 - FR-013: The difficulty label colors shall visually distinguish `Medium`, `Hard`, and `Easy`.
-- FR-014: The screen shall display a fixed bottom navigation bar with five destinations:
+- FR-014: *(Moved to the tab shell, spec 016.)* The screen shall display a fixed bottom navigation bar with five destinations:
   - `Home`
   - `Categories`
   - `Leaderboard`
-  - `Bookmarks`
+  - `Bookmarks` *(replaced by `Articles` in spec 016)*
   - `Profile`
-- FR-015: The `Home` navigation item shall appear active by default.
+- FR-015: *(Moved to the tab shell, spec 016.)* The `Home` navigation item shall appear active by default.
 - FR-016: Tapping the hero `Start Quiz` button shall route to the app's quiz-entry flow.
 - FR-017: Tapping the `Resume` button shall route to the in-progress quiz/session flow.
 - FR-018: Tapping any category shortcut shall route to the category/topic discovery surface.
 - FR-019: Tapping any popular quiz card shall route to that quiz's detail or start screen.
 - FR-020: Tapping the notification bell shall route to the notifications or alerts surface.
-- FR-021: Tapping any bottom-navigation item shall switch to the corresponding top-level app section.
+- FR-021: *(Moved to the tab shell, spec 016.)* Tapping any bottom-navigation item shall switch to the corresponding top-level app section.
 - FR-022: The content above the bottom navigation shall remain vertically scrollable when content exceeds the viewport.
 
 ## Non-Functional Requirements
@@ -127,8 +127,8 @@ After authentication and onboarding, users need a polished home page that immedi
 - AC-006: The section `Popular Quizzes` is displayed with a right-aligned `View All` action.
 - AC-007: Three popular quiz cards are displayed with titles, metadata, difficulty labels, descriptions, ratings, and chevrons matching the mockup content.
 - AC-008: The difficulty labels visually distinguish `Medium`, `Hard`, and `Easy`.
-- AC-009: A five-item bottom navigation bar is displayed with `Home` visually active.
-- AC-010: The content area is vertically scrollable while the bottom navigation remains fixed.
+- AC-009: *(Moved to the tab shell, spec 016.)* A five-item bottom navigation bar is displayed with `Home` visually active.
+- AC-010: The content area is vertically scrollable. *(The fixed bottom nav moved to the tab shell, spec 016.)*
 
 ## Test Traceability
 
@@ -142,8 +142,8 @@ After authentication and onboarding, users need a polished home page that immedi
 | AC-006 | Widget | Verify `Popular Quizzes` header and `View All` action |
 | AC-007 | Widget | Verify popular quiz card content and rating chips |
 | AC-008 | Widget | Verify difficulty labels use distinct semantic colors |
-| AC-009 | Widget | Verify bottom navigation items and active state |
-| AC-010 | Widget | Verify scrollable content with pinned bottom navigation |
+| AC-009 | Widget | `test/app/main_shell_test.dart` (spec 016) |
+| AC-010 | Widget | Verify scrollable content |
 
 ## Open Questions
 

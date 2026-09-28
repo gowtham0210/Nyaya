@@ -59,4 +59,23 @@ class AppLocalizationsKn extends AppLocalizations {
 
   @override
   String get emptyNothingHere => 'ಇಲ್ಲಿ ಇನ್ನೂ ಏನೂ ಇಲ್ಲ.';
+
+  @override
+  String get navHome => 'ಮುಖಪುಟ';
+
+  @override
+  String get navCategories => 'ವರ್ಗಗಳು';
+
+  @override
+  String get navLeaderboard => 'ಲೀಡರ್‌ಬೋರ್ಡ್';
+
+  @override
+  String get navArticles => 'ಲೇಖನಗಳು';
+
+  @override
+  String get navProfile => 'ಪ್ರೊಫೈಲ್';
+
+  @override
+  String get comingSoonBody =>
+      'ನಾವು ಈ ವಿಭಾಗವನ್ನು ನಿರ್ಮಿಸುತ್ತಿದ್ದೇವೆ. ಶೀಘ್ರದಲ್ಲೇ ಮತ್ತೆ ನೋಡಿ.';
 }

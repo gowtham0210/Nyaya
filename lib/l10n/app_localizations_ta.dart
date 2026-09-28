@@ -59,4 +59,23 @@ class AppLocalizationsTa extends AppLocalizations {
 
   @override
   String get emptyNothingHere => 'இங்கே இன்னும் எதுவும் இல்லை.';
+
+  @override
+  String get navHome => 'முகப்பு';
+
+  @override
+  String get navCategories => 'வகைகள்';
+
+  @override
+  String get navLeaderboard => 'தலைமை பலகை';
+
+  @override
+  String get navArticles => 'கட்டுரைகள்';
+
+  @override
+  String get navProfile => 'சுயவிவரம்';
+
+  @override
+  String get comingSoonBody =>
+      'இந்தப் பகுதியை உருவாக்கி வருகிறோம். விரைவில் மீண்டும் பாருங்கள்.';
 }

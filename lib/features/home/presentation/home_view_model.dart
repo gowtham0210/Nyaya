@@ -1,7 +1,7 @@
 import '../../../core/presentation/widgets/nyaya_icon.dart';
 
 export '../../../core/presentation/widgets/nyaya_icon.dart'
-    show HomeIconType, HomeNavItemData;
+    show HomeIconType;
 
 class HomeViewModel {
   const HomeViewModel();
@@ -93,32 +93,6 @@ class HomeViewModel {
       icon: HomeIconType.contract,
     ),
   ];
-
-  List<HomeNavItemData> get navigationItems => const [
-    HomeNavItemData(id: 'home', label: 'Home', icon: HomeIconType.navHome),
-    HomeNavItemData(
-      id: 'categories',
-      label: 'Categories',
-      icon: HomeIconType.navCategories,
-    ),
-    HomeNavItemData(
-      id: 'leaderboard',
-      label: 'Leaderboard',
-      icon: HomeIconType.navLeaderboard,
-    ),
-    HomeNavItemData(
-      id: 'bookmarks',
-      label: 'Bookmarks',
-      icon: HomeIconType.navBookmarks,
-    ),
-    HomeNavItemData(
-      id: 'profile',
-      label: 'Profile',
-      icon: HomeIconType.navProfile,
-    ),
-  ];
-
-  int get activeNavigationIndex => 0;
 }
 
 enum QuizDifficulty {

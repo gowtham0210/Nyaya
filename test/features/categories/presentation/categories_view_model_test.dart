@@ -12,11 +12,6 @@ void main() {
     );
   });
 
-  test('activeNavigationIndex points at the Categories tab', () {
-    expect(viewModel.activeNavigationIndex, 1);
-    expect(viewModel.navigationItems[1].id, 'categories');
-  });
-
   test('filter is case-insensitive and matches substrings', () {
     final result = viewModel.filter(viewModel.categories, 'criminal');
     expect(result.map((c) => c.id), contains('criminal-law'));

@@ -28,7 +28,5 @@ void main() {
         'Contract Act Quiz',
       ]),
     );
-    expect(viewModel.navigationItems, hasLength(5));
-    expect(viewModel.activeNavigationIndex, 0);
   });
 }

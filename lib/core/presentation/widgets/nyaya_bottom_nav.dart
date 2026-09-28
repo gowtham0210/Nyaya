@@ -8,7 +8,7 @@ const navBarIndicator = Color(0xFFD3A247);
 const navBarBorder = Color(0xFFECE5DB);
 
 /// The five-tab bottom navigation bar shared by every main-tab screen
-/// (Home, Categories, Leaderboard, Bookmarks, Profile).
+/// (Home, Categories, Leaderboard, Articles, Profile).
 class NyayaBottomNavBar extends StatelessWidget {
   const NyayaBottomNavBar({
     super.key,
@@ -24,7 +24,7 @@ class NyayaBottomNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      key: const ValueKey('home.bottomNav'),
+      key: const ValueKey('nav.bar'),
       decoration: BoxDecoration(
         color: Colors.white,
         border: const Border(top: BorderSide(color: navBarBorder)),
@@ -74,7 +74,7 @@ class _NavItem extends StatelessWidget {
     final color = isActive ? navBarActive : navBarInactive;
 
     return InkWell(
-      key: ValueKey('home.nav.${item.id}'),
+      key: ValueKey('nav.${item.id}'),
       onTap: onTap,
       borderRadius: BorderRadius.circular(16),
       child: Padding(
@@ -100,8 +100,8 @@ class _NavItem extends StatelessWidget {
             const SizedBox(height: 8),
             AnimatedContainer(
               key: isActive
-                  ? ValueKey('home.nav.${item.id}.active')
-                  : ValueKey('home.nav.${item.id}.inactive'),
+                  ? ValueKey('nav.${item.id}.active')
+                  : ValueKey('nav.${item.id}.inactive'),
               duration: const Duration(milliseconds: 180),
               curve: Curves.easeOut,
               width: isActive ? 28 : 12,

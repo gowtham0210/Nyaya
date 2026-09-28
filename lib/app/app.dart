@@ -8,7 +8,7 @@ import '../features/auth/presentation/sign_in_page.dart';
 import '../features/onboarding/presentation/welcome_page.dart';
 import '../features/splash/presentation/splash_bootstrap.dart';
 import 'app_session.dart';
-import 'post_sign_up_flow.dart';
+import 'main_shell.dart';
 import 'theme/app_theme.dart';
 
 class NyayaApp extends StatelessWidget {
@@ -38,7 +38,7 @@ class NyayaApp extends StatelessWidget {
         home: SplashBootstrap(
           splashDuration: splashDuration,
           child: AppSession.isOnboarded
-              ? Builder(builder: buildWiredHomePage)
+              ? const MainShell()
               : Builder(
                   builder: (context) => WelcomePage(
                     onGetStarted: () => Navigator.of(context).push(

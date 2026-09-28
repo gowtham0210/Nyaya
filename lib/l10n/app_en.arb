@@ -22,5 +22,11 @@
   "errorOffline": "Can't reach the Nyaya server. Check your connection and try again.",
   "errorSessionExpired": "Your session has ended. Please sign in again.",
   "errorGeneric": "Something went wrong. Please try again.",
-  "emptyNothingHere": "Nothing here yet."
+  "emptyNothingHere": "Nothing here yet.",
+  "navHome": "Home",
+  "navCategories": "Categories",
+  "navLeaderboard": "Leaderboard",
+  "navArticles": "Articles",
+  "navProfile": "Profile",
+  "comingSoonBody": "We're building this section. Check back soon."
 }

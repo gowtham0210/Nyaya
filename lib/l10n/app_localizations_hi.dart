@@ -59,4 +59,22 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get emptyNothingHere => 'अभी यहाँ कुछ नहीं है।';
+
+  @override
+  String get navHome => 'होम';
+
+  @override
+  String get navCategories => 'श्रेणियाँ';
+
+  @override
+  String get navLeaderboard => 'लीडरबोर्ड';
+
+  @override
+  String get navArticles => 'लेख';
+
+  @override
+  String get navProfile => 'प्रोफ़ाइल';
+
+  @override
+  String get comingSoonBody => 'हम यह भाग बना रहे हैं। जल्द ही फिर देखें।';
 }
