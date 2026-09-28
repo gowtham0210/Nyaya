@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:nyaya/features/home/data/daily_questions_repository.dart';
+import 'package:nyaya/features/home/presentation/daily_questions_view_model.dart';
 import 'package:nyaya/features/home/presentation/home_page.dart';
 import 'package:nyaya/features/home/presentation/home_view_model.dart';
+
+import '../../../support/fake_backend.dart';
 
 void main() {
   Future<void> pumpHomePage(
@@ -19,8 +23,22 @@ void main() {
       tester.view.resetPadding();
     });
 
+    final dailyQuestions = DailyQuestionsViewModel(
+      repository: DailyQuestionsRepository(
+        fakeBackend({
+          '/daily-questions/random': {'items': []},
+        }),
+      ),
+    );
+    addTearDown(dailyQuestions.dispose);
+
     await tester.pumpWidget(
-      const MaterialApp(home: HomePage(viewModel: HomeViewModel())),
+      MaterialApp(
+        home: HomePage(
+          viewModel: const HomeViewModel(),
+          dailyQuestions: dailyQuestions,
+        ),
+      ),
     );
     await tester.pumpAndSettle();
   }

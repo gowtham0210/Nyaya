@@ -884,6 +884,46 @@ abstract class AppLocalizations {
   /// **'Popular Quizzes'**
   String get homePopularQuizzes;
 
+  /// No description provided for @homeDailyQuestions.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily Questions'**
+  String get homeDailyQuestions;
+
+  /// No description provided for @homeDailyQuestionsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Sharpen your mind with today\'s random questions'**
+  String get homeDailyQuestionsSubtitle;
+
+  /// No description provided for @homeDailyQuestionsEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No questions available yet.'**
+  String get homeDailyQuestionsEmpty;
+
+  /// No description provided for @homeDailyShowAnswer.
+  ///
+  /// In en, this message translates to:
+  /// **'Show answer'**
+  String get homeDailyShowAnswer;
+
+  /// No description provided for @homeDailyHideAnswer.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide answer'**
+  String get homeDailyHideAnswer;
+
+  /// No description provided for @homeDailyQuestionSemantics.
+  ///
+  /// In en, this message translates to:
+  /// **'Question {number}: {question}. {category}'**
+  String homeDailyQuestionSemantics(
+    int number,
+    String question,
+    String category,
+  );
+
   /// No description provided for @categoriesSubtitle.
   ///
   /// In en, this message translates to:

@@ -446,6 +446,31 @@ class AppLocalizationsTa extends AppLocalizations {
   String get homePopularQuizzes => 'பிரபலமான வினாடி வினாக்கள்';
 
   @override
+  String get homeDailyQuestions => 'தினசரி கேள்விகள்';
+
+  @override
+  String get homeDailyQuestionsSubtitle =>
+      'இன்றைய சீரற்ற கேள்விகளுடன் உங்கள் மனதைக் கூர்மைப்படுத்துங்கள்';
+
+  @override
+  String get homeDailyQuestionsEmpty => 'இன்னும் கேள்விகள் இல்லை.';
+
+  @override
+  String get homeDailyShowAnswer => 'பதிலைக் காட்டு';
+
+  @override
+  String get homeDailyHideAnswer => 'பதிலை மறை';
+
+  @override
+  String homeDailyQuestionSemantics(
+    int number,
+    String question,
+    String category,
+  ) {
+    return 'கேள்வி $number: $question. $category';
+  }
+
+  @override
   String get categoriesSubtitle =>
       'தலைப்புகளை ஆராய்ந்து உங்கள் சட்ட அறிவை வலுப்படுத்துங்கள்.';
 

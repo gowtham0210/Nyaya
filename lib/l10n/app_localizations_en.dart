@@ -442,6 +442,31 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homePopularQuizzes => 'Popular Quizzes';
 
   @override
+  String get homeDailyQuestions => 'Daily Questions';
+
+  @override
+  String get homeDailyQuestionsSubtitle =>
+      'Sharpen your mind with today\'s random questions';
+
+  @override
+  String get homeDailyQuestionsEmpty => 'No questions available yet.';
+
+  @override
+  String get homeDailyShowAnswer => 'Show answer';
+
+  @override
+  String get homeDailyHideAnswer => 'Hide answer';
+
+  @override
+  String homeDailyQuestionSemantics(
+    int number,
+    String question,
+    String category,
+  ) {
+    return 'Question $number: $question. $category';
+  }
+
+  @override
   String get categoriesSubtitle =>
       'Explore topics and strengthen your legal knowledge.';
 

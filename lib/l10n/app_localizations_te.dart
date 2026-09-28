@@ -444,6 +444,31 @@ class AppLocalizationsTe extends AppLocalizations {
   String get homePopularQuizzes => 'ప్రసిద్ధ క్విజ్‌లు';
 
   @override
+  String get homeDailyQuestions => 'డైలీ ప్రశ్నలు';
+
+  @override
+  String get homeDailyQuestionsSubtitle =>
+      'నేటి యాదృచ్ఛిక ప్రశ్నలతో మీ మనసును పదునుపెట్టుకోండి';
+
+  @override
+  String get homeDailyQuestionsEmpty => 'ఇంకా ప్రశ్నలు అందుబాటులో లేవు.';
+
+  @override
+  String get homeDailyShowAnswer => 'సమాధానం చూపించు';
+
+  @override
+  String get homeDailyHideAnswer => 'సమాధానం దాచు';
+
+  @override
+  String homeDailyQuestionSemantics(
+    int number,
+    String question,
+    String category,
+  ) {
+    return 'ప్రశ్న $number: $question. $category';
+  }
+
+  @override
   String get categoriesSubtitle =>
       'అంశాలను అన్వేషించి మీ న్యాయ జ్ఞానాన్ని బలపరచుకోండి.';
 

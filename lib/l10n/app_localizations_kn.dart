@@ -445,6 +445,31 @@ class AppLocalizationsKn extends AppLocalizations {
   String get homePopularQuizzes => 'ಜನಪ್ರಿಯ ಕ್ವಿಜ್‌ಗಳು';
 
   @override
+  String get homeDailyQuestions => 'ದೈನಂದಿನ ಪ್ರಶ್ನೆಗಳು';
+
+  @override
+  String get homeDailyQuestionsSubtitle =>
+      'ಇಂದಿನ ಯಾದೃಚ್ಛಿಕ ಪ್ರಶ್ನೆಗಳೊಂದಿಗೆ ನಿಮ್ಮ ಮನಸ್ಸನ್ನು ಚುರುಕುಗೊಳಿಸಿ';
+
+  @override
+  String get homeDailyQuestionsEmpty => 'ಇನ್ನೂ ಯಾವುದೇ ಪ್ರಶ್ನೆಗಳು ಲಭ್ಯವಿಲ್ಲ.';
+
+  @override
+  String get homeDailyShowAnswer => 'ಉತ್ತರ ತೋರಿಸಿ';
+
+  @override
+  String get homeDailyHideAnswer => 'ಉತ್ತರ ಮರೆಮಾಡಿ';
+
+  @override
+  String homeDailyQuestionSemantics(
+    int number,
+    String question,
+    String category,
+  ) {
+    return 'ಪ್ರಶ್ನೆ $number: $question. $category';
+  }
+
+  @override
   String get categoriesSubtitle =>
       'ವಿಷಯಗಳನ್ನು ಅನ್ವೇಷಿಸಿ ಮತ್ತು ನಿಮ್ಮ ಕಾನೂನು ಜ್ಞಾನವನ್ನು ಬಲಪಡಿಸಿ.';
 

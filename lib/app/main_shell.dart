@@ -5,6 +5,8 @@ import '../core/network/api_client.dart';
 import '../features/categories/data/categories_repository.dart';
 import '../features/categories/presentation/categories_page.dart';
 import '../features/categories/presentation/categories_view_model.dart';
+import '../features/home/data/daily_questions_repository.dart';
+import '../features/home/presentation/daily_questions_view_model.dart';
 import '../features/home/presentation/home_page.dart';
 import '../features/home/presentation/home_view_model.dart';
 import '../features/quiz_question/presentation/quiz_question_page.dart';
@@ -40,11 +42,15 @@ class _MainShellState extends State<MainShell> {
   late final _categoriesViewModel = CategoriesViewModel(
     repository: CategoriesRepository(_apiClient),
   );
+  late final _dailyQuestionsViewModel = DailyQuestionsViewModel(
+    repository: DailyQuestionsRepository(_apiClient),
+  );
 
   @override
   void dispose() {
     _controller.dispose();
     _categoriesViewModel.dispose();
+    _dailyQuestionsViewModel.dispose();
     super.dispose();
   }
 
@@ -98,6 +104,7 @@ class _MainShellState extends State<MainShell> {
   Widget _buildHome(BuildContext context) {
     return HomePage(
       viewModel: const HomeViewModel(),
+      dailyQuestions: _dailyQuestionsViewModel,
       // Provisional wire until the Topics tab exists.
       onResumePressed: () => Navigator.of(context).push(
         MaterialPageRoute<void>(

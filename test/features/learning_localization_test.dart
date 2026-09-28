@@ -5,6 +5,8 @@ import 'package:nyaya/features/categories/data/categories_repository.dart';
 import 'package:nyaya/features/categories/presentation/categories_page.dart';
 import 'package:nyaya/features/categories/presentation/categories_view_model.dart';
 import 'package:nyaya/features/goal_selection/presentation/goal_selection_page.dart';
+import 'package:nyaya/features/home/data/daily_questions_repository.dart';
+import 'package:nyaya/features/home/presentation/daily_questions_view_model.dart';
 import 'package:nyaya/features/home/presentation/home_page.dart';
 import 'package:nyaya/features/home/presentation/home_view_model.dart';
 import 'package:nyaya/features/quiz_question/presentation/quiz_question_page.dart';
@@ -34,9 +36,29 @@ void main() {
   });
 
   testWidgets('Home renders in Hindi', (tester) async {
+    final dailyQuestions = DailyQuestionsViewModel(
+      repository: DailyQuestionsRepository(
+        fakeBackend({
+          '/daily-questions/random': {
+            'items': [
+              {
+                'id': 1,
+                'category': 'संविधान',
+                'question': 'जीवन का अधिकार किस अनुच्छेद में है?',
+                'answer': 'अनुच्छेद 21।',
+              },
+            ],
+          },
+        }),
+      ),
+    );
+    addTearDown(dailyQuestions.dispose);
     await pumpLocalized(
       tester,
-      const HomePage(viewModel: HomeViewModel()),
+      HomePage(
+        viewModel: const HomeViewModel(),
+        dailyQuestions: dailyQuestions,
+      ),
       locale: const Locale('hi'),
     );
 
@@ -55,6 +77,17 @@ void main() {
           matching: find.byType(Scrollable),
         )
         .first;
+    // 018 AC-009: the Daily Questions section is in Hindi too.
+    await tester.scrollUntilVisible(
+      find.byKey(const ValueKey('home.daily.question.1')),
+      300,
+      scrollable: page,
+    );
+    expect(find.text('दैनिक प्रश्न'), findsOneWidget);
+    expect(find.text('1 प्रश्न'), findsOneWidget);
+    expect(find.text('उत्तर देखें'), findsOneWidget);
+    expect(find.text('Daily Questions'), findsNothing);
+
     await tester.scrollUntilVisible(
       find.text('लोकप्रिय क्विज़'),
       300,

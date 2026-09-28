@@ -165,6 +165,25 @@
   "homeExploreByCategory": "Explore by Category",
   "homeContinueLearning": "Continue Learning",
   "homePopularQuizzes": "Popular Quizzes",
+  "homeDailyQuestions": "Daily Questions",
+  "homeDailyQuestionsSubtitle": "Sharpen your mind with today's random questions",
+  "homeDailyQuestionsEmpty": "No questions available yet.",
+  "homeDailyShowAnswer": "Show answer",
+  "homeDailyHideAnswer": "Hide answer",
+  "homeDailyQuestionSemantics": "Question {number}: {question}. {category}",
+  "@homeDailyQuestionSemantics": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      },
+      "question": {
+        "type": "String"
+      },
+      "category": {
+        "type": "String"
+      }
+    }
+  },
   "categoriesSubtitle": "Explore topics and strengthen your legal knowledge.",
   "categoriesSearchHint": "Search categories",
   "categoriesNoMatch": "No categories match your search.",

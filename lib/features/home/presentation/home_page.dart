@@ -3,12 +3,15 @@ import 'package:flutter/material.dart';
 import '../../../core/localization/l10n.dart';
 import '../../../core/presentation/widgets/nyaya_icon.dart';
 import '../../../core/presentation/widgets/nyaya_widgets.dart';
+import 'daily_questions_view_model.dart';
 import 'home_view_model.dart';
+import 'widgets/daily_questions_section.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({
     super.key,
     required this.viewModel,
+    required this.dailyQuestions,
     this.onNotificationsPressed,
     this.onStartQuizPressed,
     this.onResumePressed,
@@ -19,6 +22,7 @@ class HomePage extends StatelessWidget {
   });
 
   final HomeViewModel viewModel;
+  final DailyQuestionsViewModel dailyQuestions;
   final VoidCallback? onNotificationsPressed;
   final VoidCallback? onStartQuizPressed;
   final VoidCallback? onResumePressed;
@@ -38,10 +42,22 @@ class HomePage extends StatelessWidget {
   static const easyColor = Color(0xFF1FA35B);
 
   @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  @override
+  void initState() {
+    super.initState();
+    widget.dailyQuestions.load();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+    final viewModel = widget.viewModel;
     return Scaffold(
-      backgroundColor: pageBackground,
+      backgroundColor: HomePage.pageBackground,
       body: SafeArea(
         bottom: false,
         child: ListView(
@@ -51,7 +67,7 @@ class HomePage extends StatelessWidget {
             _HeaderRow(
               hasUnreadNotifications: viewModel.hasUnreadNotifications,
               onNotificationsPressed: () {
-                final callback = onNotificationsPressed;
+                final callback = widget.onNotificationsPressed;
                 if (callback != null) {
                   callback();
                   return;
@@ -70,7 +86,7 @@ class HomePage extends StatelessWidget {
               supportingCopy: l10n.homeHeroSupport,
               ctaLabel: l10n.homeStartQuiz,
               onPressed: () {
-                final callback = onStartQuizPressed;
+                final callback = widget.onStartQuizPressed;
                 if (callback != null) {
                   callback();
                   return;
@@ -84,7 +100,7 @@ class HomePage extends StatelessWidget {
               title: l10n.homeExploreByCategory,
               actionLabel: l10n.commonViewAll,
               onPressed: () {
-                final callback = onViewAllCategoriesPressed;
+                final callback = widget.onViewAllCategoriesPressed;
                 if (callback != null) {
                   callback();
                   return;
@@ -96,7 +112,7 @@ class HomePage extends StatelessWidget {
             _CategoryStrip(
               categories: viewModel.categories,
               onCategorySelected: (category) {
-                final callback = onCategorySelected;
+                final callback = widget.onCategorySelected;
                 if (callback != null) {
                   callback(category);
                   return;
@@ -114,7 +130,7 @@ class HomePage extends StatelessWidget {
               style: const TextStyle(
                 fontSize: 22,
                 fontWeight: FontWeight.w700,
-                color: heroBackground,
+                color: HomePage.heroBackground,
                 letterSpacing: -0.3,
               ),
             ),
@@ -122,7 +138,7 @@ class HomePage extends StatelessWidget {
             _ContinueLearningCard(
               data: viewModel.continueLearning,
               onResumePressed: () {
-                final callback = onResumePressed;
+                final callback = widget.onResumePressed;
                 if (callback != null) {
                   callback();
                   return;
@@ -131,12 +147,14 @@ class HomePage extends StatelessWidget {
               },
             ),
             const SizedBox(height: 28),
+            DailyQuestionsSection(viewModel: widget.dailyQuestions),
+            const SizedBox(height: 28),
             _SectionHeader(
               key: const ValueKey('home.section.popular'),
               title: l10n.homePopularQuizzes,
               actionLabel: l10n.commonViewAll,
               onPressed: () {
-                final callback = onViewAllPopularPressed;
+                final callback = widget.onViewAllPopularPressed;
                 if (callback != null) {
                   callback();
                   return;
@@ -149,7 +167,7 @@ class HomePage extends StatelessWidget {
               _PopularQuizCard(
                 quiz: quiz,
                 onPressed: () {
-                  final callback = onQuizSelected;
+                  final callback = widget.onQuizSelected;
                   if (callback != null) {
                     callback(quiz);
                     return;

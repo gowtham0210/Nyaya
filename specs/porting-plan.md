@@ -40,7 +40,7 @@ Also: move theme colors/shadows to `lib/core/presentation/`, add assets under `a
 | # | Spec | Reference | Notes |
 |---|---|---|---|
 | 1 | 017-categories-remote | `categories_api_service`, `categories_repository` | Spec 013 UI stays; real data |
-| 2 | 018-home-sections | `daily_questions_section`, `legal_updates_section`, `ask_nyaya_card`, `learning_progress_card` | Add to existing Home |
+| 2 | 018-daily-questions (#29); #30, #31 get own specs | `daily_questions_section`, `legal_updates_section`, `ask_nyaya_card`, `learning_progress_card` | Add to existing Home |
 | 3 | 019-articles | `articles_screen`, `article_detail_screen`, `article_accordion_item` | Articles tab |
 | 4 | 020-legal-updates | `legal_updates_*` | Home section + see-all |
 | 5 | 021-profile | `profile_screen`, `edit_profile_screen`, `initials_avatar`, `profile_api_service` | Real logout replaces test hack; language picker |
