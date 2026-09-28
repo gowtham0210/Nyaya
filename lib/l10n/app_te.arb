@@ -189,5 +189,21 @@
   "articlesReadArticle": "ఆర్టికల్ చదవండి",
   "articleWhatItMeans": "దీని అర్థం ఏమిటి",
   "articleWhyItMatters": "ఇది ఎందుకు ముఖ్యం",
-  "articleKeyFeatures": "ముఖ్య లక్షణాలు"
+  "articleKeyFeatures": "ముఖ్య లక్షణాలు",
+  "profileStatsTitle": "నా గణాంకాలు",
+  "profileStatStreak": "రోజు స్ట్రీక్",
+  "profileStatCategories": "అన్వేషించిన వర్గాలు",
+  "profileStatQuizzes": "పూర్తయిన క్విజ్‌లు",
+  "profileStatPoints": "సంపాదించిన పాయింట్లు",
+  "profileEdit": "ప్రొఫైల్ సవరించండి",
+  "profileSettingsTitle": "ఖాతా & సెట్టింగ్‌లు",
+  "profileLanguage": "భాష",
+  "profileReminders": "రోజువారీ రిమైండర్‌లు",
+  "profilePrivacy": "గోప్యత & భద్రత",
+  "profileHelpSupport": "సహాయం & మద్దతు",
+  "profileHelpResources": "న్యాయ సహాయ వనరులు",
+  "profileAbout": "న్యాయ గురించి",
+  "profileLogout": "లాగ్ అవుట్",
+  "profileLogoutConfirmTitle": "న్యాయ నుండి లాగ్ అవుట్ చేయాలా?",
+  "profileLogoutConfirmBody": "మళ్లీ సైన్ ఇన్ చేయడానికి మీ ఫోన్ నంబర్ మరియు కోడ్ అవసరం."
 }

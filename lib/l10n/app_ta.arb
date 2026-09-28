@@ -189,5 +189,21 @@
   "articlesReadArticle": "கட்டுரையைப் படியுங்கள்",
   "articleWhatItMeans": "இதன் பொருள் என்ன",
   "articleWhyItMatters": "இது ஏன் முக்கியம்",
-  "articleKeyFeatures": "முக்கிய அம்சங்கள்"
+  "articleKeyFeatures": "முக்கிய அம்சங்கள்",
+  "profileStatsTitle": "எனது புள்ளிவிவரங்கள்",
+  "profileStatStreak": "நாள் தொடர்ச்சி",
+  "profileStatCategories": "ஆராயப்பட்ட வகைகள்",
+  "profileStatQuizzes": "முடிக்கப்பட்ட வினாடி வினாக்கள்",
+  "profileStatPoints": "பெறப்பட்ட புள்ளிகள்",
+  "profileEdit": "சுயவிவரத்தைத் திருத்து",
+  "profileSettingsTitle": "கணக்கு & அமைப்புகள்",
+  "profileLanguage": "மொழி",
+  "profileReminders": "தினசரி நினைவூட்டல்கள்",
+  "profilePrivacy": "தனியுரிமை & பாதுகாப்பு",
+  "profileHelpSupport": "உதவி & ஆதரவு",
+  "profileHelpResources": "சட்ட உதவி ஆதாரங்கள்",
+  "profileAbout": "நியாயா பற்றி",
+  "profileLogout": "வெளியேறு",
+  "profileLogoutConfirmTitle": "நியாயாவிலிருந்து வெளியேறவா?",
+  "profileLogoutConfirmBody": "மீண்டும் உள்நுழைய உங்கள் தொலைபேசி எண்ணும் குறியீடும் தேவை."
 }

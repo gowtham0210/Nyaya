@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:nyaya/app/main_shell.dart';
 import 'package:nyaya/core/localization/l10n.dart';
+import 'package:nyaya/features/auth/presentation/sign_in_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../support/fake_backend.dart';
+import '../support/profile_backend.dart';
 
 void main() {
   Future<void> pumpMainShell(WidgetTester tester, {Locale? locale}) async {
@@ -22,6 +25,7 @@ void main() {
         home: MainShell(
           apiClient: fakeBackend({
             '/categories': {'items': []},
+            ...profileRoutes(),
             '/articles': {
               'items': [
                 {
@@ -167,10 +171,40 @@ void main() {
     expect(find.text('It stops discrimination.'), findsOneWidget);
   });
 
+  testWidgets('021 Profile shows the learner and logs out to sign-in', (
+    tester,
+  ) async {
+    SharedPreferences.setMockInitialValues({});
+    await pumpMainShell(tester);
+
+    await tester.tap(find.byKey(const ValueKey('nav.profile')));
+    await tester.pumpAndSettle();
+    expect(find.text('Asha Rao'), findsOneWidget);
+
+    final logout = find.byKey(const ValueKey('profile.logout'));
+    await tester.scrollUntilVisible(
+      logout,
+      200,
+      scrollable: find
+          .descendant(
+            of: find.byKey(const ValueKey('profile.scroll')),
+            matching: find.byType(Scrollable),
+          )
+          .first,
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(logout);
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const ValueKey('profile.logout.confirm')));
+    await tester.pumpAndSettle();
+
+    expect(find.byType(SignInPage), findsOneWidget);
+  });
+
   testWidgets('AC-006 unbuilt tabs show the coming-soon state', (tester) async {
     await pumpMainShell(tester);
 
-    for (final id in ['leaderboard', 'profile']) {
+    for (final id in ['leaderboard']) {
       await tester.tap(find.byKey(ValueKey('nav.$id')));
       await tester.pumpAndSettle();
       expect(find.text('Coming soon'), findsOneWidget, reason: id);

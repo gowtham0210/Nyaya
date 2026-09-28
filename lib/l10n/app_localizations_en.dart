@@ -684,4 +684,53 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get articleKeyFeatures => 'Key features';
+
+  @override
+  String get profileStatsTitle => 'My statistics';
+
+  @override
+  String get profileStatStreak => 'Day streak';
+
+  @override
+  String get profileStatCategories => 'Categories explored';
+
+  @override
+  String get profileStatQuizzes => 'Quizzes completed';
+
+  @override
+  String get profileStatPoints => 'Points earned';
+
+  @override
+  String get profileEdit => 'Edit profile';
+
+  @override
+  String get profileSettingsTitle => 'Account & settings';
+
+  @override
+  String get profileLanguage => 'Language';
+
+  @override
+  String get profileReminders => 'Daily reminders';
+
+  @override
+  String get profilePrivacy => 'Privacy & security';
+
+  @override
+  String get profileHelpSupport => 'Help & support';
+
+  @override
+  String get profileHelpResources => 'Legal help resources';
+
+  @override
+  String get profileAbout => 'About Nyaya';
+
+  @override
+  String get profileLogout => 'Log out';
+
+  @override
+  String get profileLogoutConfirmTitle => 'Log out of Nyaya?';
+
+  @override
+  String get profileLogoutConfirmBody =>
+      'You\'ll need your phone number and a code to sign in again.';
 }

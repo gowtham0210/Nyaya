@@ -685,4 +685,53 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get articleKeyFeatures => 'मुख्य विशेषताएं';
+
+  @override
+  String get profileStatsTitle => 'मेरे आंकड़े';
+
+  @override
+  String get profileStatStreak => 'दिन की लगातार गिनती';
+
+  @override
+  String get profileStatCategories => 'श्रेणियां एक्सप्लोर की';
+
+  @override
+  String get profileStatQuizzes => 'पूरे किए गए क्विज़';
+
+  @override
+  String get profileStatPoints => 'अर्जित पॉइंट्स';
+
+  @override
+  String get profileEdit => 'प्रोफ़ाइल संपादित करें';
+
+  @override
+  String get profileSettingsTitle => 'खाता और सेटिंग्स';
+
+  @override
+  String get profileLanguage => 'भाषा';
+
+  @override
+  String get profileReminders => 'दैनिक रिमाइंडर';
+
+  @override
+  String get profilePrivacy => 'गोपनीयता और सुरक्षा';
+
+  @override
+  String get profileHelpSupport => 'सहायता और समर्थन';
+
+  @override
+  String get profileHelpResources => 'कानूनी सहायता संसाधन';
+
+  @override
+  String get profileAbout => 'न्याय के बारे में';
+
+  @override
+  String get profileLogout => 'लॉग आउट';
+
+  @override
+  String get profileLogoutConfirmTitle => 'न्याय से लॉग आउट करें?';
+
+  @override
+  String get profileLogoutConfirmBody =>
+      'दोबारा साइन इन करने के लिए आपको अपना फ़ोन नंबर और कोड चाहिए होगा।';
 }

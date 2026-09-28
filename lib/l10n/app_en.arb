@@ -349,5 +349,21 @@
   "articlesReadArticle": "Read article",
   "articleWhatItMeans": "What it means",
   "articleWhyItMatters": "Why it matters",
-  "articleKeyFeatures": "Key features"
+  "articleKeyFeatures": "Key features",
+  "profileStatsTitle": "My statistics",
+  "profileStatStreak": "Day streak",
+  "profileStatCategories": "Categories explored",
+  "profileStatQuizzes": "Quizzes completed",
+  "profileStatPoints": "Points earned",
+  "profileEdit": "Edit profile",
+  "profileSettingsTitle": "Account & settings",
+  "profileLanguage": "Language",
+  "profileReminders": "Daily reminders",
+  "profilePrivacy": "Privacy & security",
+  "profileHelpSupport": "Help & support",
+  "profileHelpResources": "Legal help resources",
+  "profileAbout": "About Nyaya",
+  "profileLogout": "Log out",
+  "profileLogoutConfirmTitle": "Log out of Nyaya?",
+  "profileLogoutConfirmBody": "You'll need your phone number and a code to sign in again."
 }

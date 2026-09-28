@@ -1252,6 +1252,102 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Key features'**
   String get articleKeyFeatures;
+
+  /// No description provided for @profileStatsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'My statistics'**
+  String get profileStatsTitle;
+
+  /// No description provided for @profileStatStreak.
+  ///
+  /// In en, this message translates to:
+  /// **'Day streak'**
+  String get profileStatStreak;
+
+  /// No description provided for @profileStatCategories.
+  ///
+  /// In en, this message translates to:
+  /// **'Categories explored'**
+  String get profileStatCategories;
+
+  /// No description provided for @profileStatQuizzes.
+  ///
+  /// In en, this message translates to:
+  /// **'Quizzes completed'**
+  String get profileStatQuizzes;
+
+  /// No description provided for @profileStatPoints.
+  ///
+  /// In en, this message translates to:
+  /// **'Points earned'**
+  String get profileStatPoints;
+
+  /// No description provided for @profileEdit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit profile'**
+  String get profileEdit;
+
+  /// No description provided for @profileSettingsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Account & settings'**
+  String get profileSettingsTitle;
+
+  /// No description provided for @profileLanguage.
+  ///
+  /// In en, this message translates to:
+  /// **'Language'**
+  String get profileLanguage;
+
+  /// No description provided for @profileReminders.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily reminders'**
+  String get profileReminders;
+
+  /// No description provided for @profilePrivacy.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy & security'**
+  String get profilePrivacy;
+
+  /// No description provided for @profileHelpSupport.
+  ///
+  /// In en, this message translates to:
+  /// **'Help & support'**
+  String get profileHelpSupport;
+
+  /// No description provided for @profileHelpResources.
+  ///
+  /// In en, this message translates to:
+  /// **'Legal help resources'**
+  String get profileHelpResources;
+
+  /// No description provided for @profileAbout.
+  ///
+  /// In en, this message translates to:
+  /// **'About Nyaya'**
+  String get profileAbout;
+
+  /// No description provided for @profileLogout.
+  ///
+  /// In en, this message translates to:
+  /// **'Log out'**
+  String get profileLogout;
+
+  /// No description provided for @profileLogoutConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Log out of Nyaya?'**
+  String get profileLogoutConfirmTitle;
+
+  /// No description provided for @profileLogoutConfirmBody.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'ll need your phone number and a code to sign in again.'**
+  String get profileLogoutConfirmBody;
 }
 
 class _AppLocalizationsDelegate

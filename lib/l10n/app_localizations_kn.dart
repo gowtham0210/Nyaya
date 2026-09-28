@@ -689,4 +689,53 @@ class AppLocalizationsKn extends AppLocalizations {
 
   @override
   String get articleKeyFeatures => 'ಪ್ರಮುಖ ಲಕ್ಷಣಗಳು';
+
+  @override
+  String get profileStatsTitle => 'ನನ್ನ ಅಂಕಿಅಂಶಗಳು';
+
+  @override
+  String get profileStatStreak => 'ದಿನದ ಸ್ಟ್ರೀಕ್';
+
+  @override
+  String get profileStatCategories => 'ಅನ್ವೇಷಿಸಿದ ವರ್ಗಗಳು';
+
+  @override
+  String get profileStatQuizzes => 'ಪೂರ್ಣಗೊಂಡ ಕ್ವಿಜ್‌ಗಳು';
+
+  @override
+  String get profileStatPoints => 'ಗಳಿಸಿದ ಪಾಯಿಂಟ್‌ಗಳು';
+
+  @override
+  String get profileEdit => 'ಪ್ರೊಫೈಲ್ ಸಂಪಾದಿಸಿ';
+
+  @override
+  String get profileSettingsTitle => 'ಖಾತೆ ಮತ್ತು ಸೆಟ್ಟಿಂಗ್‌ಗಳು';
+
+  @override
+  String get profileLanguage => 'ಭಾಷೆ';
+
+  @override
+  String get profileReminders => 'ದೈನಂದಿನ ಜ್ಞಾಪನೆಗಳು';
+
+  @override
+  String get profilePrivacy => 'ಗೌಪ್ಯತೆ ಮತ್ತು ಸುರಕ್ಷತೆ';
+
+  @override
+  String get profileHelpSupport => 'ಸಹಾಯ ಮತ್ತು ಬೆಂಬಲ';
+
+  @override
+  String get profileHelpResources => 'ಕಾನೂನು ಸಹಾಯ ಸಂಪನ್ಮೂಲಗಳು';
+
+  @override
+  String get profileAbout => 'ನ್ಯಾಯ ಬಗ್ಗೆ';
+
+  @override
+  String get profileLogout => 'ಲಾಗ್ ಔಟ್';
+
+  @override
+  String get profileLogoutConfirmTitle => 'ನ್ಯಾಯದಿಂದ ಲಾಗ್ ಔಟ್ ಮಾಡಬೇಕೆ?';
+
+  @override
+  String get profileLogoutConfirmBody =>
+      'ಮತ್ತೆ ಸೈನ್ ಇನ್ ಮಾಡಲು ನಿಮ್ಮ ಫೋನ್ ಸಂಖ್ಯೆ ಮತ್ತು ಕೋಡ್ ಬೇಕು.';
 }

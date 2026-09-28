@@ -19,6 +19,9 @@ import '../features/home/presentation/recommended_page.dart';
 import '../features/legal_updates/data/legal_updates_repository.dart';
 import '../features/legal_updates/presentation/legal_updates_page.dart';
 import '../features/legal_updates/presentation/legal_updates_view_model.dart';
+import '../features/profile/data/profile_repository.dart';
+import '../features/profile/presentation/profile_page.dart';
+import '../features/profile/presentation/profile_view_model.dart';
 import '../features/quiz_question/presentation/quiz_question_page.dart';
 import '../features/quiz_result/presentation/quiz_result_page.dart';
 import '../features/quiz_result/presentation/quiz_result_view_model.dart';
@@ -59,6 +62,9 @@ class _MainShellState extends State<MainShell> {
   late final _articlesViewModel = ArticlesViewModel(
     repository: ArticlesRepository(_apiClient),
   );
+  late final _profileViewModel = ProfileViewModel(
+    repository: ProfileRepository(_apiClient),
+  );
   late final _progressViewModel = LearningProgressViewModel(
     repository: ProgressRepository(_apiClient),
   );
@@ -74,6 +80,7 @@ class _MainShellState extends State<MainShell> {
     _legalUpdatesViewModel.dispose();
     _progressViewModel.dispose();
     _articlesViewModel.dispose();
+    _profileViewModel.dispose();
     super.dispose();
   }
 
@@ -113,10 +120,15 @@ class _MainShellState extends State<MainShell> {
               ),
             ),
           ),
-          _comingSoon(
+          _tab(
             MainTab.profile,
             l10n.navProfile,
             HomeIconType.navProfile,
+            (context) => ProfilePage(
+              viewModel: _profileViewModel,
+              onEntrySelected: (entry) => _openProfileEntry(context, entry),
+              onLogout: () => endSession(context),
+            ),
           ),
         ],
       ),
@@ -132,6 +144,11 @@ class _MainShellState extends State<MainShell> {
 
   ShellTab _comingSoon(MainTab tab, String label, HomeIconType icon) =>
       _tab(tab, label, icon, (_) => ComingSoonTab(title: label, icon: icon));
+
+  /// Screens behind Profile's entries; unbuilt ones say they're coming.
+  void _openProfileEntry(BuildContext context, ProfileEntry entry) {
+    showMessage(context, context.l10n.commonComingSoon);
+  }
 
   Widget _buildHome(BuildContext context) {
     return HomePage(

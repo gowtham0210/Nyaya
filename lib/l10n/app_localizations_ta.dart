@@ -690,4 +690,53 @@ class AppLocalizationsTa extends AppLocalizations {
 
   @override
   String get articleKeyFeatures => 'முக்கிய அம்சங்கள்';
+
+  @override
+  String get profileStatsTitle => 'எனது புள்ளிவிவரங்கள்';
+
+  @override
+  String get profileStatStreak => 'நாள் தொடர்ச்சி';
+
+  @override
+  String get profileStatCategories => 'ஆராயப்பட்ட வகைகள்';
+
+  @override
+  String get profileStatQuizzes => 'முடிக்கப்பட்ட வினாடி வினாக்கள்';
+
+  @override
+  String get profileStatPoints => 'பெறப்பட்ட புள்ளிகள்';
+
+  @override
+  String get profileEdit => 'சுயவிவரத்தைத் திருத்து';
+
+  @override
+  String get profileSettingsTitle => 'கணக்கு & அமைப்புகள்';
+
+  @override
+  String get profileLanguage => 'மொழி';
+
+  @override
+  String get profileReminders => 'தினசரி நினைவூட்டல்கள்';
+
+  @override
+  String get profilePrivacy => 'தனியுரிமை & பாதுகாப்பு';
+
+  @override
+  String get profileHelpSupport => 'உதவி & ஆதரவு';
+
+  @override
+  String get profileHelpResources => 'சட்ட உதவி ஆதாரங்கள்';
+
+  @override
+  String get profileAbout => 'நியாயா பற்றி';
+
+  @override
+  String get profileLogout => 'வெளியேறு';
+
+  @override
+  String get profileLogoutConfirmTitle => 'நியாயாவிலிருந்து வெளியேறவா?';
+
+  @override
+  String get profileLogoutConfirmBody =>
+      'மீண்டும் உள்நுழைய உங்கள் தொலைபேசி எண்ணும் குறியீடும் தேவை.';
 }

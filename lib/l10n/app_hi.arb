@@ -189,5 +189,21 @@
   "articlesReadArticle": "अनुच्छेद पढ़ें",
   "articleWhatItMeans": "इसका अर्थ क्या है",
   "articleWhyItMatters": "यह महत्वपूर्ण क्यों है",
-  "articleKeyFeatures": "मुख्य विशेषताएं"
+  "articleKeyFeatures": "मुख्य विशेषताएं",
+  "profileStatsTitle": "मेरे आंकड़े",
+  "profileStatStreak": "दिन की लगातार गिनती",
+  "profileStatCategories": "श्रेणियां एक्सप्लोर की",
+  "profileStatQuizzes": "पूरे किए गए क्विज़",
+  "profileStatPoints": "अर्जित पॉइंट्स",
+  "profileEdit": "प्रोफ़ाइल संपादित करें",
+  "profileSettingsTitle": "खाता और सेटिंग्स",
+  "profileLanguage": "भाषा",
+  "profileReminders": "दैनिक रिमाइंडर",
+  "profilePrivacy": "गोपनीयता और सुरक्षा",
+  "profileHelpSupport": "सहायता और समर्थन",
+  "profileHelpResources": "कानूनी सहायता संसाधन",
+  "profileAbout": "न्याय के बारे में",
+  "profileLogout": "लॉग आउट",
+  "profileLogoutConfirmTitle": "न्याय से लॉग आउट करें?",
+  "profileLogoutConfirmBody": "दोबारा साइन इन करने के लिए आपको अपना फ़ोन नंबर और कोड चाहिए होगा।"
 }

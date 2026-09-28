@@ -688,4 +688,53 @@ class AppLocalizationsTe extends AppLocalizations {
 
   @override
   String get articleKeyFeatures => 'ముఖ్య లక్షణాలు';
+
+  @override
+  String get profileStatsTitle => 'నా గణాంకాలు';
+
+  @override
+  String get profileStatStreak => 'రోజు స్ట్రీక్';
+
+  @override
+  String get profileStatCategories => 'అన్వేషించిన వర్గాలు';
+
+  @override
+  String get profileStatQuizzes => 'పూర్తయిన క్విజ్‌లు';
+
+  @override
+  String get profileStatPoints => 'సంపాదించిన పాయింట్లు';
+
+  @override
+  String get profileEdit => 'ప్రొఫైల్ సవరించండి';
+
+  @override
+  String get profileSettingsTitle => 'ఖాతా & సెట్టింగ్‌లు';
+
+  @override
+  String get profileLanguage => 'భాష';
+
+  @override
+  String get profileReminders => 'రోజువారీ రిమైండర్‌లు';
+
+  @override
+  String get profilePrivacy => 'గోప్యత & భద్రత';
+
+  @override
+  String get profileHelpSupport => 'సహాయం & మద్దతు';
+
+  @override
+  String get profileHelpResources => 'న్యాయ సహాయ వనరులు';
+
+  @override
+  String get profileAbout => 'న్యాయ గురించి';
+
+  @override
+  String get profileLogout => 'లాగ్ అవుట్';
+
+  @override
+  String get profileLogoutConfirmTitle => 'న్యాయ నుండి లాగ్ అవుట్ చేయాలా?';
+
+  @override
+  String get profileLogoutConfirmBody =>
+      'మళ్లీ సైన్ ఇన్ చేయడానికి మీ ఫోన్ నంబర్ మరియు కోడ్ అవసరం.';
 }
