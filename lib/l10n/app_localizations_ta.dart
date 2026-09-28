@@ -761,4 +761,22 @@ class AppLocalizationsTa extends AppLocalizations {
   @override
   String get editProfilePhotoFailed =>
       'கேமரா அல்லது புகைப்படங்களைத் திறக்க முடியவில்லை. நியாயாவின் அனுமதிகளைச் சரிபார்க்கவும்.';
+
+  @override
+  String get remindersToggle => 'தினசரி நினைவூட்டல்';
+
+  @override
+  String get remindersToggleSubtitle =>
+      'தினமும் பயிற்சி செய்ய நினைவூட்டல் பெறுங்கள்';
+
+  @override
+  String get remindersTime => 'நினைவூட்டல் நேரம்';
+
+  @override
+  String get remindersPermissionDenied =>
+      'நியாயாவுக்கு அறிவிப்புகள் முடக்கப்பட்டுள்ளன. நினைவூட்டல்களைப் பெற உங்கள் தொலைபேசி அமைப்புகளில் அவற்றை இயக்கவும்.';
+
+  @override
+  String get reminderNotificationBody =>
+      'உங்கள் தினசரி சட்டப் பயிற்சிக்கான நேரம் — தொடர்ச்சியைத் தக்கவைத்துக் கொள்ளுங்கள்.';
 }

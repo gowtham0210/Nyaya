@@ -755,4 +755,21 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get editProfilePhotoFailed =>
       'Couldn\'t open the camera or photos. Check Nyaya\'s permissions.';
+
+  @override
+  String get remindersToggle => 'Daily reminder';
+
+  @override
+  String get remindersToggleSubtitle => 'Get a nudge to practise each day';
+
+  @override
+  String get remindersTime => 'Reminder time';
+
+  @override
+  String get remindersPermissionDenied =>
+      'Notifications are off for Nyaya. Turn them on in your phone\'s settings to get reminders.';
+
+  @override
+  String get reminderNotificationBody =>
+      'Time for your daily legal practice — keep your streak going.';
 }

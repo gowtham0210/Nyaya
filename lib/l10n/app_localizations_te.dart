@@ -759,4 +759,22 @@ class AppLocalizationsTe extends AppLocalizations {
   @override
   String get editProfilePhotoFailed =>
       'కెమెరా లేదా ఫోటోలు తెరవలేకపోయాం. న్యాయ అనుమతులను తనిఖీ చేయండి.';
+
+  @override
+  String get remindersToggle => 'రోజువారీ రిమైండర్';
+
+  @override
+  String get remindersToggleSubtitle =>
+      'ప్రతిరోజూ సాధన చేయడానికి రిమైండర్ పొందండి';
+
+  @override
+  String get remindersTime => 'రిమైండర్ సమయం';
+
+  @override
+  String get remindersPermissionDenied =>
+      'న్యాయ కోసం నోటిఫికేషన్‌లు ఆఫ్‌లో ఉన్నాయి. రిమైండర్‌లు పొందడానికి మీ ఫోన్ సెట్టింగ్‌లలో వాటిని ఆన్ చేయండి.';
+
+  @override
+  String get reminderNotificationBody =>
+      'మీ రోజువారీ న్యాయ సాధనకు సమయం — మీ స్ట్రీక్‌ను కొనసాగించండి.';
 }

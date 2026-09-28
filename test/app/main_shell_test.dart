@@ -13,10 +13,14 @@ import 'package:nyaya/features/auth/presentation/sign_in_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../support/fake_backend.dart';
+import '../support/fake_reminder_scheduler.dart';
 import '../support/profile_backend.dart';
 
 void main() {
+  late FakeReminderScheduler reminderScheduler;
+
   Future<void> pumpMainShell(WidgetTester tester, {Locale? locale}) async {
+    reminderScheduler = FakeReminderScheduler();
     tester.view.physicalSize = const Size(393, 852);
     tester.view.devicePixelRatio = 1;
     addTearDown(() {
@@ -30,6 +34,7 @@ void main() {
         supportedLocales: AppLocalizations.supportedLocales,
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         home: MainShell(
+          reminderScheduler: reminderScheduler,
           apiClient: fakeBackend({
             '/categories': {'items': []},
             ...profileRoutes(),
@@ -356,6 +361,32 @@ void main() {
     }
     // Profile has no translated text, so it isn't refetched.
     expect(langsByPath['/users/me'], [null]);
+  });
+
+  testWidgets('029 Daily reminders opens from Profile', (tester) async {
+    SharedPreferences.setMockInitialValues({});
+    await pumpMainShell(tester);
+    await tester.tap(find.byKey(const ValueKey('nav.profile')));
+    await tester.pumpAndSettle();
+    final entry = find.byKey(const ValueKey('profile.entry.reminders'));
+    await tester.scrollUntilVisible(
+      entry,
+      200,
+      scrollable: find
+          .descendant(
+            of: find.byKey(const ValueKey('profile.scroll')),
+            matching: find.byType(Scrollable),
+          )
+          .first,
+    );
+    await tester.pumpAndSettle();
+
+    await tester.tap(entry);
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const ValueKey('reminders.toggle')));
+    await tester.pumpAndSettle();
+
+    expect(reminderScheduler.scheduled?.hour, 9);
   });
 
   testWidgets('AC-006 unbuilt tabs show the coming-soon state', (tester) async {

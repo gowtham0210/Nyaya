@@ -212,5 +212,10 @@
   "editProfileCamera": "ಫೋಟೋ ತೆಗೆಯಿರಿ",
   "editProfileGallery": "ಗ್ಯಾಲರಿಯಿಂದ ಆಯ್ಕೆಮಾಡಿ",
   "editProfilePhotoUpdated": "ಫೋಟೋ ನವೀಕರಿಸಲಾಗಿದೆ",
-  "editProfilePhotoFailed": "ಕ್ಯಾಮೆರಾ ಅಥವಾ ಫೋಟೋಗಳನ್ನು ತೆರೆಯಲಾಗಲಿಲ್ಲ. ನ್ಯಾಯದ ಅನುಮತಿಗಳನ್ನು ಪರಿಶೀಲಿಸಿ."
+  "editProfilePhotoFailed": "ಕ್ಯಾಮೆರಾ ಅಥವಾ ಫೋಟೋಗಳನ್ನು ತೆರೆಯಲಾಗಲಿಲ್ಲ. ನ್ಯಾಯದ ಅನುಮತಿಗಳನ್ನು ಪರಿಶೀಲಿಸಿ.",
+  "remindersToggle": "ದೈನಂದಿನ ಜ್ಞಾಪನೆ",
+  "remindersToggleSubtitle": "ಪ್ರತಿದಿನ ಅಭ್ಯಾಸ ಮಾಡಲು ಜ್ಞಾಪನೆ ಪಡೆಯಿರಿ",
+  "remindersTime": "ಜ್ಞಾಪನೆಯ ಸಮಯ",
+  "remindersPermissionDenied": "ನ್ಯಾಯಕ್ಕೆ ಅಧಿಸೂಚನೆಗಳು ಆಫ್ ಆಗಿವೆ. ಜ್ಞಾಪನೆಗಳನ್ನು ಪಡೆಯಲು ನಿಮ್ಮ ಫೋನ್ ಸೆಟ್ಟಿಂಗ್‌ಗಳಲ್ಲಿ ಅವುಗಳನ್ನು ಆನ್ ಮಾಡಿ.",
+  "reminderNotificationBody": "ನಿಮ್ಮ ದೈನಂದಿನ ಕಾನೂನು ಅಭ್ಯಾಸದ ಸಮಯ — ನಿಮ್ಮ ಸ್ಟ್ರೀಕ್ ಮುಂದುವರಿಸಿ."
 }

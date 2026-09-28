@@ -756,4 +756,21 @@ class AppLocalizationsHi extends AppLocalizations {
   @override
   String get editProfilePhotoFailed =>
       'कैमरा या फ़ोटो नहीं खुल सके। न्याय की अनुमतियाँ जाँचें।';
+
+  @override
+  String get remindersToggle => 'दैनिक अनुस्मारक';
+
+  @override
+  String get remindersToggleSubtitle => 'हर दिन अभ्यास का अनुस्मारक पाएं';
+
+  @override
+  String get remindersTime => 'अनुस्मारक का समय';
+
+  @override
+  String get remindersPermissionDenied =>
+      'न्याय के लिए सूचनाएं बंद हैं। अनुस्मारक पाने के लिए फ़ोन की सेटिंग्स में उन्हें चालू करें।';
+
+  @override
+  String get reminderNotificationBody =>
+      'आपके दैनिक कानूनी अभ्यास का समय — अपनी लगातार गिनती बनाए रखें।';
 }

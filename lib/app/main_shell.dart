@@ -32,7 +32,11 @@ import '../features/profile/presentation/profile_view_model.dart';
 import '../features/quiz_question/presentation/quiz_question_page.dart';
 import '../features/quiz_result/presentation/quiz_result_page.dart';
 import '../features/quiz_result/presentation/quiz_result_view_model.dart';
+import '../features/settings/data/reminder_scheduler.dart';
+import '../features/settings/data/reminder_settings.dart';
 import '../features/settings/presentation/language_page.dart';
+import '../features/settings/presentation/reminders_page.dart';
+import '../features/settings/presentation/reminders_view_model.dart';
 import '../features/shell/presentation/coming_soon_tab.dart';
 import '../features/shell/presentation/tab_shell_page.dart';
 import '../features/topic_detail/presentation/topic_detail_page.dart';
@@ -52,6 +56,7 @@ class MainShell extends StatefulWidget {
     this.apiClient,
     this.language,
     this.selectLanguage,
+    this.reminderScheduler,
   });
 
   /// Backend client for the tabs' data; tests pass a fake.
@@ -63,6 +68,9 @@ class MainShell extends StatefulWidget {
   /// Saves a picked language; defaults to [AppLanguage.select].
   final Future<void> Function(String languageCode)? selectLanguage;
 
+  /// Schedules daily reminders; tests pass a fake.
+  final ReminderScheduler? reminderScheduler;
+
   @override
   State<MainShell> createState() => _MainShellState();
 }
@@ -72,6 +80,8 @@ class _MainShellState extends State<MainShell> {
   late final ApiClient _apiClient = widget.apiClient ?? AppServices.apiClient;
   late final ValueListenable<Locale> _language =
       widget.language ?? AppLanguage.current;
+  late final ReminderScheduler _reminderScheduler =
+      widget.reminderScheduler ?? LocalNotificationsScheduler();
 
   // Tab view models live as long as the shell so each tab keeps its data.
   late final _categoriesViewModel = CategoriesViewModel(
@@ -193,9 +203,25 @@ class _MainShellState extends State<MainShell> {
         _openEditProfile(context);
       case ProfileEntry.language:
         _openLanguage(context);
+      case ProfileEntry.reminders:
+        _openReminders(context);
       default:
         showMessage(context, context.l10n.commonComingSoon);
     }
+  }
+
+  void _openReminders(BuildContext context) {
+    final viewModel = RemindersViewModel(
+      scheduler: _reminderScheduler,
+      store: ReminderSettingsStore(),
+    );
+    Navigator.of(context)
+        .push(
+          MaterialPageRoute<void>(
+            builder: (_) => RemindersPage(viewModel: viewModel),
+          ),
+        )
+        .whenComplete(viewModel.dispose);
   }
 
   void _openLanguage(BuildContext context) {

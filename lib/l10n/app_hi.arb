@@ -212,5 +212,10 @@
   "editProfileCamera": "फ़ोटो लें",
   "editProfileGallery": "गैलरी से चुनें",
   "editProfilePhotoUpdated": "फ़ोटो अपडेट हो गई",
-  "editProfilePhotoFailed": "कैमरा या फ़ोटो नहीं खुल सके। न्याय की अनुमतियाँ जाँचें।"
+  "editProfilePhotoFailed": "कैमरा या फ़ोटो नहीं खुल सके। न्याय की अनुमतियाँ जाँचें।",
+  "remindersToggle": "दैनिक अनुस्मारक",
+  "remindersToggleSubtitle": "हर दिन अभ्यास का अनुस्मारक पाएं",
+  "remindersTime": "अनुस्मारक का समय",
+  "remindersPermissionDenied": "न्याय के लिए सूचनाएं बंद हैं। अनुस्मारक पाने के लिए फ़ोन की सेटिंग्स में उन्हें चालू करें।",
+  "reminderNotificationBody": "आपके दैनिक कानूनी अभ्यास का समय — अपनी लगातार गिनती बनाए रखें।"
 }

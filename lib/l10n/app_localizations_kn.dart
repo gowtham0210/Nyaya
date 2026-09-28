@@ -760,4 +760,21 @@ class AppLocalizationsKn extends AppLocalizations {
   @override
   String get editProfilePhotoFailed =>
       'ಕ್ಯಾಮೆರಾ ಅಥವಾ ಫೋಟೋಗಳನ್ನು ತೆರೆಯಲಾಗಲಿಲ್ಲ. ನ್ಯಾಯದ ಅನುಮತಿಗಳನ್ನು ಪರಿಶೀಲಿಸಿ.';
+
+  @override
+  String get remindersToggle => 'ದೈನಂದಿನ ಜ್ಞಾಪನೆ';
+
+  @override
+  String get remindersToggleSubtitle => 'ಪ್ರತಿದಿನ ಅಭ್ಯಾಸ ಮಾಡಲು ಜ್ಞಾಪನೆ ಪಡೆಯಿರಿ';
+
+  @override
+  String get remindersTime => 'ಜ್ಞಾಪನೆಯ ಸಮಯ';
+
+  @override
+  String get remindersPermissionDenied =>
+      'ನ್ಯಾಯಕ್ಕೆ ಅಧಿಸೂಚನೆಗಳು ಆಫ್ ಆಗಿವೆ. ಜ್ಞಾಪನೆಗಳನ್ನು ಪಡೆಯಲು ನಿಮ್ಮ ಫೋನ್ ಸೆಟ್ಟಿಂಗ್‌ಗಳಲ್ಲಿ ಅವುಗಳನ್ನು ಆನ್ ಮಾಡಿ.';
+
+  @override
+  String get reminderNotificationBody =>
+      'ನಿಮ್ಮ ದೈನಂದಿನ ಕಾನೂನು ಅಭ್ಯಾಸದ ಸಮಯ — ನಿಮ್ಮ ಸ್ಟ್ರೀಕ್ ಮುಂದುವರಿಸಿ.';
 }

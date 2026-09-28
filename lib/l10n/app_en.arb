@@ -372,5 +372,10 @@
   "editProfileCamera": "Take a photo",
   "editProfileGallery": "Choose from gallery",
   "editProfilePhotoUpdated": "Photo updated",
-  "editProfilePhotoFailed": "Couldn't open the camera or photos. Check Nyaya's permissions."
+  "editProfilePhotoFailed": "Couldn't open the camera or photos. Check Nyaya's permissions.",
+  "remindersToggle": "Daily reminder",
+  "remindersToggleSubtitle": "Get a nudge to practise each day",
+  "remindersTime": "Reminder time",
+  "remindersPermissionDenied": "Notifications are off for Nyaya. Turn them on in your phone's settings to get reminders.",
+  "reminderNotificationBody": "Time for your daily legal practice — keep your streak going."
 }

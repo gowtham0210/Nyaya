@@ -1390,6 +1390,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Couldn\'t open the camera or photos. Check Nyaya\'s permissions.'**
   String get editProfilePhotoFailed;
+
+  /// No description provided for @remindersToggle.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily reminder'**
+  String get remindersToggle;
+
+  /// No description provided for @remindersToggleSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Get a nudge to practise each day'**
+  String get remindersToggleSubtitle;
+
+  /// No description provided for @remindersTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Reminder time'**
+  String get remindersTime;
+
+  /// No description provided for @remindersPermissionDenied.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications are off for Nyaya. Turn them on in your phone\'s settings to get reminders.'**
+  String get remindersPermissionDenied;
+
+  /// No description provided for @reminderNotificationBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Time for your daily legal practice — keep your streak going.'**
+  String get reminderNotificationBody;
 }
 
 class _AppLocalizationsDelegate

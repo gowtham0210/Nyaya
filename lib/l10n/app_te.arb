@@ -212,5 +212,10 @@
   "editProfileCamera": "ఫోటో తీయండి",
   "editProfileGallery": "గ్యాలరీ నుండి ఎంచుకోండి",
   "editProfilePhotoUpdated": "ఫోటో నవీకరించబడింది",
-  "editProfilePhotoFailed": "కెమెరా లేదా ఫోటోలు తెరవలేకపోయాం. న్యాయ అనుమతులను తనిఖీ చేయండి."
+  "editProfilePhotoFailed": "కెమెరా లేదా ఫోటోలు తెరవలేకపోయాం. న్యాయ అనుమతులను తనిఖీ చేయండి.",
+  "remindersToggle": "రోజువారీ రిమైండర్",
+  "remindersToggleSubtitle": "ప్రతిరోజూ సాధన చేయడానికి రిమైండర్ పొందండి",
+  "remindersTime": "రిమైండర్ సమయం",
+  "remindersPermissionDenied": "న్యాయ కోసం నోటిఫికేషన్‌లు ఆఫ్‌లో ఉన్నాయి. రిమైండర్‌లు పొందడానికి మీ ఫోన్ సెట్టింగ్‌లలో వాటిని ఆన్ చేయండి.",
+  "reminderNotificationBody": "మీ రోజువారీ న్యాయ సాధనకు సమయం — మీ స్ట్రీక్‌ను కొనసాగించండి."
 }
