@@ -398,5 +398,7 @@
   "aboutFeatureDaily": "Daily legal questions with clear answers",
   "aboutFeatureUpdates": "Latest legal updates and judgements",
   "aboutFeatureQuizzes": "Quizzes that test what you've learned",
-  "aboutFeatureLanguages": "Available in English, Hindi, Tamil, Telugu and Kannada"
+  "aboutFeatureLanguages": "Available in English, Hindi, Tamil, Telugu and Kannada",
+  "remindersFailed": "Couldn't set the reminder. Please try again.",
+  "reminderChannelName": "Daily practice reminder"
 }

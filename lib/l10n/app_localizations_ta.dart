@@ -831,4 +831,11 @@ class AppLocalizationsTa extends AppLocalizations {
   @override
   String get aboutFeatureLanguages =>
       'ஆங்கிலம், இந்தி, தமிழ், தெலுங்கு மற்றும் கன்னடத்தில் கிடைக்கும்';
+
+  @override
+  String get remindersFailed =>
+      'நினைவூட்டலை அமைக்க முடியவில்லை. மீண்டும் முயற்சிக்கவும்.';
+
+  @override
+  String get reminderChannelName => 'தினசரி பயிற்சி நினைவூட்டல்';
 }

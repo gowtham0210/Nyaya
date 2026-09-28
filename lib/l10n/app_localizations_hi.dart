@@ -822,4 +822,11 @@ class AppLocalizationsHi extends AppLocalizations {
   @override
   String get aboutFeatureLanguages =>
       'अंग्रेज़ी, हिंदी, तमिल, तेलुगु और कन्नड़ में उपलब्ध';
+
+  @override
+  String get remindersFailed =>
+      'अनुस्मारक सेट नहीं हो सका। कृपया फिर से प्रयास करें।';
+
+  @override
+  String get reminderChannelName => 'दैनिक अभ्यास अनुस्मारक';
 }

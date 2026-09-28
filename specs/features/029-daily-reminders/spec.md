@@ -40,7 +40,13 @@ Nothing brings learners back each day.
   explanation shows.
 - FR-004: Turning off shall cancel the reminder and save.
 - FR-005: Picking a new time shall save it and reschedule if on.
-- FR-006: The reminder text shall be in the app language.
+- FR-006: The reminder text and Android channel name shall be in the app
+  language.
+- FR-007: If scheduling fails, the choice stays as it was and a localized
+  message shows; one change runs at a time, and nothing changes before the
+  saved settings load.
+- FR-008: If the time zone name can't be read, a zone with the device's
+  current offset is used.
 
 ## Acceptance Criteria
 

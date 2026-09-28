@@ -15,6 +15,7 @@ abstract class ReminderScheduler {
     required int minute,
     required String title,
     required String body,
+    required String channelName,
   });
 
   Future<void> cancel();
@@ -33,8 +34,13 @@ class LocalNotificationsScheduler implements ReminderScheduler {
       final zone = await FlutterTimezone.getLocalTimezone();
       tz.setLocalLocation(tz.getLocation(zone.identifier));
     } catch (error) {
-      // Falls back to UTC; the reminder still fires daily.
+      // Without the zone name, use any zone with the device's current
+      // offset, so reminders still fire at the right local time today.
       debugPrint('Reminder time zone lookup failed: $error');
+      final zone = _zoneWithOffset(DateTime.now().timeZoneOffset);
+      if (zone != null) {
+        tz.setLocalLocation(zone);
+      }
     }
     await _plugin.initialize(
       settings: const InitializationSettings(
@@ -71,6 +77,7 @@ class LocalNotificationsScheduler implements ReminderScheduler {
     required int minute,
     required String title,
     required String body,
+    required String channelName,
   }) async {
     await _init();
     final now = tz.TZDateTime.now(tz.local);
@@ -90,11 +97,8 @@ class LocalNotificationsScheduler implements ReminderScheduler {
       title: title,
       body: body,
       scheduledDate: next,
-      notificationDetails: const NotificationDetails(
-        android: AndroidNotificationDetails(
-          'daily_reminder',
-          'Daily practice reminder',
-        ),
+      notificationDetails: NotificationDetails(
+        android: AndroidNotificationDetails('daily_reminder', channelName),
         iOS: DarwinNotificationDetails(),
       ),
       androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
@@ -107,4 +111,14 @@ class LocalNotificationsScheduler implements ReminderScheduler {
     await _init();
     await _plugin.cancel(id: _reminderId);
   }
+}
+
+tz.Location? _zoneWithOffset(Duration offset) {
+  final now = DateTime.now().millisecondsSinceEpoch;
+  for (final location in tz.timeZoneDatabase.locations.values) {
+    if (location.timeZone(now).offset == offset) {
+      return location;
+    }
+  }
+  return null;
 }

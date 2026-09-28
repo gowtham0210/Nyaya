@@ -821,4 +821,10 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get aboutFeatureLanguages =>
       'Available in English, Hindi, Tamil, Telugu and Kannada';
+
+  @override
+  String get remindersFailed => 'Couldn\'t set the reminder. Please try again.';
+
+  @override
+  String get reminderChannelName => 'Daily practice reminder';
 }

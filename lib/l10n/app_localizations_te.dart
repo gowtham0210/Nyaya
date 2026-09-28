@@ -829,4 +829,11 @@ class AppLocalizationsTe extends AppLocalizations {
   @override
   String get aboutFeatureLanguages =>
       'ఇంగ్లీష్, హిందీ, తమిళం, తెలుగు మరియు కన్నడలో అందుబాటులో ఉంది';
+
+  @override
+  String get remindersFailed =>
+      'రిమైండర్ సెట్ చేయలేకపోయాం. దయచేసి మళ్లీ ప్రయత్నించండి.';
+
+  @override
+  String get reminderChannelName => 'రోజువారీ సాధన రిమైండర్';
 }

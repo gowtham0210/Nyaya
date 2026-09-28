@@ -1504,6 +1504,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Available in English, Hindi, Tamil, Telugu and Kannada'**
   String get aboutFeatureLanguages;
+
+  /// No description provided for @remindersFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t set the reminder. Please try again.'**
+  String get remindersFailed;
+
+  /// No description provided for @reminderChannelName.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily practice reminder'**
+  String get reminderChannelName;
 }
 
 class _AppLocalizationsDelegate

@@ -42,7 +42,9 @@ void main() {
 
     expect(
       tester
-          .widget<SwitchListTile>(find.byKey(const ValueKey('reminders.toggle')))
+          .widget<SwitchListTile>(
+            find.byKey(const ValueKey('reminders.toggle')),
+          )
           .value,
       isTrue,
     );
@@ -104,5 +106,32 @@ void main() {
     await pumpPage(tester, locale: const Locale('hi'));
 
     expect(find.text('दैनिक अनुस्मारक'), findsOneWidget);
+  });
+
+  testWidgets('a scheduling failure is explained', (tester) async {
+    await pumpPage(tester);
+    scheduler.failure = Exception('plugin');
+
+    await tester.tap(find.byKey(const ValueKey('reminders.toggle')));
+    await tester.pumpAndSettle();
+
+    expect(
+      find.text("Couldn't set the reminder. Please try again."),
+      findsOneWidget,
+    );
+  });
+
+  testWidgets('the switch is labelled and fits large text', (tester) async {
+    tester.platformDispatcher.textScaleFactorTestValue = 1.6;
+    addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
+    await pumpPage(tester);
+    tester.view.physicalSize = const Size(320, 640);
+    await tester.pumpAndSettle();
+
+    expect(tester.takeException(), isNull);
+    expect(
+      tester.getSemantics(find.byKey(const ValueKey('reminders.toggle'))),
+      isSemantics(hasToggledState: true, isToggled: false, hasTapAction: true),
+    );
   });
 }

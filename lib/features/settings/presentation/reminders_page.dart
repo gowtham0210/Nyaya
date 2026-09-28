@@ -28,7 +28,11 @@ class _RemindersPageState extends State<RemindersPage> {
 
   ReminderText _text() {
     final l10n = context.l10n;
-    return (title: l10n.appTitle, body: l10n.reminderNotificationBody);
+    return (
+      title: l10n.appTitle,
+      body: l10n.reminderNotificationBody,
+      channelName: l10n.reminderChannelName,
+    );
   }
 
   Future<void> _pickTime() async {
@@ -82,8 +86,9 @@ class _RemindersPageState extends State<RemindersPage> {
                       activeThumbColor: _gold,
                       title: Text(l10n.remindersToggle),
                       subtitle: Text(l10n.remindersToggleSubtitle),
-                      onChanged: (enabled) =>
-                          viewModel.setEnabled(enabled, _text()),
+                      onChanged: viewModel.ready && !viewModel.busy
+                          ? (enabled) => viewModel.setEnabled(enabled, _text())
+                          : null,
                     ),
                     const Divider(height: 1, color: _cardBorder),
                     ListTile(
@@ -98,11 +103,21 @@ class _RemindersPageState extends State<RemindersPage> {
                           color: _navy,
                         ),
                       ),
-                      onTap: _pickTime,
+                      onTap: viewModel.ready && !viewModel.busy
+                          ? _pickTime
+                          : null,
                     ),
                   ],
                 ),
               ),
+              if (viewModel.failed) ...[
+                const SizedBox(height: 16),
+                Text(
+                  l10n.remindersFailed,
+                  key: const ValueKey('reminders.failed'),
+                  style: const TextStyle(color: _danger, height: 1.4),
+                ),
+              ],
               if (viewModel.permissionDenied) ...[
                 const SizedBox(height: 16),
                 Text(

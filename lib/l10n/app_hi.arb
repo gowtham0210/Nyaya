@@ -231,5 +231,7 @@
   "aboutFeatureDaily": "स्पष्ट उत्तरों के साथ दैनिक कानूनी प्रश्न",
   "aboutFeatureUpdates": "नवीनतम कानूनी अपडेट और न्यायादेश",
   "aboutFeatureQuizzes": "आपने जो सीखा उसे परखने वाले क्विज़",
-  "aboutFeatureLanguages": "अंग्रेज़ी, हिंदी, तमिल, तेलुगु और कन्नड़ में उपलब्ध"
+  "aboutFeatureLanguages": "अंग्रेज़ी, हिंदी, तमिल, तेलुगु और कन्नड़ में उपलब्ध",
+  "remindersFailed": "अनुस्मारक सेट नहीं हो सका। कृपया फिर से प्रयास करें।",
+  "reminderChannelName": "दैनिक अभ्यास अनुस्मारक"
 }

@@ -828,4 +828,11 @@ class AppLocalizationsKn extends AppLocalizations {
   @override
   String get aboutFeatureLanguages =>
       'ಇಂಗ್ಲಿಷ್, ಹಿಂದಿ, ತಮಿಳು, ತೆಲುಗು ಮತ್ತು ಕನ್ನಡದಲ್ಲಿ ಲಭ್ಯ';
+
+  @override
+  String get remindersFailed =>
+      'ಜ್ಞಾಪನೆಯನ್ನು ಹೊಂದಿಸಲಾಗಲಿಲ್ಲ. ದಯವಿಟ್ಟು ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.';
+
+  @override
+  String get reminderChannelName => 'ದೈನಂದಿನ ಅಭ್ಯಾಸ ಜ್ಞಾಪನೆ';
 }

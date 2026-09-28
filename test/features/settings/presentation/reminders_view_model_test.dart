@@ -5,7 +5,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../support/fake_reminder_scheduler.dart';
 
-const text = (title: 'Nyaya', body: 'Practise today');
+const text = (
+  title: 'Nyaya',
+  body: 'Practise today',
+  channelName: 'Daily practice reminder',
+);
 
 void main() {
   late FakeReminderScheduler scheduler;
@@ -87,5 +91,39 @@ void main() {
 
     expect(scheduler.scheduled, isNull);
     expect(viewModel.settings.hour, 7);
+  });
+
+  test('a scheduling failure keeps the old choice and flags it', () async {
+    final viewModel = await loaded();
+    scheduler.failure = Exception('plugin');
+
+    await viewModel.setEnabled(true, text);
+
+    expect(viewModel.settings.enabled, isFalse);
+    expect(viewModel.failed, isTrue);
+    expect(viewModel.busy, isFalse);
+  });
+
+  test('it is not ready until settings load', () async {
+    final viewModel = RemindersViewModel(
+      scheduler: scheduler,
+      store: ReminderSettingsStore(),
+    );
+    expect(viewModel.ready, isFalse);
+
+    await viewModel.load();
+
+    expect(viewModel.ready, isTrue);
+  });
+
+  test('closing mid-request does not throw', () async {
+    final viewModel = RemindersViewModel(
+      scheduler: scheduler,
+      store: ReminderSettingsStore(),
+    );
+    final loading = viewModel.load();
+    viewModel.dispose();
+
+    await loading;
   });
 }
