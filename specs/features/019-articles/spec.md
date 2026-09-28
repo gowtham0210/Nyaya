@@ -24,7 +24,7 @@ through quizzes.
 
 - Search in the tab (issue #40).
 - Legal Updates tab inside Articles (Legal Updates live on Home, spec 020).
-- Reloading when the language changes (issue #35).
+- Reloading when the language changes (done in spec 028, issue #35).
 
 ## Assumptions
 

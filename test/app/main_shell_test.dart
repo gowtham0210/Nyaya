@@ -283,7 +283,7 @@ void main() {
     SharedPreferences.setMockInitialValues({});
     final language = ValueNotifier(const Locale('en'));
     addTearDown(language.dispose);
-    final categoryLangs = <String?>[];
+    final langsByPath = <String, List<String?>>{};
     final routes = <String, Object>{
       '/categories': {'items': []},
       ...profileRoutes(),
@@ -305,9 +305,9 @@ void main() {
               languageCode: () => language.value.languageCode,
               httpClient: MockClient((request) async {
                 final path = request.url.path.replaceFirst('/api/v1', '');
-                if (path == '/categories') {
-                  categoryLangs.add(request.url.queryParameters['lang']);
-                }
+                langsByPath
+                    .putIfAbsent(path, () => [])
+                    .add(request.url.queryParameters['lang']);
                 final route = routes[path];
                 return route == null
                     ? http.Response('{}', 404)
@@ -319,7 +319,7 @@ void main() {
       ),
     );
     await tester.pumpAndSettle();
-    expect(categoryLangs, [null]);
+    expect(langsByPath['/categories'], [null]);
 
     await tester.tap(find.byKey(const ValueKey('nav.profile')));
     await tester.pumpAndSettle();
@@ -337,13 +337,25 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(entry);
     await tester.pumpAndSettle();
+    // A quick second tap must not close anything else.
     await tester.tap(find.text('हिन्दी'));
+    await tester.tap(find.text('தமிழ்'), warnIfMissed: false);
     await tester.pumpAndSettle();
 
-    // Back on Profile, now in Hindi, with content reloaded in Hindi.
+    // Back on Profile, now in Hindi, with loaded content reloaded in Hindi.
     expect(find.byType(LanguagePage), findsNothing);
     expect(find.text('मेरे आंकड़े'), findsOneWidget);
-    expect(categoryLangs, [null, 'hi']);
+    // The shell builds every tab up front, so all four had loaded.
+    for (final path in [
+      '/categories',
+      '/daily-questions/random',
+      '/legal-updates',
+      '/articles',
+    ]) {
+      expect(langsByPath[path], [null, 'hi'], reason: path);
+    }
+    // Profile has no translated text, so it isn't refetched.
+    expect(langsByPath['/users/me'], [null]);
   });
 
   testWidgets('AC-006 unbuilt tabs show the coming-soon state', (tester) async {

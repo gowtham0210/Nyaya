@@ -23,7 +23,7 @@ the app each day.
 ## Non-Goals
 
 - Scoring or saving answers.
-- Reloading when the language changes (issue #35).
+- Reloading when the language changes (done in spec 028, issue #35).
 - Pull-to-refresh.
 
 ## Actors

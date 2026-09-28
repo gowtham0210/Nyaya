@@ -100,6 +100,7 @@ class _MainShellState extends State<MainShell> {
   }
 
   /// Backend content comes in the app language, so reload what's shown.
+  /// Profile and progress have no translated text, so they stay.
   void _reloadContent() {
     for (final viewModel in <LoadStateNotifier<Object?>>[
       _categoriesViewModel,
@@ -201,14 +202,21 @@ class _MainShellState extends State<MainShell> {
     final select = widget.selectLanguage ?? AppLanguage.select;
     Navigator.of(context).push(
       MaterialPageRoute<void>(
-        builder: (pageContext) => LanguagePage(
-          current: _language.value,
-          onSelected: (code) async {
-            final navigator = Navigator.of(pageContext);
-            await select(code);
-            navigator.pop();
-          },
-        ),
+        builder: (pageContext) {
+          var picked = false;
+          return LanguagePage(
+            current: _language.value,
+            onSelected: (code) {
+              // Only the first tap counts; close first so nothing else pops.
+              if (picked) {
+                return;
+              }
+              picked = true;
+              Navigator.of(pageContext).pop();
+              select(code);
+            },
+          );
+        },
       ),
     );
   }

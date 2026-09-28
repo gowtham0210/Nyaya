@@ -49,7 +49,7 @@ class LanguagePage extends StatelessWidget {
                   if (index > 0) const Divider(height: 1, color: _cardBorder),
                   _LanguageTile(
                     code: locale.languageCode,
-                    name: nativeLanguageName(l10n, locale.languageCode),
+                    name: AppLanguage.nativeName(l10n, locale.languageCode),
                     selected: locale.languageCode == current.languageCode,
                     onTap: () => onSelected(locale.languageCode),
                   ),
@@ -105,12 +105,3 @@ class _LanguageTile extends StatelessWidget {
     );
   }
 }
-
-/// A language's name in its own script, e.g. `हिन्दी` for `hi`.
-String nativeLanguageName(AppLocalizations l10n, String code) => switch (code) {
-  'hi' => l10n.languageHindi,
-  'ta' => l10n.languageTamil,
-  'te' => l10n.languageTelugu,
-  'kn' => l10n.languageKannada,
-  _ => l10n.languageEnglish,
-};

@@ -36,6 +36,17 @@ class AppLanguage {
     await prefs.setString(_prefsKey, languageCode);
   }
 
+  /// A language's name in its own script, e.g. `हिन्दी` for `hi`.
+  static String nativeName(AppLocalizations l10n, String languageCode) =>
+      switch (languageCode) {
+        'en' => l10n.languageEnglish,
+        'hi' => l10n.languageHindi,
+        'ta' => l10n.languageTamil,
+        'te' => l10n.languageTelugu,
+        'kn' => l10n.languageKannada,
+        _ => languageCode,
+      };
+
   static Locale? _supported(String? languageCode) {
     for (final locale in supported) {
       if (locale.languageCode == languageCode) {

@@ -22,7 +22,7 @@ Learners can't see recent law changes in the app.
 - Update detail screen (cards aren't tappable yet).
 - Category filter chips (Nisha had them on the Articles tab).
 - Bookmarking updates.
-- Reloading when the language changes (issue #35).
+- Reloading when the language changes (done in spec 028, issue #35).
 
 ## Actors
 

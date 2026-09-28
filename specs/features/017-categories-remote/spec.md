@@ -21,7 +21,7 @@ topics the app may not have and miss ones it does.
 
 - Category → quiz list screen (tapping still reports the category).
 - Home's category strip (stays sample data until the Home tickets).
-- Reloading when the language changes (issue #35).
+- Reloading when the language changes (done in spec 028, issue #35).
 
 ## Actors
 

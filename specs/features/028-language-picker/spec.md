@@ -29,7 +29,8 @@ Learners can't change the app language after the first launch.
 - FR-001: The picker shall list English, हिन्दी, தமிழ், తెలుగు, ಕನ್ನಡ,
   marking the current one (check icon and selected state).
 - FR-002: Picking a language shall switch the app immediately and return
-  to Profile.
+  to Profile. Only the first tap counts, so a quick second tap closes
+  nothing else.
 - FR-003: The choice shall persist across launches.
 - FR-004: When the language changes, categories, daily questions, legal
   updates and articles that have loaded shall reload; ones not yet opened
@@ -39,8 +40,9 @@ Learners can't change the app language after the first launch.
 
 - AC-001: The picker lists the five names and marks the current one.
 - AC-002: Tapping a language reports its code.
-- AC-003: In the shell, picking Hindi shows Profile in Hindi and refetches
-  categories with `lang=hi`.
+- AC-003: In the shell, picking Hindi (even with a quick second tap) shows
+  Profile in Hindi and refetches categories, daily questions, legal updates
+  and articles with `lang=hi`, but not the profile.
 - AC-004: A view model reloads on a language change only if it had loaded.
 - AC-005: A saved language is restored on launch (existing
   `app_language_test.dart`).
