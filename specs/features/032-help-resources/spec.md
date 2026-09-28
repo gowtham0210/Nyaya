@@ -38,14 +38,15 @@ Learners who need real legal help can't find who to contact near them.
   each, and load matching contacts; loading, empty and error-with-Retry
   states shall show for both.
 - FR-002: Changing the state or category shall reload contacts; the latest
-  choice wins.
+  choice wins. Reloading the options keeps a still-listed choice.
 - FR-003: Each contact shall show its name, a "National helpline" chip when
   national, "Source verified <date>" or "Needs verification", numbers,
   hours, and source.
 - FR-004: "Call" dials the toll-free number, else the phone; email opens
   mail; website and source open the browser (web links only).
 - FR-005: A link that can't open shall show a localized message.
-- FR-006: An emergency note shall dial 112 on tap.
+- FR-006: An emergency note shall dial 112 on tap; it and each Call are
+  labelled buttons for screen readers.
 
 ## Acceptance Criteria
 

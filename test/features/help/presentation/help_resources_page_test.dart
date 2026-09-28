@@ -136,9 +136,53 @@ void main() {
     addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
     await pumpPage(tester, helpResourcesRoutes(), locale: const Locale('hi'));
     tester.view.physicalSize = const Size(320, 640);
+    tester.view.devicePixelRatio = 1;
     await tester.pumpAndSettle();
 
     expect(tester.takeException(), isNull);
     expect(find.text('आपातकाल में 112 डायल करें।'), findsOneWidget);
+  });
+
+  testWidgets('no matching contacts shows the empty state', (tester) async {
+    await pumpPage(tester, helpResourcesRoutes(resources: []));
+    await scrollTo(tester, find.byKey(const ValueKey('loadState.empty')));
+
+    expect(find.byKey(const ValueKey('loadState.empty')), findsOneWidget);
+  });
+
+  testWidgets('a failed contact list shows Retry, which reloads', (
+    tester,
+  ) async {
+    final routes = helpResourcesRoutes()
+      ..['/help-resources'] = http.Response('{}', 500);
+    await pumpPage(tester, routes);
+    final retry = find.byKey(const ValueKey('loadState.retry'));
+    await scrollTo(tester, retry);
+
+    routes.addAll(helpResourcesRoutes());
+    await tester.tap(retry);
+    await tester.pumpAndSettle();
+
+    await scrollTo(tester, find.text('Women Helpline'));
+    expect(find.text('Women Helpline'), findsOneWidget);
+  });
+
+  testWidgets('call and 112 are labelled buttons', (tester) async {
+    await pumpPage(tester, helpResourcesRoutes());
+
+    expect(
+      tester.getSemantics(find.byKey(const ValueKey('helpRes.emergency'))),
+      isSemantics(
+        isButton: true,
+        hasTapAction: true,
+        label: 'In an emergency, dial 112.',
+      ),
+    );
+    final call = find.byKey(const ValueKey('helpRes.1.call'));
+    await scrollTo(tester, call);
+    expect(
+      tester.getSemantics(call),
+      isSemantics(isButton: true, hasTapAction: true, label: 'Call 181'),
+    );
   });
 }

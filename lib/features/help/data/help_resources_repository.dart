@@ -1,4 +1,5 @@
 import '../../../core/network/api_client.dart';
+import '../../../core/network/json_text.dart';
 
 /// An Indian state or union territory.
 class IndianState {
@@ -6,6 +7,13 @@ class IndianState {
 
   final String code;
   final String name;
+
+  /// Same [code] is the same state, so a reloaded list keeps the selection.
+  @override
+  bool operator ==(Object other) => other is IndianState && other.code == code;
+
+  @override
+  int get hashCode => code.hashCode;
 }
 
 /// A kind of help, e.g. women's safety.
@@ -14,6 +22,12 @@ class HelpCategory {
 
   final String slug;
   final String name;
+
+  @override
+  bool operator ==(Object other) => other is HelpCategory && other.slug == slug;
+
+  @override
+  int get hashCode => slug.hashCode;
 }
 
 /// What the learner can filter by.
@@ -90,12 +104,12 @@ class HelpResourcesRepository {
   }
 
   Future<List<HelpResource>> fetchResources({
-    required String state,
-    required String category,
+    required IndianState state,
+    required HelpCategory category,
   }) async {
     final body = await _client.get(
       '/help-resources',
-      query: {'state': state, 'category': category},
+      query: {'state': state.code, 'category': category.slug},
     );
     return [for (final item in _items(body)) _toResource(item)];
   }
@@ -113,24 +127,19 @@ class HelpResourcesRepository {
       isNational: json['isNational'] as bool? ?? false,
       isVerified: json['verificationStatus'] == 'verified',
       sourceName: json['sourceName'] as String? ?? '',
-      tollFree: _text(json['tollFree']),
-      phone: _text(json['phoneNumber']),
-      email: _text(json['email']),
-      website: _https(json['websiteUrl']),
-      hours: _text(json['serviceHours']),
-      source: _https(json['sourceUrl']),
+      tollFree: jsonText(json['tollFree']),
+      phone: jsonText(json['phoneNumber']),
+      email: jsonText(json['email']),
+      website: _webLink(json['websiteUrl']),
+      hours: jsonText(json['serviceHours']),
+      source: _webLink(json['sourceUrl']),
       verifiedAt: verifiedAt?.toLocal(),
     );
   }
 
-  static String? _text(Object? value) {
-    final text = (value as String?)?.trim();
-    return text == null || text.isEmpty ? null : text;
-  }
-
-  /// Only web links open; anything else is dropped.
-  static Uri? _https(Object? value) {
-    final uri = Uri.tryParse(_text(value) ?? '');
+  /// Only http(s) links open; anything else is dropped.
+  static Uri? _webLink(Object? value) {
+    final uri = Uri.tryParse(jsonText(value) ?? '');
     return uri != null && (uri.scheme == 'https' || uri.scheme == 'http')
         ? uri
         : null;

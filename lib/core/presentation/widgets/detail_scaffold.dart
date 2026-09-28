@@ -4,6 +4,7 @@ const brandNavy = Color(0xFF11233B);
 const brandGold = Color(0xFFB9823A);
 const brandSupportText = Color(0xFF5E6878);
 const brandDanger = Color(0xFFD64545);
+const brandSuccess = Color(0xFF1FA35B);
 const _pageBackground = Color(0xFFF8F6F2);
 const _cardBorder = Color(0xFFECE5DB);
 

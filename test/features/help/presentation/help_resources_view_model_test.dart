@@ -95,4 +95,35 @@ void main() {
 
     expect(viewModel.resources, isA<Loaded<List<HelpResource>>>());
   });
+
+  test('a failed option load is the error state and load() recovers', () async {
+    final routes = helpResourcesRoutes()
+      ..['/help-resources/categories'] = http.Response('{}', 500);
+    final viewModel = HelpResourcesViewModel(
+      repository: HelpResourcesRepository(fakeBackend(routes)),
+    );
+
+    await viewModel.load();
+    expect(viewModel.state, isA<Failed<HelpOptions>>());
+
+    routes.addAll(helpResourcesRoutes());
+    await viewModel.load();
+    expect(viewModel.resources, isA<Loaded<List<HelpResource>>>());
+  });
+
+  test('reloading options keeps an equal selection', () async {
+    final viewModel = HelpResourcesViewModel(
+      repository: HelpResourcesRepository(fakeBackend(helpResourcesRoutes())),
+    );
+    await viewModel.load();
+    await viewModel.selectState(
+      const IndianState(code: 'KA', name: 'Karnataka'),
+    );
+
+    await viewModel.load();
+
+    final options = (viewModel.state as Loaded<HelpOptions>).data;
+    expect(options.states, contains(viewModel.selectedState));
+    expect(viewModel.selectedState?.code, 'KA');
+  });
 }

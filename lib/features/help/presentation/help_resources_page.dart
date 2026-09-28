@@ -5,10 +5,9 @@ import '../../../core/localization/l10n.dart';
 import '../../../core/presentation/show_message.dart';
 import '../../../core/presentation/widgets/load_state_view.dart';
 import '../../../core/presentation/widgets/detail_scaffold.dart';
+import '../data/contact_links.dart';
 import '../data/link_opener.dart';
 import 'help_resources_view_model.dart';
-
-const _verifiedGreen = Color(0xFF1FA35B);
 
 /// Legal help resources (spec 032): pick a state and a kind of help, then
 /// call, email or open each contact.
@@ -135,30 +134,36 @@ class _EmergencyNote extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
+    return Semantics(
       key: const ValueKey('helpRes.emergency'),
-      color: brandDanger.withValues(alpha: 0.08),
-      borderRadius: BorderRadius.circular(14),
-      child: InkWell(
+      button: true,
+      label: context.l10n.helpResEmergency,
+      child: Material(
+        color: brandDanger.withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(14),
-        onTap: onCall,
-        child: Padding(
-          padding: const EdgeInsets.all(12),
-          child: Row(
-            children: [
-              const Icon(Icons.emergency_outlined, color: brandDanger),
-              const SizedBox(width: 10),
-              Expanded(
-                child: Text(
-                  context.l10n.helpResEmergency,
-                  style: const TextStyle(
-                    color: brandDanger,
-                    fontWeight: FontWeight.w600,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(14),
+          onTap: onCall,
+          child: ExcludeSemantics(
+            child: Padding(
+              padding: const EdgeInsets.all(12),
+              child: Row(
+                children: [
+                  const Icon(Icons.emergency_outlined, color: brandDanger),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Text(
+                      context.l10n.helpResEmergency,
+                      style: const TextStyle(
+                        color: brandDanger,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
                   ),
-                ),
+                  const Icon(Icons.call_rounded, color: brandDanger),
+                ],
               ),
-              const Icon(Icons.call_rounded, color: brandDanger),
-            ],
+            ),
           ),
         ),
       ),
@@ -211,7 +216,7 @@ class _ResourceCard extends StatelessWidget {
                       l10n.helpResVerified(
                         DateFormat.yMMMd(locale).format(verifiedAt),
                       ),
-                      color: _verifiedGreen,
+                      color: brandSuccess,
                     )
                   else
                     _Chip(
@@ -220,7 +225,7 @@ class _ResourceCard extends StatelessWidget {
                     ),
                 ],
               ),
-              if (resource.tollFree != null || resource.phone != null) ...[
+              if (callNumber != null) ...[
                 const SizedBox(height: 10),
                 if (resource.tollFree case final tollFree?)
                   Text('${l10n.helpResTollFree}: $tollFree'),
@@ -256,7 +261,7 @@ class _ResourceCard extends StatelessWidget {
             leading: const Icon(Icons.mail_outline_rounded),
             title: Text(l10n.helpResEmail),
             subtitle: Text(email),
-            onTap: () => onOpen(Uri(scheme: 'mailto', path: email)),
+            onTap: () => onOpen(mailLink(email)),
           ),
         if (website != null)
           ListTile(

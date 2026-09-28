@@ -1,4 +1,5 @@
 import '../../../core/network/api_client.dart';
+import '../../../core/network/json_text.dart';
 import '../../../core/network/api_config.dart';
 import 'photo_picker.dart';
 
@@ -90,9 +91,9 @@ class ProfileRepository {
 
   static UserProfile _toProfile(Map<String, dynamic> json) => UserProfile(
     fullName: json['fullName'] as String,
-    phone: _text(json['phone']),
-    profession: _text(json['profession']),
-    avatarUrl: _absoluteUrl(_text(json['avatarUrl'])),
+    phone: jsonText(json['phone']),
+    profession: jsonText(json['profession']),
+    avatarUrl: _absoluteUrl(jsonText(json['avatarUrl'])),
   );
 
   /// The backend sends upload paths relative to its origin.
@@ -104,9 +105,4 @@ class ProfileRepository {
   }
 
   static int _int(Object? value) => (value as num?)?.toInt() ?? 0;
-
-  static String? _text(Object? value) {
-    final text = (value as String?)?.trim();
-    return text == null || text.isEmpty ? null : text;
-  }
 }

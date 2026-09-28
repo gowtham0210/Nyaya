@@ -7,6 +7,9 @@ import 'package:nyaya/features/help/data/help_resources_repository.dart';
 import '../../../support/fake_backend.dart';
 import '../../../support/help_resources_backend.dart';
 
+const tamilNadu = IndianState(code: 'TN', name: 'Tamil Nadu');
+const womenSafety = HelpCategory(slug: 'women-safety', name: "Women's safety");
+
 void main() {
   test('loads states and categories', () async {
     final repository = HelpResourcesRepository(
@@ -34,7 +37,7 @@ void main() {
       ),
     );
 
-    await repository.fetchResources(state: 'TN', category: 'women-safety');
+    await repository.fetchResources(state: tamilNadu, category: womenSafety);
 
     expect(asked.path, '/api/v1/help-resources');
     expect(asked.queryParameters, {'state': 'TN', 'category': 'women-safety'});
@@ -46,8 +49,8 @@ void main() {
     );
 
     final [national, state] = await repository.fetchResources(
-      state: 'TN',
-      category: 'women-safety',
+      state: tamilNadu,
+      category: womenSafety,
     );
 
     expect(national.name, 'Women Helpline');

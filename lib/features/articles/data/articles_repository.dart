@@ -1,4 +1,5 @@
 import '../../../core/network/api_client.dart';
+import '../../../core/network/json_text.dart';
 
 /// A Constitution article as the backend returns it.
 class Article {
@@ -60,17 +61,11 @@ class ArticlesRepository {
     title: json['title'] as String,
     articleRange: json['articleRange'] as String? ?? '',
     description: json['description'] as String? ?? '',
-    whatItMeans: _text(json['whatItMeans']),
-    whyItMatters: _text(json['whyItMatters']),
+    whatItMeans: jsonText(json['whatItMeans']),
+    whyItMatters: jsonText(json['whyItMatters']),
     keyFeatures: [
-      for (final feature in (_text(json['keyFeatures']) ?? '').split(';'))
+      for (final feature in (jsonText(json['keyFeatures']) ?? '').split(';'))
         if (feature.trim().isNotEmpty) feature.trim(),
     ],
   );
-
-  /// Trimmed text, or null when missing or blank.
-  static String? _text(Object? value) {
-    final text = (value as String?)?.trim();
-    return text == null || text.isEmpty ? null : text;
-  }
 }

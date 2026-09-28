@@ -40,8 +40,15 @@ class HelpResourcesViewModel extends LoadStateNotifier<HelpOptions> {
     if (options is! Loaded<HelpOptions>) {
       return;
     }
-    _selectedState ??= options.data.states.first;
-    _selectedCategory ??= options.data.categories.first;
+    // Keep a still-listed choice; otherwise take the first.
+    final states = options.data.states;
+    final categories = options.data.categories;
+    _selectedState = states.contains(_selectedState)
+        ? states.firstWhere((state) => state == _selectedState)
+        : states.first;
+    _selectedCategory = categories.contains(_selectedCategory)
+        ? categories.firstWhere((category) => category == _selectedCategory)
+        : categories.first;
     await _loadResources();
   }
 
@@ -59,17 +66,16 @@ class HelpResourcesViewModel extends LoadStateNotifier<HelpOptions> {
   Future<void> reloadResources() => _loadResources();
 
   Future<void> _loadResources() async {
-    final stateCode = _selectedState?.code;
-    final categorySlug = _selectedCategory?.slug;
-    if (stateCode == null || categorySlug == null) {
+    final pickedState = _selectedState;
+    final category = _selectedCategory;
+    if (pickedState == null || category == null) {
       return;
     }
     final loadId = ++_resourcesLoadId;
     _resources = const Loading();
     notifyIfActive();
     final result = await LoadState.run(
-      () =>
-          _repository.fetchResources(state: stateCode, category: categorySlug),
+      () => _repository.fetchResources(state: pickedState, category: category),
       isEmpty: (resources) => resources.isEmpty,
     );
     if (loadId == _resourcesLoadId) {
