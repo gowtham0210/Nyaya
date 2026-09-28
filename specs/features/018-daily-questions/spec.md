@@ -16,7 +16,8 @@ the app each day.
 
 - Home shows a few daily questions from the backend in the learner's
   language.
-- The learner reveals each answer inline, in one tap.
+- The learner reveals each answer inline, in one tap. "Answer" in issue #29
+  means reveal: the backend gives an answer text, not options.
 - The section loads on its own and never blocks the rest of Home.
 
 ## Non-Goals
@@ -40,6 +41,7 @@ the app each day.
 
 - FR-001: When Home opens, the app shall request 3 daily questions in the
   current language and show a loading indicator in the section meanwhile.
+  (`nisha-frontend` asked for 2; the issue asks for "a few".)
 - FR-002: When questions load, the section shall show each question with its
   number and category, and the question count.
 - FR-003: When the learner taps a question, the app shall show its answer
@@ -69,7 +71,8 @@ the app each day.
 
 ## Data and Integration Impact
 
-- Remote APIs: `GET /daily-questions/random`, with `count` and `lang`.
+- Remote APIs: `GET /daily-questions/random`, with `count`, plus `lang` for
+  non-English languages.
 
 ## Acceptance Criteria
 

@@ -6,11 +6,11 @@ import '../../../../core/presentation/widgets/load_state_view.dart';
 import '../../../../core/presentation/widgets/nyaya_widgets.dart';
 import '../daily_questions_view_model.dart';
 
-const _navy = Color(0xFF11233B);
+const _deepNavy = Color(0xFF11233B);
 const _supportText = Color(0xFF5E6878);
 const _cardBorder = Color(0xFFECE5DB);
 const _tileBackground = Color(0xFFF8F6F2);
-const _badgeColors = [_navy, Color(0xFFB9823A)];
+const _badgeColors = [_deepNavy, Color(0xFFB9823A)];
 
 /// Home's Daily Questions card (spec 018). Its own load states render
 /// inside the card, so the rest of Home never waits on it.
@@ -104,7 +104,7 @@ class _Header extends StatelessWidget {
                 style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w700,
-                  color: _navy,
+                  color: _deepNavy,
                 ),
               ),
               const SizedBox(height: 3),
@@ -133,7 +133,7 @@ class _Header extends StatelessWidget {
               style: const TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.w700,
-                color: _navy,
+                color: _deepNavy,
               ),
             ),
           ),
@@ -190,9 +190,6 @@ class _QuestionTile extends StatelessWidget {
                     number: number,
                     question: question,
                     badgeColor: badgeColor,
-                    toggleLabel: revealed
-                        ? l10n.homeDailyHideAnswer
-                        : l10n.homeDailyShowAnswer,
                     revealed: revealed,
                   ),
                 ),
@@ -235,18 +232,17 @@ class _QuestionHeader extends StatelessWidget {
     required this.number,
     required this.question,
     required this.badgeColor,
-    required this.toggleLabel,
     required this.revealed,
   });
 
   final int number;
   final DailyQuestion question;
   final Color badgeColor;
-  final String toggleLabel;
   final bool revealed;
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -274,7 +270,7 @@ class _QuestionHeader extends StatelessWidget {
                 style: const TextStyle(
                   fontSize: 15,
                   fontWeight: FontWeight.w700,
-                  color: _navy,
+                  color: _deepNavy,
                   height: 1.4,
                 ),
               ),
@@ -309,7 +305,9 @@ class _QuestionHeader extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        toggleLabel,
+                        revealed
+                            ? l10n.homeDailyHideAnswer
+                            : l10n.homeDailyShowAnswer,
                         style: const TextStyle(
                           fontSize: 13,
                           fontWeight: FontWeight.w600,

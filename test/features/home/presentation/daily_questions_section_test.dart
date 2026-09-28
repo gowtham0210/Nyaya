@@ -222,6 +222,7 @@ void main() {
       find.text('Something went wrong. Please try again.'),
       findsOneWidget,
     );
+    expect(find.byKey(const ValueKey('loadState.retry')), findsOneWidget);
   });
 
   testWidgets('AC-008 each question is a labelled button with expanded state', (
