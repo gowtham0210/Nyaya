@@ -91,4 +91,265 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get categoriesEmpty => 'No categories yet.';
+
+  @override
+  String get brandTagline => 'LAW BASED QUIZ APP';
+
+  @override
+  String get splashSemanticsLabel => 'Nyaya splash screen';
+
+  @override
+  String get splashTapToContinue => 'Tap to continue';
+
+  @override
+  String get splashLoadingLabel => 'Loading Nyaya';
+
+  @override
+  String splashLoadingValue(int percent) {
+    return '$percent percent';
+  }
+
+  @override
+  String get commonGetStarted => 'Get Started';
+
+  @override
+  String get commonSkip => 'Skip';
+
+  @override
+  String get commonNext => 'Next';
+
+  @override
+  String get commonSignIn => 'Sign in';
+
+  @override
+  String get commonLogin => 'Login';
+
+  @override
+  String get commonSignUp => 'Signup';
+
+  @override
+  String get commonHaveAccount => 'Already have an account? ';
+
+  @override
+  String get welcomeHeadlineLine1 => 'Law Made Easy,';
+
+  @override
+  String get welcomeHeadlineLine2 => 'Justice Made Accessible.';
+
+  @override
+  String get welcomeBody =>
+      'Explore laws, test your knowledge, and become your own legal expert.';
+
+  @override
+  String get welcomeLearnTitle => 'Learn Laws';
+
+  @override
+  String get welcomeLearnBody =>
+      'Explore and understand important laws in simple language.';
+
+  @override
+  String get welcomeRightsTitle => 'Know Your Rights';
+
+  @override
+  String get welcomeRightsBody =>
+      'Stay informed and empowered about your legal rights.';
+
+  @override
+  String get welcomeTrackTitle => 'Track & Stay Updated';
+
+  @override
+  String get welcomeTrackBody =>
+      'Track case status and get the latest legal updates with ease.';
+
+  @override
+  String get onboarding1Line1 => 'Test Your Knowledge.';
+
+  @override
+  String get onboarding1Line2 => 'Master Justice.';
+
+  @override
+  String get onboarding2Line1 => 'Learn. Understand.';
+
+  @override
+  String get onboarding2Line2 => 'Apply Law.';
+
+  @override
+  String get onboarding2Body =>
+      'Nyaya makes legal learning simple with case-based quizzes, real-life scenarios and expertly crafted content.';
+
+  @override
+  String get onboarding3Line1 => 'Track Progress.';
+
+  @override
+  String get onboarding3Line2 => 'Achieve Excellence.';
+
+  @override
+  String get onboarding3Body =>
+      'Track your performance, build streaks, earn badges and become the best version of your legal knowledge.';
+
+  @override
+  String get authJoinSubtitle =>
+      'Join NYAYA and start your legal learning journey';
+
+  @override
+  String get signInTitle => 'Welcome Back to NYAYA !';
+
+  @override
+  String get signInSubtitle =>
+      'Rejoin NYAYA and start your legal learning journey';
+
+  @override
+  String get signInNoAccount => 'Don\'t have an account? ';
+
+  @override
+  String get signInPhoneMissing => 'Enter your phone number.';
+
+  @override
+  String get signInPasswordMissing => 'Enter your password.';
+
+  @override
+  String get fieldPhoneLabel => 'Phone Number';
+
+  @override
+  String get fieldPhoneHint => 'Enter your phone number';
+
+  @override
+  String get fieldPasswordLabel => 'Password';
+
+  @override
+  String get fieldPasswordHintCreate => 'Create a strong password';
+
+  @override
+  String get fieldPasswordHint => 'Enter your password';
+
+  @override
+  String get showPassword => 'Show password';
+
+  @override
+  String get hidePassword => 'Hide password';
+
+  @override
+  String get fieldFullNameLabel => 'Full Name';
+
+  @override
+  String get fieldFullNameHint => 'Enter your full name';
+
+  @override
+  String get fieldProfessionLabel => 'Profession';
+
+  @override
+  String get fieldProfessionHint => 'Select your profession';
+
+  @override
+  String get professionLawStudent => 'Law Student';
+
+  @override
+  String get professionLawyer => 'Lawyer / Advocate';
+
+  @override
+  String get professionJudge => 'Judge / Judicial Officer';
+
+  @override
+  String get professionLegalProfessional => 'Legal Professional';
+
+  @override
+  String get professionCitizen => 'General Citizen';
+
+  @override
+  String get signUpTitle => 'Create Your Account';
+
+  @override
+  String get signUpSendOtp => 'Send OTP';
+
+  @override
+  String get validationNameRequired => 'Full name is required';
+
+  @override
+  String get validationNameTooShort => 'Name must be at least 3 characters';
+
+  @override
+  String get validationProfessionRequired => 'Profession is required';
+
+  @override
+  String get validationPasswordRequired => 'Password is required';
+
+  @override
+  String get validationPasswordWeak =>
+      'Use at least 8 characters with letters and numbers';
+
+  @override
+  String get validationPhoneRequired => 'Phone number is required';
+
+  @override
+  String get validationPhoneInvalid => 'Enter a valid phone number';
+
+  @override
+  String get otpTitle => 'Verify OTP';
+
+  @override
+  String get otpSentTo => 'We\'ve sent a 6-digit OTP to';
+
+  @override
+  String get otpChange => 'Change';
+
+  @override
+  String get otpEnter => 'Enter OTP';
+
+  @override
+  String get otpNotReceived => 'Didn\'t receive the OTP?';
+
+  @override
+  String get otpResend => 'Resend OTP';
+
+  @override
+  String get otpResending => 'Resending…';
+
+  @override
+  String otpResendIn(String time) {
+    return 'Resend OTP in $time';
+  }
+
+  @override
+  String get otpTapToResend => 'Tap to resend';
+
+  @override
+  String get otpVerifyContinue => 'Verify & Continue';
+
+  @override
+  String get otpIncomplete => 'Enter the full 6-digit code.';
+
+  @override
+  String get otpSentAgain => 'A new OTP has been sent.';
+
+  @override
+  String get authErrorInvalidPhone =>
+      'That phone number doesn\'t look right. Please check and try again.';
+
+  @override
+  String get authErrorTooManyRequests =>
+      'Too many attempts. Please wait a while before trying again.';
+
+  @override
+  String get authErrorQuotaExceeded =>
+      'SMS quota exceeded for now. Please try again later.';
+
+  @override
+  String get authErrorInvalidCode =>
+      'Incorrect OTP. Please check the code and try again.';
+
+  @override
+  String get authErrorCodeExpired =>
+      'This OTP has expired. Please request a new one.';
+
+  @override
+  String get authErrorUserDisabled =>
+      'This account has been disabled. Please contact support.';
+
+  @override
+  String get authErrorNotEnabled =>
+      'Phone sign-in isn\'t enabled for this app yet.';
+
+  @override
+  String get authErrorCredentialInUse =>
+      'This phone number is already linked to another account.';
 }

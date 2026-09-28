@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../../core/presentation/widgets/nyaya_widgets.dart';
+import '../../../../core/localization/l10n.dart';
 
 /// Compact horizontal brand lockup (icon beside wordmark, tagline centered
 /// below) used at the top of the login and sign-up screens. Distinct from
@@ -32,9 +33,9 @@ class AuthHeader extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 4),
-        const Text(
-          'LAW BASIC QUIZ APP',
-          style: TextStyle(
+        Text(
+          context.l10n.brandTagline,
+          style: const TextStyle(
             color: gold,
             fontSize: 11,
             fontWeight: FontWeight.bold,

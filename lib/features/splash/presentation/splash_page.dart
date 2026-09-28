@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../core/presentation/widgets/nyaya_widgets.dart';
+import '../../../core/localization/l10n.dart';
 
 class SplashPage extends StatelessWidget {
   const SplashPage({
@@ -15,6 +16,7 @@ class SplashPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final size = MediaQuery.sizeOf(context);
     final width = size.width;
     final height = size.height;
@@ -121,8 +123,10 @@ class SplashPage extends StatelessWidget {
                         children: [
                           Semantics(
                             container: true,
-                            label: 'Nyaya splash screen',
-                            hint: isReadyToContinue ? 'Tap to continue' : null,
+                            label: l10n.splashSemanticsLabel,
+                            hint: isReadyToContinue
+                                ? l10n.splashTapToContinue
+                                : null,
                             child: const ExcludeSemantics(
                               child: BrandLockup(
                                 key: ValueKey('splash.brand'),
@@ -148,8 +152,10 @@ class SplashPage extends StatelessWidget {
                           Semantics(
                             key: const ValueKey('splash.loading_semantics'),
                             container: true,
-                            label: 'Loading Nyaya',
-                            value: '${(progress * 100).round()} percent',
+                            label: l10n.splashLoadingLabel,
+                            value: l10n.splashLoadingValue(
+                              (progress * 100).round(),
+                            ),
                             child: ExcludeSemantics(
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(999),
@@ -183,7 +189,7 @@ class SplashPage extends StatelessWidget {
                   excluding: !isReadyToContinue,
                   child: Semantics(
                     button: true,
-                    label: 'Tap to continue',
+                    label: l10n.splashTapToContinue,
                     child: Material(
                       color: Colors.transparent,
                       child: InkWell(

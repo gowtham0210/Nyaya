@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
+import '../../localization/l10n.dart';
 
 const ivory = Color(0xFFFBF7F1);
 const waveBeige = Color(0xFFF1E5D7);
@@ -70,7 +71,7 @@ class BrandLockup extends StatelessWidget {
         ),
         SizedBox(height: 8),
         Text(
-          'LAW BASED QUIZ APP',
+          context.l10n.brandTagline,
           key: _key('tagline'),
           textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.labelLarge?.copyWith(

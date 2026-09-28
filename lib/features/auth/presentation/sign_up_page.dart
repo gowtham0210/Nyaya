@@ -5,12 +5,14 @@ import '../../../app/post_sign_up_flow.dart';
 import '../../../core/presentation/widgets/nyaya_widgets.dart';
 import '../data/auth_api_client.dart';
 import '../../../app/app_services.dart';
-import '../data/firebase_auth_error_mapper.dart';
 import '../data/firebase_phone_auth_service.dart';
 import 'otp_verification_page.dart';
 import 'widgets/auth_header.dart';
 import 'widgets/auth_primary_button.dart';
 import 'widgets/auth_text_field.dart';
+import '../../../core/localization/l10n.dart';
+import 'auth_error_text.dart';
+import 'profession.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key, this.onSignInRequested});
@@ -37,22 +39,21 @@ class _SignUpPageState extends State<SignUpPage> {
   var _hasAttemptedSubmit = false;
   var _isSendingOtp = false;
 
-  static const _professions = [
-    (label: 'Law Student', icon: Icons.school_outlined),
-    (label: 'Lawyer / Advocate', icon: Icons.balance_outlined),
-    (label: 'Judge / Judicial Officer', icon: Icons.gavel_rounded),
-    (label: 'Legal Professional', icon: Icons.work_outline_rounded),
-    (label: 'General Citizen', icon: Icons.person_outline_rounded),
-  ];
+  /// The picked profession. The field shows its localized label; the
+  /// backend gets its stable English [Profession.value].
+  Profession? _profession;
 
-  IconData get _selectedProfessionIcon {
-    final label = _professionController.text;
-    for (final profession in _professions) {
-      if (profession.label == label) {
-        return profession.icon;
-      }
+  IconData get _selectedProfessionIcon =>
+      _profession?.icon ?? Icons.work_outline_rounded;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Keep the field's label in the current language.
+    final profession = _profession;
+    if (profession != null) {
+      _professionController.text = profession.label(context.l10n);
     }
-    return Icons.work_outline_rounded;
   }
 
   @override
@@ -94,11 +95,11 @@ class _SignUpPageState extends State<SignUpPage> {
                       children: [
                         const AuthHeader(),
                         SizedBox(height: contentWidth * 0.08),
-                        const Text(
-                          'Create Your Account',
-                          key: ValueKey('signup.title'),
+                        Text(
+                          context.l10n.signUpTitle,
+                          key: const ValueKey('signup.title'),
                           textAlign: TextAlign.center,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 22,
                             fontWeight: FontWeight.w700,
                             color: navy,
@@ -107,10 +108,10 @@ class _SignUpPageState extends State<SignUpPage> {
                           ),
                         ),
                         const SizedBox(height: 6),
-                        const Text(
-                          'Join NYAYA and start your legal learning journey',
+                        Text(
+                          context.l10n.authJoinSubtitle,
                           textAlign: TextAlign.center,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 13,
                             color: bodyGrey,
                             height: 1.4,
@@ -154,8 +155,8 @@ class _SignUpPageState extends State<SignUpPage> {
           children: [
             AuthTextField(
               key: const ValueKey('signup.field.fullName'),
-              label: 'Full Name',
-              hint: 'Enter your full name',
+              label: context.l10n.fieldFullNameLabel,
+              hint: context.l10n.fieldFullNameHint,
               icon: Icons.person_outline_rounded,
               controller: _fullNameController,
               textCapitalization: TextCapitalization.words,
@@ -165,8 +166,8 @@ class _SignUpPageState extends State<SignUpPage> {
             const SizedBox(height: 16),
             AuthTextField(
               key: const ValueKey('signup.field.profession'),
-              label: 'Profession',
-              hint: 'Select your profession',
+              label: context.l10n.fieldProfessionLabel,
+              hint: context.l10n.fieldProfessionHint,
               icon: _selectedProfessionIcon,
               controller: _professionController,
               readOnly: true,
@@ -180,8 +181,8 @@ class _SignUpPageState extends State<SignUpPage> {
             const SizedBox(height: 16),
             AuthTextField(
               key: const ValueKey('signup.field.password'),
-              label: 'Password',
-              hint: 'Create a strong password',
+              label: context.l10n.fieldPasswordLabel,
+              hint: context.l10n.fieldPasswordHintCreate,
               icon: Icons.lock_outline_rounded,
               controller: _passwordController,
               obscureText: _obscurePassword,
@@ -192,8 +193,8 @@ class _SignUpPageState extends State<SignUpPage> {
                 onPressed: () =>
                     setState(() => _obscurePassword = !_obscurePassword),
                 tooltip: _obscurePassword
-                    ? 'Show password'
-                    : 'Hide password',
+                    ? context.l10n.showPassword
+                    : context.l10n.hidePassword,
                 icon: Icon(
                   _obscurePassword
                       ? Icons.visibility_off_outlined
@@ -205,8 +206,8 @@ class _SignUpPageState extends State<SignUpPage> {
             const SizedBox(height: 16),
             AuthTextField(
               key: const ValueKey('signup.field.phone'),
-              label: 'Phone Number',
-              hint: 'Enter your phone number',
+              label: context.l10n.fieldPhoneLabel,
+              hint: context.l10n.fieldPhoneHint,
               icon: Icons.call_outlined,
               controller: _phoneController,
               keyboardType: TextInputType.phone,
@@ -218,7 +219,7 @@ class _SignUpPageState extends State<SignUpPage> {
             const SizedBox(height: 20),
             AuthPrimaryButton(
               key: const ValueKey('signup.button.sendOtp'),
-              label: 'Send OTP',
+              label: context.l10n.signUpSendOtp,
               backgroundColor: gold,
               isLoading: _isSendingOtp,
               onPressed: _submitForm,
@@ -231,8 +232,8 @@ class _SignUpPageState extends State<SignUpPage> {
 
   Future<void> _pickProfession(BuildContext context) async {
     FocusScope.of(context).unfocus();
-    final currentSelection = _professionController.text;
-    final selected = await showModalBottomSheet<String>(
+    final l10n = context.l10n;
+    final selected = await showModalBottomSheet<Profession>(
       context: context,
       backgroundColor: Colors.white,
       shape: const RoundedRectangleBorder(
@@ -253,12 +254,12 @@ class _SignUpPageState extends State<SignUpPage> {
                   borderRadius: BorderRadius.circular(999),
                 ),
               ),
-              for (final profession in _professions) ...[
+              for (final profession in Profession.values) ...[
                 _ProfessionOptionTile(
-                  label: profession.label,
+                  label: profession.label(l10n),
                   icon: profession.icon,
-                  isSelected: profession.label == currentSelection,
-                  onTap: () => Navigator.of(sheetContext).pop(profession.label),
+                  isSelected: profession == _profession,
+                  onTap: () => Navigator.of(sheetContext).pop(profession),
                 ),
                 const SizedBox(height: 10),
               ],
@@ -268,24 +269,27 @@ class _SignUpPageState extends State<SignUpPage> {
       ),
     );
     if (selected != null && mounted) {
-      setState(() => _professionController.text = selected);
+      setState(() {
+        _profession = selected;
+        _professionController.text = selected.label(l10n);
+      });
     }
   }
 
   String? _validateFullName(String? value) {
     final trimmed = value?.trim() ?? '';
     if (trimmed.isEmpty) {
-      return 'Full name is required';
+      return context.l10n.validationNameRequired;
     }
     if (trimmed.length < 3) {
-      return 'Name must be at least 3 characters';
+      return context.l10n.validationNameTooShort;
     }
     return null;
   }
 
   String? _validateProfession(String? value) {
-    if ((value ?? '').trim().isEmpty) {
-      return 'Profession is required';
+    if (_profession == null) {
+      return context.l10n.validationProfessionRequired;
     }
     return null;
   }
@@ -295,10 +299,10 @@ class _SignUpPageState extends State<SignUpPage> {
     final hasLetter = RegExp(r'[A-Za-z]').hasMatch(text);
     final hasNumber = RegExp(r'\d').hasMatch(text);
     if (text.isEmpty) {
-      return 'Password is required';
+      return context.l10n.validationPasswordRequired;
     }
     if (text.length < 8 || !hasLetter || !hasNumber) {
-      return 'Use at least 8 characters with letters and numbers';
+      return context.l10n.validationPasswordWeak;
     }
     return null;
   }
@@ -306,10 +310,10 @@ class _SignUpPageState extends State<SignUpPage> {
   String? _validatePhone(String? value) {
     final digits = (value ?? '').replaceAll(RegExp(r'\D'), '');
     if (digits.isEmpty) {
-      return 'Phone number is required';
+      return context.l10n.validationPhoneRequired;
     }
     if (digits.length < 10 || digits.length > 15) {
-      return 'Enter a valid phone number';
+      return context.l10n.validationPhoneInvalid;
     }
     return null;
   }
@@ -326,7 +330,7 @@ class _SignUpPageState extends State<SignUpPage> {
     final digits = _phoneController.text.replaceAll(RegExp(r'\D'), '');
     final phoneNumber = '+91$digits';
     final fullName = _fullNameController.text.trim();
-    final profession = _professionController.text;
+    final profession = _profession!.value;
     // Trimmed so a stray keyboard-inserted space doesn't silently make this
     // password different from what Login sends later (see sign_in_page.dart).
     final password = _passwordController.text.trim();
@@ -356,7 +360,7 @@ class _SignUpPageState extends State<SignUpPage> {
         onVerificationFailed: (error) {
           if (!mounted) return;
           setState(() => _isSendingOtp = false);
-          _showMessage(mapFirebaseAuthError(error));
+          _showMessage(firebaseAuthErrorText(context.l10n, error));
         },
         onAutoVerified: (credential) async {
           // Android could silently confirm the device without ever showing
@@ -374,11 +378,11 @@ class _SignUpPageState extends State<SignUpPage> {
     } on FirebaseAuthException catch (error) {
       if (!mounted) return;
       setState(() => _isSendingOtp = false);
-      _showMessage(mapFirebaseAuthError(error));
+      _showMessage(firebaseAuthErrorText(context.l10n, error));
     } catch (_) {
       if (!mounted) return;
       setState(() => _isSendingOtp = false);
-      _showMessage('Network error. Please check your connection and try again.');
+      _showMessage(context.l10n.errorOffline);
     }
   }
 
@@ -403,11 +407,11 @@ class _SignUpPageState extends State<SignUpPage> {
     } on AuthApiException catch (error) {
       if (!mounted) return;
       setState(() => _isSendingOtp = false);
-      _showMessage(error.message);
+      _showMessage(authApiErrorText(context.l10n, error));
     } catch (_) {
       if (!mounted) return;
       setState(() => _isSendingOtp = false);
-      _showMessage('Network error. Please check your connection and try again.');
+      _showMessage(context.l10n.errorOffline);
     }
   }
 
@@ -484,8 +488,7 @@ class _ProfessionOptionTile extends StatelessWidget {
                   ),
                 ),
               ),
-              if (isSelected)
-                Icon(Icons.check_circle, size: 18, color: gold),
+              if (isSelected) Icon(Icons.check_circle, size: 18, color: gold),
             ],
           ),
         ),
@@ -508,13 +511,16 @@ class _LoginLink extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 4),
         child: RichText(
           textAlign: TextAlign.center,
-          text: const TextSpan(
-            style: TextStyle(fontSize: 14, color: bodyGrey),
+          text: TextSpan(
+            style: const TextStyle(fontSize: 14, color: bodyGrey),
             children: [
-              TextSpan(text: 'Already have an account? '),
+              TextSpan(text: context.l10n.commonHaveAccount),
               TextSpan(
-                text: 'Login',
-                style: TextStyle(color: gold, fontWeight: FontWeight.w600),
+                text: context.l10n.commonLogin,
+                style: const TextStyle(
+                  color: gold,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ],
           ),

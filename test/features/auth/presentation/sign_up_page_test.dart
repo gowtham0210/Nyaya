@@ -116,15 +116,14 @@ void main() {
     }
 
     await fill('signup.field.fullName', 'Gowtham S');
-    // Profession is a read-only field populated via a picker sheet; set it
-    // directly through its controller-backed field for this form-level test.
-    final professionField = tester.widget<TextFormField>(
-      find.descendant(
-        of: find.byKey(const ValueKey('signup.field.profession')),
-        matching: find.byType(TextFormField),
-      ),
+    // Profession is a read-only field populated via a picker sheet.
+    await tester.ensureVisible(
+      find.byKey(const ValueKey('signup.field.profession')),
     );
-    professionField.controller?.text = 'Student';
+    await tester.tap(find.byKey(const ValueKey('signup.field.profession')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Law Student'));
+    await tester.pumpAndSettle();
     await fill('signup.field.password', 'passw0rd1');
     await fill('signup.field.phone', '9876543210');
 

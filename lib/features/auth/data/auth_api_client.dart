@@ -1,13 +1,20 @@
 import '../../../core/network/api_client.dart';
 
-/// Thrown for any non-2xx response or transport-level failure. [message] is
-/// suitable to show directly to the user — it's either the backend's own
-/// `message` field or a friendly fallback for network/timeout issues.
+/// Thrown for any auth failure. [cause] says what went wrong; pages turn
+/// it into localized text (see `authApiErrorText`). [message] is for logs.
 class AuthApiException implements Exception {
-  AuthApiException(this.message, {this.statusCode});
+  AuthApiException(this.message, {this.statusCode, this.cause});
+
+  AuthApiException.from(ApiException error)
+    : this(
+        error.message,
+        statusCode: error is ApiServerException ? error.statusCode : null,
+        cause: error,
+      );
 
   final String message;
   final int? statusCode;
+  final ApiException? cause;
 
   @override
   String toString() => message;
@@ -152,10 +159,8 @@ class AuthApiClient {
   ) async {
     try {
       return await _client.post(path, body: body, authenticated: false);
-    } on ApiServerException catch (error) {
-      throw AuthApiException(error.message, statusCode: error.statusCode);
     } on ApiException catch (error) {
-      throw AuthApiException(error.message);
+      throw AuthApiException.from(error);
     }
   }
 }

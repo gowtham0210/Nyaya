@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
 import '../../../../core/presentation/widgets/nyaya_widgets.dart';
+import '../../../../core/localization/l10n.dart';
 
 class GetStartedButton extends StatelessWidget {
   const GetStartedButton({
     super.key,
     required this.onTap,
-    this.label = 'GET STARTED',
+    this.label,
     this.backgroundColor = gold,
     this.trailing,
   });
 
   final VoidCallback onTap;
-  final String label;
+  /// Defaults to the localized "GET STARTED".
+  final String? label;
   final Color backgroundColor;
   final Widget? trailing;
 
@@ -34,7 +36,7 @@ class GetStartedButton extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              label,
+              label ?? context.l10n.commonGetStarted.toUpperCase(),
               style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w700,

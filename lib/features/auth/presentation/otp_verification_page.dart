@@ -8,10 +8,11 @@ import '../../../core/presentation/widgets/nyaya_widgets.dart';
 import '../data/auth_api_client.dart';
 import '../../../app/app_services.dart';
 import '../data/auth_token_store.dart';
-import '../data/firebase_auth_error_mapper.dart';
 import '../data/firebase_phone_auth_service.dart';
 import 'widgets/auth_header.dart';
 import 'widgets/auth_primary_button.dart';
+import '../../../core/localization/l10n.dart';
+import 'auth_error_text.dart';
 
 const _otpLength = 6;
 const _resendCooldown = Duration(seconds: 45);
@@ -139,7 +140,7 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
       final code = _enteredCode;
       if (code.length < _otpLength) {
         setState(() => _isVerifying = false);
-        _showMessage('Enter the full 6-digit code.');
+        _showMessage(context.l10n.otpIncomplete);
         return;
       }
       try {
@@ -151,12 +152,12 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
       } on FirebaseAuthException catch (error) {
         if (!mounted) return;
         setState(() => _isVerifying = false);
-        _showMessage(mapFirebaseAuthError(error));
+        _showMessage(firebaseAuthErrorText(context.l10n, error));
         return;
       } catch (_) {
         if (!mounted) return;
         setState(() => _isVerifying = false);
-        _showMessage('Network error. Please check your connection and try again.');
+        _showMessage(context.l10n.errorOffline);
         return;
       }
     }
@@ -193,11 +194,11 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
     } on AuthApiException catch (error) {
       if (!mounted) return;
       setState(() => _isVerifying = false);
-      _showMessage(error.message);
+      _showMessage(authApiErrorText(context.l10n, error));
     } catch (_) {
       if (!mounted) return;
       setState(() => _isVerifying = false);
-      _showMessage('Network error. Please check your connection and try again.');
+      _showMessage(context.l10n.errorOffline);
     }
   }
 
@@ -215,12 +216,12 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
             _isResending = false;
           });
           _startResendTimer();
-          _showMessage('A new OTP has been sent.');
+          _showMessage(context.l10n.otpSentAgain);
         },
         onVerificationFailed: (error) {
           if (!mounted) return;
           setState(() => _isResending = false);
-          _showMessage(mapFirebaseAuthError(error));
+          _showMessage(firebaseAuthErrorText(context.l10n, error));
         },
         onAutoVerified: (credential) async {
           if (!mounted) return;
@@ -233,11 +234,11 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
     } on FirebaseAuthException catch (error) {
       if (!mounted) return;
       setState(() => _isResending = false);
-      _showMessage(mapFirebaseAuthError(error));
+      _showMessage(firebaseAuthErrorText(context.l10n, error));
     } catch (_) {
       if (!mounted) return;
       setState(() => _isResending = false);
-      _showMessage('Network error. Please check your connection and try again.');
+      _showMessage(context.l10n.errorOffline);
     }
   }
 
@@ -278,10 +279,10 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
                       children: [
                         const AuthHeader(),
                         SizedBox(height: contentWidth * 0.08),
-                        const Text(
-                          'Create Your Account',
+                        Text(
+                          context.l10n.signUpTitle,
                           textAlign: TextAlign.center,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 22,
                             fontWeight: FontWeight.w700,
                             color: navy,
@@ -290,10 +291,10 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
                           ),
                         ),
                         const SizedBox(height: 6),
-                        const Text(
-                          'Join NYAYA and start your legal learning journey',
+                        Text(
+                          context.l10n.authJoinSubtitle,
                           textAlign: TextAlign.center,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 13,
                             color: bodyGrey,
                             height: 1.4,
@@ -325,10 +326,10 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const Text(
-            'Verify OTP',
+          Text(
+            context.l10n.otpTitle,
             textAlign: TextAlign.center,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 22,
               fontWeight: FontWeight.w700,
               color: navy,
@@ -337,9 +338,12 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
           ),
           const SizedBox(height: 10),
           Text(
-            "We've sent a 6-digit OTP to",
+            context.l10n.otpSentTo,
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 13, color: bodyGrey.withValues(alpha: 0.9)),
+            style: TextStyle(
+              fontSize: 13,
+              color: bodyGrey.withValues(alpha: 0.9),
+            ),
           ),
           const SizedBox(height: 4),
           Row(
@@ -361,11 +365,15 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(Icons.edit_outlined, size: 14, color: gold.withValues(alpha: 0.9)),
+                    Icon(
+                      Icons.edit_outlined,
+                      size: 14,
+                      color: gold.withValues(alpha: 0.9),
+                    ),
                     const SizedBox(width: 2),
-                    const Text(
-                      'Change',
-                      style: TextStyle(
+                    Text(
+                      context.l10n.otpChange,
+                      style: const TextStyle(
                         fontSize: 13,
                         fontWeight: FontWeight.w600,
                         color: gold,
@@ -377,11 +385,15 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
             ],
           ),
           const SizedBox(height: 24),
-          const Align(
+          Align(
             alignment: Alignment.centerLeft,
             child: Text(
-              'Enter OTP',
-              style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: navy),
+              context.l10n.otpEnter,
+              style: const TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w700,
+                color: navy,
+              ),
             ),
           ),
           const SizedBox(height: 10),
@@ -404,16 +416,24 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
               children: [
                 Text.rich(
                   TextSpan(
-                    style: TextStyle(fontSize: 13, color: bodyGrey.withValues(alpha: 0.9)),
+                    style: TextStyle(
+                      fontSize: 13,
+                      color: bodyGrey.withValues(alpha: 0.9),
+                    ),
                     children: [
-                      const TextSpan(text: "Didn't receive the OTP?\n"),
+                      TextSpan(text: '${context.l10n.otpNotReceived}\n'),
                       TextSpan(
                         text: canResend
-                            ? 'Resend OTP'
+                            ? context.l10n.otpResend
                             : (_isResending
-                                ? 'Resending…'
-                                : 'Resend OTP in ${_formatSeconds(_secondsRemaining)}'),
-                        style: const TextStyle(color: gold, fontWeight: FontWeight.w600),
+                                  ? context.l10n.otpResending
+                                  : context.l10n.otpResendIn(
+                                      _formatSeconds(_secondsRemaining),
+                                    )),
+                        style: const TextStyle(
+                          color: gold,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ],
                   ),
@@ -423,7 +443,7 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
                   TextButton(
                     key: const ValueKey('otp.button.resend'),
                     onPressed: _resendOtp,
-                    child: const Text('Tap to resend'),
+                    child: Text(context.l10n.otpTapToResend),
                   ),
               ],
             ),
@@ -431,7 +451,7 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
           const SizedBox(height: 12),
           AuthPrimaryButton(
             key: const ValueKey('otp.button.verify'),
-            label: 'Verify & Continue',
+            label: context.l10n.otpVerifyContinue,
             isLoading: _isVerifying,
             onPressed: _handleVerify,
           ),
@@ -476,7 +496,11 @@ class _OtpDigitBox extends StatelessWidget {
         maxLength: 1,
         cursorColor: navy,
         inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700, color: navy),
+        style: const TextStyle(
+          fontSize: 18,
+          fontWeight: FontWeight.w700,
+          color: navy,
+        ),
         decoration: InputDecoration(
           counterText: '',
           contentPadding: const EdgeInsets.symmetric(vertical: 12),
@@ -490,7 +514,10 @@ class _OtpDigitBox extends StatelessWidget {
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
-            borderSide: BorderSide(color: gold.withValues(alpha: 0.88), width: 1.6),
+            borderSide: BorderSide(
+              color: gold.withValues(alpha: 0.88),
+              width: 1.6,
+            ),
           ),
         ),
       ),

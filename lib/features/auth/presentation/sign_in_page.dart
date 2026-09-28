@@ -8,6 +8,8 @@ import 'sign_up_page.dart';
 import 'widgets/auth_header.dart';
 import 'widgets/auth_primary_button.dart';
 import 'widgets/auth_text_field.dart';
+import '../../../core/localization/l10n.dart';
+import 'auth_error_text.dart';
 
 class SignInPage extends StatefulWidget {
   const SignInPage({super.key});
@@ -63,11 +65,11 @@ class _SignInPageState extends State<SignInPage> {
                       children: [
                         const AuthHeader(),
                         SizedBox(height: contentWidth * 0.08),
-                        const Text(
-                          'Welcome Back to NYAYA !',
-                          key: ValueKey('signin.title'),
+                        Text(
+                          context.l10n.signInTitle,
+                          key: const ValueKey('signin.title'),
                           textAlign: TextAlign.center,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 22,
                             fontWeight: FontWeight.w700,
                             color: navy,
@@ -76,10 +78,10 @@ class _SignInPageState extends State<SignInPage> {
                           ),
                         ),
                         const SizedBox(height: 6),
-                        const Text(
-                          'Rejoin NYAYA and start your legal learning journey',
+                        Text(
+                          context.l10n.signInSubtitle,
                           textAlign: TextAlign.center,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 13,
                             color: bodyGrey,
                             height: 1.4,
@@ -130,11 +132,11 @@ class _SignInPageState extends State<SignInPage> {
     final password = _passwordController.text.trim();
 
     if (identifier.isEmpty) {
-      _showMessage('Enter your phone number.');
+      _showMessage(context.l10n.signInPhoneMissing);
       return;
     }
     if (password.isEmpty) {
-      _showMessage('Enter your password.');
+      _showMessage(context.l10n.signInPasswordMissing);
       return;
     }
 
@@ -155,11 +157,11 @@ class _SignInPageState extends State<SignInPage> {
     } on AuthApiException catch (error) {
       if (!mounted) return;
       setState(() => _isLoggingIn = false);
-      _showMessage(error.message);
+      _showMessage(authApiErrorText(context.l10n, error));
     } catch (_) {
       if (!mounted) return;
       setState(() => _isLoggingIn = false);
-      _showMessage('Network error. Please check your connection and try again.');
+      _showMessage(context.l10n.errorOffline);
     }
   }
 
@@ -218,8 +220,8 @@ class _SignInCard extends StatelessWidget {
         children: [
           AuthTextField(
             key: const ValueKey('signin.field.identifier'),
-            label: 'Phone Number',
-            hint: 'Enter your phone number',
+            label: context.l10n.fieldPhoneLabel,
+            hint: context.l10n.fieldPhoneHint,
             icon: Icons.call_outlined,
             controller: identifierController,
             keyboardType: TextInputType.phone,
@@ -228,8 +230,8 @@ class _SignInCard extends StatelessWidget {
           const SizedBox(height: 16),
           AuthTextField(
             key: const ValueKey('signin.field.password'),
-            label: 'Password',
-            hint: 'Create a strong password',
+            label: context.l10n.fieldPasswordLabel,
+            hint: context.l10n.fieldPasswordHint,
             icon: Icons.lock_outline_rounded,
             controller: passwordController,
             obscureText: obscurePassword,
@@ -237,7 +239,9 @@ class _SignInCard extends StatelessWidget {
             autofillHints: const [AutofillHints.password],
             suffixIcon: IconButton(
               onPressed: onToggleObscure,
-              tooltip: obscurePassword ? 'Show password' : 'Hide password',
+              tooltip: obscurePassword
+                  ? context.l10n.showPassword
+                  : context.l10n.hidePassword,
               icon: Icon(
                 obscurePassword
                     ? Icons.visibility_off_outlined
@@ -249,7 +253,7 @@ class _SignInCard extends StatelessWidget {
           const SizedBox(height: 20),
           AuthPrimaryButton(
             key: const ValueKey('signin.button.login'),
-            label: 'Login',
+            label: context.l10n.commonLogin,
             isLoading: isLoading,
             onPressed: onLoginPressed,
           ),
@@ -273,13 +277,16 @@ class _SignupLink extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 4),
         child: RichText(
           textAlign: TextAlign.center,
-          text: const TextSpan(
-            style: TextStyle(fontSize: 14, color: bodyGrey),
+          text: TextSpan(
+            style: const TextStyle(fontSize: 14, color: bodyGrey),
             children: [
-              TextSpan(text: "Don't have an account? "),
+              TextSpan(text: context.l10n.signInNoAccount),
               TextSpan(
-                text: 'Signup',
-                style: TextStyle(color: gold, fontWeight: FontWeight.w600),
+                text: context.l10n.commonSignUp,
+                style: const TextStyle(
+                  color: gold,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ],
           ),

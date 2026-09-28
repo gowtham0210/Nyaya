@@ -107,10 +107,10 @@ class ApiClient {
       }
       if (response.statusCode == 401) {
         _onSessionExpired?.call();
-        throw ApiUnauthorizedException(
-          _backendMessage(response) ??
-              const ApiUnauthorizedException().message,
-        );
+        final message = _backendMessage(response);
+        throw message == null
+            ? const ApiUnauthorizedException()
+            : ApiUnauthorizedException.fromServer(message);
       }
     }
     final status = response.statusCode;
@@ -119,11 +119,12 @@ class ApiClient {
     }
     final message = _backendMessage(response);
     if (status == 404) {
-      throw ApiNotFoundException(message ?? 'Not found.');
+      throw ApiNotFoundException(message ?? 'Not found.', message);
     }
     throw ApiServerException(
       status,
       message ?? 'Request failed ($status). Please try again.',
+      serverMessage: message,
     );
   }
 
@@ -166,10 +167,7 @@ class ApiClient {
 
   Uri _uri(String path, Map<String, String>? query) {
     final language = _languageCode();
-    final params = {
-      ...?query,
-      if (language != 'en') 'lang': language,
-    };
+    final params = {...?query, if (language != 'en') 'lang': language};
     final uri = Uri.parse('${ApiConfig.apiV1BaseUrl}$path');
     return params.isEmpty ? uri : uri.replace(queryParameters: params);
   }

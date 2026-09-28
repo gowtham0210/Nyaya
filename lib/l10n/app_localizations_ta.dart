@@ -92,4 +92,266 @@ class AppLocalizationsTa extends AppLocalizations {
 
   @override
   String get categoriesEmpty => 'இன்னும் வகைகள் எதுவும் இல்லை.';
+
+  @override
+  String get brandTagline => 'சட்ட அடிப்படையிலான வினாடி வினா செயலி';
+
+  @override
+  String get splashSemanticsLabel => 'நியாயா தொடக்கத் திரை';
+
+  @override
+  String get splashTapToContinue => 'தொடர தட்டவும்';
+
+  @override
+  String get splashLoadingLabel => 'நியாயா ஏற்றப்படுகிறது';
+
+  @override
+  String splashLoadingValue(int percent) {
+    return '$percent சதவீதம்';
+  }
+
+  @override
+  String get commonGetStarted => 'தொடங்குங்கள்';
+
+  @override
+  String get commonSkip => 'தவிர்';
+
+  @override
+  String get commonNext => 'அடுத்து';
+
+  @override
+  String get commonSignIn => 'உள்நுழையவும்';
+
+  @override
+  String get commonLogin => 'உள்நுழை';
+
+  @override
+  String get commonSignUp => 'பதிவு செய்';
+
+  @override
+  String get commonHaveAccount => 'ஏற்கனவே கணக்கு உள்ளதா? ';
+
+  @override
+  String get welcomeHeadlineLine1 => 'சட்டம் எளிதாக,';
+
+  @override
+  String get welcomeHeadlineLine2 => 'நீதி அனைவருக்கும்.';
+
+  @override
+  String get welcomeBody =>
+      'சட்டங்களை அறியுங்கள், உங்கள் அறிவைச் சோதியுங்கள், நீங்களே உங்கள் சட்ட நிபுணராகுங்கள்.';
+
+  @override
+  String get welcomeLearnTitle => 'சட்டங்களைக் கற்றுக்கொள்ளுங்கள்';
+
+  @override
+  String get welcomeLearnBody =>
+      'முக்கியமான சட்டங்களை எளிய மொழியில் அறிந்து புரிந்துகொள்ளுங்கள்.';
+
+  @override
+  String get welcomeRightsTitle => 'உங்கள் உரிமைகளை அறியுங்கள்';
+
+  @override
+  String get welcomeRightsBody =>
+      'உங்கள் சட்ட உரிமைகள் பற்றி அறிந்து வலுவாக இருங்கள்.';
+
+  @override
+  String get welcomeTrackTitle => 'கண்காணித்து புதுப்பித்த நிலையில் இருங்கள்';
+
+  @override
+  String get welcomeTrackBody =>
+      'வழக்கு நிலையைக் கண்காணித்து சமீபத்திய சட்டச் செய்திகளை எளிதாகப் பெறுங்கள்.';
+
+  @override
+  String get onboarding1Line1 => 'உங்கள் அறிவைச் சோதியுங்கள்.';
+
+  @override
+  String get onboarding1Line2 => 'நீதியில் தேர்ச்சி பெறுங்கள்.';
+
+  @override
+  String get onboarding2Line1 => 'கற்றுக்கொள்ளுங்கள். புரிந்துகொள்ளுங்கள்.';
+
+  @override
+  String get onboarding2Line2 => 'சட்டத்தைப் பயன்படுத்துங்கள்.';
+
+  @override
+  String get onboarding2Body =>
+      'வழக்கு அடிப்படையிலான வினாடி வினாக்கள், நிஜ வாழ்க்கைச் சூழல்கள், நிபுணர்கள் உருவாக்கிய உள்ளடக்கம் மூலம் நியாயா செயலி சட்டக் கல்வியை எளிதாக்குகிறது.';
+
+  @override
+  String get onboarding3Line1 => 'முன்னேற்றத்தைக் கண்காணியுங்கள்.';
+
+  @override
+  String get onboarding3Line2 => 'சிறப்பை அடையுங்கள்.';
+
+  @override
+  String get onboarding3Body =>
+      'உங்கள் செயல்திறனைக் கண்காணியுங்கள், தொடர் நாட்களை உருவாக்குங்கள், பதக்கங்களைப் பெறுங்கள், உங்கள் சட்ட அறிவின் சிறந்த வடிவமாகுங்கள்.';
+
+  @override
+  String get authJoinSubtitle =>
+      'நியாயாவில் சேர்ந்து உங்கள் சட்டக் கற்றல் பயணத்தைத் தொடங்குங்கள்';
+
+  @override
+  String get signInTitle => 'நியாயாவுக்கு மீண்டும் வரவேற்கிறோம்!';
+
+  @override
+  String get signInSubtitle =>
+      'நியாயாவில் மீண்டும் இணைந்து உங்கள் சட்டக் கற்றல் பயணத்தைத் தொடருங்கள்';
+
+  @override
+  String get signInNoAccount => 'கணக்கு இல்லையா? ';
+
+  @override
+  String get signInPhoneMissing => 'உங்கள் தொலைபேசி எண்ணை உள்ளிடவும்.';
+
+  @override
+  String get signInPasswordMissing => 'உங்கள் கடவுச்சொல்லை உள்ளிடவும்.';
+
+  @override
+  String get fieldPhoneLabel => 'தொலைபேசி எண்';
+
+  @override
+  String get fieldPhoneHint => 'உங்கள் தொலைபேசி எண்ணை உள்ளிடவும்';
+
+  @override
+  String get fieldPasswordLabel => 'கடவுச்சொல்';
+
+  @override
+  String get fieldPasswordHintCreate => 'வலுவான கடவுச்சொல்லை உருவாக்கவும்';
+
+  @override
+  String get fieldPasswordHint => 'உங்கள் கடவுச்சொல்லை உள்ளிடவும்';
+
+  @override
+  String get showPassword => 'கடவுச்சொல்லைக் காட்டு';
+
+  @override
+  String get hidePassword => 'கடவுச்சொல்லை மறை';
+
+  @override
+  String get fieldFullNameLabel => 'முழு பெயர்';
+
+  @override
+  String get fieldFullNameHint => 'உங்கள் முழுப் பெயரை உள்ளிடவும்';
+
+  @override
+  String get fieldProfessionLabel => 'தொழில்';
+
+  @override
+  String get fieldProfessionHint => 'உங்கள் தொழிலைத் தேர்ந்தெடுக்கவும்';
+
+  @override
+  String get professionLawStudent => 'சட்ட மாணவர்';
+
+  @override
+  String get professionLawyer => 'வழக்கறிஞர்';
+
+  @override
+  String get professionJudge => 'நீதிபதி / நீதித்துறை அலுவலர்';
+
+  @override
+  String get professionLegalProfessional => 'சட்டத் துறை நிபுணர்';
+
+  @override
+  String get professionCitizen => 'பொதுமக்கள்';
+
+  @override
+  String get signUpTitle => 'உங்கள் கணக்கை உருவாக்குங்கள்';
+
+  @override
+  String get signUpSendOtp => 'OTP அனுப்பு';
+
+  @override
+  String get validationNameRequired => 'முழுப் பெயர் தேவை';
+
+  @override
+  String get validationNameTooShort =>
+      'பெயர் குறைந்தது 3 எழுத்துகள் இருக்க வேண்டும்';
+
+  @override
+  String get validationProfessionRequired => 'தொழில் தேவை';
+
+  @override
+  String get validationPasswordRequired => 'கடவுச்சொல் தேவை';
+
+  @override
+  String get validationPasswordWeak =>
+      'எழுத்துகளும் எண்களும் கொண்ட குறைந்தது 8 எழுத்துகளைப் பயன்படுத்தவும்';
+
+  @override
+  String get validationPhoneRequired => 'தொலைபேசி எண் தேவை';
+
+  @override
+  String get validationPhoneInvalid => 'சரியான தொலைபேசி எண்ணை உள்ளிடவும்';
+
+  @override
+  String get otpTitle => 'OTP ஐச் சரிபார்க்கவும்';
+
+  @override
+  String get otpSentTo => '6 இலக்க OTP இந்த எண்ணுக்கு அனுப்பப்பட்டது:';
+
+  @override
+  String get otpChange => 'மாற்று';
+
+  @override
+  String get otpEnter => 'OTP ஐ உள்ளிடவும்';
+
+  @override
+  String get otpNotReceived => 'OTP கிடைக்கவில்லையா?';
+
+  @override
+  String get otpResend => 'OTP ஐ மீண்டும் அனுப்பு';
+
+  @override
+  String get otpResending => 'மீண்டும் அனுப்புகிறது…';
+
+  @override
+  String otpResendIn(String time) {
+    return '$time இல் OTP ஐ மீண்டும் அனுப்பலாம்';
+  }
+
+  @override
+  String get otpTapToResend => 'மீண்டும் அனுப்ப தட்டவும்';
+
+  @override
+  String get otpVerifyContinue => 'சரிபார்த்து தொடரவும்';
+
+  @override
+  String get otpIncomplete => 'முழு 6 இலக்கக் குறியீட்டை உள்ளிடவும்.';
+
+  @override
+  String get otpSentAgain => 'புதிய OTP அனுப்பப்பட்டது.';
+
+  @override
+  String get authErrorInvalidPhone =>
+      'இந்தத் தொலைபேசி எண் சரியாகத் தெரியவில்லை. சரிபார்த்து மீண்டும் முயற்சிக்கவும்.';
+
+  @override
+  String get authErrorTooManyRequests =>
+      'அதிகமான முயற்சிகள். சிறிது நேரம் கழித்து மீண்டும் முயற்சிக்கவும்.';
+
+  @override
+  String get authErrorQuotaExceeded =>
+      'தற்போதைக்கு SMS வரம்பு தீர்ந்துவிட்டது. பின்னர் முயற்சிக்கவும்.';
+
+  @override
+  String get authErrorInvalidCode =>
+      'தவறான OTP. குறியீட்டைச் சரிபார்த்து மீண்டும் முயற்சிக்கவும்.';
+
+  @override
+  String get authErrorCodeExpired =>
+      'இந்த OTP காலாவதியாகிவிட்டது. புதியதைக் கோரவும்.';
+
+  @override
+  String get authErrorUserDisabled =>
+      'இந்தக் கணக்கு முடக்கப்பட்டுள்ளது. உதவியைத் தொடர்பு கொள்ளவும்.';
+
+  @override
+  String get authErrorNotEnabled =>
+      'இந்தச் செயலியில் தொலைபேசி உள்நுழைவு இன்னும் இயக்கப்படவில்லை.';
+
+  @override
+  String get authErrorCredentialInUse =>
+      'இந்தத் தொலைபேசி எண் ஏற்கனவே வேறு கணக்குடன் இணைக்கப்பட்டுள்ளது.';
 }

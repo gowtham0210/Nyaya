@@ -5,6 +5,7 @@ import '../../auth/presentation/sign_up_page.dart';
 import 'widgets/get_started_button.dart';
 import 'widgets/onboarding_nav_bar.dart';
 import 'widgets/page_indicator.dart';
+import '../../../core/localization/l10n.dart';
 
 class OnboardingPage extends StatefulWidget {
   const OnboardingPage({super.key});
@@ -210,10 +211,10 @@ class _OnboardingPageState extends State<OnboardingPage> {
             const SizedBox(height: 12),
             Column(
               children: [
-                const Text(
-                  'Test Your Knowledge.',
+                Text(
+                  context.l10n.onboarding1Line1,
                   textAlign: TextAlign.center,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 22,
                     fontWeight: FontWeight.w600,
                     color: Color(0xFF1F2A37),
@@ -222,10 +223,10 @@ class _OnboardingPageState extends State<OnboardingPage> {
                   ),
                 ),
                 const SizedBox(height: 6),
-                const Text(
-                  'Master Justice.',
+                Text(
+                  context.l10n.onboarding1Line2,
                   textAlign: TextAlign.center,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 22,
                     fontWeight: FontWeight.w600,
                     color: gold,
@@ -288,10 +289,10 @@ class _OnboardingPageState extends State<OnboardingPage> {
 
             // ── Heading ──
             const SizedBox(height: 16),
-            const Text(
-              'Learn. Understand.',
+            Text(
+              context.l10n.onboarding2Line1,
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.w700,
                 color: navy,
@@ -300,10 +301,10 @@ class _OnboardingPageState extends State<OnboardingPage> {
               ),
             ),
             const SizedBox(height: 6),
-            const Text(
-              'Apply Law.',
+            Text(
+              context.l10n.onboarding2Line2,
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.w700,
                 color: gold,
@@ -319,10 +320,10 @@ class _OnboardingPageState extends State<OnboardingPage> {
             const SizedBox(height: 12),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: width * 0.05),
-              child: const Text(
-                'Nyaya makes legal learning simple with case-based quizzes, real-life scenarios and expertly crafted content.',
+              child: Text(
+                context.l10n.onboarding2Body,
                 textAlign: TextAlign.center,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w400,
                   color: bodyGrey,
@@ -385,10 +386,10 @@ class _OnboardingPageState extends State<OnboardingPage> {
 
             // ── Heading ──
             const SizedBox(height: 16),
-            const Text(
-              'Track Progress.',
+            Text(
+              context.l10n.onboarding3Line1,
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.w700,
                 color: navy,
@@ -397,10 +398,10 @@ class _OnboardingPageState extends State<OnboardingPage> {
               ),
             ),
             const SizedBox(height: 6),
-            const Text(
-              'Achieve Excellence.',
+            Text(
+              context.l10n.onboarding3Line2,
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.w700,
                 color: gold,
@@ -416,10 +417,10 @@ class _OnboardingPageState extends State<OnboardingPage> {
             const SizedBox(height: 12),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: width * 0.05),
-              child: const Text(
-                'Track your performance, build streaks, earn badges and become the best version of your legal knowledge.',
+              child: Text(
+                context.l10n.onboarding3Body,
                 textAlign: TextAlign.center,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w400,
                   color: bodyGrey,
@@ -461,22 +462,22 @@ class _OnboardingPageState extends State<OnboardingPage> {
                 padding: const EdgeInsets.symmetric(vertical: 4),
                 child: RichText(
                   textAlign: TextAlign.center,
-                  text: const TextSpan(
-                    style: TextStyle(
+                  text: TextSpan(
+                    style: const TextStyle(
                       fontFamily: 'Roboto', // Or whatever default sans-serif is
                       fontSize: 13,
                     ),
                     children: [
                       TextSpan(
-                        text: 'Already have an account? ',
-                        style: TextStyle(
+                        text: context.l10n.commonHaveAccount,
+                        style: const TextStyle(
                           color: bodyGrey,
                           fontWeight: FontWeight.w400,
                         ),
                       ),
                       TextSpan(
-                        text: 'Sign in',
-                        style: TextStyle(
+                        text: context.l10n.commonSignIn,
+                        style: const TextStyle(
                           color: gold,
                           fontWeight: FontWeight.w600,
                         ),

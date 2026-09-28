@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../../core/presentation/widgets/nyaya_widgets.dart';
+import '../../../../core/localization/l10n.dart';
 
 /// Navigation bar for onboarding screens with SKIP and NEXT buttons.
 class OnboardingNavBar extends StatelessWidget {
@@ -22,11 +23,11 @@ class OnboardingNavBar extends StatelessWidget {
           GestureDetector(
             onTap: onSkip,
             behavior: HitTestBehavior.opaque,
-            child: const Padding(
-              padding: EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
               child: Text(
-                'SKIP',
-                style: TextStyle(
+                context.l10n.commonSkip.toUpperCase(),
+                style: const TextStyle(
                   color: navy,
                   fontSize: 14,
                   fontWeight: FontWeight.w700,
@@ -42,18 +43,18 @@ class OnboardingNavBar extends StatelessWidget {
               padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
-                children: const [
+                children: [
                   Text(
-                    'NEXT',
-                    style: TextStyle(
+                    context.l10n.commonNext.toUpperCase(),
+                    style: const TextStyle(
                       color: gold,
                       fontSize: 14,
                       fontWeight: FontWeight.w700,
                       letterSpacing: 1.0,
                     ),
                   ),
-                  SizedBox(width: 4),
-                  Icon(
+                  const SizedBox(width: 4),
+                  const Icon(
                     Icons.chevron_right,
                     color: gold,
                     size: 18,

@@ -58,6 +58,13 @@ only, so legal ideas are harder to follow.
 - AC-003: An unsupported device locale falls back to English.
 - AC-004: A saved choice is restored on launch.
 - AC-005: Selecting a language updates the current locale and persists it.
+- AC-006: Splash (including screen-reader text), Welcome, onboarding,
+  sign-in, sign-up and OTP render in a non-English locale with translated
+  text (issue #27).
+- AC-008: Auth error messages are the backend's own message or localized
+  app text, never an English fallback.
+- AC-007: Sign-up shows localized professions but sends the backend a stable
+  English value.
 
 ## Test Traceability
 
@@ -65,7 +72,19 @@ only, so legal ideas are harder to follow.
 | --- | --- | --- |
 | AC-001 | Unit | `test/core/localization/app_localizations_test.dart` |
 | AC-002–AC-005 | Unit | `test/core/localization/app_language_test.dart` |
+| AC-006 | Widget | `test/features/onboarding/presentation/onboarding_localization_test.dart`, `test/features/auth/presentation/auth_localization_test.dart` |
+| AC-007, AC-008 | Unit | `test/features/auth/presentation/auth_text_test.dart` |
 
 ## Open Questions
 
-- Who reviews hi, ta, te, kn text before release?
+- Who reviews hi, ta, te, kn text before release? **Every non-English
+  string needs native review.** Reused from `nisha-frontend` tables: nav
+  labels, Sign in, Retry, Cancel, Coming soon, Law Student, Lawyer /
+  Advocate, and the Phone Number / Password / Profession / Full Name field
+  labels where her tables had them. Everything else was machine-drafted.
+
+## Notes
+
+- Issue #27 unified the Welcome/auth tagline "LAW BASIC QUIZ APP" to the
+  splash's "LAW BASED QUIZ APP", and changed the sign-in password hint from
+  "Create a strong password" to "Enter your password".

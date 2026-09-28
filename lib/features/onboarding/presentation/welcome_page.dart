@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../core/presentation/widgets/nyaya_widgets.dart';
 import 'widgets/get_started_button.dart';
+import '../../../core/localization/l10n.dart';
 
 /// The very first screen a new user sees: brand lockup, value proposition,
 /// hero illustration, a row of feature highlights and the primary CTA.
@@ -40,7 +41,7 @@ class WelcomePage extends StatelessWidget {
                         const _FeatureRow(),
                         SizedBox(height: contentWidth * 0.06),
                         GetStartedButton(
-                          label: 'Get Started',
+                          label: context.l10n.commonGetStarted,
                           backgroundColor: navy,
                           onTap: onGetStarted ?? () {},
                           trailing: const Icon(
@@ -89,9 +90,9 @@ class _WelcomeLockup extends StatelessWidget {
         const SizedBox(height: 10),
         Image.asset(wordmarkAsset, width: 160, fit: BoxFit.contain),
         const SizedBox(height: 4),
-        const Text(
-          'LAW BASIC QUIZ APP',
-          style: TextStyle(
+        Text(
+          context.l10n.brandTagline,
+          style: const TextStyle(
             color: gold,
             fontSize: 12,
             fontWeight: FontWeight.bold,
@@ -114,7 +115,7 @@ class _Heading extends StatelessWidget {
     return Column(
       children: [
         Text(
-          'Law Made Easy,',
+          context.l10n.welcomeHeadlineLine1,
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: fontSize,
@@ -125,7 +126,7 @@ class _Heading extends StatelessWidget {
           ),
         ),
         Text(
-          'Justice Made Accessible.',
+          context.l10n.welcomeHeadlineLine2,
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: fontSize,
@@ -149,10 +150,10 @@ class _SupportingText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: width * 0.04),
-      child: const Text(
-        'Explore laws, test your knowledge, and become your own legal expert.',
+      child: Text(
+        context.l10n.welcomeBody,
         textAlign: TextAlign.center,
-        style: TextStyle(
+        style: const TextStyle(
           fontSize: 14,
           fontWeight: FontWeight.w400,
           color: bodyGrey,
@@ -189,33 +190,31 @@ class _FeatureRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Row(
+    final l10n = context.l10n;
+    return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Expanded(
           child: _FeatureItem(
             icon: Icons.menu_book_outlined,
-            title: 'Learn Laws',
-            description:
-                'Explore and understand important laws in simple language.',
+            title: l10n.welcomeLearnTitle,
+            description: l10n.welcomeLearnBody,
           ),
         ),
-        SizedBox(width: 8),
+        const SizedBox(width: 8),
         Expanded(
           child: _FeatureItem(
             icon: Icons.shield_outlined,
-            title: 'Know Your Rights',
-            description:
-                'Stay informed and empowered about your legal rights.',
+            title: l10n.welcomeRightsTitle,
+            description: l10n.welcomeRightsBody,
           ),
         ),
-        SizedBox(width: 8),
+        const SizedBox(width: 8),
         Expanded(
           child: _FeatureItem(
             icon: Icons.groups_outlined,
-            title: 'Track & Stay Updated',
-            description:
-                'Track case status and get the latest legal updates with ease.',
+            title: l10n.welcomeTrackTitle,
+            description: l10n.welcomeTrackBody,
           ),
         ),
       ],

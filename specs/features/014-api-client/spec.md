@@ -47,7 +47,9 @@ feature repeats it, and error handling drifts.
   expired and throw `ApiUnauthorizedException`.
 - FR-006: The client shall map 404 to `ApiNotFoundException`, other non-2xx
   to `ApiServerException` with the backend message and status code, and
-  transport errors or timeouts to `ApiOfflineException`.
+  transport errors or timeouts to `ApiOfflineException`. Each exception
+  carries `serverMessage` only when the backend sent one, so UI never shows
+  the client's English fallback text.
 - FR-007: The client shall support GET, POST, PATCH, DELETE with JSON bodies
   and a multipart file upload.
 

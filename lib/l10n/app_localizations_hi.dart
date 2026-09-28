@@ -91,4 +91,265 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get categoriesEmpty => 'अभी कोई श्रेणी नहीं है।';
+
+  @override
+  String get brandTagline => 'कानून आधारित क्विज़ ऐप';
+
+  @override
+  String get splashSemanticsLabel => 'न्याय स्प्लैश स्क्रीन';
+
+  @override
+  String get splashTapToContinue => 'आगे बढ़ने के लिए टैप करें';
+
+  @override
+  String get splashLoadingLabel => 'न्याय लोड हो रहा है';
+
+  @override
+  String splashLoadingValue(int percent) {
+    return '$percent प्रतिशत';
+  }
+
+  @override
+  String get commonGetStarted => 'शुरू करें';
+
+  @override
+  String get commonSkip => 'छोड़ें';
+
+  @override
+  String get commonNext => 'आगे';
+
+  @override
+  String get commonSignIn => 'साइन इन करें';
+
+  @override
+  String get commonLogin => 'लॉगिन';
+
+  @override
+  String get commonSignUp => 'साइन अप';
+
+  @override
+  String get commonHaveAccount => 'पहले से खाता है? ';
+
+  @override
+  String get welcomeHeadlineLine1 => 'कानून हुआ आसान,';
+
+  @override
+  String get welcomeHeadlineLine2 => 'न्याय हुआ सुलभ।';
+
+  @override
+  String get welcomeBody =>
+      'कानूनों को जानें, अपने ज्ञान को परखें, और खुद अपने कानूनी विशेषज्ञ बनें।';
+
+  @override
+  String get welcomeLearnTitle => 'कानून सीखें';
+
+  @override
+  String get welcomeLearnBody =>
+      'महत्वपूर्ण कानूनों को सरल भाषा में जानें और समझें।';
+
+  @override
+  String get welcomeRightsTitle => 'अपने अधिकार जानें';
+
+  @override
+  String get welcomeRightsBody =>
+      'अपने कानूनी अधिकारों के बारे में जानकार और सशक्त रहें।';
+
+  @override
+  String get welcomeTrackTitle => 'ट्रैक करें और अपडेट रहें';
+
+  @override
+  String get welcomeTrackBody =>
+      'मामले की स्थिति ट्रैक करें और ताज़ा कानूनी अपडेट आसानी से पाएँ।';
+
+  @override
+  String get onboarding1Line1 => 'अपना ज्ञान परखें।';
+
+  @override
+  String get onboarding1Line2 => 'न्याय में महारत पाएँ।';
+
+  @override
+  String get onboarding2Line1 => 'सीखें। समझें।';
+
+  @override
+  String get onboarding2Line2 => 'कानून लागू करें।';
+
+  @override
+  String get onboarding2Body =>
+      'न्याय ऐप मामलों पर आधारित क्विज़, वास्तविक जीवन की स्थितियों और विशेषज्ञों द्वारा तैयार सामग्री से कानूनी पढ़ाई आसान बनाता है।';
+
+  @override
+  String get onboarding3Line1 => 'प्रगति ट्रैक करें।';
+
+  @override
+  String get onboarding3Line2 => 'उत्कृष्टता पाएँ।';
+
+  @override
+  String get onboarding3Body =>
+      'अपना प्रदर्शन ट्रैक करें, लगातार सीखने की लय बनाएँ, बैज कमाएँ और अपने कानूनी ज्ञान का सर्वश्रेष्ठ रूप बनें।';
+
+  @override
+  String get authJoinSubtitle =>
+      'न्याय से जुड़ें और अपनी कानूनी सीखने की यात्रा शुरू करें';
+
+  @override
+  String get signInTitle => 'न्याय में फिर से स्वागत है!';
+
+  @override
+  String get signInSubtitle =>
+      'न्याय में फिर से जुड़ें और अपनी कानूनी सीखने की यात्रा जारी रखें';
+
+  @override
+  String get signInNoAccount => 'खाता नहीं है? ';
+
+  @override
+  String get signInPhoneMissing => 'अपना फ़ोन नंबर दर्ज करें।';
+
+  @override
+  String get signInPasswordMissing => 'अपना पासवर्ड दर्ज करें।';
+
+  @override
+  String get fieldPhoneLabel => 'फ़ोन नंबर';
+
+  @override
+  String get fieldPhoneHint => 'अपना फ़ोन नंबर दर्ज करें';
+
+  @override
+  String get fieldPasswordLabel => 'पासवर्ड';
+
+  @override
+  String get fieldPasswordHintCreate => 'एक मज़बूत पासवर्ड बनाएँ';
+
+  @override
+  String get fieldPasswordHint => 'अपना पासवर्ड दर्ज करें';
+
+  @override
+  String get showPassword => 'पासवर्ड दिखाएँ';
+
+  @override
+  String get hidePassword => 'पासवर्ड छिपाएँ';
+
+  @override
+  String get fieldFullNameLabel => 'पूरा नाम';
+
+  @override
+  String get fieldFullNameHint => 'अपना पूरा नाम दर्ज करें';
+
+  @override
+  String get fieldProfessionLabel => 'पेशा';
+
+  @override
+  String get fieldProfessionHint => 'अपना पेशा चुनें';
+
+  @override
+  String get professionLawStudent => 'कानून का छात्र';
+
+  @override
+  String get professionLawyer => 'वकील / अधिवक्ता';
+
+  @override
+  String get professionJudge => 'न्यायाधीश / न्यायिक अधिकारी';
+
+  @override
+  String get professionLegalProfessional => 'कानूनी पेशेवर';
+
+  @override
+  String get professionCitizen => 'आम नागरिक';
+
+  @override
+  String get signUpTitle => 'अपना खाता बनाएँ';
+
+  @override
+  String get signUpSendOtp => 'OTP भेजें';
+
+  @override
+  String get validationNameRequired => 'पूरा नाम आवश्यक है';
+
+  @override
+  String get validationNameTooShort => 'नाम कम से कम 3 अक्षरों का होना चाहिए';
+
+  @override
+  String get validationProfessionRequired => 'पेशा आवश्यक है';
+
+  @override
+  String get validationPasswordRequired => 'पासवर्ड आवश्यक है';
+
+  @override
+  String get validationPasswordWeak =>
+      'अक्षरों और अंकों के साथ कम से कम 8 वर्ण रखें';
+
+  @override
+  String get validationPhoneRequired => 'फ़ोन नंबर आवश्यक है';
+
+  @override
+  String get validationPhoneInvalid => 'मान्य फ़ोन नंबर दर्ज करें';
+
+  @override
+  String get otpTitle => 'OTP सत्यापित करें';
+
+  @override
+  String get otpSentTo => '6 अंकों का OTP इस नंबर पर भेजा गया है:';
+
+  @override
+  String get otpChange => 'बदलें';
+
+  @override
+  String get otpEnter => 'OTP दर्ज करें';
+
+  @override
+  String get otpNotReceived => 'OTP नहीं मिला?';
+
+  @override
+  String get otpResend => 'OTP फिर से भेजें';
+
+  @override
+  String get otpResending => 'फिर से भेजा जा रहा है…';
+
+  @override
+  String otpResendIn(String time) {
+    return '$time में OTP फिर से भेजें';
+  }
+
+  @override
+  String get otpTapToResend => 'फिर से भेजने के लिए टैप करें';
+
+  @override
+  String get otpVerifyContinue => 'सत्यापित करें और आगे बढ़ें';
+
+  @override
+  String get otpIncomplete => 'पूरा 6 अंकों का कोड दर्ज करें।';
+
+  @override
+  String get otpSentAgain => 'नया OTP भेज दिया गया है।';
+
+  @override
+  String get authErrorInvalidPhone =>
+      'यह फ़ोन नंबर सही नहीं लगता। कृपया जाँचें और पुनः प्रयास करें।';
+
+  @override
+  String get authErrorTooManyRequests =>
+      'बहुत अधिक प्रयास। कृपया कुछ देर बाद फिर प्रयास करें।';
+
+  @override
+  String get authErrorQuotaExceeded =>
+      'अभी के लिए SMS सीमा पूरी हो गई है। कृपया बाद में प्रयास करें।';
+
+  @override
+  String get authErrorInvalidCode =>
+      'गलत OTP। कृपया कोड जाँचें और पुनः प्रयास करें।';
+
+  @override
+  String get authErrorCodeExpired =>
+      'यह OTP समाप्त हो गया है। कृपया नया OTP मँगाएँ।';
+
+  @override
+  String get authErrorUserDisabled =>
+      'यह खाता निष्क्रिय कर दिया गया है। कृपया सहायता से संपर्क करें।';
+
+  @override
+  String get authErrorNotEnabled =>
+      'इस ऐप के लिए फ़ोन साइन-इन अभी चालू नहीं है।';
+
+  @override
+  String get authErrorCredentialInUse =>
+      'यह फ़ोन नंबर पहले से किसी दूसरे खाते से जुड़ा है।';
 }
