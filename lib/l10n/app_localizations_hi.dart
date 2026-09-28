@@ -615,4 +615,48 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get legalUpdatesCategoryNotices => 'सूचनाएं';
+
+  @override
+  String get commonSoon => 'शीघ्र';
+
+  @override
+  String homeProgressQuizzesCompleted(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count क्विज़ पूरे हुए',
+      one: '1 क्विज़ पूरा हुआ',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String homeProgressPoints(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count अंक',
+      one: '1 अंक',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String homeProgressAccuracy(int percent) {
+    return 'सटीकता $percent%';
+  }
+
+  @override
+  String get homeProgressEmpty =>
+      'अभी तक कोई क्विज़ नहीं। अपना पहला क्विज़ दें!';
+
+  @override
+  String get homeAskNyayaTitle => 'न्याय से पूछें';
+
+  @override
+  String get homeAskNyayaBody =>
+      'अपने कानूनी सवाल सरल भाषा में पूछें। स्पष्ट जवाब पाएं।';
+
+  @override
+  String get homeRecommended => 'आपके लिए सुझाया गया';
 }

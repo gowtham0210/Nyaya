@@ -617,4 +617,48 @@ class AppLocalizationsTe extends AppLocalizations {
 
   @override
   String get legalUpdatesCategoryNotices => 'నోటీసులు';
+
+  @override
+  String get commonSoon => 'త్వరలో';
+
+  @override
+  String homeProgressQuizzesCompleted(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count క్విజ్‌లు పూర్తయ్యాయి',
+      one: '1 క్విజ్ పూర్తయింది',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String homeProgressPoints(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count పాయింట్లు',
+      one: '1 పాయింట్',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String homeProgressAccuracy(int percent) {
+    return 'ఖచ్చితత్వం $percent%';
+  }
+
+  @override
+  String get homeProgressEmpty =>
+      'ఇంకా క్విజ్‌లు లేవు. మీ మొదటి క్విజ్ రాయండి!';
+
+  @override
+  String get homeAskNyayaTitle => 'న్యాయను అడగండి';
+
+  @override
+  String get homeAskNyayaBody =>
+      'మీ న్యాయ ప్రశ్నలను సరళమైన భాషలో అడగండి. స్పష్టమైన సమాధానాలు పొందండి.';
+
+  @override
+  String get homeRecommended => 'మీ కోసం సిఫార్సు చేయబడింది';
 }

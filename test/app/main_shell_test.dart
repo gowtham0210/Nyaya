@@ -80,6 +80,35 @@ void main() {
     expect(find.byKey(const ValueKey('categories.search')), findsOneWidget);
   });
 
+  testWidgets('026 AC-007 View All recommended opens the grid', (tester) async {
+    await pumpMainShell(tester);
+    final viewAll = find.byKey(
+      const ValueKey('home.section.recommended.viewAll'),
+    );
+    await tester.scrollUntilVisible(
+      viewAll,
+      300,
+      scrollable: find
+          .descendant(
+            of: find.byKey(const ValueKey('home.scroll')),
+            matching: find.byType(Scrollable),
+          )
+          .first,
+    );
+    await tester.pumpAndSettle();
+
+    await tester.tap(viewAll);
+    await tester.pumpAndSettle();
+
+    expect(
+      find.descendant(
+        of: find.byType(AppBar),
+        matching: find.text('Recommended for you'),
+      ),
+      findsOneWidget,
+    );
+  });
+
   testWidgets('020 AC-005 View All legal updates opens the full list', (
     tester,
   ) async {

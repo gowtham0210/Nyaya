@@ -173,5 +173,13 @@
   "legalUpdatesCategoryJudgements": "ತೀರ್ಪುಗಳು",
   "legalUpdatesCategoryLegislation": "ಶಾಸನ",
   "legalUpdatesCategoryReforms": "ಸುಧಾರಣೆಗಳು",
-  "legalUpdatesCategoryNotices": "ಸೂಚನೆಗಳು"
+  "legalUpdatesCategoryNotices": "ಸೂಚನೆಗಳು",
+  "commonSoon": "ಶೀಘ್ರದಲ್ಲಿ",
+  "homeProgressQuizzesCompleted": "{count, plural, =1{1 ಕ್ವಿಜ್ ಪೂರ್ಣಗೊಂಡಿದೆ} other{{count} ಕ್ವಿಜ್‌ಗಳು ಪೂರ್ಣಗೊಂಡಿವೆ}}",
+  "homeProgressPoints": "{count, plural, =1{1 ಅಂಕ} other{{count} ಅಂಕಗಳು}}",
+  "homeProgressAccuracy": "ನಿಖರತೆ {percent}%",
+  "homeProgressEmpty": "ಇನ್ನೂ ಯಾವುದೇ ಕ್ವಿಜ್ ಇಲ್ಲ. ನಿಮ್ಮ ಮೊದಲ ಕ್ವಿಜ್ ತೆಗೆದುಕೊಳ್ಳಿ!",
+  "homeAskNyayaTitle": "ನ್ಯಾಯ ಅನ್ನು ಕೇಳಿ",
+  "homeAskNyayaBody": "ನಿಮ್ಮ ಕಾನೂನು ಪ್ರಶ್ನೆಗಳನ್ನು ಸರಳ ಭಾಷೆಯಲ್ಲಿ ಕೇಳಿ. ಸ್ಪಷ್ಟ ಉತ್ತರಗಳನ್ನು ಪಡೆಯಿರಿ.",
+  "homeRecommended": "ನಿಮಗಾಗಿ ಶಿಫಾರಸು ಮಾಡಲಾಗಿದೆ"
 }

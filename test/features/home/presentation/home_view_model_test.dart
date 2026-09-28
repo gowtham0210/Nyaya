@@ -17,8 +17,6 @@ void main() {
         'Legal Reasoning',
       ]),
     );
-    expect(viewModel.continueLearning.title, 'Indian Constitution Quiz');
-    expect(viewModel.continueLearning.progress, 0.65);
     expect(viewModel.popularQuizzes, hasLength(3));
     expect(
       viewModel.popularQuizzes.map((quiz) => quiz.title),

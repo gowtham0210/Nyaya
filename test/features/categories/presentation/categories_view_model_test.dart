@@ -152,4 +152,25 @@ void main() {
     final cards = (viewModel.state as Loaded<List<CategoryData>>).data;
     expect(cards.single.label, 'New');
   });
+
+  test('026 NFR-001 ensureLoaded fetches once for Home and the tab', () async {
+    var calls = 0;
+    final viewModel = viewModelWith(
+      ApiClient(
+        httpClient: MockClient((request) async {
+          if (request.url.path.endsWith('/categories')) {
+            calls++;
+          }
+          return http.Response('{"items":[]}', 200);
+        }),
+      ),
+    );
+
+    await viewModel.ensureLoaded();
+    await viewModel.ensureLoaded();
+
+    expect(calls, 1);
+    await viewModel.load();
+    expect(calls, 2);
+  });
 }

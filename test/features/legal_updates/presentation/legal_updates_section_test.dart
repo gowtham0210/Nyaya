@@ -11,6 +11,7 @@ import 'package:nyaya/features/legal_updates/data/legal_updates_repository.dart'
 import 'package:nyaya/features/legal_updates/presentation/legal_updates_view_model.dart';
 
 import '../../../support/fake_backend.dart';
+import '../../../support/home_fixture.dart';
 import '../../../support/localized_app.dart';
 
 Map<String, Object> update(
@@ -60,12 +61,15 @@ void main() {
       ),
     );
     addTearDown(dailyQuestions.dispose);
+    final sections = quietHomeSections();
     await pumpLocalized(
       tester,
       HomePage(
         viewModel: const HomeViewModel(),
         dailyQuestions: dailyQuestions,
         legalUpdates: viewModel,
+        progress: sections.progress,
+        categories: sections.categories,
         onViewAllLegalUpdatesPressed: onViewAllLegalUpdatesPressed,
       ),
       locale: locale,

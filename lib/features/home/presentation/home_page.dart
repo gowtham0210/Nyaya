@@ -1,13 +1,19 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/localization/l10n.dart';
+import '../../../core/presentation/show_message.dart';
 import '../../../core/presentation/widgets/nyaya_icon.dart';
 import '../../../core/presentation/widgets/nyaya_widgets.dart';
 import '../../legal_updates/presentation/legal_updates_section.dart';
 import '../../legal_updates/presentation/legal_updates_view_model.dart';
+import '../../categories/presentation/categories_view_model.dart';
 import 'daily_questions_view_model.dart';
 import 'home_view_model.dart';
+import 'learning_progress_view_model.dart';
+import 'widgets/ask_nyaya_card.dart';
 import 'widgets/daily_questions_section.dart';
+import 'widgets/learning_progress_card.dart';
+import 'widgets/recommended_section.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({
@@ -15,6 +21,8 @@ class HomePage extends StatefulWidget {
     required this.viewModel,
     required this.dailyQuestions,
     required this.legalUpdates,
+    required this.progress,
+    required this.categories,
     this.onNotificationsPressed,
     this.onStartQuizPressed,
     this.onResumePressed,
@@ -23,11 +31,18 @@ class HomePage extends StatefulWidget {
     this.onCategorySelected,
     this.onQuizSelected,
     this.onViewAllLegalUpdatesPressed,
+    this.onAskNyayaPressed,
+    this.onRecommendedSelected,
+    this.onViewAllRecommendedPressed,
   });
 
   final HomeViewModel viewModel;
   final DailyQuestionsViewModel dailyQuestions;
   final LegalUpdatesViewModel legalUpdates;
+  final LearningProgressViewModel progress;
+
+  /// Backend categories for Recommended; shared with the Categories tab.
+  final CategoriesViewModel categories;
   final VoidCallback? onNotificationsPressed;
   final VoidCallback? onStartQuizPressed;
   final VoidCallback? onResumePressed;
@@ -36,6 +51,9 @@ class HomePage extends StatefulWidget {
   final ValueChanged<HomeCategoryData>? onCategorySelected;
   final ValueChanged<PopularQuizData>? onQuizSelected;
   final VoidCallback? onViewAllLegalUpdatesPressed;
+  final VoidCallback? onAskNyayaPressed;
+  final ValueChanged<CategoryData>? onRecommendedSelected;
+  final VoidCallback? onViewAllRecommendedPressed;
 
   static const pageBackground = Color(0xFFF8F6F2);
   static const heroBackground = Color(0xFF11233B);
@@ -55,7 +73,9 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+    widget.progress.load();
     widget.dailyQuestions.load();
+    widget.categories.ensureLoaded();
     widget.legalUpdates.load();
   }
 
@@ -73,17 +93,10 @@ class _HomePageState extends State<HomePage> {
           children: [
             _HeaderRow(
               hasUnreadNotifications: viewModel.hasUnreadNotifications,
-              onNotificationsPressed: () {
-                final callback = widget.onNotificationsPressed;
-                if (callback != null) {
-                  callback();
-                  return;
-                }
-                _showPlaceholder(
-                  context,
-                  l10n.featureComingSoon(l10n.homeNotifications),
-                );
-              },
+              onNotificationsPressed: _orPlaceholder(
+                widget.onNotificationsPressed,
+                l10n.featureComingSoon(l10n.homeNotifications),
+              ),
             ),
             const SizedBox(height: 20),
             _HeroBanner(
@@ -92,43 +105,28 @@ class _HomePageState extends State<HomePage> {
               trailLine: l10n.homeHeroTrail,
               supportingCopy: l10n.homeHeroSupport,
               ctaLabel: l10n.homeStartQuiz,
-              onPressed: () {
-                final callback = widget.onStartQuizPressed;
-                if (callback != null) {
-                  callback();
-                  return;
-                }
-                _showPlaceholder(context, l10n.commonComingSoon);
-              },
+              onPressed: _orPlaceholder(
+                widget.onStartQuizPressed,
+                l10n.commonComingSoon,
+              ),
             ),
             const SizedBox(height: 28),
             _SectionHeader(
               key: const ValueKey('home.section.explore'),
               title: l10n.homeExploreByCategory,
               actionLabel: l10n.commonViewAll,
-              onPressed: () {
-                final callback = widget.onViewAllCategoriesPressed;
-                if (callback != null) {
-                  callback();
-                  return;
-                }
-                _showPlaceholder(context, l10n.commonComingSoon);
-              },
+              onPressed: _orPlaceholder(
+                widget.onViewAllCategoriesPressed,
+                l10n.commonComingSoon,
+              ),
             ),
             const SizedBox(height: 16),
             _CategoryStrip(
               categories: viewModel.categories,
-              onCategorySelected: (category) {
-                final callback = widget.onCategorySelected;
-                if (callback != null) {
-                  callback(category);
-                  return;
-                }
-                _showPlaceholder(
-                  context,
-                  l10n.featureComingSoon(category.label),
-                );
-              },
+              onCategorySelected: _orPlaceholderWith(
+                widget.onCategorySelected,
+                (category) => l10n.featureComingSoon(category.label),
+              ),
             ),
             const SizedBox(height: 30),
             Text(
@@ -142,45 +140,59 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             const SizedBox(height: 16),
-            _ContinueLearningCard(
-              data: viewModel.continueLearning,
-              onResumePressed: () {
-                final callback = widget.onResumePressed;
-                if (callback != null) {
-                  callback();
-                  return;
-                }
-                _showPlaceholder(context, l10n.commonComingSoon);
-              },
+            LearningProgressCard(
+              viewModel: widget.progress,
+              onResumePressed: _orPlaceholder(
+                widget.onResumePressed,
+                l10n.commonComingSoon,
+              ),
+            ),
+            const SizedBox(height: 16),
+            AskNyayaCard(
+              onPressed: _orPlaceholder(
+                widget.onAskNyayaPressed,
+                l10n.featureComingSoon(l10n.homeAskNyayaTitle),
+              ),
             ),
             const SizedBox(height: 28),
             DailyQuestionsSection(viewModel: widget.dailyQuestions),
             const SizedBox(height: 28),
             _SectionHeader(
+              key: const ValueKey('home.section.recommended'),
+              actionKey: const ValueKey('home.section.recommended.viewAll'),
+              title: l10n.homeRecommended,
+              actionLabel: l10n.commonViewAll,
+              onPressed: _orPlaceholder(
+                widget.onViewAllRecommendedPressed,
+                l10n.commonComingSoon,
+              ),
+            ),
+            const SizedBox(height: 16),
+            RecommendedSection(
+              viewModel: widget.categories,
+              onCategorySelected: _orPlaceholderWith(
+                widget.onRecommendedSelected,
+                (category) => l10n.featureComingSoon(category.label),
+              ),
+            ),
+            const SizedBox(height: 28),
+            _SectionHeader(
               key: const ValueKey('home.section.popular'),
               title: l10n.homePopularQuizzes,
               actionLabel: l10n.commonViewAll,
-              onPressed: () {
-                final callback = widget.onViewAllPopularPressed;
-                if (callback != null) {
-                  callback();
-                  return;
-                }
-                _showPlaceholder(context, l10n.commonComingSoon);
-              },
+              onPressed: _orPlaceholder(
+                widget.onViewAllPopularPressed,
+                l10n.commonComingSoon,
+              ),
             ),
             const SizedBox(height: 16),
             for (final quiz in viewModel.popularQuizzes) ...[
               _PopularQuizCard(
                 quiz: quiz,
-                onPressed: () {
-                  final callback = widget.onQuizSelected;
-                  if (callback != null) {
-                    callback(quiz);
-                    return;
-                  }
-                  _showPlaceholder(context, l10n.featureComingSoon(quiz.title));
-                },
+                onPressed: () => _orPlaceholderWith<PopularQuizData>(
+                  widget.onQuizSelected,
+                  (quiz) => l10n.featureComingSoon(quiz.title),
+                )(quiz),
               ),
               const SizedBox(height: 16),
             ],
@@ -190,14 +202,10 @@ class _HomePageState extends State<HomePage> {
               actionKey: const ValueKey('home.section.legalUpdates.viewAll'),
               title: l10n.legalUpdatesTitle,
               actionLabel: l10n.commonViewAll,
-              onPressed: () {
-                final callback = widget.onViewAllLegalUpdatesPressed;
-                if (callback != null) {
-                  callback();
-                  return;
-                }
-                _showPlaceholder(context, l10n.commonComingSoon);
-              },
+              onPressed: _orPlaceholder(
+                widget.onViewAllLegalUpdatesPressed,
+                l10n.commonComingSoon,
+              ),
             ),
             const SizedBox(height: 16),
             LegalUpdatesSection(viewModel: widget.legalUpdates),
@@ -208,12 +216,15 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  void _showPlaceholder(BuildContext context, String message) {
-    final messenger = ScaffoldMessenger.of(context);
-    messenger
-      ..hideCurrentSnackBar()
-      ..showSnackBar(SnackBar(content: Text(message)));
-  }
+  /// [callback], or a snackbar with [message] until the feature is wired.
+  VoidCallback _orPlaceholder(VoidCallback? callback, String message) =>
+      callback ?? () => showMessage(context, message);
+
+  /// [_orPlaceholder] for callbacks that take the tapped item.
+  ValueChanged<T> _orPlaceholderWith<T>(
+    ValueChanged<T>? callback,
+    String Function(T item) message,
+  ) => callback ?? (item) => showMessage(context, message(item));
 }
 
 class _HeaderRow extends StatelessWidget {
@@ -658,178 +669,6 @@ class _CategoryTile extends StatelessWidget {
               ),
             ),
           ],
-        ),
-      ),
-    );
-  }
-}
-
-class _ContinueLearningCard extends StatelessWidget {
-  const _ContinueLearningCard({
-    required this.data,
-    required this.onResumePressed,
-  });
-
-  final ContinueLearningData data;
-  final VoidCallback onResumePressed;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      key: const ValueKey('home.continue.card'),
-      padding: const EdgeInsets.all(18),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: HomePage.cardBorder),
-        boxShadow: [
-          BoxShadow(
-            color: HomePage.heroBackground.withValues(alpha: 0.06),
-            blurRadius: 24,
-            offset: const Offset(0, 12),
-          ),
-        ],
-      ),
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          final compact = constraints.maxWidth < 360;
-
-          return Row(
-            children: [
-              _ProgressRing(progress: data.progress, compact: compact),
-              const SizedBox(width: 16),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      data.title,
-                      key: const ValueKey('home.continue.title'),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w700,
-                        color: HomePage.heroBackground,
-                        letterSpacing: -0.3,
-                      ),
-                    ),
-                    const SizedBox(height: 6),
-                    Text(
-                      context.l10n.questionCount(data.questionCount),
-                      key: const ValueKey('home.continue.meta'),
-                      style: const TextStyle(
-                        fontSize: 14,
-                        color: HomePage.supportText,
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-                    _ProgressBar(progress: data.progress),
-                  ],
-                ),
-              ),
-              const SizedBox(width: 14),
-              SizedBox(
-                width: compact ? 92 : 104,
-                height: 52,
-                child: ElevatedButton(
-                  key: const ValueKey('home.continue.resume'),
-                  onPressed: onResumePressed,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: HomePage.heroBackground,
-                    foregroundColor: Colors.white,
-                    elevation: 0,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(18),
-                    ),
-                  ),
-                  child: FittedBox(
-                    fit: BoxFit.scaleDown,
-                    child: Text(
-                      context.l10n.commonResume,
-                      style: const TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          );
-        },
-      ),
-    );
-  }
-}
-
-class _ProgressRing extends StatelessWidget {
-  const _ProgressRing({required this.progress, required this.compact});
-
-  final double progress;
-  final bool compact;
-
-  @override
-  Widget build(BuildContext context) {
-    final size = compact ? 74.0 : 82.0;
-
-    return SizedBox(
-      width: size,
-      height: size,
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          SizedBox(
-            width: size,
-            height: size,
-            child: CircularProgressIndicator(
-              key: const ValueKey('home.continue.progress'),
-              value: progress,
-              strokeWidth: compact ? 6 : 7,
-              backgroundColor: const Color(0xFFF0E8DC),
-              valueColor: const AlwaysStoppedAnimation<Color>(
-                HomePage.heroHighlight,
-              ),
-            ),
-          ),
-          Text(
-            '${(progress * 100).round()}%',
-            style: const TextStyle(
-              fontSize: 15,
-              fontWeight: FontWeight.w700,
-              color: HomePage.heroBackground,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _ProgressBar extends StatelessWidget {
-  const _ProgressBar({required this.progress});
-
-  final double progress;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 8,
-      decoration: BoxDecoration(
-        color: const Color(0xFFF2ECE4),
-        borderRadius: BorderRadius.circular(999),
-      ),
-      clipBehavior: Clip.antiAlias,
-      child: FractionallySizedBox(
-        alignment: Alignment.centerLeft,
-        widthFactor: progress,
-        child: DecoratedBox(
-          decoration: BoxDecoration(
-            gradient: const LinearGradient(
-              colors: [HomePage.heroHighlight, Color(0xFFC97A28)],
-            ),
-            borderRadius: BorderRadius.circular(999),
-          ),
         ),
       ),
     );

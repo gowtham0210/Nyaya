@@ -13,6 +13,7 @@ import 'package:nyaya/features/legal_updates/data/legal_updates_repository.dart'
 import 'package:nyaya/features/legal_updates/presentation/legal_updates_view_model.dart';
 
 import '../../../support/fake_backend.dart';
+import '../../../support/home_fixture.dart';
 
 const twoQuestions = {
   '/daily-questions/random': {
@@ -59,12 +60,15 @@ void main() {
     );
     addTearDown(legalUpdates.dispose);
 
+    final sections = quietHomeSections();
     await tester.pumpWidget(
       MaterialApp(
         home: HomePage(
           viewModel: const HomeViewModel(),
           dailyQuestions: dailyQuestions,
           legalUpdates: legalUpdates,
+          progress: sections.progress,
+          categories: sections.categories,
         ),
       ),
     );

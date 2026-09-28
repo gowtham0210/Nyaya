@@ -6,9 +6,12 @@ import '../features/categories/data/categories_repository.dart';
 import '../features/categories/presentation/categories_page.dart';
 import '../features/categories/presentation/categories_view_model.dart';
 import '../features/home/data/daily_questions_repository.dart';
+import '../features/home/data/progress_repository.dart';
 import '../features/home/presentation/daily_questions_view_model.dart';
 import '../features/home/presentation/home_page.dart';
 import '../features/home/presentation/home_view_model.dart';
+import '../features/home/presentation/learning_progress_view_model.dart';
+import '../features/home/presentation/recommended_page.dart';
 import '../features/legal_updates/data/legal_updates_repository.dart';
 import '../features/legal_updates/presentation/legal_updates_page.dart';
 import '../features/legal_updates/presentation/legal_updates_view_model.dart';
@@ -19,6 +22,7 @@ import '../features/shell/presentation/coming_soon_tab.dart';
 import '../features/shell/presentation/tab_shell_page.dart';
 import '../features/topic_detail/presentation/topic_detail_page.dart';
 import '../features/topic_detail/presentation/topic_detail_view_model.dart';
+import '../core/presentation/show_message.dart';
 import 'app_services.dart';
 import 'session_actions.dart';
 import 'session_expiry_listener.dart';
@@ -48,6 +52,9 @@ class _MainShellState extends State<MainShell> {
   late final _dailyQuestionsViewModel = DailyQuestionsViewModel(
     repository: DailyQuestionsRepository(_apiClient),
   );
+  late final _progressViewModel = LearningProgressViewModel(
+    repository: ProgressRepository(_apiClient),
+  );
   late final _legalUpdatesViewModel = LegalUpdatesViewModel(
     repository: LegalUpdatesRepository(_apiClient),
   );
@@ -58,6 +65,7 @@ class _MainShellState extends State<MainShell> {
     _categoriesViewModel.dispose();
     _dailyQuestionsViewModel.dispose();
     _legalUpdatesViewModel.dispose();
+    _progressViewModel.dispose();
     super.dispose();
   }
 
@@ -113,6 +121,8 @@ class _MainShellState extends State<MainShell> {
       viewModel: const HomeViewModel(),
       dailyQuestions: _dailyQuestionsViewModel,
       legalUpdates: _legalUpdatesViewModel,
+      progress: _progressViewModel,
+      categories: _categoriesViewModel,
       // Provisional wire until the Topics tab exists.
       onResumePressed: () => Navigator.of(context).push(
         MaterialPageRoute<void>(
@@ -124,6 +134,18 @@ class _MainShellState extends State<MainShell> {
       ),
       onViewAllCategoriesPressed: () =>
           _controller.select(MainTab.categories.index),
+      onViewAllRecommendedPressed: () => Navigator.of(context).push(
+        MaterialPageRoute<void>(
+          builder: (pageContext) => RecommendedPage(
+            viewModel: _categoriesViewModel,
+            // Category screens don't exist yet; same message as on Home.
+            onCategorySelected: (category) => showMessage(
+              pageContext,
+              pageContext.l10n.featureComingSoon(category.label),
+            ),
+          ),
+        ),
+      ),
       onViewAllLegalUpdatesPressed: () => Navigator.of(context).push(
         MaterialPageRoute<void>(
           builder: (_) => LegalUpdatesPage(viewModel: _legalUpdatesViewModel),

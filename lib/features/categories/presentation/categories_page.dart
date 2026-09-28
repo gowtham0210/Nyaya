@@ -32,7 +32,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
   void initState() {
     super.initState();
     _searchController.addListener(_onSearchChanged);
-    widget.viewModel.load();
+    widget.viewModel.ensureLoaded();
   }
 
   @override

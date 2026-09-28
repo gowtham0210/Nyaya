@@ -18,6 +18,7 @@ import 'package:nyaya/features/quiz_result/presentation/quiz_result_view_model.d
 import 'package:nyaya/features/topic_detail/presentation/topic_detail_page.dart';
 
 import '../support/fake_backend.dart';
+import '../support/home_fixture.dart';
 import '../support/localized_app.dart';
 
 // Issue #28: learning screens render UI text in the learner's language.
@@ -63,12 +64,15 @@ void main() {
       ),
     );
     addTearDown(legalUpdates.dispose);
+    final sections = quietHomeSections();
     await pumpLocalized(
       tester,
       HomePage(
         viewModel: const HomeViewModel(),
         dailyQuestions: dailyQuestions,
         legalUpdates: legalUpdates,
+        progress: sections.progress,
+        categories: sections.categories,
       ),
       locale: const Locale('hi'),
     );
@@ -80,7 +84,7 @@ void main() {
     expect(find.text('कानून आधारित क्विज़ ऐप'), findsOneWidget);
     expect(find.text('Explore by Category'), findsNothing);
     // Sample content stays as is.
-    expect(find.text('Indian Constitution Quiz'), findsOneWidget);
+    expect(find.text('Constitutional Law'), findsOneWidget);
 
     final page = find
         .descendant(

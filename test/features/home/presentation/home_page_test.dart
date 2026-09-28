@@ -8,6 +8,7 @@ import 'package:nyaya/features/legal_updates/data/legal_updates_repository.dart'
 import 'package:nyaya/features/legal_updates/presentation/legal_updates_view_model.dart';
 
 import '../../../support/fake_backend.dart';
+import '../../../support/home_fixture.dart';
 
 void main() {
   Future<void> pumpHomePage(
@@ -41,6 +42,7 @@ void main() {
       ),
     );
     addTearDown(legalUpdates.dispose);
+    final sections = quietHomeSections();
 
     await tester.pumpWidget(
       MaterialApp(
@@ -48,6 +50,8 @@ void main() {
           viewModel: const HomeViewModel(),
           dailyQuestions: dailyQuestions,
           legalUpdates: legalUpdates,
+          progress: sections.progress,
+          categories: sections.categories,
         ),
       ),
     );
@@ -99,16 +103,8 @@ void main() {
 
     expect(find.byKey(const ValueKey('home.section.continue')), findsOneWidget);
     expect(find.byKey(const ValueKey('home.continue.card')), findsOneWidget);
-    expect(find.text('Indian Constitution Quiz'), findsOneWidget);
-    expect(
-      find.descendant(
-        of: find.byKey(const ValueKey('home.continue.card')),
-        matching: find.text('15 Questions'),
-      ),
-      findsOneWidget,
-    );
-    expect(find.text('65%'), findsOneWidget);
-    expect(find.text('Resume'), findsOneWidget);
+    // Real progress (spec 026); this backend has no attempts yet.
+    expect(find.text('No quizzes yet. Take your first quiz!'), findsOneWidget);
   });
 
   testWidgets(

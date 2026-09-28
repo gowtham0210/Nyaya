@@ -9,12 +9,6 @@ class HomeViewModel {
 
   bool get hasUnreadNotifications => true;
 
-  ContinueLearningData get continueLearning => const ContinueLearningData(
-    title: 'Indian Constitution Quiz',
-    questionCount: 15,
-    progress: 0.65,
-  );
-
   List<HomeCategoryData> get categories => const [
     HomeCategoryData(
       id: 'constitutional-law',
@@ -94,18 +88,6 @@ class HomeCategoryData {
   final String id;
   final String label;
   final HomeIconType icon;
-}
-
-class ContinueLearningData {
-  const ContinueLearningData({
-    required this.title,
-    required this.questionCount,
-    required this.progress,
-  });
-
-  final String title;
-  final int questionCount;
-  final double progress;
 }
 
 class PopularQuizData {

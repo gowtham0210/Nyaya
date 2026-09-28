@@ -615,4 +615,47 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get legalUpdatesCategoryNotices => 'Notices';
+
+  @override
+  String get commonSoon => 'Soon';
+
+  @override
+  String homeProgressQuizzesCompleted(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count quizzes completed',
+      one: '1 quiz completed',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String homeProgressPoints(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count points',
+      one: '1 point',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String homeProgressAccuracy(int percent) {
+    return 'Accuracy $percent%';
+  }
+
+  @override
+  String get homeProgressEmpty => 'No quizzes yet. Take your first quiz!';
+
+  @override
+  String get homeAskNyayaTitle => 'Ask Nyaya';
+
+  @override
+  String get homeAskNyayaBody =>
+      'Ask your legal questions in simple language. Get clear answers.';
+
+  @override
+  String get homeRecommended => 'Recommended for you';
 }

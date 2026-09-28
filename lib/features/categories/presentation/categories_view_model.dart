@@ -1,39 +1,24 @@
-import 'package:flutter/foundation.dart';
-
-import '../../../core/presentation/load_state.dart';
+import '../../../core/presentation/load_state_notifier.dart';
 import '../../../core/presentation/widgets/nyaya_icon.dart';
 import '../data/categories_repository.dart';
 
-class CategoriesViewModel extends ChangeNotifier {
+class CategoriesViewModel extends LoadStateNotifier<List<CategoryData>> {
   CategoriesViewModel({required CategoriesRepository repository})
     : _repository = repository;
 
   final CategoriesRepository _repository;
-  var _disposed = false;
-  var _loadId = 0;
 
   String get featureId => '013-categories';
 
-  LoadState<List<CategoryData>> get state => _state;
-  LoadState<List<CategoryData>> _state = const Loading();
+  @override
+  Future<List<CategoryData>> fetch() async => [
+    for (final (index, category)
+        in (await _repository.fetchCategories()).indexed)
+      _toCard(category, index),
+  ];
 
-  /// Loads categories. When loads overlap (Retry during a load), only the
-  /// latest one's result is kept.
-  Future<void> load() async {
-    final loadId = ++_loadId;
-    _setState(const Loading());
-    final result = await LoadState.run(
-      () async => [
-        for (final (index, category)
-            in (await _repository.fetchCategories()).indexed)
-          _toCard(category, index),
-      ],
-      isEmpty: (cards) => cards.isEmpty,
-    );
-    if (loadId == _loadId) {
-      _setState(result);
-    }
-  }
+  @override
+  bool isEmpty(List<CategoryData> cards) => cards.isEmpty;
 
   List<CategoryData> filter(List<CategoryData> categories, String query) {
     final normalized = query.trim().toLowerCase();
@@ -43,20 +28,6 @@ class CategoriesViewModel extends ChangeNotifier {
     return categories
         .where((category) => category.label.toLowerCase().contains(normalized))
         .toList();
-  }
-
-  void _setState(LoadState<List<CategoryData>> state) {
-    if (_disposed) {
-      return;
-    }
-    _state = state;
-    notifyListeners();
-  }
-
-  @override
-  void dispose() {
-    _disposed = true;
-    super.dispose();
   }
 }
 

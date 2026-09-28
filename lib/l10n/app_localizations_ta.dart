@@ -619,4 +619,48 @@ class AppLocalizationsTa extends AppLocalizations {
 
   @override
   String get legalUpdatesCategoryNotices => 'அறிவிப்புகள்';
+
+  @override
+  String get commonSoon => 'விரைவில்';
+
+  @override
+  String homeProgressQuizzesCompleted(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count வினாடி வினாக்கள் முடிந்தன',
+      one: '1 வினாடி வினா முடிந்தது',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String homeProgressPoints(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count புள்ளிகள்',
+      one: '1 புள்ளி',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String homeProgressAccuracy(int percent) {
+    return 'துல்லியம் $percent%';
+  }
+
+  @override
+  String get homeProgressEmpty =>
+      'இன்னும் வினாடி வினா இல்லை. உங்கள் முதல் வினாடி வினாவை எழுதுங்கள்!';
+
+  @override
+  String get homeAskNyayaTitle => 'நியாயா-விடம் கேளுங்கள்';
+
+  @override
+  String get homeAskNyayaBody =>
+      'உங்கள் சட்ட கேள்விகளை எளிய மொழியில் கேளுங்கள். தெளிவான பதில்கள் பெறுங்கள்.';
+
+  @override
+  String get homeRecommended => 'உங்களுக்கான பரிந்துரைகள்';
 }

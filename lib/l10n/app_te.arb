@@ -173,5 +173,13 @@
   "legalUpdatesCategoryJudgements": "తీర్పులు",
   "legalUpdatesCategoryLegislation": "చట్టం",
   "legalUpdatesCategoryReforms": "సంస్కరణలు",
-  "legalUpdatesCategoryNotices": "నోటీసులు"
+  "legalUpdatesCategoryNotices": "నోటీసులు",
+  "commonSoon": "త్వరలో",
+  "homeProgressQuizzesCompleted": "{count, plural, =1{1 క్విజ్ పూర్తయింది} other{{count} క్విజ్‌లు పూర్తయ్యాయి}}",
+  "homeProgressPoints": "{count, plural, =1{1 పాయింట్} other{{count} పాయింట్లు}}",
+  "homeProgressAccuracy": "ఖచ్చితత్వం {percent}%",
+  "homeProgressEmpty": "ఇంకా క్విజ్‌లు లేవు. మీ మొదటి క్విజ్ రాయండి!",
+  "homeAskNyayaTitle": "న్యాయను అడగండి",
+  "homeAskNyayaBody": "మీ న్యాయ ప్రశ్నలను సరళమైన భాషలో అడగండి. స్పష్టమైన సమాధానాలు పొందండి.",
+  "homeRecommended": "మీ కోసం సిఫార్సు చేయబడింది"
 }

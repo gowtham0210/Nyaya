@@ -1156,6 +1156,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Notices'**
   String get legalUpdatesCategoryNotices;
+
+  /// No description provided for @commonSoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Soon'**
+  String get commonSoon;
+
+  /// No description provided for @homeProgressQuizzesCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 quiz completed} other{{count} quizzes completed}}'**
+  String homeProgressQuizzesCompleted(int count);
+
+  /// No description provided for @homeProgressPoints.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 point} other{{count} points}}'**
+  String homeProgressPoints(int count);
+
+  /// No description provided for @homeProgressAccuracy.
+  ///
+  /// In en, this message translates to:
+  /// **'Accuracy {percent}%'**
+  String homeProgressAccuracy(int percent);
+
+  /// No description provided for @homeProgressEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No quizzes yet. Take your first quiz!'**
+  String get homeProgressEmpty;
+
+  /// No description provided for @homeAskNyayaTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask Nyaya'**
+  String get homeAskNyayaTitle;
+
+  /// No description provided for @homeAskNyayaBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask your legal questions in simple language. Get clear answers.'**
+  String get homeAskNyayaBody;
+
+  /// No description provided for @homeRecommended.
+  ///
+  /// In en, this message translates to:
+  /// **'Recommended for you'**
+  String get homeRecommended;
 }
 
 class _AppLocalizationsDelegate

@@ -618,4 +618,48 @@ class AppLocalizationsKn extends AppLocalizations {
 
   @override
   String get legalUpdatesCategoryNotices => 'ಸೂಚನೆಗಳು';
+
+  @override
+  String get commonSoon => 'ಶೀಘ್ರದಲ್ಲಿ';
+
+  @override
+  String homeProgressQuizzesCompleted(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count ಕ್ವಿಜ್‌ಗಳು ಪೂರ್ಣಗೊಂಡಿವೆ',
+      one: '1 ಕ್ವಿಜ್ ಪೂರ್ಣಗೊಂಡಿದೆ',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String homeProgressPoints(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count ಅಂಕಗಳು',
+      one: '1 ಅಂಕ',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String homeProgressAccuracy(int percent) {
+    return 'ನಿಖರತೆ $percent%';
+  }
+
+  @override
+  String get homeProgressEmpty =>
+      'ಇನ್ನೂ ಯಾವುದೇ ಕ್ವಿಜ್ ಇಲ್ಲ. ನಿಮ್ಮ ಮೊದಲ ಕ್ವಿಜ್ ತೆಗೆದುಕೊಳ್ಳಿ!';
+
+  @override
+  String get homeAskNyayaTitle => 'ನ್ಯಾಯ ಅನ್ನು ಕೇಳಿ';
+
+  @override
+  String get homeAskNyayaBody =>
+      'ನಿಮ್ಮ ಕಾನೂನು ಪ್ರಶ್ನೆಗಳನ್ನು ಸರಳ ಭಾಷೆಯಲ್ಲಿ ಕೇಳಿ. ಸ್ಪಷ್ಟ ಉತ್ತರಗಳನ್ನು ಪಡೆಯಿರಿ.';
+
+  @override
+  String get homeRecommended => 'ನಿಮಗಾಗಿ ಶಿಫಾರಸು ಮಾಡಲಾಗಿದೆ';
 }
