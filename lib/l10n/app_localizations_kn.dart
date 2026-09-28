@@ -777,4 +777,55 @@ class AppLocalizationsKn extends AppLocalizations {
   @override
   String get reminderNotificationBody =>
       'ನಿಮ್ಮ ದೈನಂದಿನ ಕಾನೂನು ಅಭ್ಯಾಸದ ಸಮಯ — ನಿಮ್ಮ ಸ್ಟ್ರೀಕ್ ಮುಂದುವರಿಸಿ.';
+
+  @override
+  String get privacySessionsTitle => 'ಸಕ್ರಿಯ ಸೆಷನ್‌ಗಳು';
+
+  @override
+  String get privacySessionsBody =>
+      'ನಿಮ್ಮ ಖಾತೆಯಲ್ಲಿ ಪ್ರಸ್ತುತ ಸಕ್ರಿಯವಾಗಿರುವ ಸೈನ್-ಇನ್‌ಗಳು';
+
+  @override
+  String get privacyLogoutAll => 'ಎಲ್ಲಾ ಸಾಧನಗಳಿಂದ ಲಾಗ್ ಔಟ್ ಮಾಡಿ';
+
+  @override
+  String get privacyLogoutAllConfirm =>
+      'ಇದು ಈ ಸಾಧನ ಸೇರಿದಂತೆ ಎಲ್ಲಾ ಸಾಧನಗಳಿಂದ ನಿಮ್ಮನ್ನು ಸೈನ್ ಔಟ್ ಮಾಡುತ್ತದೆ.';
+
+  @override
+  String get privacyNoPassword =>
+      'ನೀವು ನಿಮ್ಮ ಫೋನ್ ಸಂಖ್ಯೆ ಮತ್ತು ಒಂದು ಬಾರಿಯ ಕೋಡ್‌ನಿಂದ ಸೈನ್ ಇನ್ ಮಾಡುತ್ತೀರಿ, ಆದ್ದರಿಂದ ಬದಲಾಯಿಸಲು ಯಾವುದೇ ಪಾಸ್‌ವರ್ಡ್ ಇಲ್ಲ.';
+
+  @override
+  String get aboutTagline => 'ಒಂದೊಂದು ಕ್ವಿಜ್‌ನಲ್ಲಿ ಕಾನೂನಿನ ಮೂಲಾಂಶಗಳು';
+
+  @override
+  String aboutVersion(String version) {
+    return 'ಆವೃತ್ತಿ $version';
+  }
+
+  @override
+  String get aboutDescription =>
+      'ನ್ಯಾಯ ಭಾರತೀಯ ಕಾನೂನನ್ನು ಸರಳ ಭಾಷೆಯಲ್ಲಿ ಅರ್ಥಮಾಡಿಕೊಳ್ಳಲು ಸಹಾಯ ಮಾಡುತ್ತದೆ — ಸಂವಿಧಾನವನ್ನು ಲೇಖನ ಲೇಖನವಾಗಿ ಕಲಿಯಿರಿ, ನಿಮ್ಮ ಜ್ಞಾನವನ್ನು ಪರೀಕ್ಷಿಸಿ ಮತ್ತು ಕಾನೂನು ಬೆಳವಣಿಗೆಗಳ ಬಗ್ಗೆ ಅಪ್‌ಡೇಟ್ ಆಗಿರಿ.';
+
+  @override
+  String get aboutFeaturesTitle => 'ನ್ಯಾಯದಲ್ಲಿ ನಿಮಗೆ ಸಿಗುವುದು';
+
+  @override
+  String get aboutFeatureArticles => 'ಭಾರತೀಯ ಸಂವಿಧಾನದ ಲೇಖನ-ವಾರು ಮಾರ್ಗದರ್ಶಿ';
+
+  @override
+  String get aboutFeatureDaily =>
+      'ಸ್ಪಷ್ಟ ಉತ್ತರಗಳೊಂದಿಗೆ ದೈನಂದಿನ ಕಾನೂನು ಪ್ರಶ್ನೆಗಳು';
+
+  @override
+  String get aboutFeatureUpdates =>
+      'ಇತ್ತೀಚಿನ ಕಾನೂನು ಅಪ್‌ಡೇಟ್‌ಗಳು ಮತ್ತು ತೀರ್ಪುಗಳು';
+
+  @override
+  String get aboutFeatureQuizzes => 'ನೀವು ಕಲಿತದ್ದನ್ನು ಪರೀಕ್ಷಿಸುವ ಕ್ವಿಜ್‌ಗಳು';
+
+  @override
+  String get aboutFeatureLanguages =>
+      'ಇಂಗ್ಲಿಷ್, ಹಿಂದಿ, ತಮಿಳು, ತೆಲುಗು ಮತ್ತು ಕನ್ನಡದಲ್ಲಿ ಲಭ್ಯ';
 }

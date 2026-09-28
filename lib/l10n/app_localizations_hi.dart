@@ -773,4 +773,53 @@ class AppLocalizationsHi extends AppLocalizations {
   @override
   String get reminderNotificationBody =>
       'आपके दैनिक कानूनी अभ्यास का समय — अपनी लगातार गिनती बनाए रखें।';
+
+  @override
+  String get privacySessionsTitle => 'सक्रिय सत्र';
+
+  @override
+  String get privacySessionsBody => 'आपके खाते पर वर्तमान में सक्रिय साइन-इन';
+
+  @override
+  String get privacyLogoutAll => 'सभी उपकरणों से लॉग आउट करें';
+
+  @override
+  String get privacyLogoutAllConfirm =>
+      'इससे आप इस उपकरण सहित सभी उपकरणों से साइन आउट हो जाएंगे।';
+
+  @override
+  String get privacyNoPassword =>
+      'आप अपने फ़ोन नंबर और एक बार के कोड से साइन इन करते हैं, इसलिए बदलने के लिए कोई पासवर्ड नहीं है।';
+
+  @override
+  String get aboutTagline => 'एक-एक क्विज़ से कानून की बुनियादी बातें';
+
+  @override
+  String aboutVersion(String version) {
+    return 'संस्करण $version';
+  }
+
+  @override
+  String get aboutDescription =>
+      'न्याय आपको भारतीय कानून को सरल भाषा में समझने में मदद करता है — संविधान को अनुच्छेद दर अनुच्छेद सीखें, अपने ज्ञान को परखें और कानूनी घटनाक्रम से अपडेट रहें।';
+
+  @override
+  String get aboutFeaturesTitle => 'न्याय में आपको क्या मिलेगा';
+
+  @override
+  String get aboutFeatureArticles =>
+      'भारतीय संविधान की अनुच्छेद-दर-अनुच्छेद मार्गदर्शिका';
+
+  @override
+  String get aboutFeatureDaily => 'स्पष्ट उत्तरों के साथ दैनिक कानूनी प्रश्न';
+
+  @override
+  String get aboutFeatureUpdates => 'नवीनतम कानूनी अपडेट और न्यायादेश';
+
+  @override
+  String get aboutFeatureQuizzes => 'आपने जो सीखा उसे परखने वाले क्विज़';
+
+  @override
+  String get aboutFeatureLanguages =>
+      'अंग्रेज़ी, हिंदी, तमिल, तेलुगु और कन्नड़ में उपलब्ध';
 }

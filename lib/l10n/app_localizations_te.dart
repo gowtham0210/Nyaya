@@ -777,4 +777,56 @@ class AppLocalizationsTe extends AppLocalizations {
   @override
   String get reminderNotificationBody =>
       'మీ రోజువారీ న్యాయ సాధనకు సమయం — మీ స్ట్రీక్‌ను కొనసాగించండి.';
+
+  @override
+  String get privacySessionsTitle => 'యాక్టివ్ సెషన్‌లు';
+
+  @override
+  String get privacySessionsBody =>
+      'మీ ఖాతాలో ప్రస్తుతం యాక్టివ్‌గా ఉన్న సైన్-ఇన్‌లు';
+
+  @override
+  String get privacyLogoutAll => 'అన్ని పరికరాల నుండి లాగ్ అవుట్ చేయండి';
+
+  @override
+  String get privacyLogoutAllConfirm =>
+      'ఇది ఈ పరికరంతో సహా అన్ని పరికరాల నుండి మిమ్మల్ని సైన్ అవుట్ చేస్తుంది.';
+
+  @override
+  String get privacyNoPassword =>
+      'మీరు మీ ఫోన్ నంబర్ మరియు ఒక్కసారి కోడ్‌తో సైన్ ఇన్ చేస్తారు, కాబట్టి మార్చడానికి పాస్‌వర్డ్ లేదు.';
+
+  @override
+  String get aboutTagline => 'ఒక్కో క్విజ్‌తో చట్టపు ప్రాథమికాంశాలు';
+
+  @override
+  String aboutVersion(String version) {
+    return 'వెర్షన్ $version';
+  }
+
+  @override
+  String get aboutDescription =>
+      'న్యాయ భారతీయ చట్టాన్ని సరళమైన భాషలో అర్థం చేసుకోవడానికి సహాయపడుతుంది — రాజ్యాంగాన్ని ఆర్టికల్ వారీగా నేర్చుకోండి, మీ జ్ఞానాన్ని పరీక్షించుకోండి మరియు చట్టపరమైన పరిణామాలపై అప్‌డేట్‌గా ఉండండి.';
+
+  @override
+  String get aboutFeaturesTitle => 'న్యాయలో మీకు ఏమి దొరుకుతుంది';
+
+  @override
+  String get aboutFeatureArticles =>
+      'భారత రాజ్యాంగానికి ఆర్టికల్ వారీగా మార్గదర్శి';
+
+  @override
+  String get aboutFeatureDaily =>
+      'స్పష్టమైన సమాధానాలతో రోజువారీ న్యాయ ప్రశ్నలు';
+
+  @override
+  String get aboutFeatureUpdates => 'తాజా లీగల్ అప్‌డేట్‌లు మరియు తీర్పులు';
+
+  @override
+  String get aboutFeatureQuizzes =>
+      'మీరు నేర్చుకున్నదాన్ని పరీక్షించే క్విజ్‌లు';
+
+  @override
+  String get aboutFeatureLanguages =>
+      'ఇంగ్లీష్, హిందీ, తమిళం, తెలుగు మరియు కన్నడలో అందుబాటులో ఉంది';
 }

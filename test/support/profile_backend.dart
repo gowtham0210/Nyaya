@@ -22,4 +22,6 @@ Map<String, Object> profileRoutes({
   },
   '/users/me/streak': {'currentStreak': streak, 'maxStreak': 6},
   '/users/me/categories-explored': {'categoriesExplored': 3},
+  '/users/me/security': {'activeSessions': 2},
+  '/users/me/logout-all': <String, Object>{},
 };

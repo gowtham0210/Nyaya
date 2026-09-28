@@ -779,4 +779,56 @@ class AppLocalizationsTa extends AppLocalizations {
   @override
   String get reminderNotificationBody =>
       'உங்கள் தினசரி சட்டப் பயிற்சிக்கான நேரம் — தொடர்ச்சியைத் தக்கவைத்துக் கொள்ளுங்கள்.';
+
+  @override
+  String get privacySessionsTitle => 'செயலில் உள்ள அமர்வுகள்';
+
+  @override
+  String get privacySessionsBody =>
+      'உங்கள் கணக்கில் தற்போது செயலில் உள்ள உள்நுழைவுகள்';
+
+  @override
+  String get privacyLogoutAll => 'அனைத்து சாதனங்களிலிருந்தும் வெளியேறு';
+
+  @override
+  String get privacyLogoutAllConfirm =>
+      'இது இந்தச் சாதனம் உட்பட அனைத்து சாதனங்களிலிருந்தும் உங்களை வெளியேற்றும்.';
+
+  @override
+  String get privacyNoPassword =>
+      'நீங்கள் உங்கள் தொலைபேசி எண் மற்றும் ஒருமுறை குறியீடு மூலம் உள்நுழைகிறீர்கள், எனவே மாற்ற கடவுச்சொல் இல்லை.';
+
+  @override
+  String get aboutTagline => 'ஒவ்வொரு வினாடி வினாவிலும் சட்ட அடிப்படைகள்';
+
+  @override
+  String aboutVersion(String version) {
+    return 'பதிப்பு $version';
+  }
+
+  @override
+  String get aboutDescription =>
+      'நியாயா இந்தியச் சட்டத்தை எளிய மொழியில் புரிந்துகொள்ள உதவுகிறது — அரசியலமைப்பை கட்டுரை கட்டுரையாகக் கற்று, உங்கள் அறிவைச் சோதித்து, சட்ட மாற்றங்களை அறிந்திருங்கள்.';
+
+  @override
+  String get aboutFeaturesTitle => 'நியாயாவில் நீங்கள் காண்பவை';
+
+  @override
+  String get aboutFeatureArticles =>
+      'இந்திய அரசியலமைப்பின் கட்டுரை வாரியான வழிகாட்டி';
+
+  @override
+  String get aboutFeatureDaily => 'தெளிவான பதில்களுடன் தினசரி சட்டக் கேள்விகள்';
+
+  @override
+  String get aboutFeatureUpdates =>
+      'சமீபத்திய சட்ட புதுப்பிப்புகள் மற்றும் தீர்ப்புகள்';
+
+  @override
+  String get aboutFeatureQuizzes =>
+      'நீங்கள் கற்றதைச் சோதிக்கும் வினாடி வினாக்கள்';
+
+  @override
+  String get aboutFeatureLanguages =>
+      'ஆங்கிலம், இந்தி, தமிழ், தெலுங்கு மற்றும் கன்னடத்தில் கிடைக்கும்';
 }

@@ -772,4 +772,53 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get reminderNotificationBody =>
       'Time for your daily legal practice — keep your streak going.';
+
+  @override
+  String get privacySessionsTitle => 'Active sessions';
+
+  @override
+  String get privacySessionsBody => 'Sign-ins currently active on your account';
+
+  @override
+  String get privacyLogoutAll => 'Log out from all devices';
+
+  @override
+  String get privacyLogoutAllConfirm =>
+      'This will sign you out on every device, including this one.';
+
+  @override
+  String get privacyNoPassword =>
+      'You sign in with your phone number and a one-time code, so there\'s no password to change.';
+
+  @override
+  String get aboutTagline => 'Law basics, one quiz at a time';
+
+  @override
+  String aboutVersion(String version) {
+    return 'Version $version';
+  }
+
+  @override
+  String get aboutDescription =>
+      'Nyaya helps you understand Indian law in simple language — learn the Constitution article by article, test your knowledge and stay updated on legal developments.';
+
+  @override
+  String get aboutFeaturesTitle => 'What you\'ll find in Nyaya';
+
+  @override
+  String get aboutFeatureArticles =>
+      'Article-by-article guide to the Indian Constitution';
+
+  @override
+  String get aboutFeatureDaily => 'Daily legal questions with clear answers';
+
+  @override
+  String get aboutFeatureUpdates => 'Latest legal updates and judgements';
+
+  @override
+  String get aboutFeatureQuizzes => 'Quizzes that test what you\'ve learned';
+
+  @override
+  String get aboutFeatureLanguages =>
+      'Available in English, Hindi, Tamil, Telugu and Kannada';
 }

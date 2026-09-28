@@ -1420,6 +1420,90 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Time for your daily legal practice — keep your streak going.'**
   String get reminderNotificationBody;
+
+  /// No description provided for @privacySessionsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Active sessions'**
+  String get privacySessionsTitle;
+
+  /// No description provided for @privacySessionsBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign-ins currently active on your account'**
+  String get privacySessionsBody;
+
+  /// No description provided for @privacyLogoutAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Log out from all devices'**
+  String get privacyLogoutAll;
+
+  /// No description provided for @privacyLogoutAllConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'This will sign you out on every device, including this one.'**
+  String get privacyLogoutAllConfirm;
+
+  /// No description provided for @privacyNoPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'You sign in with your phone number and a one-time code, so there\'s no password to change.'**
+  String get privacyNoPassword;
+
+  /// No description provided for @aboutTagline.
+  ///
+  /// In en, this message translates to:
+  /// **'Law basics, one quiz at a time'**
+  String get aboutTagline;
+
+  /// No description provided for @aboutVersion.
+  ///
+  /// In en, this message translates to:
+  /// **'Version {version}'**
+  String aboutVersion(String version);
+
+  /// No description provided for @aboutDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Nyaya helps you understand Indian law in simple language — learn the Constitution article by article, test your knowledge and stay updated on legal developments.'**
+  String get aboutDescription;
+
+  /// No description provided for @aboutFeaturesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'What you\'ll find in Nyaya'**
+  String get aboutFeaturesTitle;
+
+  /// No description provided for @aboutFeatureArticles.
+  ///
+  /// In en, this message translates to:
+  /// **'Article-by-article guide to the Indian Constitution'**
+  String get aboutFeatureArticles;
+
+  /// No description provided for @aboutFeatureDaily.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily legal questions with clear answers'**
+  String get aboutFeatureDaily;
+
+  /// No description provided for @aboutFeatureUpdates.
+  ///
+  /// In en, this message translates to:
+  /// **'Latest legal updates and judgements'**
+  String get aboutFeatureUpdates;
+
+  /// No description provided for @aboutFeatureQuizzes.
+  ///
+  /// In en, this message translates to:
+  /// **'Quizzes that test what you\'ve learned'**
+  String get aboutFeatureQuizzes;
+
+  /// No description provided for @aboutFeatureLanguages.
+  ///
+  /// In en, this message translates to:
+  /// **'Available in English, Hindi, Tamil, Telugu and Kannada'**
+  String get aboutFeatureLanguages;
 }
 
 class _AppLocalizationsDelegate

@@ -377,5 +377,26 @@
   "remindersToggleSubtitle": "Get a nudge to practise each day",
   "remindersTime": "Reminder time",
   "remindersPermissionDenied": "Notifications are off for Nyaya. Turn them on in your phone's settings to get reminders.",
-  "reminderNotificationBody": "Time for your daily legal practice — keep your streak going."
+  "reminderNotificationBody": "Time for your daily legal practice — keep your streak going.",
+  "privacySessionsTitle": "Active sessions",
+  "privacySessionsBody": "Sign-ins currently active on your account",
+  "privacyLogoutAll": "Log out from all devices",
+  "privacyLogoutAllConfirm": "This will sign you out on every device, including this one.",
+  "privacyNoPassword": "You sign in with your phone number and a one-time code, so there's no password to change.",
+  "aboutTagline": "Law basics, one quiz at a time",
+  "aboutVersion": "Version {version}",
+  "@aboutVersion": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "aboutDescription": "Nyaya helps you understand Indian law in simple language — learn the Constitution article by article, test your knowledge and stay updated on legal developments.",
+  "aboutFeaturesTitle": "What you'll find in Nyaya",
+  "aboutFeatureArticles": "Article-by-article guide to the Indian Constitution",
+  "aboutFeatureDaily": "Daily legal questions with clear answers",
+  "aboutFeatureUpdates": "Latest legal updates and judgements",
+  "aboutFeatureQuizzes": "Quizzes that test what you've learned",
+  "aboutFeatureLanguages": "Available in English, Hindi, Tamil, Telugu and Kannada"
 }

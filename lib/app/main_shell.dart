@@ -32,7 +32,12 @@ import '../features/profile/presentation/profile_view_model.dart';
 import '../features/quiz_question/presentation/quiz_question_page.dart';
 import '../features/quiz_result/presentation/quiz_result_page.dart';
 import '../features/quiz_result/presentation/quiz_result_view_model.dart';
+import '../features/settings/data/app_version.dart';
 import '../features/settings/data/reminder_scheduler.dart';
+import '../features/settings/data/security_repository.dart';
+import '../features/settings/presentation/about_page.dart';
+import '../features/settings/presentation/privacy_page.dart';
+import '../features/settings/presentation/privacy_view_model.dart';
 import '../features/settings/data/reminder_settings.dart';
 import '../features/settings/presentation/language_page.dart';
 import '../features/settings/presentation/reminders_page.dart';
@@ -57,6 +62,7 @@ class MainShell extends StatefulWidget {
     this.language,
     this.selectLanguage,
     this.reminderScheduler,
+    this.loadAppVersion,
   });
 
   /// Backend client for the tabs' data; tests pass a fake.
@@ -70,6 +76,9 @@ class MainShell extends StatefulWidget {
 
   /// Schedules daily reminders; tests pass a fake.
   final ReminderScheduler? reminderScheduler;
+
+  /// Reads the app version for About; defaults to the platform's.
+  final Future<String> Function()? loadAppVersion;
 
   @override
   State<MainShell> createState() => _MainShellState();
@@ -205,9 +214,34 @@ class _MainShellState extends State<MainShell> {
         _openLanguage(context);
       case ProfileEntry.reminders:
         _openReminders(context);
+      case ProfileEntry.privacy:
+        _openPrivacy(context);
+      case ProfileEntry.about:
+        Navigator.of(context).push(
+          MaterialPageRoute<void>(
+            builder: (_) =>
+                AboutPage(loadVersion: widget.loadAppVersion ?? readAppVersion),
+          ),
+        );
       default:
         showMessage(context, context.l10n.commonComingSoon);
     }
+  }
+
+  void _openPrivacy(BuildContext context) {
+    final viewModel = PrivacyViewModel(
+      repository: SecurityRepository(_apiClient),
+    );
+    Navigator.of(context)
+        .push(
+          MaterialPageRoute<void>(
+            builder: (pageContext) => PrivacyPage(
+              viewModel: viewModel,
+              onSignedOut: () => endSession(pageContext),
+            ),
+          ),
+        )
+        .whenComplete(viewModel.dispose);
   }
 
   void _openReminders(BuildContext context) {

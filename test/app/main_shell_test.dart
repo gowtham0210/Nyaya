@@ -35,6 +35,7 @@ void main() {
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         home: MainShell(
           reminderScheduler: reminderScheduler,
+          loadAppVersion: () async => '9.9.9 (42)',
           apiClient: fakeBackend({
             '/categories': {'items': []},
             ...profileRoutes(),
@@ -387,6 +388,49 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(reminderScheduler.scheduled?.hour, 9);
+  });
+
+  Future<void> openProfileEntry(WidgetTester tester, String entry) async {
+    await tester.tap(find.byKey(const ValueKey('nav.profile')));
+    await tester.pumpAndSettle();
+    final tile = find.byKey(ValueKey('profile.entry.$entry'));
+    await tester.scrollUntilVisible(
+      tile,
+      200,
+      scrollable: find
+          .descendant(
+            of: find.byKey(const ValueKey('profile.scroll')),
+            matching: find.byType(Scrollable),
+          )
+          .first,
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(tile);
+    await tester.pumpAndSettle();
+  }
+
+  testWidgets('030 logging out of all devices returns to sign-in', (
+    tester,
+  ) async {
+    SharedPreferences.setMockInitialValues({});
+    await AppSession.saveSignedIn();
+    await pumpMainShell(tester);
+    await openProfileEntry(tester, 'privacy');
+
+    await tester.tap(find.byKey(const ValueKey('privacy.logoutAll')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const ValueKey('privacy.logoutAll.confirm')));
+    await tester.pumpAndSettle();
+
+    expect(find.byType(SignInPage), findsOneWidget);
+    expect(AppSession.signedIn, isFalse);
+  });
+
+  testWidgets('030 About shows the app version', (tester) async {
+    await pumpMainShell(tester);
+    await openProfileEntry(tester, 'about');
+
+    expect(find.text('Version 9.9.9 (42)'), findsOneWidget);
   });
 
   testWidgets('AC-006 unbuilt tabs show the coming-soon state', (tester) async {
