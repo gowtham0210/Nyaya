@@ -78,4 +78,18 @@ class AppLocalizationsTa extends AppLocalizations {
   @override
   String get comingSoonBody =>
       'இந்தப் பகுதியை உருவாக்கி வருகிறோம். விரைவில் மீண்டும் பாருங்கள்.';
+
+  @override
+  String categoryQuizCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count வினாடி வினாக்கள்',
+      one: '1 வினாடி வினா',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get categoriesEmpty => 'இன்னும் வகைகள் எதுவும் இல்லை.';
 }

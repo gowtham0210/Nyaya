@@ -21,7 +21,7 @@ A main-tab screen matching Home's ivory background and navy/gold palette: serif 
 ### 3. Category Grid
 - Two columns, 14px gaps. Each card fills with a pastel tint color (`category.tintHex`) instead of a white card — no border.
 - 52px white/translucent circle icon avatar with a category-specific icon color (`category.iconHex`).
-- Bold navy label (2 lines max), bodyGrey "N topics" meta on the same row as a 32px white circular arrow-forward button.
+- Bold navy label (2 lines max), bodyGrey "N quizzes" meta (hidden when the count is unknown, spec 017) on the same row as a 32px white circular arrow-forward button.
 
 ### 4. Empty State
 - Centered icon + "No categories match your search" when filtered list is empty.
@@ -31,7 +31,7 @@ A main-tab screen matching Home's ivory background and navy/gold palette: serif 
 
 ## Color and Type
 
-Shared constants from `nyaya_widgets.dart` and `nyaya_bottom_nav.dart` (navy/heroBackground `#11233B`, gold `#C89B3C`, cardBorder `#ECE5DB`, bodyGrey). Each category carries its own pastel tint/icon color pair (blue, red, green, purple, amber, teal, pink) cycled across the sample data. Serif via `fontFamily: 'serif'` for the header, matching Home/Topic Detail.
+Shared constants from `nyaya_widgets.dart` and `nyaya_bottom_nav.dart` (navy/heroBackground `#11233B`, gold `#C89B3C`, cardBorder `#ECE5DB`, bodyGrey). Each category carries its own pastel tint/icon color pair (blue, red, green, purple, amber, teal, pink) picked by slug, else cycled by position (spec 017). Serif via `fontFamily: 'serif'` for the header, matching Home/Topic Detail.
 
 ## Interaction
 

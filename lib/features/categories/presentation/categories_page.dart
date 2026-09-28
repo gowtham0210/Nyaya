@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/localization/l10n.dart';
+import '../../../core/presentation/widgets/load_state_view.dart';
 import '../../../core/presentation/widgets/nyaya_icon.dart';
 import '../../../core/presentation/widgets/nyaya_widgets.dart';
 import 'categories_view_model.dart';
@@ -25,13 +27,12 @@ class CategoriesPage extends StatefulWidget {
 
 class _CategoriesPageState extends State<CategoriesPage> {
   final _searchController = TextEditingController();
-  late List<CategoryData> _visibleCategories;
 
   @override
   void initState() {
     super.initState();
-    _visibleCategories = widget.viewModel.categories;
     _searchController.addListener(_onSearchChanged);
+    widget.viewModel.load();
   }
 
   @override
@@ -41,14 +42,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
     super.dispose();
   }
 
-  void _onSearchChanged() {
-    setState(() {
-      _visibleCategories = widget.viewModel.filter(
-        widget.viewModel.categories,
-        _searchController.text,
-      );
-    });
-  }
+  void _onSearchChanged() => setState(() {});
 
   @override
   Widget build(BuildContext context) {
@@ -108,52 +102,65 @@ class _CategoriesPageState extends State<CategoriesPage> {
                   ),
                   const SizedBox(width: 10),
                   _FilterButton(
-                    onTap: () => _showPlaceholder(
-                      context,
-                      'Filters are not wired yet.',
-                    ),
+                    onTap: () =>
+                        _showPlaceholder(context, 'Filters are not wired yet.'),
                   ),
                 ],
               ),
               const SizedBox(height: 20),
               Expanded(
-                child: _visibleCategories.isEmpty
-                    ? _EmptyState(message: viewModel.emptySearchMessage)
-                    : GridView.builder(
-                        key: const ValueKey('categories.grid'),
-                        padding: const EdgeInsets.only(bottom: 24),
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,
-                              mainAxisSpacing: 14,
-                              crossAxisSpacing: 14,
-                              childAspectRatio: 0.92,
-                            ),
-                        itemCount: _visibleCategories.length,
-                        itemBuilder: (context, index) {
-                          final category = _visibleCategories[index];
-                          return _CategoryCard(
-                            category: category,
-                            onTap: () {
-                              final callback = widget.onCategorySelected;
-                              if (callback != null) {
-                                callback(category);
-                                return;
-                              }
-                              _showPlaceholder(
-                                context,
-                                '${category.label} is not wired yet.',
-                              );
-                            },
-                          );
-                        },
-                      ),
+                child: ListenableBuilder(
+                  listenable: viewModel,
+                  builder: (context, _) => LoadStateView<List<CategoryData>>(
+                    state: viewModel.state,
+                    onRetry: viewModel.load,
+                    emptyMessage: context.l10n.categoriesEmpty,
+                    emptyIcon: Icons.grid_view_rounded,
+                    builder: (context, categories) => _buildGrid(
+                      viewModel.filter(categories, _searchController.text),
+                      viewModel.emptySearchMessage,
+                    ),
+                  ),
+                ),
               ),
             ],
           ),
         ),
       ),
     );
+  }
+
+  Widget _buildGrid(List<CategoryData> visible, String emptySearchMessage) {
+    return visible.isEmpty
+        ? _EmptyState(message: emptySearchMessage)
+        : GridView.builder(
+            key: const ValueKey('categories.grid'),
+            padding: const EdgeInsets.only(bottom: 24),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              mainAxisSpacing: 14,
+              crossAxisSpacing: 14,
+              childAspectRatio: 0.92,
+            ),
+            itemCount: visible.length,
+            itemBuilder: (context, index) {
+              final category = visible[index];
+              return _CategoryCard(
+                category: category,
+                onTap: () {
+                  final callback = widget.onCategorySelected;
+                  if (callback != null) {
+                    callback(category);
+                    return;
+                  }
+                  _showPlaceholder(
+                    context,
+                    '${category.label} is not wired yet.',
+                  );
+                },
+              );
+            },
+          );
   }
 
   void _showPlaceholder(BuildContext context, String message) {
@@ -288,9 +295,10 @@ class _CategoryCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final iconColor = Color(category.iconHex);
+    final quizCount = category.quizCount;
 
     return InkWell(
-      key: ValueKey('categories.card.${category.id}'),
+      key: ValueKey('categories.card.${category.slug}'),
       onTap: onTap,
       borderRadius: BorderRadius.circular(22),
       child: Container(
@@ -333,14 +341,18 @@ class _CategoryCard extends StatelessWidget {
             Row(
               children: [
                 Expanded(
-                  child: Text(
-                    '${category.topicCount} topics',
-                    key: ValueKey('categories.card.${category.id}.meta'),
-                    style: const TextStyle(
-                      fontSize: 13,
-                      color: CategoriesPage.supportText,
-                    ),
-                  ),
+                  child: quizCount == null
+                      ? const SizedBox.shrink()
+                      : Text(
+                          context.l10n.categoryQuizCount(quizCount),
+                          key: ValueKey(
+                            'categories.card.${category.slug}.meta',
+                          ),
+                          style: const TextStyle(
+                            fontSize: 13,
+                            color: CategoriesPage.supportText,
+                          ),
+                        ),
                 ),
                 Container(
                   width: 32,

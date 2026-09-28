@@ -21,5 +21,7 @@
   "navLeaderboard": "தலைமை பலகை",
   "navArticles": "கட்டுரைகள்",
   "navProfile": "சுயவிவரம்",
-  "comingSoonBody": "இந்தப் பகுதியை உருவாக்கி வருகிறோம். விரைவில் மீண்டும் பாருங்கள்."
+  "comingSoonBody": "இந்தப் பகுதியை உருவாக்கி வருகிறோம். விரைவில் மீண்டும் பாருங்கள்.",
+  "categoryQuizCount": "{count, plural, =1{1 வினாடி வினா} other{{count} வினாடி வினாக்கள்}}",
+  "categoriesEmpty": "இன்னும் வகைகள் எதுவும் இல்லை."
 }

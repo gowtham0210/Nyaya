@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../core/localization/l10n.dart';
+import '../core/network/api_client.dart';
+import '../features/categories/data/categories_repository.dart';
 import '../features/categories/presentation/categories_page.dart';
 import '../features/categories/presentation/categories_view_model.dart';
 import '../features/home/presentation/home_page.dart';
@@ -21,7 +23,10 @@ enum MainTab { home, categories, leaderboard, articles, profile }
 
 /// The signed-in app: five tabs under one bottom nav (spec 016).
 class MainShell extends StatefulWidget {
-  const MainShell({super.key});
+  const MainShell({super.key, this.apiClient});
+
+  /// Backend client for the tabs' data; tests pass a fake.
+  final ApiClient? apiClient;
 
   @override
   State<MainShell> createState() => _MainShellState();
@@ -29,10 +34,17 @@ class MainShell extends StatefulWidget {
 
 class _MainShellState extends State<MainShell> {
   final _controller = TabShellController();
+  late final ApiClient _apiClient = widget.apiClient ?? AppServices.apiClient;
+
+  // Tab view models live as long as the shell so each tab keeps its data.
+  late final _categoriesViewModel = CategoriesViewModel(
+    repository: CategoriesRepository(_apiClient),
+  );
 
   @override
   void dispose() {
     _controller.dispose();
+    _categoriesViewModel.dispose();
     super.dispose();
   }
 
@@ -51,7 +63,7 @@ class _MainShellState extends State<MainShell> {
             MainTab.categories,
             l10n.navCategories,
             HomeIconType.navCategories,
-            (_) => const CategoriesPage(viewModel: CategoriesViewModel()),
+            (_) => CategoriesPage(viewModel: _categoriesViewModel),
           ),
           _comingSoon(
             MainTab.leaderboard,

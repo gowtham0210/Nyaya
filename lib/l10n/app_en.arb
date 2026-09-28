@@ -28,5 +28,14 @@
   "navLeaderboard": "Leaderboard",
   "navArticles": "Articles",
   "navProfile": "Profile",
-  "comingSoonBody": "We're building this section. Check back soon."
+  "comingSoonBody": "We're building this section. Check back soon.",
+  "categoryQuizCount": "{count, plural, =1{1 quiz} other{{count} quizzes}}",
+  "@categoryQuizCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "categoriesEmpty": "No categories yet."
 }

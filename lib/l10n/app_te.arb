@@ -21,5 +21,7 @@
   "navLeaderboard": "లీడర్‌బోర్డ్",
   "navArticles": "ఆర్టికల్స్",
   "navProfile": "ప్రొఫైల్",
-  "comingSoonBody": "మేము ఈ విభాగాన్ని రూపొందిస్తున్నాము. త్వరలో మళ్లీ చూడండి."
+  "comingSoonBody": "మేము ఈ విభాగాన్ని రూపొందిస్తున్నాము. త్వరలో మళ్లీ చూడండి.",
+  "categoryQuizCount": "{count, plural, =1{1 క్విజ్} other{{count} క్విజ్‌లు}}",
+  "categoriesEmpty": "ఇంకా వర్గాలు ఏవీ లేవు."
 }

@@ -21,5 +21,7 @@
   "navLeaderboard": "ಲೀಡರ್‌ಬೋರ್ಡ್",
   "navArticles": "ಲೇಖನಗಳು",
   "navProfile": "ಪ್ರೊಫೈಲ್",
-  "comingSoonBody": "ನಾವು ಈ ವಿಭಾಗವನ್ನು ನಿರ್ಮಿಸುತ್ತಿದ್ದೇವೆ. ಶೀಘ್ರದಲ್ಲೇ ಮತ್ತೆ ನೋಡಿ."
+  "comingSoonBody": "ನಾವು ಈ ವಿಭಾಗವನ್ನು ನಿರ್ಮಿಸುತ್ತಿದ್ದೇವೆ. ಶೀಘ್ರದಲ್ಲೇ ಮತ್ತೆ ನೋಡಿ.",
+  "categoryQuizCount": "{count, plural, =1{1 ಕ್ವಿಜ್} other{{count} ಕ್ವಿಜ್‌ಗಳು}}",
+  "categoriesEmpty": "ಇನ್ನೂ ಯಾವುದೇ ವರ್ಗಗಳಿಲ್ಲ."
 }

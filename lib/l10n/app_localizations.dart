@@ -235,6 +235,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'We\'re building this section. Check back soon.'**
   String get comingSoonBody;
+
+  /// No description provided for @categoryQuizCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 quiz} other{{count} quizzes}}'**
+  String categoryQuizCount(int count);
+
+  /// No description provided for @categoriesEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No categories yet.'**
+  String get categoriesEmpty;
 }
 
 class _AppLocalizationsDelegate

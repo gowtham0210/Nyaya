@@ -3,6 +3,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:nyaya/app/main_shell.dart';
 import 'package:nyaya/core/localization/l10n.dart';
 
+import '../support/fake_backend.dart';
+
 void main() {
   Future<void> pumpMainShell(WidgetTester tester, {Locale? locale}) async {
     tester.view.physicalSize = const Size(393, 852);
@@ -17,7 +19,11 @@ void main() {
         locale: locale,
         supportedLocales: AppLocalizations.supportedLocales,
         localizationsDelegates: AppLocalizations.localizationsDelegates,
-        home: const MainShell(),
+        home: MainShell(
+          apiClient: fakeBackend({
+            '/categories': {'items': []},
+          }),
+        ),
       ),
     );
     await tester.pumpAndSettle();

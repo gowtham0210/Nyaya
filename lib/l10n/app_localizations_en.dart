@@ -77,4 +77,18 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get comingSoonBody => 'We\'re building this section. Check back soon.';
+
+  @override
+  String categoryQuizCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count quizzes',
+      one: '1 quiz',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get categoriesEmpty => 'No categories yet.';
 }

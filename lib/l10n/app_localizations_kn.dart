@@ -78,4 +78,18 @@ class AppLocalizationsKn extends AppLocalizations {
   @override
   String get comingSoonBody =>
       'ನಾವು ಈ ವಿಭಾಗವನ್ನು ನಿರ್ಮಿಸುತ್ತಿದ್ದೇವೆ. ಶೀಘ್ರದಲ್ಲೇ ಮತ್ತೆ ನೋಡಿ.';
+
+  @override
+  String categoryQuizCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count ಕ್ವಿಜ್‌ಗಳು',
+      one: '1 ಕ್ವಿಜ್',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get categoriesEmpty => 'ಇನ್ನೂ ಯಾವುದೇ ವರ್ಗಗಳಿಲ್ಲ.';
 }
