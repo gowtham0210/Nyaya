@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import '../features/auth/data/auth_repository.dart';
 import '../features/auth/data/auth_token_store.dart';
 import '../features/auth/presentation/sign_in_page.dart';
 import '../features/categories/presentation/categories_page.dart';
@@ -14,6 +13,7 @@ import '../features/quiz_result/presentation/quiz_result_page.dart';
 import '../features/quiz_result/presentation/quiz_result_view_model.dart';
 import '../features/topic_detail/presentation/topic_detail_page.dart';
 import '../features/topic_detail/presentation/topic_detail_view_model.dart';
+import 'app_services.dart';
 import 'app_session.dart';
 
 const _profileNavIndex = 4;
@@ -50,14 +50,12 @@ Widget buildWiredHomePage(BuildContext context) {
   );
 }
 
-final _authRepository = AuthRepository();
-
 /// Revokes the backend session (best-effort), signs out of Firebase, clears
 /// all locally stored tokens, then sends the user back to the Login page
 /// with a fresh navigation stack — handy for repeatedly testing Signup/OTP
 /// with different numbers.
 Future<void> logout(BuildContext context) async {
-  await _authRepository.logout();
+  await AppServices.authRepository.logout();
   await FirebaseAuth.instance.signOut();
   AuthTokenStore.clear();
   await AppSession.clear();

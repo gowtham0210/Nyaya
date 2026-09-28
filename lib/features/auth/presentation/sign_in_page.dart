@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../app/post_sign_up_flow.dart';
 import '../../../core/presentation/widgets/nyaya_widgets.dart';
 import '../data/auth_api_client.dart';
-import '../data/auth_repository.dart';
+import '../../../app/app_services.dart';
 import 'sign_up_page.dart';
 import 'widgets/auth_header.dart';
 import 'widgets/auth_primary_button.dart';
@@ -21,7 +21,7 @@ class _SignInPageState extends State<SignInPage> {
   final _passwordController = TextEditingController();
 
   // Deferred until first use — see the note in sign_up_page.dart.
-  late final _authRepository = AuthRepository();
+  late final _authRepository = AppServices.authRepository;
 
   var _obscurePassword = true;
   var _isLoggingIn = false;

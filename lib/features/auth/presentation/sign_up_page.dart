@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import '../../../app/post_sign_up_flow.dart';
 import '../../../core/presentation/widgets/nyaya_widgets.dart';
 import '../data/auth_api_client.dart';
-import '../data/auth_repository.dart';
+import '../../../app/app_services.dart';
 import '../data/firebase_auth_error_mapper.dart';
 import '../data/firebase_phone_auth_service.dart';
 import 'otp_verification_page.dart';
@@ -31,7 +31,7 @@ class _SignUpPageState extends State<SignUpPage> {
   // Deferred until first use so widget tests that never submit the form
   // don't need a configured Firebase app just to render this page.
   late final _phoneAuthService = FirebasePhoneAuthService();
-  late final _authRepository = AuthRepository();
+  late final _authRepository = AppServices.authRepository;
 
   var _obscurePassword = true;
   var _hasAttemptedSubmit = false;

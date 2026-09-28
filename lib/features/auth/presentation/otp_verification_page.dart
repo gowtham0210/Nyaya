@@ -6,7 +6,7 @@ import 'package:flutter/services.dart';
 
 import '../../../core/presentation/widgets/nyaya_widgets.dart';
 import '../data/auth_api_client.dart';
-import '../data/auth_repository.dart';
+import '../../../app/app_services.dart';
 import '../data/auth_token_store.dart';
 import '../data/firebase_auth_error_mapper.dart';
 import '../data/firebase_phone_auth_service.dart';
@@ -60,7 +60,7 @@ class OtpVerificationPage extends StatefulWidget {
 class _OtpVerificationPageState extends State<OtpVerificationPage> {
   // Deferred until first use — see the note in sign_up_page.dart.
   late final _phoneAuthService = FirebasePhoneAuthService();
-  late final _authRepository = AuthRepository();
+  late final _authRepository = AppServices.authRepository;
 
   late final List<TextEditingController> _controllers = List.generate(
     _otpLength,

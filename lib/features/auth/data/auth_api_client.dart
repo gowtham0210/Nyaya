@@ -1,9 +1,4 @@
-import 'dart:async';
-import 'dart:convert';
-
-import 'package:http/http.dart' as http;
-
-import '../../../core/network/api_config.dart';
+import '../../../core/network/api_client.dart';
 
 /// Thrown for any non-2xx response or transport-level failure. [message] is
 /// suitable to show directly to the user — it's either the backend's own
@@ -102,15 +97,13 @@ DateTime? _parseDate(Object? value) {
   return null;
 }
 
-/// Raw HTTP calls to the Nyaya backend's auth endpoints
-/// (`$apiV1BaseUrl/auth/...`). Deliberately stateless — it never reads or
-/// writes [AuthTokenStore] itself; see `AuthRepository` for that.
+/// The Nyaya backend's auth endpoints (`/auth/...`) on the shared
+/// [ApiClient]. Deliberately stateless — it never reads or writes
+/// [AuthTokenStore] itself; see `AuthRepository` for that.
 class AuthApiClient {
-  AuthApiClient({http.Client? httpClient}) : _httpClient = httpClient ?? http.Client();
+  AuthApiClient({ApiClient? client}) : _client = client ?? ApiClient();
 
-  final http.Client _httpClient;
-
-  static const _timeout = Duration(seconds: 15);
+  final ApiClient _client;
 
   Future<AuthSession> signup({
     required String fullName,
@@ -119,14 +112,14 @@ class AuthApiClient {
     required String password,
     String? firebaseIdToken,
   }) async {
-    final response = await _post('/auth/signup', {
+    final body = await _post('/auth/signup', {
       'full_name': fullName,
       'profession': profession,
       'phone': phone,
       'password': password,
       'firebase_id_token': ?firebaseIdToken,
     });
-    return AuthSession.fromJson(_decode(response));
+    return AuthSession.fromJson(body);
   }
 
   Future<AuthSession> login({
@@ -134,67 +127,35 @@ class AuthApiClient {
     String? phone,
     required String password,
   }) async {
-    final response = await _post('/auth/login', {
+    final body = await _post('/auth/login', {
       'email': ?email,
       'phone': ?phone,
       'password': password,
     });
-    return AuthSession.fromJson(_decode(response));
+    return AuthSession.fromJson(body);
   }
 
   Future<RefreshedTokens> refresh({required String refreshToken}) async {
-    final response = await _post('/auth/refresh', {
-      'refreshToken': refreshToken,
-    });
-    return RefreshedTokens.fromJson(_decode(response));
+    final body = await _post('/auth/refresh', {'refreshToken': refreshToken});
+    return RefreshedTokens.fromJson(body);
   }
 
   Future<void> logout({required String refreshToken}) async {
     await _post('/auth/logout', {'refreshToken': refreshToken});
   }
 
-  Future<http.Response> _post(String path, Map<String, dynamic> body) async {
-    final uri = Uri.parse('${ApiConfig.apiV1BaseUrl}$path');
-    http.Response response;
+  /// Auth calls never send or refresh a bearer token, and surface failures
+  /// as [AuthApiException] so the auth pages can show [message] directly.
+  Future<Map<String, dynamic>> _post(
+    String path,
+    Map<String, dynamic> body,
+  ) async {
     try {
-      response = await _httpClient
-          .post(
-            uri,
-            headers: const {'Content-Type': 'application/json'},
-            body: jsonEncode(body),
-          )
-          .timeout(_timeout);
-    } on TimeoutException {
-      throw AuthApiException('The server took too long to respond. Please try again.');
-    } on http.ClientException {
-      throw AuthApiException('Network error. Please check your connection and try again.');
-    } catch (_) {
-      throw AuthApiException('Network error. Please check your connection and try again.');
+      return await _client.post(path, body: body, authenticated: false);
+    } on ApiServerException catch (error) {
+      throw AuthApiException(error.message, statusCode: error.statusCode);
+    } on ApiException catch (error) {
+      throw AuthApiException(error.message);
     }
-
-    if (response.statusCode >= 400) {
-      throw AuthApiException(_extractMessage(response), statusCode: response.statusCode);
-    }
-    return response;
-  }
-
-  Map<String, dynamic> _decode(http.Response response) {
-    if (response.body.isEmpty) {
-      return const {};
-    }
-    final decoded = jsonDecode(response.body);
-    return decoded is Map<String, dynamic> ? decoded : const {};
-  }
-
-  String _extractMessage(http.Response response) {
-    try {
-      final decoded = jsonDecode(response.body);
-      if (decoded is Map<String, dynamic> && decoded['message'] is String) {
-        return decoded['message'] as String;
-      }
-    } catch (_) {
-      // Fall through to the generic message below.
-    }
-    return 'Request failed (${response.statusCode}). Please try again.';
   }
 }
