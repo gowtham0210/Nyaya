@@ -12,6 +12,7 @@ import 'widgets/auth_primary_button.dart';
 import 'widgets/auth_text_field.dart';
 import '../../../core/localization/l10n.dart';
 import 'auth_error_text.dart';
+import 'name_validation.dart';
 import 'profession.dart';
 
 class SignUpPage extends StatefulWidget {
@@ -276,16 +277,8 @@ class _SignUpPageState extends State<SignUpPage> {
     }
   }
 
-  String? _validateFullName(String? value) {
-    final trimmed = value?.trim() ?? '';
-    if (trimmed.isEmpty) {
-      return context.l10n.validationNameRequired;
-    }
-    if (trimmed.length < 3) {
-      return context.l10n.validationNameTooShort;
-    }
-    return null;
-  }
+  String? _validateFullName(String? value) =>
+      validateFullName(context.l10n, value);
 
   String? _validateProfession(String? value) {
     if (_profession == null) {

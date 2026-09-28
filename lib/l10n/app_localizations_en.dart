@@ -733,4 +733,22 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get profileLogoutConfirmBody =>
       'You\'ll need your phone number and a code to sign in again.';
+
+  @override
+  String get editProfileSave => 'Save changes';
+
+  @override
+  String get editProfileSaved => 'Profile updated';
+
+  @override
+  String get editProfileChangePhoto => 'Change photo';
+
+  @override
+  String get editProfileCamera => 'Take a photo';
+
+  @override
+  String get editProfileGallery => 'Choose from gallery';
+
+  @override
+  String get editProfilePhotoUpdated => 'Photo updated';
 }

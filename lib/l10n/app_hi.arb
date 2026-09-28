@@ -205,5 +205,11 @@
   "profileAbout": "न्याय के बारे में",
   "profileLogout": "लॉग आउट",
   "profileLogoutConfirmTitle": "न्याय से लॉग आउट करें?",
-  "profileLogoutConfirmBody": "दोबारा साइन इन करने के लिए आपको अपना फ़ोन नंबर और कोड चाहिए होगा।"
+  "profileLogoutConfirmBody": "दोबारा साइन इन करने के लिए आपको अपना फ़ोन नंबर और कोड चाहिए होगा।",
+  "editProfileSave": "बदलाव सहेजें",
+  "editProfileSaved": "प्रोफ़ाइल अपडेट हो गई",
+  "editProfileChangePhoto": "फ़ोटो बदलें",
+  "editProfileCamera": "फ़ोटो लें",
+  "editProfileGallery": "गैलरी से चुनें",
+  "editProfilePhotoUpdated": "फ़ोटो अपडेट हो गई"
 }

@@ -365,5 +365,11 @@
   "profileAbout": "About Nyaya",
   "profileLogout": "Log out",
   "profileLogoutConfirmTitle": "Log out of Nyaya?",
-  "profileLogoutConfirmBody": "You'll need your phone number and a code to sign in again."
+  "profileLogoutConfirmBody": "You'll need your phone number and a code to sign in again.",
+  "editProfileSave": "Save changes",
+  "editProfileSaved": "Profile updated",
+  "editProfileChangePhoto": "Change photo",
+  "editProfileCamera": "Take a photo",
+  "editProfileGallery": "Choose from gallery",
+  "editProfilePhotoUpdated": "Photo updated"
 }

@@ -734,4 +734,22 @@ class AppLocalizationsHi extends AppLocalizations {
   @override
   String get profileLogoutConfirmBody =>
       'दोबारा साइन इन करने के लिए आपको अपना फ़ोन नंबर और कोड चाहिए होगा।';
+
+  @override
+  String get editProfileSave => 'बदलाव सहेजें';
+
+  @override
+  String get editProfileSaved => 'प्रोफ़ाइल अपडेट हो गई';
+
+  @override
+  String get editProfileChangePhoto => 'फ़ोटो बदलें';
+
+  @override
+  String get editProfileCamera => 'फ़ोटो लें';
+
+  @override
+  String get editProfileGallery => 'गैलरी से चुनें';
+
+  @override
+  String get editProfilePhotoUpdated => 'फ़ोटो अपडेट हो गई';
 }

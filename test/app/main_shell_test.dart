@@ -204,6 +204,26 @@ void main() {
     expect(AppSession.signedIn, isFalse);
   });
 
+  testWidgets('027 Edit profile opens from Profile, pre-filled', (
+    tester,
+  ) async {
+    await pumpMainShell(tester);
+    await tester.tap(find.byKey(const ValueKey('nav.profile')));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byKey(const ValueKey('profile.edit')));
+    await tester.pumpAndSettle();
+
+    expect(find.byKey(const ValueKey('editProfile.save')), findsOneWidget);
+    expect(
+      tester
+          .widget<TextFormField>(find.byKey(const ValueKey('editProfile.name')))
+          .controller!
+          .text,
+      'Asha Rao',
+    );
+  });
+
   testWidgets('AC-006 unbuilt tabs show the coming-soon state', (tester) async {
     await pumpMainShell(tester);
 

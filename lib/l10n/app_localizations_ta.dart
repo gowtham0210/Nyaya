@@ -739,4 +739,22 @@ class AppLocalizationsTa extends AppLocalizations {
   @override
   String get profileLogoutConfirmBody =>
       'மீண்டும் உள்நுழைய உங்கள் தொலைபேசி எண்ணும் குறியீடும் தேவை.';
+
+  @override
+  String get editProfileSave => 'மாற்றங்களைச் சேமி';
+
+  @override
+  String get editProfileSaved => 'சுயவிவரம் புதுப்பிக்கப்பட்டது';
+
+  @override
+  String get editProfileChangePhoto => 'புகைப்படத்தை மாற்று';
+
+  @override
+  String get editProfileCamera => 'புகைப்படம் எடு';
+
+  @override
+  String get editProfileGallery => 'கேலரியிலிருந்து தேர்வு செய்';
+
+  @override
+  String get editProfilePhotoUpdated => 'புகைப்படம் புதுப்பிக்கப்பட்டது';
 }

@@ -1348,6 +1348,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'You\'ll need your phone number and a code to sign in again.'**
   String get profileLogoutConfirmBody;
+
+  /// No description provided for @editProfileSave.
+  ///
+  /// In en, this message translates to:
+  /// **'Save changes'**
+  String get editProfileSave;
+
+  /// No description provided for @editProfileSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile updated'**
+  String get editProfileSaved;
+
+  /// No description provided for @editProfileChangePhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Change photo'**
+  String get editProfileChangePhoto;
+
+  /// No description provided for @editProfileCamera.
+  ///
+  /// In en, this message translates to:
+  /// **'Take a photo'**
+  String get editProfileCamera;
+
+  /// No description provided for @editProfileGallery.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose from gallery'**
+  String get editProfileGallery;
+
+  /// No description provided for @editProfilePhotoUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Photo updated'**
+  String get editProfilePhotoUpdated;
 }
 
 class _AppLocalizationsDelegate

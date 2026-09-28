@@ -16,6 +16,16 @@ enum Profession {
   final String value;
   final IconData icon;
 
+  /// The profession the backend stored as [value], or null if unknown.
+  static Profession? fromValue(String? value) {
+    for (final profession in values) {
+      if (profession.value == value) {
+        return profession;
+      }
+    }
+    return null;
+  }
+
   String label(AppLocalizations l10n) => switch (this) {
     lawStudent => l10n.professionLawStudent,
     lawyer => l10n.professionLawyer,

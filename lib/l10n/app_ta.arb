@@ -205,5 +205,11 @@
   "profileAbout": "நியாயா பற்றி",
   "profileLogout": "வெளியேறு",
   "profileLogoutConfirmTitle": "நியாயாவிலிருந்து வெளியேறவா?",
-  "profileLogoutConfirmBody": "மீண்டும் உள்நுழைய உங்கள் தொலைபேசி எண்ணும் குறியீடும் தேவை."
+  "profileLogoutConfirmBody": "மீண்டும் உள்நுழைய உங்கள் தொலைபேசி எண்ணும் குறியீடும் தேவை.",
+  "editProfileSave": "மாற்றங்களைச் சேமி",
+  "editProfileSaved": "சுயவிவரம் புதுப்பிக்கப்பட்டது",
+  "editProfileChangePhoto": "புகைப்படத்தை மாற்று",
+  "editProfileCamera": "புகைப்படம் எடு",
+  "editProfileGallery": "கேலரியிலிருந்து தேர்வு செய்",
+  "editProfilePhotoUpdated": "புகைப்படம் புதுப்பிக்கப்பட்டது"
 }

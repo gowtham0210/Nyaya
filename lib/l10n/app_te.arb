@@ -205,5 +205,11 @@
   "profileAbout": "న్యాయ గురించి",
   "profileLogout": "లాగ్ అవుట్",
   "profileLogoutConfirmTitle": "న్యాయ నుండి లాగ్ అవుట్ చేయాలా?",
-  "profileLogoutConfirmBody": "మళ్లీ సైన్ ఇన్ చేయడానికి మీ ఫోన్ నంబర్ మరియు కోడ్ అవసరం."
+  "profileLogoutConfirmBody": "మళ్లీ సైన్ ఇన్ చేయడానికి మీ ఫోన్ నంబర్ మరియు కోడ్ అవసరం.",
+  "editProfileSave": "మార్పులను సేవ్ చేయండి",
+  "editProfileSaved": "ప్రొఫైల్ నవీకరించబడింది",
+  "editProfileChangePhoto": "ఫోటో మార్చండి",
+  "editProfileCamera": "ఫోటో తీయండి",
+  "editProfileGallery": "గ్యాలరీ నుండి ఎంచుకోండి",
+  "editProfilePhotoUpdated": "ఫోటో నవీకరించబడింది"
 }

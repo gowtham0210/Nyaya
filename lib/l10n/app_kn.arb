@@ -205,5 +205,11 @@
   "profileAbout": "ನ್ಯಾಯ ಬಗ್ಗೆ",
   "profileLogout": "ಲಾಗ್ ಔಟ್",
   "profileLogoutConfirmTitle": "ನ್ಯಾಯದಿಂದ ಲಾಗ್ ಔಟ್ ಮಾಡಬೇಕೆ?",
-  "profileLogoutConfirmBody": "ಮತ್ತೆ ಸೈನ್ ಇನ್ ಮಾಡಲು ನಿಮ್ಮ ಫೋನ್ ಸಂಖ್ಯೆ ಮತ್ತು ಕೋಡ್ ಬೇಕು."
+  "profileLogoutConfirmBody": "ಮತ್ತೆ ಸೈನ್ ಇನ್ ಮಾಡಲು ನಿಮ್ಮ ಫೋನ್ ಸಂಖ್ಯೆ ಮತ್ತು ಕೋಡ್ ಬೇಕು.",
+  "editProfileSave": "ಬದಲಾವಣೆಗಳನ್ನು ಉಳಿಸಿ",
+  "editProfileSaved": "ಪ್ರೊಫೈಲ್ ನವೀಕರಿಸಲಾಗಿದೆ",
+  "editProfileChangePhoto": "ಫೋಟೋ ಬದಲಿಸಿ",
+  "editProfileCamera": "ಫೋಟೋ ತೆಗೆಯಿರಿ",
+  "editProfileGallery": "ಗ್ಯಾಲರಿಯಿಂದ ಆಯ್ಕೆಮಾಡಿ",
+  "editProfilePhotoUpdated": "ಫೋಟೋ ನವೀಕರಿಸಲಾಗಿದೆ"
 }

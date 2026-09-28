@@ -19,7 +19,11 @@ import '../features/home/presentation/recommended_page.dart';
 import '../features/legal_updates/data/legal_updates_repository.dart';
 import '../features/legal_updates/presentation/legal_updates_page.dart';
 import '../features/legal_updates/presentation/legal_updates_view_model.dart';
+import '../core/presentation/load_state.dart';
+import '../features/profile/data/photo_picker.dart';
 import '../features/profile/data/profile_repository.dart';
+import '../features/profile/presentation/edit_profile_page.dart';
+import '../features/profile/presentation/edit_profile_view_model.dart';
 import '../features/profile/presentation/profile_page.dart';
 import '../features/profile/presentation/profile_view_model.dart';
 import '../features/quiz_question/presentation/quiz_question_page.dart';
@@ -147,7 +151,34 @@ class _MainShellState extends State<MainShell> {
 
   /// Screens behind Profile's entries; unbuilt ones say they're coming.
   void _openProfileEntry(BuildContext context, ProfileEntry entry) {
-    showMessage(context, context.l10n.commonComingSoon);
+    switch (entry) {
+      case ProfileEntry.editProfile:
+        _openEditProfile(context);
+      default:
+        showMessage(context, context.l10n.commonComingSoon);
+    }
+  }
+
+  void _openEditProfile(BuildContext context) {
+    final state = _profileViewModel.state;
+    if (state is! Loaded<ProfileOverview>) {
+      return;
+    }
+    final viewModel = EditProfileViewModel(
+      repository: ProfileRepository(_apiClient),
+      profile: state.data.profile,
+      onChanged: _profileViewModel.load,
+    );
+    Navigator.of(context)
+        .push(
+          MaterialPageRoute<void>(
+            builder: (_) => EditProfilePage(
+              viewModel: viewModel,
+              pickPhoto: pickWithImagePicker,
+            ),
+          ),
+        )
+        .whenComplete(viewModel.dispose);
   }
 
   Widget _buildHome(BuildContext context) {

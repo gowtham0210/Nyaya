@@ -56,7 +56,7 @@ class ProfileRepository {
       _client.get('/users/me/categories-explored'),
     ]);
     return ProfileOverview(
-      profile: toProfile(me),
+      profile: _toProfile(me),
       stats: ProfileStats(
         streak: _int(streak['currentStreak']),
         categoriesExplored: _int(explored['categoriesExplored']),
@@ -66,8 +66,31 @@ class ProfileRepository {
     );
   }
 
-  /// Maps a backend `User`; also used by the edit-profile calls.
-  static UserProfile toProfile(Map<String, dynamic> json) => UserProfile(
+  /// Saves the learner's name and profession (`PATCH /users/me`).
+  Future<UserProfile> updateProfile({
+    required String fullName,
+    required String? profession,
+  }) async => _toProfile(
+    await _client.patch(
+      '/users/me',
+      body: {'fullName': fullName, 'profession': ?profession},
+    ),
+  );
+
+  /// Uploads a new photo (`POST /users/me/avatar`, multipart `avatar`).
+  Future<UserProfile> uploadAvatar({
+    required List<int> bytes,
+    required String filename,
+  }) async => _toProfile(
+    await _client.upload(
+      '/users/me/avatar',
+      field: 'avatar',
+      bytes: bytes,
+      filename: filename,
+    ),
+  );
+
+  static UserProfile _toProfile(Map<String, dynamic> json) => UserProfile(
     fullName: json['fullName'] as String,
     phone: _text(json['phone']),
     profession: _text(json['profession']),

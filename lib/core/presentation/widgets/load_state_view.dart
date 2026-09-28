@@ -43,21 +43,20 @@ class LoadStateView<T> extends StatelessWidget {
         icon: error is ApiOfflineException
             ? Icons.cloud_off_rounded
             : Icons.error_outline_rounded,
-        message: _failureMessage(context, error),
+        message: failureMessage(context.l10n, error),
         onRetry: error is ApiUnauthorizedException ? null : onRetry,
       ),
     };
   }
-
-  String _failureMessage(BuildContext context, Object error) {
-    final l10n = context.l10n;
-    return switch (error) {
-      ApiOfflineException() => l10n.errorOffline,
-      ApiUnauthorizedException() => l10n.errorSessionExpired,
-      _ => l10n.errorGeneric,
-    };
-  }
 }
+
+/// A localized message for a failed request: offline, session ended, or
+/// anything else.
+String failureMessage(AppLocalizations l10n, Object error) => switch (error) {
+  ApiOfflineException() => l10n.errorOffline,
+  ApiUnauthorizedException() => l10n.errorSessionExpired,
+  _ => l10n.errorGeneric,
+};
 
 class _StateMessage extends StatelessWidget {
   const _StateMessage({

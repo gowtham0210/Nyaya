@@ -737,4 +737,22 @@ class AppLocalizationsTe extends AppLocalizations {
   @override
   String get profileLogoutConfirmBody =>
       'మళ్లీ సైన్ ఇన్ చేయడానికి మీ ఫోన్ నంబర్ మరియు కోడ్ అవసరం.';
+
+  @override
+  String get editProfileSave => 'మార్పులను సేవ్ చేయండి';
+
+  @override
+  String get editProfileSaved => 'ప్రొఫైల్ నవీకరించబడింది';
+
+  @override
+  String get editProfileChangePhoto => 'ఫోటో మార్చండి';
+
+  @override
+  String get editProfileCamera => 'ఫోటో తీయండి';
+
+  @override
+  String get editProfileGallery => 'గ్యాలరీ నుండి ఎంచుకోండి';
+
+  @override
+  String get editProfilePhotoUpdated => 'ఫోటో నవీకరించబడింది';
 }

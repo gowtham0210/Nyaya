@@ -738,4 +738,22 @@ class AppLocalizationsKn extends AppLocalizations {
   @override
   String get profileLogoutConfirmBody =>
       'ಮತ್ತೆ ಸೈನ್ ಇನ್ ಮಾಡಲು ನಿಮ್ಮ ಫೋನ್ ಸಂಖ್ಯೆ ಮತ್ತು ಕೋಡ್ ಬೇಕು.';
+
+  @override
+  String get editProfileSave => 'ಬದಲಾವಣೆಗಳನ್ನು ಉಳಿಸಿ';
+
+  @override
+  String get editProfileSaved => 'ಪ್ರೊಫೈಲ್ ನವೀಕರಿಸಲಾಗಿದೆ';
+
+  @override
+  String get editProfileChangePhoto => 'ಫೋಟೋ ಬದಲಿಸಿ';
+
+  @override
+  String get editProfileCamera => 'ಫೋಟೋ ತೆಗೆಯಿರಿ';
+
+  @override
+  String get editProfileGallery => 'ಗ್ಯಾಲರಿಯಿಂದ ಆಯ್ಕೆಮಾಡಿ';
+
+  @override
+  String get editProfilePhotoUpdated => 'ಫೋಟೋ ನವೀಕರಿಸಲಾಗಿದೆ';
 }
