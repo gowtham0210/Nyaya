@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:nyaya/app/app_session.dart';
 import 'package:nyaya/app/main_shell.dart';
 import 'package:nyaya/core/localization/l10n.dart';
 import 'package:nyaya/features/auth/presentation/sign_in_page.dart';
@@ -175,6 +176,7 @@ void main() {
     tester,
   ) async {
     SharedPreferences.setMockInitialValues({});
+    await AppSession.saveSignedIn();
     await pumpMainShell(tester);
 
     await tester.tap(find.byKey(const ValueKey('nav.profile')));
@@ -199,6 +201,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.byType(SignInPage), findsOneWidget);
+    expect(AppSession.signedIn, isFalse);
   });
 
   testWidgets('AC-006 unbuilt tabs show the coming-soon state', (tester) async {

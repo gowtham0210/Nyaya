@@ -1,4 +1,5 @@
 import '../../../core/network/api_client.dart';
+import '../../../core/network/api_config.dart';
 
 /// The signed-in learner, from `GET /users/me`.
 class UserProfile {
@@ -13,7 +14,7 @@ class UserProfile {
   final String? phone;
   final String? profession;
 
-  /// Relative to the API origin, or absolute; null when there's no photo.
+  /// Absolute photo URL; null when there's no photo.
   final String? avatarUrl;
 }
 
@@ -70,8 +71,16 @@ class ProfileRepository {
     fullName: json['fullName'] as String,
     phone: _text(json['phone']),
     profession: _text(json['profession']),
-    avatarUrl: _text(json['avatarUrl']),
+    avatarUrl: _absoluteUrl(_text(json['avatarUrl'])),
   );
+
+  /// The backend sends upload paths relative to its origin.
+  static String? _absoluteUrl(String? path) {
+    if (path == null || path.startsWith('http')) {
+      return path;
+    }
+    return '${ApiConfig.baseUrl}${path.startsWith('/') ? '' : '/'}$path';
+  }
 
   static int _int(Object? value) => (value as num?)?.toInt() ?? 0;
 

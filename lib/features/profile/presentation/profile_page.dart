@@ -67,7 +67,6 @@ class _ProfilePageState extends State<ProfilePage> {
               LoadStateView<ProfileOverview>(
                 state: viewModel.state,
                 onRetry: viewModel.load,
-                emptyMessage: '',
                 builder: (context, overview) => Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
@@ -320,47 +319,66 @@ class _EntryList extends StatelessWidget {
   }
 }
 
-class _LogoutTile extends StatelessWidget {
+class _LogoutTile extends StatefulWidget {
   const _LogoutTile({required this.onLogout});
 
   final Future<void> Function() onLogout;
 
   @override
-  Widget build(BuildContext context) {
+  State<_LogoutTile> createState() => _LogoutTileState();
+}
+
+class _LogoutTileState extends State<_LogoutTile> {
+  /// True while logging out, so a second tap does nothing.
+  var _busy = false;
+
+  Future<void> _confirmAndLogout() async {
     final l10n = context.l10n;
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: Text(l10n.profileLogoutConfirmTitle),
+        content: Text(l10n.profileLogoutConfirmBody),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(false),
+            child: Text(l10n.commonCancel),
+          ),
+          TextButton(
+            key: const ValueKey('profile.logout.confirm'),
+            onPressed: () => Navigator.of(dialogContext).pop(true),
+            style: TextButton.styleFrom(foregroundColor: _danger),
+            child: Text(l10n.profileLogout),
+          ),
+        ],
+      ),
+    );
+    if (confirmed != true || !mounted) {
+      return;
+    }
+    setState(() => _busy = true);
+    try {
+      await widget.onLogout();
+    } finally {
+      if (mounted) {
+        setState(() => _busy = false);
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return _Card(
       children: [
         ListTile(
           key: const ValueKey('profile.logout'),
+          enabled: !_busy,
           leading: const Icon(Icons.logout_rounded, color: _danger),
           title: Text(
-            l10n.profileLogout,
+            context.l10n.profileLogout,
             style: const TextStyle(color: _danger, fontWeight: FontWeight.w600),
           ),
-          onTap: () async {
-            final confirmed = await showDialog<bool>(
-              context: context,
-              builder: (dialogContext) => AlertDialog(
-                title: Text(l10n.profileLogoutConfirmTitle),
-                content: Text(l10n.profileLogoutConfirmBody),
-                actions: [
-                  TextButton(
-                    onPressed: () => Navigator.of(dialogContext).pop(false),
-                    child: Text(l10n.commonCancel),
-                  ),
-                  TextButton(
-                    key: const ValueKey('profile.logout.confirm'),
-                    onPressed: () => Navigator.of(dialogContext).pop(true),
-                    style: TextButton.styleFrom(foregroundColor: _danger),
-                    child: Text(l10n.profileLogout),
-                  ),
-                ],
-              ),
-            );
-            if (confirmed == true) {
-              await onLogout();
-            }
-          },
+          onTap: _confirmAndLogout,
         ),
       ],
     );

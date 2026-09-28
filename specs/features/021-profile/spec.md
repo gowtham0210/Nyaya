@@ -47,6 +47,9 @@ in as, their progress, or log out.
 - FR-005: Log out shall ask for confirmation; Cancel keeps the learner
   signed in; confirming ends the session.
 - FR-006: A failure shows the shared failure message with Retry.
+- FR-007: A second Log out tap while logging out shall do nothing.
+- FR-008: Photo paths from the backend resolve against the API origin,
+  with or without a leading `/`; the initials colour is stable across builds.
 
 ## Acceptance Criteria
 

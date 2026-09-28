@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../network/api_config.dart';
-
 const _palette = [
   Color(0xFF11233B),
   Color(0xFFB9823A),
@@ -22,7 +20,7 @@ class InitialsAvatar extends StatelessWidget {
 
   final String name;
 
-  /// Absolute, or relative to the backend origin.
+  /// Absolute photo URL.
   final String? avatarUrl;
   final double size;
 
@@ -44,7 +42,7 @@ class InitialsAvatar extends StatelessWidget {
     }
     return ClipOval(
       child: Image.network(
-        url.startsWith('http') ? url : '${ApiConfig.baseUrl}$url',
+        url,
         width: size,
         height: size,
         fit: BoxFit.cover,
@@ -70,7 +68,9 @@ class _Initials extends StatelessWidget {
       height: size,
       alignment: Alignment.center,
       decoration: BoxDecoration(
-        color: _palette[name.hashCode.abs() % _palette.length],
+        // Code units, not hashCode, so the colour is stable across builds.
+        color:
+            _palette[name.codeUnits.fold(0, (a, b) => a + b) % _palette.length],
         shape: BoxShape.circle,
       ),
       child: ExcludeSemantics(

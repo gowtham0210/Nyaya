@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
@@ -148,5 +150,45 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('a second logout tap while logging out does nothing', (
+    tester,
+  ) async {
+    final viewModel = ProfileViewModel(
+      repository: ProfileRepository(fakeBackend(profileRoutes())),
+    );
+    addTearDown(viewModel.dispose);
+    final done = Completer<void>();
+    var calls = 0;
+    await pumpLocalized(
+      tester,
+      ProfilePage(
+        viewModel: viewModel,
+        onEntrySelected: (_) {},
+        onLogout: () {
+          calls++;
+          return done.future;
+        },
+      ),
+      locale: const Locale('en'),
+    );
+    final logout = find.byKey(const ValueKey('profile.logout'));
+    await scrollTo(tester, logout);
+
+    for (var i = 0; i < 2; i++) {
+      await tester.tap(logout);
+      await tester.pumpAndSettle();
+      if (find
+          .byKey(const ValueKey('profile.logout.confirm'))
+          .evaluate()
+          .isNotEmpty) {
+        await tester.tap(find.byKey(const ValueKey('profile.logout.confirm')));
+        await tester.pumpAndSettle();
+      }
+    }
+    done.complete();
+
+    expect(calls, 1);
   });
 }

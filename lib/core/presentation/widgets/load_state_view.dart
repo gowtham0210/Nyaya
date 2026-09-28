@@ -12,14 +12,16 @@ class LoadStateView<T> extends StatelessWidget {
     super.key,
     required this.state,
     required this.builder,
-    required this.emptyMessage,
+    this.emptyMessage,
     this.emptyIcon = Icons.inbox_outlined,
     this.onRetry,
   });
 
   final LoadState<T> state;
   final Widget Function(BuildContext context, T data) builder;
-  final String emptyMessage;
+
+  /// Defaults to a generic "nothing here" message.
+  final String? emptyMessage;
   final IconData emptyIcon;
   final VoidCallback? onRetry;
 
@@ -34,7 +36,7 @@ class LoadStateView<T> extends StatelessWidget {
       Empty() => _StateMessage(
         key: const ValueKey('loadState.empty'),
         icon: emptyIcon,
-        message: emptyMessage,
+        message: emptyMessage ?? context.l10n.emptyNothingHere,
       ),
       Failed(:final error) => _StateMessage(
         key: const ValueKey('loadState.error'),

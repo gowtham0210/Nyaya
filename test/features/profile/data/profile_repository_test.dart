@@ -17,7 +17,7 @@ void main() {
     expect(overview.profile.fullName, 'Asha Rao');
     expect(overview.profile.profession, 'Law Student');
     expect(overview.profile.phone, '+919800000000');
-    expect(overview.profile.avatarUrl, '/uploads/7.png');
+    expect(overview.profile.avatarUrl, endsWith(':5000/uploads/7.png'));
     expect(overview.stats.streak, 4);
     expect(overview.stats.categoriesExplored, 3);
     expect(overview.stats.quizzesCompleted, 9);
@@ -41,5 +41,24 @@ void main() {
     final repository = ProfileRepository(fakeBackend(routes));
 
     expect(repository.fetchOverview(), throwsA(isA<ApiServerException>()));
+  });
+
+  test('AC-001 photo paths resolve with or without a slash', () async {
+    for (final path in ['/uploads/7.png', 'uploads/7.png']) {
+      final repository = ProfileRepository(
+        fakeBackend(profileRoutes(avatarUrl: path)),
+      );
+
+      final url = (await repository.fetchOverview()).profile.avatarUrl;
+
+      expect(url, endsWith(':5000/uploads/7.png'), reason: path);
+    }
+    final absolute = ProfileRepository(
+      fakeBackend(profileRoutes(avatarUrl: 'https://cdn.example/7.png')),
+    );
+    expect(
+      (await absolute.fetchOverview()).profile.avatarUrl,
+      'https://cdn.example/7.png',
+    );
   });
 }
