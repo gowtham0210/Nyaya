@@ -661,4 +661,31 @@ class AppLocalizationsTe extends AppLocalizations {
 
   @override
   String get homeRecommended => 'మీ కోసం సిఫార్సు చేయబడింది';
+
+  @override
+  String get articlesHeroTitle => 'నేర్చుకోండి & అప్‌డేట్‌గా ఉండండి';
+
+  @override
+  String get articlesHeroSubtitle =>
+      'తెలుసుకుని ఉండండి. చట్టాన్ని అర్థం చేసుకోండి.';
+
+  @override
+  String articlesPart(String part, String title) {
+    return 'భాగం $part · $title';
+  }
+
+  @override
+  String get articlesEmpty => 'ఆర్టికల్స్ అందుబాటులో లేవు.';
+
+  @override
+  String get articlesReadArticle => 'ఆర్టికల్ చదవండి';
+
+  @override
+  String get articleWhatItMeans => 'దీని అర్థం ఏమిటి';
+
+  @override
+  String get articleWhyItMatters => 'ఇది ఎందుకు ముఖ్యం';
+
+  @override
+  String get articleKeyFeatures => 'ముఖ్య లక్షణాలు';
 }

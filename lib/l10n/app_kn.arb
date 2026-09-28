@@ -181,5 +181,13 @@
   "homeProgressEmpty": "ಇನ್ನೂ ಯಾವುದೇ ಕ್ವಿಜ್ ಇಲ್ಲ. ನಿಮ್ಮ ಮೊದಲ ಕ್ವಿಜ್ ತೆಗೆದುಕೊಳ್ಳಿ!",
   "homeAskNyayaTitle": "ನ್ಯಾಯ ಅನ್ನು ಕೇಳಿ",
   "homeAskNyayaBody": "ನಿಮ್ಮ ಕಾನೂನು ಪ್ರಶ್ನೆಗಳನ್ನು ಸರಳ ಭಾಷೆಯಲ್ಲಿ ಕೇಳಿ. ಸ್ಪಷ್ಟ ಉತ್ತರಗಳನ್ನು ಪಡೆಯಿರಿ.",
-  "homeRecommended": "ನಿಮಗಾಗಿ ಶಿಫಾರಸು ಮಾಡಲಾಗಿದೆ"
+  "homeRecommended": "ನಿಮಗಾಗಿ ಶಿಫಾರಸು ಮಾಡಲಾಗಿದೆ",
+  "articlesHeroTitle": "ಕಲಿಯಿರಿ ಮತ್ತು ಅಪ್‌ಡೇಟ್ ಆಗಿರಿ",
+  "articlesHeroSubtitle": "ಮಾಹಿತಿ ಪಡೆಯಿರಿ. ಕಾನೂನನ್ನು ಅರ್ಥಮಾಡಿಕೊಳ್ಳಿ.",
+  "articlesPart": "ಭಾಗ {part} · {title}",
+  "articlesEmpty": "ಯಾವುದೇ ಲೇಖನಗಳು ಲಭ್ಯವಿಲ್ಲ.",
+  "articlesReadArticle": "ಲೇಖನ ಓದಿ",
+  "articleWhatItMeans": "ಇದರ ಅರ್ಥವೇನು",
+  "articleWhyItMatters": "ಇದು ಏಕೆ ಮುಖ್ಯ",
+  "articleKeyFeatures": "ಪ್ರಮುಖ ಲಕ್ಷಣಗಳು"
 }

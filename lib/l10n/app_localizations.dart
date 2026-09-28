@@ -1204,6 +1204,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Recommended for you'**
   String get homeRecommended;
+
+  /// No description provided for @articlesHeroTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Learn & Stay Updated'**
+  String get articlesHeroTitle;
+
+  /// No description provided for @articlesHeroSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Stay informed. Understand the law.'**
+  String get articlesHeroSubtitle;
+
+  /// No description provided for @articlesPart.
+  ///
+  /// In en, this message translates to:
+  /// **'Part {part} · {title}'**
+  String articlesPart(String part, String title);
+
+  /// No description provided for @articlesEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No articles yet.'**
+  String get articlesEmpty;
+
+  /// No description provided for @articlesReadArticle.
+  ///
+  /// In en, this message translates to:
+  /// **'Read article'**
+  String get articlesReadArticle;
+
+  /// No description provided for @articleWhatItMeans.
+  ///
+  /// In en, this message translates to:
+  /// **'What it means'**
+  String get articleWhatItMeans;
+
+  /// No description provided for @articleWhyItMatters.
+  ///
+  /// In en, this message translates to:
+  /// **'Why it matters'**
+  String get articleWhyItMatters;
+
+  /// No description provided for @articleKeyFeatures.
+  ///
+  /// In en, this message translates to:
+  /// **'Key features'**
+  String get articleKeyFeatures;
 }
 
 class _AppLocalizationsDelegate

@@ -331,5 +331,23 @@
   "homeProgressEmpty": "No quizzes yet. Take your first quiz!",
   "homeAskNyayaTitle": "Ask Nyaya",
   "homeAskNyayaBody": "Ask your legal questions in simple language. Get clear answers.",
-  "homeRecommended": "Recommended for you"
+  "homeRecommended": "Recommended for you",
+  "articlesHeroTitle": "Learn & Stay Updated",
+  "articlesHeroSubtitle": "Stay informed. Understand the law.",
+  "articlesPart": "Part {part} · {title}",
+  "@articlesPart": {
+    "placeholders": {
+      "part": {
+        "type": "String"
+      },
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "articlesEmpty": "No articles yet.",
+  "articlesReadArticle": "Read article",
+  "articleWhatItMeans": "What it means",
+  "articleWhyItMatters": "Why it matters",
+  "articleKeyFeatures": "Key features"
 }

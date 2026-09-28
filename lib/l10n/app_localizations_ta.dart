@@ -663,4 +663,31 @@ class AppLocalizationsTa extends AppLocalizations {
 
   @override
   String get homeRecommended => 'உங்களுக்கான பரிந்துரைகள்';
+
+  @override
+  String get articlesHeroTitle => 'கற்றுக்கொண்டு புதுப்பித்த நிலையில் இருங்கள்';
+
+  @override
+  String get articlesHeroSubtitle =>
+      'தகவலறிந்திருங்கள். சட்டத்தைப் புரிந்துகொள்ளுங்கள்.';
+
+  @override
+  String articlesPart(String part, String title) {
+    return 'பகுதி $part · $title';
+  }
+
+  @override
+  String get articlesEmpty => 'கட்டுரைகள் எதுவும் இல்லை.';
+
+  @override
+  String get articlesReadArticle => 'கட்டுரையைப் படியுங்கள்';
+
+  @override
+  String get articleWhatItMeans => 'இதன் பொருள் என்ன';
+
+  @override
+  String get articleWhyItMatters => 'இது ஏன் முக்கியம்';
+
+  @override
+  String get articleKeyFeatures => 'முக்கிய அம்சங்கள்';
 }

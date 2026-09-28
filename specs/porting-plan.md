@@ -41,7 +41,7 @@ Also: move theme colors/shadows to `lib/core/presentation/`, add assets under `a
 |---|---|---|---|
 | 1 | 017-categories-remote | `categories_api_service`, `categories_repository` | Spec 013 UI stays; real data |
 | 2 | 018-daily-questions (#29); 020 (#30), 026-home-progress-recommended (#31) | `daily_questions_section`, `legal_updates_section`, `ask_nyaya_card`, `learning_progress_card` | Add to existing Home |
-| 3 | 019-articles | `articles_screen`, `article_detail_screen`, `article_accordion_item` | Articles tab |
+| 3 | 019-articles (#32) | `articles_screen`, `article_detail_screen`, `article_accordion_item` | Articles tab |
 | 4 | 020-legal-updates (#30) | `legal_updates_*` | Home section + see-all |
 | 5 | 021-profile | `profile_screen`, `edit_profile_screen`, `initials_avatar`, `profile_api_service` | Real logout replaces test hack; language picker |
 | 6 | 022-settings | notifications, privacy & security, about, `logout_screen` | Drop change-password (no passwords with OTP) |

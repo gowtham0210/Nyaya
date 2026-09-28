@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 
 import '../core/localization/l10n.dart';
 import '../core/network/api_client.dart';
+import '../features/articles/data/articles_repository.dart';
+import '../features/articles/presentation/article_detail_page.dart';
+import '../features/articles/presentation/articles_page.dart';
+import '../features/articles/presentation/articles_view_model.dart';
 import '../features/categories/data/categories_repository.dart';
 import '../features/categories/presentation/categories_page.dart';
 import '../features/categories/presentation/categories_view_model.dart';
@@ -52,6 +56,9 @@ class _MainShellState extends State<MainShell> {
   late final _dailyQuestionsViewModel = DailyQuestionsViewModel(
     repository: DailyQuestionsRepository(_apiClient),
   );
+  late final _articlesViewModel = ArticlesViewModel(
+    repository: ArticlesRepository(_apiClient),
+  );
   late final _progressViewModel = LearningProgressViewModel(
     repository: ProgressRepository(_apiClient),
   );
@@ -66,6 +73,7 @@ class _MainShellState extends State<MainShell> {
     _dailyQuestionsViewModel.dispose();
     _legalUpdatesViewModel.dispose();
     _progressViewModel.dispose();
+    _articlesViewModel.dispose();
     super.dispose();
   }
 
@@ -91,10 +99,19 @@ class _MainShellState extends State<MainShell> {
             l10n.navLeaderboard,
             HomeIconType.navLeaderboard,
           ),
-          _comingSoon(
+          _tab(
             MainTab.articles,
             l10n.navArticles,
             HomeIconType.navArticles,
+            (context) => ArticlesPage(
+              viewModel: _articlesViewModel,
+              onArticleOpened: (article, number) => Navigator.of(context).push(
+                MaterialPageRoute<void>(
+                  builder: (_) =>
+                      ArticleDetailPage(number: number, article: article),
+                ),
+              ),
+            ),
           ),
           _comingSoon(
             MainTab.profile,

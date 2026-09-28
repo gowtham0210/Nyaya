@@ -658,4 +658,30 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get homeRecommended => 'Recommended for you';
+
+  @override
+  String get articlesHeroTitle => 'Learn & Stay Updated';
+
+  @override
+  String get articlesHeroSubtitle => 'Stay informed. Understand the law.';
+
+  @override
+  String articlesPart(String part, String title) {
+    return 'Part $part · $title';
+  }
+
+  @override
+  String get articlesEmpty => 'No articles yet.';
+
+  @override
+  String get articlesReadArticle => 'Read article';
+
+  @override
+  String get articleWhatItMeans => 'What it means';
+
+  @override
+  String get articleWhyItMatters => 'Why it matters';
+
+  @override
+  String get articleKeyFeatures => 'Key features';
 }

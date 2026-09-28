@@ -181,5 +181,13 @@
   "homeProgressEmpty": "अभी तक कोई क्विज़ नहीं। अपना पहला क्विज़ दें!",
   "homeAskNyayaTitle": "न्याय से पूछें",
   "homeAskNyayaBody": "अपने कानूनी सवाल सरल भाषा में पूछें। स्पष्ट जवाब पाएं।",
-  "homeRecommended": "आपके लिए सुझाया गया"
+  "homeRecommended": "आपके लिए सुझाया गया",
+  "articlesHeroTitle": "सीखें और अपडेट रहें",
+  "articlesHeroSubtitle": "सूचित रहें। कानून को समझें।",
+  "articlesPart": "भाग {part} · {title}",
+  "articlesEmpty": "कोई अनुच्छेद उपलब्ध नहीं है।",
+  "articlesReadArticle": "अनुच्छेद पढ़ें",
+  "articleWhatItMeans": "इसका अर्थ क्या है",
+  "articleWhyItMatters": "यह महत्वपूर्ण क्यों है",
+  "articleKeyFeatures": "मुख्य विशेषताएं"
 }

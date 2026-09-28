@@ -662,4 +662,31 @@ class AppLocalizationsKn extends AppLocalizations {
 
   @override
   String get homeRecommended => 'ನಿಮಗಾಗಿ ಶಿಫಾರಸು ಮಾಡಲಾಗಿದೆ';
+
+  @override
+  String get articlesHeroTitle => 'ಕಲಿಯಿರಿ ಮತ್ತು ಅಪ್‌ಡೇಟ್ ಆಗಿರಿ';
+
+  @override
+  String get articlesHeroSubtitle =>
+      'ಮಾಹಿತಿ ಪಡೆಯಿರಿ. ಕಾನೂನನ್ನು ಅರ್ಥಮಾಡಿಕೊಳ್ಳಿ.';
+
+  @override
+  String articlesPart(String part, String title) {
+    return 'ಭಾಗ $part · $title';
+  }
+
+  @override
+  String get articlesEmpty => 'ಯಾವುದೇ ಲೇಖನಗಳು ಲಭ್ಯವಿಲ್ಲ.';
+
+  @override
+  String get articlesReadArticle => 'ಲೇಖನ ಓದಿ';
+
+  @override
+  String get articleWhatItMeans => 'ಇದರ ಅರ್ಥವೇನು';
+
+  @override
+  String get articleWhyItMatters => 'ಇದು ಏಕೆ ಮುಖ್ಯ';
+
+  @override
+  String get articleKeyFeatures => 'ಪ್ರಮುಖ ಲಕ್ಷಣಗಳು';
 }

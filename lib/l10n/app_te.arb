@@ -181,5 +181,13 @@
   "homeProgressEmpty": "ఇంకా క్విజ్‌లు లేవు. మీ మొదటి క్విజ్ రాయండి!",
   "homeAskNyayaTitle": "న్యాయను అడగండి",
   "homeAskNyayaBody": "మీ న్యాయ ప్రశ్నలను సరళమైన భాషలో అడగండి. స్పష్టమైన సమాధానాలు పొందండి.",
-  "homeRecommended": "మీ కోసం సిఫార్సు చేయబడింది"
+  "homeRecommended": "మీ కోసం సిఫార్సు చేయబడింది",
+  "articlesHeroTitle": "నేర్చుకోండి & అప్‌డేట్‌గా ఉండండి",
+  "articlesHeroSubtitle": "తెలుసుకుని ఉండండి. చట్టాన్ని అర్థం చేసుకోండి.",
+  "articlesPart": "భాగం {part} · {title}",
+  "articlesEmpty": "ఆర్టికల్స్ అందుబాటులో లేవు.",
+  "articlesReadArticle": "ఆర్టికల్ చదవండి",
+  "articleWhatItMeans": "దీని అర్థం ఏమిటి",
+  "articleWhyItMatters": "ఇది ఎందుకు ముఖ్యం",
+  "articleKeyFeatures": "ముఖ్య లక్షణాలు"
 }

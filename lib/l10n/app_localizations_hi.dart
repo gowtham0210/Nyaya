@@ -659,4 +659,30 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get homeRecommended => 'आपके लिए सुझाया गया';
+
+  @override
+  String get articlesHeroTitle => 'सीखें और अपडेट रहें';
+
+  @override
+  String get articlesHeroSubtitle => 'सूचित रहें। कानून को समझें।';
+
+  @override
+  String articlesPart(String part, String title) {
+    return 'भाग $part · $title';
+  }
+
+  @override
+  String get articlesEmpty => 'कोई अनुच्छेद उपलब्ध नहीं है।';
+
+  @override
+  String get articlesReadArticle => 'अनुच्छेद पढ़ें';
+
+  @override
+  String get articleWhatItMeans => 'इसका अर्थ क्या है';
+
+  @override
+  String get articleWhyItMatters => 'यह महत्वपूर्ण क्यों है';
+
+  @override
+  String get articleKeyFeatures => 'मुख्य विशेषताएं';
 }

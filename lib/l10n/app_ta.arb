@@ -181,5 +181,13 @@
   "homeProgressEmpty": "இன்னும் வினாடி வினா இல்லை. உங்கள் முதல் வினாடி வினாவை எழுதுங்கள்!",
   "homeAskNyayaTitle": "நியாயா-விடம் கேளுங்கள்",
   "homeAskNyayaBody": "உங்கள் சட்ட கேள்விகளை எளிய மொழியில் கேளுங்கள். தெளிவான பதில்கள் பெறுங்கள்.",
-  "homeRecommended": "உங்களுக்கான பரிந்துரைகள்"
+  "homeRecommended": "உங்களுக்கான பரிந்துரைகள்",
+  "articlesHeroTitle": "கற்றுக்கொண்டு புதுப்பித்த நிலையில் இருங்கள்",
+  "articlesHeroSubtitle": "தகவலறிந்திருங்கள். சட்டத்தைப் புரிந்துகொள்ளுங்கள்.",
+  "articlesPart": "பகுதி {part} · {title}",
+  "articlesEmpty": "கட்டுரைகள் எதுவும் இல்லை.",
+  "articlesReadArticle": "கட்டுரையைப் படியுங்கள்",
+  "articleWhatItMeans": "இதன் பொருள் என்ன",
+  "articleWhyItMatters": "இது ஏன் முக்கியம்",
+  "articleKeyFeatures": "முக்கிய அம்சங்கள்"
 }

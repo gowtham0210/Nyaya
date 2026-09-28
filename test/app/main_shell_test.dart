@@ -22,6 +22,19 @@ void main() {
         home: MainShell(
           apiClient: fakeBackend({
             '/categories': {'items': []},
+            '/articles': {
+              'items': [
+                {
+                  'id': 1,
+                  'part': 'III',
+                  'partTitle': 'Fundamental Rights',
+                  'title': 'Right to Equality',
+                  'articleRange': 'Articles 14–18',
+                  'description': 'Equality before law.',
+                  'whyItMatters': 'It stops discrimination.',
+                },
+              ],
+            },
             '/legal-updates': {
               'items': [
                 {
@@ -138,10 +151,26 @@ void main() {
     expect(find.byKey(const ValueKey('home.scroll')), findsOneWidget);
   });
 
+  testWidgets('019 the Articles tab lists articles and opens one', (
+    tester,
+  ) async {
+    await pumpMainShell(tester);
+
+    await tester.tap(find.byKey(const ValueKey('nav.articles')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const ValueKey('articles.item.1')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const ValueKey('articles.item.1.read')));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Why it matters'), findsOneWidget);
+    expect(find.text('It stops discrimination.'), findsOneWidget);
+  });
+
   testWidgets('AC-006 unbuilt tabs show the coming-soon state', (tester) async {
     await pumpMainShell(tester);
 
-    for (final id in ['leaderboard', 'articles', 'profile']) {
+    for (final id in ['leaderboard', 'profile']) {
       await tester.tap(find.byKey(ValueKey('nav.$id')));
       await tester.pumpAndSettle();
       expect(find.text('Coming soon'), findsOneWidget, reason: id);
