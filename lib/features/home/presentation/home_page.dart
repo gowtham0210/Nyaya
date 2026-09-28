@@ -379,7 +379,8 @@ class _HeroBanner extends StatelessWidget {
 
     return Container(
       key: const ValueKey('home.hero'),
-      height: heroHeight,
+      // A minimum, so large text grows the banner instead of overflowing.
+      constraints: BoxConstraints(minHeight: heroHeight),
       clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(30),
@@ -397,6 +398,7 @@ class _HeroBanner extends StatelessWidget {
         ],
       ),
       child: Stack(
+        fit: StackFit.passthrough,
         children: [
           Positioned(
             right: -20,
@@ -425,109 +427,112 @@ class _HeroBanner extends StatelessWidget {
             padding: const EdgeInsets.fromLTRB(24, 22, 24, 22),
             child: ConstrainedBox(
               constraints: BoxConstraints(maxWidth: heroTextWidth),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    leadLine,
-                    key: const ValueKey('home.hero.title.lead'),
-                    style: TextStyle(
-                      fontSize: leadSize,
-                      fontWeight: FontWeight.w700,
-                      height: 1.06,
-                      color: Colors.white,
-                      fontFamily: 'serif',
-                      letterSpacing: -0.8,
-                    ),
-                  ),
-                  const SizedBox(height: 6),
-                  Text(
-                    accentLine,
-                    key: const ValueKey('home.hero.title.accent'),
-                    style: TextStyle(
-                      fontSize: accentSize,
-                      fontWeight: FontWeight.w700,
-                      height: 1.06,
-                      color: HomePage.heroHighlight,
-                      fontFamily: 'serif',
-                      letterSpacing: -0.8,
-                    ),
-                  ),
-                  const SizedBox(height: 6),
-                  Text(
-                    trailLine,
-                    key: const ValueKey('home.hero.title.trail'),
-                    style: TextStyle(
-                      fontSize: trailSize,
-                      fontWeight: FontWeight.w700,
-                      height: 1.06,
-                      color: Colors.white,
-                      fontFamily: 'serif',
-                      letterSpacing: -0.8,
-                    ),
-                  ),
-                  const Spacer(),
-                  Text(
-                    supportingCopy,
-                    key: const ValueKey('home.hero.support'),
-                    style: TextStyle(
-                      fontSize: supportSize,
-                      height: 1.45,
-                      color: Color(0xFFF2F3F5),
-                    ),
-                  ),
-                  const SizedBox(height: 18),
-                  SizedBox(
-                    height: compact ? 50 : 56,
-                    child: ElevatedButton(
-                      key: const ValueKey('home.hero.cta'),
-                      onPressed: onPressed,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: HomePage.heroHighlight,
-                        foregroundColor: Colors.white,
-                        elevation: 0,
-                        shadowColor: Colors.transparent,
-                        padding: const EdgeInsets.symmetric(horizontal: 18),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
-                        ),
+              // Lets the Spacer push the CTA down in a min-height banner.
+              child: IntrinsicHeight(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      leadLine,
+                      key: const ValueKey('home.hero.title.lead'),
+                      style: TextStyle(
+                        fontSize: leadSize,
+                        fontWeight: FontWeight.w700,
+                        height: 1.06,
+                        color: Colors.white,
+                        fontFamily: 'serif',
+                        letterSpacing: -0.8,
                       ),
-                      child: FittedBox(
-                        fit: BoxFit.scaleDown,
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Container(
-                              width: 30,
-                              height: 30,
-                              decoration: const BoxDecoration(
-                                color: Colors.white,
-                                shape: BoxShape.circle,
-                              ),
-                              alignment: Alignment.center,
-                              child: const Padding(
-                                padding: EdgeInsets.only(left: 2),
-                                child: Icon(
-                                  Icons.play_arrow_rounded,
-                                  size: 20,
-                                  color: HomePage.heroHighlight,
+                    ),
+                    const SizedBox(height: 6),
+                    Text(
+                      accentLine,
+                      key: const ValueKey('home.hero.title.accent'),
+                      style: TextStyle(
+                        fontSize: accentSize,
+                        fontWeight: FontWeight.w700,
+                        height: 1.06,
+                        color: HomePage.heroHighlight,
+                        fontFamily: 'serif',
+                        letterSpacing: -0.8,
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    Text(
+                      trailLine,
+                      key: const ValueKey('home.hero.title.trail'),
+                      style: TextStyle(
+                        fontSize: trailSize,
+                        fontWeight: FontWeight.w700,
+                        height: 1.06,
+                        color: Colors.white,
+                        fontFamily: 'serif',
+                        letterSpacing: -0.8,
+                      ),
+                    ),
+                    const Spacer(),
+                    Text(
+                      supportingCopy,
+                      key: const ValueKey('home.hero.support'),
+                      style: TextStyle(
+                        fontSize: supportSize,
+                        height: 1.45,
+                        color: Color(0xFFF2F3F5),
+                      ),
+                    ),
+                    const SizedBox(height: 18),
+                    SizedBox(
+                      height: compact ? 50 : 56,
+                      child: ElevatedButton(
+                        key: const ValueKey('home.hero.cta'),
+                        onPressed: onPressed,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: HomePage.heroHighlight,
+                          foregroundColor: Colors.white,
+                          elevation: 0,
+                          shadowColor: Colors.transparent,
+                          padding: const EdgeInsets.symmetric(horizontal: 18),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                        ),
+                        child: FittedBox(
+                          fit: BoxFit.scaleDown,
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Container(
+                                width: 30,
+                                height: 30,
+                                decoration: const BoxDecoration(
+                                  color: Colors.white,
+                                  shape: BoxShape.circle,
+                                ),
+                                alignment: Alignment.center,
+                                child: const Padding(
+                                  padding: EdgeInsets.only(left: 2),
+                                  child: Icon(
+                                    Icons.play_arrow_rounded,
+                                    size: 20,
+                                    color: HomePage.heroHighlight,
+                                  ),
                                 ),
                               ),
-                            ),
-                            const SizedBox(width: 12),
-                            Text(
-                              ctaLabel,
-                              style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w700,
+                              const SizedBox(width: 12),
+                              Text(
+                                ctaLabel,
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w700,
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),

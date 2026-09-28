@@ -145,4 +145,30 @@ void main() {
       expect(find.text('Easy'), findsOneWidget);
     },
   );
+
+  testWidgets('the hero keeps its designed height at normal text', (
+    tester,
+  ) async {
+    await pumpHomePage(tester);
+
+    expect(
+      tester.getSize(find.byKey(const ValueKey('home.hero'))).height,
+      moreOrLessEquals(393 * 0.86),
+    );
+  });
+
+  testWidgets('the hero fits large text on a small phone', (tester) async {
+    tester.platformDispatcher.textScaleFactorTestValue = 1.6;
+    addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
+    await pumpHomePage(tester, size: const Size(360, 740));
+
+    expect(tester.takeException(), isNull);
+    expect(find.byKey(const ValueKey('home.hero.cta')), findsOneWidget);
+    expect(
+      tester.getBottomLeft(find.byKey(const ValueKey('home.hero.cta'))).dy,
+      lessThanOrEqualTo(
+        tester.getBottomLeft(find.byKey(const ValueKey('home.hero'))).dy,
+      ),
+    );
+  });
 }
