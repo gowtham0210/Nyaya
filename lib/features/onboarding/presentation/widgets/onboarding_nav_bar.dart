@@ -53,11 +53,7 @@ class OnboardingNavBar extends StatelessWidget {
                     ),
                   ),
                   SizedBox(width: 4),
-                  Icon(
-                    Icons.chevron_right,
-                    color: gold,
-                    size: 18,
-                  ),
+                  Icon(Icons.chevron_right, color: gold, size: 18),
                 ],
               ),
             ),

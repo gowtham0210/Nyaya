@@ -7,7 +7,11 @@ plugins {
 
 android {
     namespace = "com.example.nyaya"
-    compileSdk = flutter.compileSdkVersion
+    // flutter_secure_storage requires compileSdk 37; Flutter's own default
+    // (flutter.compileSdkVersion) still tracks 36, which left secure-storage
+    // platform channel calls unstable on Android 16 (API 36) devices/emulators
+    // and could stall app boot before the first frame ever renders.
+    compileSdk = 37
     ndkVersion = flutter.ndkVersion
 
     compileOptions {

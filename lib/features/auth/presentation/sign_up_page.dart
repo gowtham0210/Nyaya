@@ -1,14 +1,23 @@
 import 'package:flutter/material.dart';
 
+import '../../../app/app_session.dart';
+import '../../../app/auth_api.dart';
 import '../../../core/presentation/widgets/nyaya_widgets.dart';
 
 class SignUpPage extends StatefulWidget {
-  const SignUpPage({super.key, this.onSignInRequested, this.onSignUpCompleted});
+  SignUpPage({
+    super.key,
+    this.onSignInRequested,
+    this.onSignUpCompleted,
+    AuthApi? authApi,
+  }) : authApi = authApi ?? AuthApi();
 
   final void Function(BuildContext context)? onSignInRequested;
 
-  /// Called when the form passes validation and the user submits.
+  /// Called when the account is created and the session is signed in.
   final void Function(BuildContext context)? onSignUpCompleted;
+
+  final AuthApi authApi;
 
   @override
   State<SignUpPage> createState() => _SignUpPageState();
@@ -26,6 +35,7 @@ class _SignUpPageState extends State<SignUpPage> {
   var _obscureConfirmPassword = true;
   var _agreedToTerms = true;
   var _hasAttemptedSubmit = false;
+  var _isSubmitting = false;
 
   @override
   void dispose() {
@@ -125,65 +135,64 @@ class _SignUpPageState extends State<SignUpPage> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          SizedBox(
-                            height: topSectionHeight,
-                            child: Stack(
-                              clipBehavior: Clip.none,
-                              children: [
-                                Positioned(
-                                  key: const ValueKey('signup.back'),
-                                  left: -4,
-                                  top: 0,
-                                  child: IconButton(
-                                    onPressed: () =>
-                                        Navigator.maybePop(context),
-                                    icon: const Icon(
-                                      Icons.arrow_back_ios_new_rounded,
-                                      color: navy,
-                                      size: 22,
+                          // Flowed as a Column for the same reason as the
+                          // sign-in header: absolutely positioning the brand
+                          // lockup and the intro copy inside a fixed-height
+                          // Stack let them overlap once their combined
+                          // height exceeded it.
+                          Stack(
+                            clipBehavior: Clip.none,
+                            children: [
+                              Positioned(
+                                right: -heroWidth * 0.16,
+                                top: 70,
+                                child: _HeroGlow(size: heroWidth * 1.1),
+                              ),
+                              Positioned(
+                                right: -6,
+                                top: 120,
+                                width: heroWidth,
+                                child: IgnorePointer(
+                                  child: Image.asset(
+                                    heroAsset,
+                                    fit: BoxFit.contain,
+                                    excludeFromSemantics: true,
+                                  ),
+                                ),
+                              ),
+                              ConstrainedBox(
+                                constraints: BoxConstraints(
+                                  minHeight: topSectionHeight,
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    IconButton(
+                                      key: const ValueKey('signup.back'),
+                                      onPressed: () =>
+                                          Navigator.maybePop(context),
+                                      icon: const Icon(
+                                        Icons.arrow_back_ios_new_rounded,
+                                        color: navy,
+                                        size: 22,
+                                      ),
+                                      tooltip: 'Back',
+                                      splashRadius: 24,
                                     ),
-                                    tooltip: 'Back',
-                                    splashRadius: 24,
-                                  ),
-                                ),
-                                Positioned(
-                                  right: -heroWidth * 0.16,
-                                  top: 70,
-                                  child: _HeroGlow(size: heroWidth * 1.1),
-                                ),
-                                Positioned(
-                                  right: -6,
-                                  top: 120,
-                                  width: heroWidth,
-                                  child: IgnorePointer(
-                                    child: Image.asset(
-                                      heroAsset,
-                                      fit: BoxFit.contain,
-                                      excludeFromSemantics: true,
+                                    const SizedBox(height: 10),
+                                    BrandLockup(scale: brandScale),
+                                    const SizedBox(height: 20),
+                                    ConstrainedBox(
+                                      constraints: BoxConstraints(
+                                        maxWidth: introMaxWidth,
+                                      ),
+                                      child: const _IntroCopy(),
                                     ),
-                                  ),
+                                    const SizedBox(height: 24),
+                                  ],
                                 ),
-                                Positioned(
-                                  left: 0,
-                                  top: 44,
-                                  child: Transform.scale(
-                                    scale: brandScale,
-                                    alignment: Alignment.topLeft,
-                                    child: const BrandLockup(),
-                                  ),
-                                ),
-                                Positioned(
-                                  left: 0,
-                                  bottom: 18,
-                                  child: ConstrainedBox(
-                                    constraints: BoxConstraints(
-                                      maxWidth: introMaxWidth,
-                                    ),
-                                    child: const _IntroCopy(),
-                                  ),
-                                ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
                           Transform.translate(
                             offset: const Offset(0, -12),
@@ -361,7 +370,7 @@ class _SignUpPageState extends State<SignUpPage> {
               height: 56,
               child: ElevatedButton(
                 key: const ValueKey('signup.button.primary'),
-                onPressed: _submitForm,
+                onPressed: _isSubmitting ? null : _submitForm,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: navy,
                   foregroundColor: Colors.white,
@@ -371,14 +380,23 @@ class _SignUpPageState extends State<SignUpPage> {
                     borderRadius: BorderRadius.circular(18),
                   ),
                 ),
-                child: const Text(
-                  'SIGN UP',
-                  style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w700,
-                    letterSpacing: 1.2,
-                  ),
-                ),
+                child: _isSubmitting
+                    ? const SizedBox(
+                        width: 22,
+                        height: 22,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2.4,
+                          color: Colors.white,
+                        ),
+                      )
+                    : const Text(
+                        'SIGN UP',
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w700,
+                          letterSpacing: 1.2,
+                        ),
+                      ),
               ),
             ),
             const SizedBox(height: 24),
@@ -500,7 +518,7 @@ class _SignUpPageState extends State<SignUpPage> {
     return null;
   }
 
-  void _submitForm() {
+  Future<void> _submitForm() async {
     FocusScope.of(context).unfocus();
     setState(() {
       _hasAttemptedSubmit = true;
@@ -515,12 +533,39 @@ class _SignUpPageState extends State<SignUpPage> {
       return;
     }
 
-    final onSignUpCompleted = widget.onSignUpCompleted;
-    if (onSignUpCompleted != null) {
-      onSignUpCompleted(context);
-      return;
+    setState(() {
+      _isSubmitting = true;
+    });
+
+    try {
+      final result = await widget.authApi.register(
+        fullName: _fullNameController.text.trim(),
+        email: _emailController.text.trim(),
+        phone: _phoneController.text.trim(),
+        password: _passwordController.text,
+      );
+
+      await AppSession.saveAuthSession(
+        fullName: result.fullName,
+        email: result.email,
+        accessToken: result.accessToken,
+        refreshToken: result.refreshToken,
+      );
+      await AppSession.ensureMemberSinceRecorded();
+
+      if (!mounted) {
+        return;
+      }
+      widget.onSignUpCompleted?.call(context);
+    } on AuthApiException catch (error) {
+      _showPlaceholderMessage(error.message);
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isSubmitting = false;
+        });
+      }
     }
-    _showPlaceholderMessage('Sign-up submission will be wired next.');
   }
 
   void _handleSignInRequested(BuildContext context) {

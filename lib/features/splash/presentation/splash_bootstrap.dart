@@ -53,9 +53,9 @@ class _SplashBootstrapState extends State<SplashBootstrap>
     }
 
     setState(() {
-      // Temporary review mode: keep the splash visible until the user taps.
       _awaitingTapToContinue = true;
     });
+    _showHome();
   }
 
   void _showHome() {

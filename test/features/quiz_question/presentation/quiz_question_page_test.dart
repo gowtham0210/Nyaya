@@ -52,10 +52,14 @@ void main() {
       ),
       findsOneWidget,
     );
-    expect(find.text('Only if a magistrate has signed the order'),
-        findsOneWidget);
-    expect(find.text('For any cognizable offence, with reasons recorded'),
-        findsOneWidget);
+    expect(
+      find.text('Only if a magistrate has signed the order'),
+      findsOneWidget,
+    );
+    expect(
+      find.text('For any cognizable offence, with reasons recorded'),
+      findsOneWidget,
+    );
     expect(find.text('Never — a warrant is always required'), findsOneWidget);
     expect(find.text('Only between sunrise and sunset'), findsOneWidget);
     expect(find.text('SELECT AN ANSWER'), findsOneWidget);
@@ -75,8 +79,10 @@ void main() {
     expect(find.byKey(const ValueKey('quiz.explanation')), findsOneWidget);
     expect(find.text('BNSS §35 (formerly CrPC §41)'), findsOneWidget);
     expect(
-      find.text('If arrested, you have the right to know the reason in '
-          'writing.'),
+      find.text(
+        'If arrested, you have the right to know the reason in '
+        'writing.',
+      ),
       findsOneWidget,
     );
     expect(find.text('NEXT'), findsOneWidget);
@@ -95,14 +101,16 @@ void main() {
     expect(
       tester.getSemantics(find.byKey(const ValueKey('quiz.option.C'))),
       isSemantics(
-        label: 'Option C. Never — a warrant is always required. '
+        label:
+            'Option C. Never — a warrant is always required. '
             'Your answer, wrong',
       ),
     );
     expect(
       tester.getSemantics(find.byKey(const ValueKey('quiz.option.B'))),
       isSemantics(
-        label: 'Option B. For any cognizable offence, with reasons recorded. '
+        label:
+            'Option B. For any cognizable offence, with reasons recorded. '
             'Correct answer',
       ),
     );
@@ -122,15 +130,14 @@ void main() {
     expect(
       tester.getSemantics(find.byKey(const ValueKey('quiz.option.C'))),
       isSemantics(
-        label: 'Option C. Never — a warrant is always required. '
+        label:
+            'Option C. Never — a warrant is always required. '
             'Your answer, wrong',
       ),
     );
   });
 
-  testWidgets('NEXT advances to a fresh question', (
-    WidgetTester tester,
-  ) async {
+  testWidgets('NEXT advances to a fresh question', (WidgetTester tester) async {
     await pumpQuizPage(tester, session: shortSession());
 
     await tester.tap(find.byKey(const ValueKey('quiz.option.B')));

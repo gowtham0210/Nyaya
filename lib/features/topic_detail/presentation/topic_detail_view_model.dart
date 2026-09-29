@@ -50,10 +50,10 @@ class TopicDetailViewModel {
       'CONTINUE QUIZ ${quizzes.indexOf(_continueTarget) + 1}';
 
   TopicQuiz get _continueTarget => quizzes.firstWhere(
-        (quiz) => quiz.status == QuizStatus.inProgress,
-        orElse: () => quizzes
-            .firstWhere((quiz) => quiz.status == QuizStatus.notStarted),
-      );
+    (quiz) => quiz.status == QuizStatus.inProgress,
+    orElse: () =>
+        quizzes.firstWhere((quiz) => quiz.status == QuizStatus.notStarted),
+  );
 
   final List<TopicQuiz> quizzes = const [
     TopicQuiz(

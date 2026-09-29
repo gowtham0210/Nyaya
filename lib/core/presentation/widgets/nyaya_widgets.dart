@@ -15,7 +15,15 @@ const wordmarkAsset = 'assets/branding/wordmark.png';
 const starAsset = 'assets/icons/star.png';
 
 class BrandLockup extends StatelessWidget {
-  const BrandLockup({super.key});
+  const BrandLockup({super.key, this.scale = 1});
+
+  /// Shrinks the lockup for the auth headers, where it shares the screen
+  /// with the welcome copy rather than filling a splash.
+  ///
+  /// The dimensions are scaled rather than the whole widget being wrapped in
+  /// a [Transform], because a Transform still reserves the unscaled height —
+  /// which is what used to let this lockup overlap the text beneath it.
+  final double scale;
 
   @override
   Widget build(BuildContext context) {
@@ -23,18 +31,19 @@ class BrandLockup extends StatelessWidget {
     final width = size.width;
     final height = size.height;
 
-    final logoWidth = _clamp(width * 0.42, 156, 190);
-    final logoHeight = _clamp(logoWidth * 0.80, 124, 152);
-    final wordmarkWidth = _clamp(width * 0.67, 258, 308);
-    final wordmarkHeight = _clamp(wordmarkWidth * 0.21, 52, 66);
-    final dividerWidth = _clamp(width * 0.60, 220, 252);
-    final taglineSize = _clamp(width * 0.034, 12, 14);
-    final taglineSpacing = _clamp(width * 0.016, 4.8, 6.6);
+    final logoWidth = _clamp(width * 0.42, 156, 190) * scale;
+    final logoHeight = _clamp(logoWidth * 0.80, 124 * scale, 152 * scale);
+    final wordmarkWidth = _clamp(width * 0.67, 258, 308) * scale;
+    final wordmarkHeight = _clamp(wordmarkWidth * 0.21, 52 * scale, 66 * scale);
+    final dividerWidth = _clamp(width * 0.60, 220, 252) * scale;
+    final taglineSize = _clamp(width * 0.034, 12, 14) * scale;
+    final taglineSpacing = _clamp(width * 0.016, 4.8, 6.6) * scale;
 
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         SizedBox(
+          key: const ValueKey('splash.logo'),
           width: logoWidth,
           height: logoHeight,
           child: Image.asset(
@@ -43,8 +52,9 @@ class BrandLockup extends StatelessWidget {
             excludeFromSemantics: true,
           ),
         ),
-        SizedBox(height: _clamp(height * 0.006, 4, 8)),
+        SizedBox(height: _clamp(height * 0.006, 4, 8) * scale),
         SizedBox(
+          key: const ValueKey('splash.wordmark'),
           width: wordmarkWidth,
           height: wordmarkHeight,
           child: Image.asset(
@@ -53,21 +63,23 @@ class BrandLockup extends StatelessWidget {
             excludeFromSemantics: true,
           ),
         ),
-        SizedBox(height: 8),
+        SizedBox(height: 8 * scale),
         SizedBox(
+          key: const ValueKey('splash.divider'),
           width: dividerWidth,
           child: const NyayaDivider(),
         ),
-        SizedBox(height: 8),
+        SizedBox(height: 8 * scale),
         Text(
           'LAW BASED QUIZ APP',
+          key: const ValueKey('splash.tagline'),
           textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                color: gold,
-                fontSize: taglineSize,
-                fontWeight: FontWeight.bold,
-                letterSpacing: taglineSpacing,
-              ),
+            color: gold,
+            fontSize: taglineSize,
+            fontWeight: FontWeight.bold,
+            letterSpacing: taglineSpacing,
+          ),
         ),
       ],
     );
@@ -198,9 +210,7 @@ class BackgroundWave extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const IgnorePointer(
-      child: CustomPaint(
-        painter: _SplashBackdropPainter(),
-      ),
+      child: CustomPaint(painter: _SplashBackdropPainter()),
     );
   }
 }
@@ -211,17 +221,18 @@ class _SplashBackdropPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final topGlowPaint = Paint()
-      ..shader = RadialGradient(
-        colors: [
-          waveBeige.withValues(alpha: 0.30),
-          waveBeige.withValues(alpha: 0),
-        ],
-      ).createShader(
-        Rect.fromCircle(
-          center: Offset(size.width * 0.02, size.height * 0.03),
-          radius: size.width * 0.25,
-        ),
-      );
+      ..shader =
+          RadialGradient(
+            colors: [
+              waveBeige.withValues(alpha: 0.30),
+              waveBeige.withValues(alpha: 0),
+            ],
+          ).createShader(
+            Rect.fromCircle(
+              center: Offset(size.width * 0.02, size.height * 0.03),
+              radius: size.width * 0.25,
+            ),
+          );
     canvas.drawCircle(
       Offset(size.width * 0.02, size.height * 0.03),
       size.width * 0.25,
@@ -229,17 +240,18 @@ class _SplashBackdropPainter extends CustomPainter {
     );
 
     final bottomGlowPaint = Paint()
-      ..shader = RadialGradient(
-        colors: [
-          waveBeige.withValues(alpha: 0.34),
-          waveBeige.withValues(alpha: 0),
-        ],
-      ).createShader(
-        Rect.fromCircle(
-          center: Offset(size.width * 0.02, size.height * 1.02),
-          radius: size.width * 0.34,
-        ),
-      );
+      ..shader =
+          RadialGradient(
+            colors: [
+              waveBeige.withValues(alpha: 0.34),
+              waveBeige.withValues(alpha: 0),
+            ],
+          ).createShader(
+            Rect.fromCircle(
+              center: Offset(size.width * 0.02, size.height * 1.02),
+              radius: size.width * 0.34,
+            ),
+          );
     canvas.drawCircle(
       Offset(size.width * 0.02, size.height * 1.02),
       size.width * 0.34,

@@ -1,4 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- The app talks to the Nyaya backend; without this, release builds
+         (unlike debug/profile) can't open any network connection. -->
+    <uses-permission android:name="android.permission.INTERNET"/>
     <application
         android:label="nyaya"
         android:name="${applicationName}"

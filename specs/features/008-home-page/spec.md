@@ -50,12 +50,18 @@ After authentication and onboarding, users need a polished home page that immedi
   - a prominent `Start Quiz` CTA with play icon
   - a legal-themed illustration featuring scales, law books, a temple silhouette, and a gavel
 - FR-005: The screen shall display a section header `Explore by Category` with a right-aligned `View All` action.
-- FR-006: The category section shall display five category shortcuts:
+- FR-006: The category section shall display eleven category shortcuts:
   - `Constitutional Law`
-  - `Criminal Law`
-  - `Civil Law`
-  - `Contract Law`
-  - `Legal Reasoning`
+  - `Criminal & Evidence Law`
+  - `Civil & General Law`
+  - `Marriage & Family Law`
+  - `Labor & Industrial Law`
+  - `Corporate & Commercial Law`
+  - `Taxation Law`
+  - `Cyber & Intellectual Property`
+  - `Property & Real Estate Law`
+  - `Banking & Financial Law`
+  - `Environmental Law`
 - FR-007: Each category shortcut shall include an icon container and a two-line label.
 - FR-008: The screen shall display a section header `Continue Learning`.
 - FR-009: The Continue Learning module shall display:

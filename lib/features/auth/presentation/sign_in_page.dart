@@ -1,18 +1,34 @@
 import 'package:flutter/material.dart';
 
+import '../../../app/app_session.dart';
+import '../../../app/auth_api.dart';
 import '../../../app/post_sign_up_flow.dart';
 import '../../../core/presentation/widgets/nyaya_widgets.dart';
 import 'sign_up_page.dart';
 
 class SignInPage extends StatefulWidget {
-  const SignInPage({super.key});
+  SignInPage({super.key, AuthApi? authApi}) : authApi = authApi ?? AuthApi();
+
+  final AuthApi authApi;
 
   @override
   State<SignInPage> createState() => _SignInPageState();
 }
 
 class _SignInPageState extends State<SignInPage> {
+  final _formKey = GlobalKey<FormState>();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+
   bool _obscurePassword = true;
+  bool _isSubmitting = false;
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -128,57 +144,58 @@ class _SignInPageState extends State<SignInPage> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          SizedBox(
-                            height: topSectionHeight,
-                            child: Stack(
-                              clipBehavior: Clip.none,
-                              children: [
-                                Positioned(
-                                  left: 0,
-                                  top: 0,
-                                  child: _TopActionButton(
-                                    onPressed: () =>
-                                        Navigator.maybePop(context),
+                          // The brand lockup and the welcome copy flow one
+                          // after the other in a Column. They used to be
+                          // absolutely positioned inside a fixed-height
+                          // Stack, which let the lockup overlap the heading
+                          // whenever the two together were taller than that
+                          // fixed height. Only the decorative artwork stays
+                          // positioned, behind the text.
+                          Stack(
+                            clipBehavior: Clip.none,
+                            children: [
+                              Positioned(
+                                right: -heroWidth * 0.18,
+                                top: 34,
+                                child: _HeroGlow(size: heroWidth * 1.14),
+                              ),
+                              Positioned(
+                                right: 0,
+                                top: 40,
+                                width: heroWidth,
+                                child: IgnorePointer(
+                                  child: Image.asset(
+                                    heroAsset,
+                                    fit: BoxFit.contain,
+                                    excludeFromSemantics: true,
                                   ),
                                 ),
-                                Positioned(
-                                  right: -heroWidth * 0.18,
-                                  top: 34,
-                                  child: _HeroGlow(size: heroWidth * 1.14),
+                              ),
+                              ConstrainedBox(
+                                constraints: BoxConstraints(
+                                  minHeight: topSectionHeight,
                                 ),
-                                Positioned(
-                                  right: 0,
-                                  top: 40,
-                                  width: heroWidth,
-                                  child: IgnorePointer(
-                                    child: Image.asset(
-                                      heroAsset,
-                                      fit: BoxFit.contain,
-                                      excludeFromSemantics: true,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    _TopActionButton(
+                                      onPressed: () =>
+                                          Navigator.maybePop(context),
                                     ),
-                                  ),
-                                ),
-                                Positioned(
-                                  left: 0,
-                                  top: 58,
-                                  child: Transform.scale(
-                                    scale: brandScale,
-                                    alignment: Alignment.topLeft,
-                                    child: const BrandLockup(),
-                                  ),
-                                ),
-                                Positioned(
-                                  left: 0,
-                                  bottom: 18,
-                                  child: ConstrainedBox(
-                                    constraints: BoxConstraints(
-                                      maxWidth: welcomeMaxWidth,
+                                    const SizedBox(height: 14),
+                                    BrandLockup(scale: brandScale),
+                                    const SizedBox(height: 20),
+                                    ConstrainedBox(
+                                      constraints: BoxConstraints(
+                                        maxWidth: welcomeMaxWidth,
+                                      ),
+                                      child: const _WelcomeCopy(),
                                     ),
-                                    child: const _WelcomeCopy(),
-                                  ),
+                                    const SizedBox(height: 24),
+                                  ],
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
                           Transform.translate(
                             offset: const Offset(0, -18),
@@ -260,49 +277,70 @@ class _SignInPageState extends State<SignInPage> {
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 28),
-          AutofillGroup(
-            child: Column(
-              children: [
-                _buildField(
-                  label: 'Email / Phone Number',
-                  hint: 'Enter your email or phone number',
-                  icon: Icons.person_outline_rounded,
-                  autofillHints: const [
-                    AutofillHints.username,
-                    AutofillHints.email,
-                    AutofillHints.telephoneNumber,
-                  ],
-                ),
-                const SizedBox(height: 18),
-                _buildField(
-                  label: 'Password',
-                  hint: 'Enter your password',
-                  icon: Icons.lock_outline_rounded,
-                  obscureText: _obscurePassword,
-                  autofillHints: const [AutofillHints.password],
-                  textInputAction: TextInputAction.done,
-                  suffixIcon: IconButton(
-                    icon: Icon(
-                      _obscurePassword
-                          ? Icons.visibility_off_outlined
-                          : Icons.visibility_outlined,
-                    ),
-                    color: bodyGrey.withValues(alpha: 0.72),
-                    onPressed: () {
-                      setState(() {
-                        _obscurePassword = !_obscurePassword;
-                      });
+          Form(
+            key: _formKey,
+            child: AutofillGroup(
+              child: Column(
+                children: [
+                  _buildField(
+                    key: const ValueKey('signin.field.email'),
+                    label: 'Email / Phone Number',
+                    hint: 'Enter your email or phone number',
+                    icon: Icons.person_outline_rounded,
+                    controller: _emailController,
+                    keyboardType: TextInputType.emailAddress,
+                    autofillHints: const [
+                      AutofillHints.username,
+                      AutofillHints.email,
+                      AutofillHints.telephoneNumber,
+                    ],
+                    validator: (value) {
+                      if ((value ?? '').trim().isEmpty) {
+                        return 'Email or phone number is required';
+                      }
+                      return null;
                     },
                   ),
-                ),
-              ],
+                  const SizedBox(height: 18),
+                  _buildField(
+                    key: const ValueKey('signin.field.password'),
+                    label: 'Password',
+                    hint: 'Enter your password',
+                    icon: Icons.lock_outline_rounded,
+                    controller: _passwordController,
+                    obscureText: _obscurePassword,
+                    autofillHints: const [AutofillHints.password],
+                    textInputAction: TextInputAction.done,
+                    onFieldSubmitted: (_) => _submitForm(),
+                    validator: (value) {
+                      if ((value ?? '').isEmpty) {
+                        return 'Password is required';
+                      }
+                      return null;
+                    },
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        _obscurePassword
+                            ? Icons.visibility_off_outlined
+                            : Icons.visibility_outlined,
+                      ),
+                      color: bodyGrey.withValues(alpha: 0.72),
+                      onPressed: () {
+                        setState(() {
+                          _obscurePassword = !_obscurePassword;
+                        });
+                      },
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
           const SizedBox(height: 8),
           Align(
             alignment: Alignment.centerRight,
             child: TextButton(
-              onPressed: () {},
+              onPressed: () => _showMessage('Password reset is coming soon.'),
               style: TextButton.styleFrom(
                 padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
                 minimumSize: Size.zero,
@@ -319,7 +357,8 @@ class _SignInPageState extends State<SignInPage> {
           SizedBox(
             height: 56,
             child: ElevatedButton(
-              onPressed: () {},
+              key: const ValueKey('signin.button.primary'),
+              onPressed: _isSubmitting ? null : _submitForm,
               style: ElevatedButton.styleFrom(
                 backgroundColor: navy,
                 foregroundColor: Colors.white,
@@ -329,14 +368,23 @@ class _SignInPageState extends State<SignInPage> {
                   borderRadius: BorderRadius.circular(18),
                 ),
               ),
-              child: const Text(
-                'SIGN IN',
-                style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w700,
-                  letterSpacing: 1.2,
-                ),
-              ),
+              child: _isSubmitting
+                  ? const SizedBox(
+                      width: 22,
+                      height: 22,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2.4,
+                        color: Colors.white,
+                      ),
+                    )
+                  : const Text(
+                      'SIGN IN',
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w700,
+                        letterSpacing: 1.2,
+                      ),
+                    ),
             ),
           ),
           const SizedBox(height: 24),
@@ -425,10 +473,63 @@ class _SignInPageState extends State<SignInPage> {
     );
   }
 
+  Future<void> _submitForm() async {
+    FocusScope.of(context).unfocus();
+    final isFormValid = _formKey.currentState?.validate() ?? false;
+    if (!isFormValid) {
+      return;
+    }
+
+    setState(() {
+      _isSubmitting = true;
+    });
+
+    try {
+      final result = await widget.authApi.login(
+        email: _emailController.text.trim(),
+        password: _passwordController.text,
+      );
+
+      await AppSession.saveAuthSession(
+        fullName: result.fullName,
+        email: result.email,
+        accessToken: result.accessToken,
+        refreshToken: result.refreshToken,
+      );
+
+      if (!mounted) {
+        return;
+      }
+      startPostSignInFlow(context);
+    } on AuthApiException catch (error) {
+      _showMessage(error.message);
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isSubmitting = false;
+        });
+      }
+    }
+  }
+
+  void _showMessage(String message) {
+    if (!mounted) {
+      return;
+    }
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(SnackBar(content: Text(message)));
+  }
+
   Widget _buildField({
+    Key? key,
     required String label,
     required String hint,
     required IconData icon,
+    TextEditingController? controller,
+    String? Function(String?)? validator,
+    ValueChanged<String>? onFieldSubmitted,
+    TextInputType? keyboardType,
     Iterable<String>? autofillHints,
     bool obscureText = false,
     TextInputAction textInputAction = TextInputAction.next,
@@ -437,6 +538,7 @@ class _SignInPageState extends State<SignInPage> {
     const borderColor = Color(0xFFE7DFD5);
     const fillColor = Color(0xFFFFFCF8);
     const hintColor = Color(0xFF8A94A6);
+    const errorColor = Color(0xFFB64A4A);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -450,10 +552,15 @@ class _SignInPageState extends State<SignInPage> {
           ),
         ),
         const SizedBox(height: 8),
-        TextField(
+        TextFormField(
+          key: key,
+          controller: controller,
           obscureText: obscureText,
           autofillHints: autofillHints?.toList(),
           textInputAction: textInputAction,
+          keyboardType: keyboardType,
+          validator: validator,
+          onFieldSubmitted: onFieldSubmitted,
           cursorColor: navy,
           enableSuggestions: !obscureText,
           autocorrect: !obscureText,
@@ -483,6 +590,20 @@ class _SignInPageState extends State<SignInPage> {
                 color: gold.withValues(alpha: 0.88),
                 width: 1.6,
               ),
+            ),
+            errorMaxLines: 2,
+            errorStyle: const TextStyle(
+              color: errorColor,
+              fontSize: 12,
+              height: 1.3,
+            ),
+            errorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(18),
+              borderSide: const BorderSide(color: errorColor, width: 1.2),
+            ),
+            focusedErrorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(18),
+              borderSide: const BorderSide(color: errorColor, width: 1.4),
             ),
           ),
         ),

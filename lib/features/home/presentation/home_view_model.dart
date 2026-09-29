@@ -1,3 +1,6 @@
+import '../../../app/notifications_store.dart';
+import '../../../app/quiz_progress_store.dart';
+
 class HomeViewModel {
   const HomeViewModel();
 
@@ -15,39 +18,77 @@ class HomeViewModel {
 
   String get heroCtaLabel => 'Start Quiz';
 
-  bool get hasUnreadNotifications => true;
+  bool get hasUnreadNotifications => NotificationsStore.unreadCount > 0;
 
-  ContinueLearningData get continueLearning => const ContinueLearningData(
-    title: 'Indian Constitution Quiz',
-    questionCount: 15,
-    progress: 0.65,
-  );
+  /// Reflects the user's real latest attempt once [QuizProgressStore.refresh]
+  /// has reached the backend, and the last score recorded on this device
+  /// until then.
+  ContinueLearningData get continueLearning {
+    final snapshot = QuizProgressStore.snapshot;
+    return ContinueLearningData(
+      title: snapshot.title,
+      questionCount: snapshot.questionCount,
+      progress: snapshot.progress,
+      canResume: snapshot.canResume,
+      answeredCount: snapshot.answeredCount,
+    );
+  }
 
   List<HomeCategoryData> get categories => const [
     HomeCategoryData(
-      id: 'constitutional-law',
+      id: 'constitutional_law',
       label: 'Constitutional Law',
       icon: HomeIconType.book,
     ),
     HomeCategoryData(
-      id: 'criminal-law',
-      label: 'Criminal Law',
+      id: 'criminal_evidence_law',
+      label: 'Criminal & Evidence Law',
       icon: HomeIconType.gavel,
     ),
     HomeCategoryData(
-      id: 'civil-law',
-      label: 'Civil Law',
+      id: 'civil_general_law',
+      label: 'Civil & General Law',
       icon: HomeIconType.scales,
     ),
     HomeCategoryData(
-      id: 'contract-law',
-      label: 'Contract Law',
-      icon: HomeIconType.document,
+      id: 'marriage_family_law',
+      label: 'Marriage & Family Law',
+      icon: HomeIconType.community,
     ),
     HomeCategoryData(
-      id: 'legal-reasoning',
-      label: 'Legal Reasoning',
-      icon: HomeIconType.community,
+      id: 'labor_industrial_law',
+      label: 'Labor & Industrial Law',
+      icon: HomeIconType.labor,
+    ),
+    HomeCategoryData(
+      id: 'corporate_commercial_law',
+      label: 'Corporate & Commercial Law',
+      icon: HomeIconType.contract,
+    ),
+    HomeCategoryData(
+      id: 'taxation_law',
+      label: 'Taxation Law',
+      icon: HomeIconType.taxation,
+    ),
+    HomeCategoryData(
+      id: 'cyber_intellectual_property',
+      label: 'Cyber & Intellectual Property',
+      icon: HomeIconType.cyber,
+    ),
+    HomeCategoryData(
+      id: 'property_real_estate',
+      label: 'Property & Real Estate Law',
+      icon: HomeIconType.property,
+    ),
+    HomeCategoryData(
+      id: 'banking_financial_law',
+      label: 'Banking & Financial Law',
+      icon: HomeIconType.banking,
+    ),
+    HomeCategoryData(
+      id: 'environmental_law',
+      label: 'Environmental Law',
+      icon: HomeIconType.environmental,
     ),
   ];
 
@@ -92,9 +133,9 @@ class HomeViewModel {
   List<HomeNavItemData> get navigationItems => const [
     HomeNavItemData(id: 'home', label: 'Home', icon: HomeIconType.navHome),
     HomeNavItemData(
-      id: 'categories',
-      label: 'Categories',
-      icon: HomeIconType.navCategories,
+      id: 'quizzes',
+      label: 'Quizzes',
+      icon: HomeIconType.navQuizzes,
     ),
     HomeNavItemData(
       id: 'leaderboard',
@@ -102,9 +143,9 @@ class HomeViewModel {
       icon: HomeIconType.navLeaderboard,
     ),
     HomeNavItemData(
-      id: 'bookmarks',
-      label: 'Bookmarks',
-      icon: HomeIconType.navBookmarks,
+      id: 'legal_updates',
+      label: 'Legal Updates',
+      icon: HomeIconType.navLegalUpdates,
     ),
     HomeNavItemData(
       id: 'profile',
@@ -135,10 +176,16 @@ enum HomeIconType {
   temple,
   handcuffs,
   contract,
+  labor,
+  taxation,
+  cyber,
+  property,
+  banking,
+  environmental,
   navHome,
-  navCategories,
+  navQuizzes,
   navLeaderboard,
-  navBookmarks,
+  navLegalUpdates,
   navProfile,
 }
 
@@ -159,11 +206,20 @@ class ContinueLearningData {
     required this.title,
     required this.questionCount,
     required this.progress,
+    this.canResume = false,
+    this.answeredCount = 0,
   });
 
   final String title;
   final int questionCount;
   final double progress;
+
+  /// True when a half-finished attempt is waiting to be picked up, as
+  /// opposed to a finished one to retake.
+  final bool canResume;
+
+  /// Questions already answered in that half-finished attempt.
+  final int answeredCount;
 }
 
 class PopularQuizData {

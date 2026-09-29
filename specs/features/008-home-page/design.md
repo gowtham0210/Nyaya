@@ -81,10 +81,16 @@ This document follows the intended spirit of a "UI/UX pro max" implementation: c
   - Two-line centered label below or within the card block
 - **Categories**:
   - Constitutional Law
-  - Criminal Law
-  - Civil Law
-  - Contract Law
-  - Legal Reasoning
+  - Criminal & Evidence Law
+  - Civil & General Law
+  - Marriage & Family Law
+  - Labor & Industrial Law
+  - Corporate & Commercial Law
+  - Taxation Law
+  - Cyber & Intellectual Property
+  - Property & Real Estate Law
+  - Banking & Financial Law
+  - Environmental Law
 - **Icon tone**:
   - Navy outline icons with small gold accent details where appropriate
 

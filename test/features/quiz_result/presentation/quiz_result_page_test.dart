@@ -6,11 +6,11 @@ import 'package:nyaya/features/quiz_result/presentation/quiz_result_view_model.d
 
 void main() {
   List<QuizOutcome> outcomes({required int correct, required int wrong}) => [
-        for (var i = 0; i < correct; i++)
-          QuizOutcome(questionId: 'c$i', chosenOption: 0, isCorrect: true),
-        for (var i = 0; i < wrong; i++)
-          QuizOutcome(questionId: 'w$i', chosenOption: 0, isCorrect: false),
-      ];
+    for (var i = 0; i < correct; i++)
+      QuizOutcome(questionId: 'c$i', chosenOption: 0, isCorrect: true),
+    for (var i = 0; i < wrong; i++)
+      QuizOutcome(questionId: 'w$i', chosenOption: 0, isCorrect: false),
+  ];
 
   Future<void> pumpResultPage(
     WidgetTester tester, {
@@ -32,7 +32,8 @@ void main() {
     await tester.pumpWidget(
       MaterialApp(
         home: QuizResultPage(
-          viewModel: viewModel ??
+          viewModel:
+              viewModel ??
               QuizResultViewModel(
                 outcomes: outcomes(correct: 9, wrong: 3),
                 topicTitle: 'Arrest & Your Rights',
@@ -100,7 +101,9 @@ void main() {
     await tester.ensureVisible(find.byKey(const ValueKey('result.review')));
     await tester.tap(find.byKey(const ValueKey('result.review')));
     await tester.pumpAndSettle();
-    await tester.ensureVisible(find.byKey(const ValueKey('result.backtotopic')));
+    await tester.ensureVisible(
+      find.byKey(const ValueKey('result.backtotopic')),
+    );
     await tester.tap(find.byKey(const ValueKey('result.backtotopic')));
     await tester.pumpAndSettle();
 

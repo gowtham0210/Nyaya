@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/presentation/motion.dart';
 import '../../../core/presentation/widgets/nyaya_widgets.dart';
 import 'quiz_result_view_model.dart';
 
@@ -16,11 +17,13 @@ class QuizResultPage extends StatelessWidget {
     required this.viewModel,
     required this.onReviewAnswers,
     required this.onBackToTopic,
+    this.backButtonLabel = 'BACK TO TOPIC',
   });
 
   final QuizResultViewModel viewModel;
   final VoidCallback onReviewAnswers;
   final VoidCallback onBackToTopic;
+  final String backButtonLabel;
 
   @override
   Widget build(BuildContext context) {
@@ -32,9 +35,7 @@ class QuizResultPage extends StatelessWidget {
           Positioned(
             top: 0,
             left: 0,
-            child: ExcludeSemantics(
-              child: DotPattern(width: 96, height: 96),
-            ),
+            child: ExcludeSemantics(child: DotPattern(width: 96, height: 96)),
           ),
           SafeArea(
             child: SingleChildScrollView(
@@ -44,6 +45,8 @@ class QuizResultPage extends StatelessWidget {
                 children: [
                   const SizedBox(height: 12),
                   _ScoreRing(
+                    correctCount: viewModel.correctCount,
+                    total: viewModel.total,
                     scoreLabel: viewModel.scoreLabel,
                     percentLabel: viewModel.percentLabel,
                   ),
@@ -82,7 +85,7 @@ class QuizResultPage extends StatelessWidget {
                   ),
                   const SizedBox(height: 14),
                   _SecondaryCta(
-                    label: 'BACK TO TOPIC',
+                    label: backButtonLabel,
                     onPressed: onBackToTopic,
                   ),
                 ],
@@ -96,8 +99,18 @@ class QuizResultPage extends StatelessWidget {
 }
 
 class _ScoreRing extends StatelessWidget {
-  const _ScoreRing({required this.scoreLabel, required this.percentLabel});
+  const _ScoreRing({
+    required this.correctCount,
+    required this.total,
+    required this.scoreLabel,
+    required this.percentLabel,
+  });
 
+  final int correctCount;
+  final int total;
+
+  /// The settled labels. Screen readers announce these rather than the
+  /// mid-count values, and they are what the widget rests on.
   final String scoreLabel;
   final String percentLabel;
 
@@ -130,14 +143,20 @@ class _ScoreRing extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    scoreLabel,
-                    key: const ValueKey('result.score'),
-                    style: const TextStyle(
-                      fontFamily: 'serif',
-                      color: navy,
-                      fontSize: 46,
-                      fontWeight: FontWeight.w700,
+                  // The score counts up to its final value, which gives the
+                  // result screen a beat of anticipation instead of landing
+                  // fully formed.
+                  AnimatedCount(
+                    value: correctCount.toDouble(),
+                    builder: (context, animated) => Text(
+                      '${animated.round()}/$total',
+                      key: const ValueKey('result.score'),
+                      style: const TextStyle(
+                        fontFamily: 'serif',
+                        color: navy,
+                        fontSize: 46,
+                        fontWeight: FontWeight.w700,
+                      ),
                     ),
                   ),
                   Container(
@@ -146,14 +165,17 @@ class _ScoreRing extends StatelessWidget {
                     margin: const EdgeInsets.symmetric(vertical: 4),
                     color: gold,
                   ),
-                  Text(
-                    percentLabel,
-                    key: const ValueKey('result.percent'),
-                    style: const TextStyle(
-                      fontFamily: 'serif',
-                      color: navy,
-                      fontSize: 24,
-                      fontWeight: FontWeight.w600,
+                  AnimatedCount(
+                    value: total == 0 ? 0 : correctCount / total * 100,
+                    builder: (context, animated) => Text(
+                      '${animated.round()}%',
+                      key: const ValueKey('result.percent'),
+                      style: const TextStyle(
+                        fontFamily: 'serif',
+                        color: navy,
+                        fontSize: 24,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ),
                 ],
@@ -179,11 +201,7 @@ class _Laurel extends StatelessWidget {
       transform: mirror
           ? Matrix4.diagonal3Values(-1, 1, 1)
           : Matrix4.identity(),
-      child: Icon(
-        Icons.eco,
-        color: gold.withValues(alpha: 0.85),
-        size: 44,
-      ),
+      child: Icon(Icons.eco, color: gold.withValues(alpha: 0.85), size: 44),
     );
   }
 }
@@ -272,7 +290,10 @@ class _StatColumn extends StatelessWidget {
             Container(
               width: 44,
               height: 44,
-              decoration: BoxDecoration(color: iconTint, shape: BoxShape.circle),
+              decoration: BoxDecoration(
+                color: iconTint,
+                shape: BoxShape.circle,
+              ),
               child: Icon(icon, color: iconColor, size: 24),
             ),
             const SizedBox(height: 10),
@@ -354,10 +375,7 @@ class _PrimaryCta extends StatelessWidget {
         onPressed: onPressed,
         child: Text(
           label,
-          style: const TextStyle(
-            fontWeight: FontWeight.w700,
-            letterSpacing: 2,
-          ),
+          style: const TextStyle(fontWeight: FontWeight.w700, letterSpacing: 2),
         ),
       ),
     );
@@ -386,10 +404,7 @@ class _SecondaryCta extends StatelessWidget {
         onPressed: onPressed,
         child: Text(
           label,
-          style: const TextStyle(
-            fontWeight: FontWeight.w700,
-            letterSpacing: 2,
-          ),
+          style: const TextStyle(fontWeight: FontWeight.w700, letterSpacing: 2),
         ),
       ),
     );

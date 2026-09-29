@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/presentation/motion.dart';
 import '../../../core/presentation/widgets/nyaya_widgets.dart';
 import 'quiz_session_view_model.dart';
 
@@ -28,11 +29,32 @@ class _QuizQuestionPageState extends State<QuizQuestionPage> {
   late final QuizSessionViewModel _session =
       widget.session ?? QuizSessionViewModel();
 
-  void _answer(int option) {
-    if (_session.isAnswered) {
+  Future<void> _answer(int option) async {
+    if (_session.isAnswered || _session.isGrading) {
       return;
     }
-    setState(() => _session.answer(option));
+    Motion.tick();
+    // A bundled session settles this synchronously, so the single setState
+    // below still paints the verdict in one frame. A backend-backed one
+    // needs the extra frame to show that the pick is being graded.
+    final grading = _session.answer(option);
+    if (_session.isGrading) {
+      setState(() {});
+    }
+    await grading;
+    if (!mounted) {
+      return;
+    }
+    setState(() {});
+
+    final error = _session.gradingError;
+    if (error != null) {
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(
+          SnackBar(content: Text("Couldn't submit that answer. $error")),
+        );
+    }
   }
 
   void _next() {
@@ -78,7 +100,9 @@ class _QuizQuestionPageState extends State<QuizQuestionPage> {
                 children: [
                   for (var i = 0; i < _session.questions.length; i++) ...[
                     Expanded(
-                      child: Container(
+                      child: AnimatedContainer(
+                        duration: Motion.normal,
+                        curve: Motion.enter,
                         height: 6,
                         decoration: BoxDecoration(
                           color: i <= _session.currentIndex
@@ -127,8 +151,7 @@ class _QuizQuestionPageState extends State<QuizQuestionPage> {
                       ),
                     ),
                     const SizedBox(height: 16),
-                    for (final (index, option)
-                        in question.options.indexed) ...[
+                    for (final (index, option) in question.options.indexed) ...[
                       _OptionCard(
                         letter: String.fromCharCode(65 + index),
                         text: option,
@@ -138,9 +161,14 @@ class _QuizQuestionPageState extends State<QuizQuestionPage> {
                       const SizedBox(height: 12),
                     ],
                     if (_session.isAnswered)
-                      _ExplanationCard(
-                        isCorrect: _session.isCorrect,
-                        explanation: question.explanation,
+                      FadeSlideIn(
+                        // Keyed by question so each one animates in afresh
+                        // rather than the widget being reused silently.
+                        key: ValueKey('explanation.${question.id}'),
+                        child: _ExplanationCard(
+                          isCorrect: _session.isCorrect,
+                          explanation: question.explanation,
+                        ),
                       ),
                   ],
                 ),
@@ -151,41 +179,65 @@ class _QuizQuestionPageState extends State<QuizQuestionPage> {
               child: SizedBox(
                 height: 54,
                 width: double.infinity,
-                child: _session.isAnswered
-                    ? ElevatedButton(
-                        key: const ValueKey('quiz.next'),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: gold,
-                          foregroundColor: Colors.white,
-                          shape: RoundedRectangleBorder(
+                child: AnimatedSwitcher(
+                  duration: Motion.fast,
+                  child: _session.isAnswered
+                      ? ElevatedButton(
+                          key: const ValueKey('quiz.next'),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: gold,
+                            foregroundColor: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                          ),
+                          onPressed: _next,
+                          child: Text(
+                            _session.currentIndex ==
+                                    _session.questions.length - 1
+                                ? 'SUBMIT QUIZ'
+                                : 'NEXT',
+                            style: const TextStyle(
+                              fontWeight: FontWeight.w700,
+                              letterSpacing: 2,
+                            ),
+                          ),
+                        )
+                      : Container(
+                          key: const ValueKey('quiz.selectbar'),
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            color: _disabledGrey.withValues(alpha: 0.4),
                             borderRadius: BorderRadius.circular(30),
                           ),
-                        ),
-                        onPressed: _next,
-                        child: const Text(
-                          'NEXT',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w700,
-                            letterSpacing: 2,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              if (_session.isGrading) ...[
+                                const SizedBox(
+                                  width: 16,
+                                  height: 16,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    color: _disabledGrey,
+                                  ),
+                                ),
+                                const SizedBox(width: 12),
+                              ],
+                              Text(
+                                _session.isGrading
+                                    ? 'CHECKING'
+                                    : 'SELECT AN ANSWER',
+                                style: const TextStyle(
+                                  color: _disabledGrey,
+                                  fontWeight: FontWeight.w700,
+                                  letterSpacing: 2,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                      )
-                    : Container(
-                        key: const ValueKey('quiz.selectbar'),
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          color: _disabledGrey.withValues(alpha: 0.4),
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                        child: const Text(
-                          'SELECT AN ANSWER',
-                          style: TextStyle(
-                            color: _disabledGrey,
-                            fontWeight: FontWeight.w700,
-                            letterSpacing: 2,
-                          ),
-                        ),
-                      ),
+                ),
               ),
             ),
           ],
@@ -198,8 +250,10 @@ class _QuizQuestionPageState extends State<QuizQuestionPage> {
     if (!_session.isAnswered) {
       return _OptionState.neutral;
     }
-    final question = _session.currentQuestion;
-    if (index == question.correctOption) {
+    // The right answer comes from the session's verdict: a bundled question
+    // carries its own key, a backend one learns it when the server grades
+    // the pick.
+    if (index == _session.revealedCorrectOption) {
       return index == _session.selectedOption
           ? _OptionState.lockedCorrect
           : _OptionState.revealedCorrect;
@@ -231,16 +285,16 @@ class _OptionCard extends StatelessWidget {
     final (fill, border, badge) = switch (state) {
       _OptionState.neutral => (Colors.white, _cardBorder, _LetterBadge.neutral),
       _OptionState.lockedCorrect => (
-          _correctTint,
-          _correctGreen,
-          _LetterBadge.check,
-        ),
+        _correctTint,
+        _correctGreen,
+        _LetterBadge.check,
+      ),
       _OptionState.lockedWrong => (_wrongTint, _wrongRed, _LetterBadge.cross),
       _OptionState.revealedCorrect => (
-          Colors.white,
-          _correctGreen,
-          _LetterBadge.neutral,
-        ),
+        Colors.white,
+        _correctGreen,
+        _LetterBadge.neutral,
+      ),
     };
 
     final stateLabel = switch (state) {
@@ -253,12 +307,16 @@ class _OptionCard extends StatelessWidget {
     return Semantics(
       button: true,
       label: 'Option $letter. $text$stateLabel',
-      child: InkWell(
+      child: PressableScale(
         key: ValueKey('quiz.option.$letter'),
-        borderRadius: BorderRadius.circular(16),
-        onTap: onTap,
+        onPressed: onTap,
         child: ExcludeSemantics(
-          child: Container(
+          // The verdict arrives from the server, so the card eases into its
+          // green or red rather than snapping — which also softens the wait
+          // when the network is slow.
+          child: AnimatedContainer(
+            duration: Motion.fast,
+            curve: Motion.standard,
             padding: const EdgeInsets.all(14),
             decoration: BoxDecoration(
               color: fill,
@@ -313,8 +371,9 @@ class _OptionCard extends StatelessWidget {
           child: const Icon(Icons.close, color: Colors.white, size: 20),
         );
       case _LetterBadge.neutral:
-        final ringColor =
-            state == _OptionState.revealedCorrect ? _correctGreen : gold;
+        final ringColor = state == _OptionState.revealedCorrect
+            ? _correctGreen
+            : gold;
         return Container(
           width: 36,
           height: 36,
@@ -336,10 +395,10 @@ class _OptionCard extends StatelessWidget {
   }
 
   _LetterBadge badge() => switch (state) {
-        _OptionState.lockedCorrect => _LetterBadge.check,
-        _OptionState.lockedWrong => _LetterBadge.cross,
-        _ => _LetterBadge.neutral,
-      };
+    _OptionState.lockedCorrect => _LetterBadge.check,
+    _OptionState.lockedWrong => _LetterBadge.cross,
+    _ => _LetterBadge.neutral,
+  };
 }
 
 enum _LetterBadge { neutral, check, cross }
@@ -398,8 +457,7 @@ class _ExplanationCard extends StatelessWidget {
             const SizedBox(height: 10),
             Row(
               children: [
-                const Icon(Icons.menu_book_outlined,
-                    color: bodyGrey, size: 18),
+                const Icon(Icons.menu_book_outlined, color: bodyGrey, size: 18),
                 const SizedBox(width: 8),
                 Expanded(
                   child: Text(

@@ -36,6 +36,7 @@ class SplashPage extends StatelessWidget {
         child: Stack(
           children: [
             const Positioned.fill(
+              key: ValueKey('splash.wave'),
               child: BackgroundWave(),
             ),
             Positioned(
@@ -59,10 +60,7 @@ class SplashPage extends StatelessWidget {
               left: width * 0.02,
               top: height * 0.07,
               child: IgnorePointer(
-                child: DotPattern(
-                  width: width * 0.14,
-                  height: width * 0.11,
-                ),
+                child: DotPattern(width: width * 0.14, height: width * 0.11),
               ),
             ),
             Positioned(
@@ -100,10 +98,7 @@ class SplashPage extends StatelessWidget {
               right: width * 0.08,
               bottom: height * 0.055,
               child: IgnorePointer(
-                child: DotPattern(
-                  width: width * 0.14,
-                  height: width * 0.11,
-                ),
+                child: DotPattern(width: width * 0.14, height: width * 0.11),
               ),
             ),
             SafeArea(
@@ -123,9 +118,7 @@ class SplashPage extends StatelessWidget {
                             label: 'Nyaya splash screen',
                             hint: isReadyToContinue ? 'Tap to continue' : null,
                             child: const ExcludeSemantics(
-                              child: BrandLockup(
-                                key: ValueKey('splash.brand'),
-                              ),
+                              child: BrandLockup(key: ValueKey('splash.brand')),
                             ),
                           ),
                           SizedBox(height: _clamp(height * 0.05, 34, 44)),

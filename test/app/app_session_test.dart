@@ -34,6 +34,27 @@ void main() {
 
     expect(AppSession.signedIn, isTrue);
     expect(AppSession.selectedGoalId, 'learn-law-for-life');
+  });
+
+  test('a session with no access token is not onboarded', () async {
+    // What a session stored before the app had real auth looks like: the
+    // flags are set, but there is no token to call the backend with.
+    await AppSession.saveSignedIn();
+    await AppSession.saveGoal('learn-law-for-life');
+
+    expect(AppSession.accessToken, isNull);
+    expect(AppSession.isOnboarded, isFalse);
+  });
+
+  test('a signed-in session with a goal and a token is onboarded', () async {
+    await AppSession.saveAuthSession(
+      fullName: 'Asha Rao',
+      email: 'asha@example.com',
+      accessToken: 'access-token',
+      refreshToken: 'refresh-token',
+    );
+    await AppSession.saveGoal('learn-law-for-life');
+
     expect(AppSession.isOnboarded, isTrue);
   });
 
@@ -45,5 +66,32 @@ void main() {
     await AppSession.load();
 
     expect(AppSession.isOnboarded, isFalse);
+  });
+
+  test('a saved profile survives a reload', () async {
+    await AppSession.saveProfile(
+      fullName: 'Priya Sharma',
+      email: 'priya@example.com',
+    );
+
+    AppSession.fullName = null;
+    AppSession.email = null;
+    await AppSession.load();
+
+    expect(AppSession.fullName, 'Priya Sharma');
+    expect(AppSession.email, 'priya@example.com');
+  });
+
+  test('clear resets the saved profile', () async {
+    await AppSession.saveProfile(
+      fullName: 'Priya Sharma',
+      email: 'priya@example.com',
+    );
+
+    await AppSession.clear();
+    await AppSession.load();
+
+    expect(AppSession.fullName, isNull);
+    expect(AppSession.email, isNull);
   });
 }

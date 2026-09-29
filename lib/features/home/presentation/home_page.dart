@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/presentation/motion.dart';
 import '../../../core/presentation/widgets/nyaya_widgets.dart';
+import '../../quiz_question/data/quiz_api.dart';
 import 'home_view_model.dart';
 
 class HomePage extends StatelessWidget {
@@ -15,6 +17,8 @@ class HomePage extends StatelessWidget {
     this.onCategorySelected,
     this.onQuizSelected,
     this.onNavigationSelected,
+    this.onDifficultySelected,
+    this.quizApi,
   });
 
   final HomeViewModel viewModel;
@@ -26,6 +30,12 @@ class HomePage extends StatelessWidget {
   final ValueChanged<HomeCategoryData>? onCategorySelected;
   final ValueChanged<PopularQuizData>? onQuizSelected;
   final ValueChanged<int>? onNavigationSelected;
+
+  /// Called with 'easy' | 'medium' | 'hard' from the Quick Practice cards.
+  final ValueChanged<String>? onDifficultySelected;
+
+  /// Overridden in tests; defaults to a real [QuizApi] otherwise.
+  final QuizApi? quizApi;
 
   static const pageBackground = Color(0xFFF8F6F2);
   static const heroBackground = Color(0xFF11233B);
@@ -41,7 +51,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: pageBackground,
-      bottomNavigationBar: _HomeBottomNavigationBar(
+      bottomNavigationBar: HomeBottomNavigationBar(
         items: viewModel.navigationItems,
         activeIndex: viewModel.activeNavigationIndex,
         onSelected: (index) {
@@ -118,6 +128,8 @@ class HomePage extends StatelessWidget {
                 );
               },
             ),
+            _PracticeStrip(api: quizApi, onSelected: onDifficultySelected),
+            _QuestionOfTheDay(api: quizApi),
             const SizedBox(height: 30),
             const Text(
               'Continue Learning',
@@ -131,6 +143,9 @@ class HomePage extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             _ContinueLearningCard(
+              key: ValueKey(
+                'home.continue.${viewModel.continueLearning.progress}',
+              ),
               data: viewModel.continueLearning,
               onResumePressed: () {
                 final callback = onResumePressed;
@@ -159,17 +174,23 @@ class HomePage extends StatelessWidget {
               },
             ),
             const SizedBox(height: 16),
-            for (final quiz in viewModel.popularQuizzes) ...[
-              _PopularQuizCard(
-                quiz: quiz,
-                onPressed: () {
-                  final callback = onQuizSelected;
-                  if (callback != null) {
-                    callback(quiz);
-                    return;
-                  }
-                  _showPlaceholder(context, '${quiz.title} is not wired yet.');
-                },
+            for (final (index, quiz) in viewModel.popularQuizzes.indexed) ...[
+              FadeSlideIn(
+                delay: Motion.stagger * index,
+                child: _PopularQuizCard(
+                  quiz: quiz,
+                  onPressed: () {
+                    final callback = onQuizSelected;
+                    if (callback != null) {
+                      callback(quiz);
+                      return;
+                    }
+                    _showPlaceholder(
+                      context,
+                      '${quiz.title} is not wired yet.',
+                    );
+                  },
+                ),
               ),
               const SizedBox(height: 16),
             ],
@@ -328,8 +349,10 @@ class _HeroBanner extends StatelessWidget {
     final heroHeight = (width * (compact ? 0.86 : 0.76))
         .clamp(324.0, 360.0)
         .toDouble();
-    final heroArtWidth = (width * (compact ? 0.62 : 0.68))
-        .clamp(210.0, 320.0)
+    // Narrower on small screens so the headline keeps a usable column
+    // beside it rather than being squeezed into one word per line.
+    final heroArtWidth = (width * (compact ? 0.52 : 0.62))
+        .clamp(170.0, 300.0)
         .toDouble();
     final heroTextWidth = width * (compact ? 0.58 : 0.52);
     final leadSize = compact ? 22.0 : 29.0;
@@ -339,7 +362,10 @@ class _HeroBanner extends StatelessWidget {
 
     return Container(
       key: const ValueKey('home.hero'),
-      height: heroHeight,
+      // A minimum rather than a fixed height: the headline wraps to more
+      // lines on narrow screens and at large text scales, and a hard height
+      // would clip it instead of letting the card grow.
+      constraints: BoxConstraints(minHeight: heroHeight),
       clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(30),
@@ -383,112 +409,129 @@ class _HeroBanner extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.fromLTRB(24, 22, 24, 22),
-            child: ConstrainedBox(
-              constraints: BoxConstraints(maxWidth: heroTextWidth),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    leadLine,
-                    key: const ValueKey('home.hero.title.lead'),
-                    style: TextStyle(
-                      fontSize: leadSize,
-                      fontWeight: FontWeight.w700,
-                      height: 1.06,
-                      color: Colors.white,
-                      fontFamily: 'serif',
-                      letterSpacing: -0.8,
-                    ),
-                  ),
-                  const SizedBox(height: 6),
-                  Text(
-                    accentLine,
-                    key: const ValueKey('home.hero.title.accent'),
-                    style: TextStyle(
-                      fontSize: accentSize,
-                      fontWeight: FontWeight.w700,
-                      height: 1.06,
-                      color: HomePage.heroHighlight,
-                      fontFamily: 'serif',
-                      letterSpacing: -0.8,
-                    ),
-                  ),
-                  const SizedBox(height: 6),
-                  Text(
-                    trailLine,
-                    key: const ValueKey('home.hero.title.trail'),
-                    style: TextStyle(
-                      fontSize: trailSize,
-                      fontWeight: FontWeight.w700,
-                      height: 1.06,
-                      color: Colors.white,
-                      fontFamily: 'serif',
-                      letterSpacing: -0.8,
-                    ),
-                  ),
-                  const Spacer(),
-                  Text(
-                    supportingCopy,
-                    key: const ValueKey('home.hero.support'),
-                    style: TextStyle(
-                      fontSize: supportSize,
-                      height: 1.45,
-                      color: Color(0xFFF2F3F5),
-                    ),
-                  ),
-                  const SizedBox(height: 18),
-                  SizedBox(
-                    height: compact ? 50 : 56,
-                    child: ElevatedButton(
-                      key: const ValueKey('home.hero.cta'),
-                      onPressed: onPressed,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: HomePage.heroHighlight,
-                        foregroundColor: Colors.white,
-                        elevation: 0,
-                        shadowColor: Colors.transparent,
-                        padding: const EdgeInsets.symmetric(horizontal: 18),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                // The artwork hangs off the right edge, so only the part of
+                // it still inside the card eats into the text column. Sizing
+                // the text against that leftover space — rather than a fixed
+                // fraction of the screen — is what stops the supporting copy
+                // running underneath the scales.
+                const artOverhang = 28.0;
+                const gutter = 10.0;
+                final artInsideCard = heroArtWidth - artOverhang;
+                final available = constraints.maxWidth - artInsideCard - gutter;
+                final textWidth = available
+                    .clamp(constraints.maxWidth * 0.56, heroTextWidth)
+                    .toDouble();
+
+                return ConstrainedBox(
+                  constraints: BoxConstraints(maxWidth: textWidth),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        leadLine,
+                        key: const ValueKey('home.hero.title.lead'),
+                        style: TextStyle(
+                          fontSize: leadSize,
+                          fontWeight: FontWeight.w700,
+                          height: 1.06,
+                          color: Colors.white,
+                          fontFamily: 'serif',
+                          letterSpacing: -0.8,
                         ),
                       ),
-                      child: FittedBox(
-                        fit: BoxFit.scaleDown,
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Container(
-                              width: 30,
-                              height: 30,
-                              decoration: const BoxDecoration(
-                                color: Colors.white,
-                                shape: BoxShape.circle,
-                              ),
-                              alignment: Alignment.center,
-                              child: const Padding(
-                                padding: EdgeInsets.only(left: 2),
-                                child: Icon(
-                                  Icons.play_arrow_rounded,
-                                  size: 20,
-                                  color: HomePage.heroHighlight,
+                      const SizedBox(height: 6),
+                      Text(
+                        accentLine,
+                        key: const ValueKey('home.hero.title.accent'),
+                        style: TextStyle(
+                          fontSize: accentSize,
+                          fontWeight: FontWeight.w700,
+                          height: 1.06,
+                          color: HomePage.heroHighlight,
+                          fontFamily: 'serif',
+                          letterSpacing: -0.8,
+                        ),
+                      ),
+                      const SizedBox(height: 6),
+                      Text(
+                        trailLine,
+                        key: const ValueKey('home.hero.title.trail'),
+                        style: TextStyle(
+                          fontSize: trailSize,
+                          fontWeight: FontWeight.w700,
+                          height: 1.06,
+                          color: Colors.white,
+                          fontFamily: 'serif',
+                          letterSpacing: -0.8,
+                        ),
+                      ),
+                      const SizedBox(height: 18),
+                      Text(
+                        supportingCopy,
+                        key: const ValueKey('home.hero.support'),
+                        style: TextStyle(
+                          fontSize: supportSize,
+                          height: 1.45,
+                          color: Color(0xFFF2F3F5),
+                        ),
+                      ),
+                      const SizedBox(height: 18),
+                      SizedBox(
+                        height: compact ? 50 : 56,
+                        child: ElevatedButton(
+                          key: const ValueKey('home.hero.cta'),
+                          onPressed: onPressed,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: HomePage.heroHighlight,
+                            foregroundColor: Colors.white,
+                            elevation: 0,
+                            shadowColor: Colors.transparent,
+                            padding: const EdgeInsets.symmetric(horizontal: 18),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                          ),
+                          child: FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Container(
+                                  width: 30,
+                                  height: 30,
+                                  decoration: const BoxDecoration(
+                                    color: Colors.white,
+                                    shape: BoxShape.circle,
+                                  ),
+                                  alignment: Alignment.center,
+                                  child: const Padding(
+                                    padding: EdgeInsets.only(left: 2),
+                                    child: Icon(
+                                      Icons.play_arrow_rounded,
+                                      size: 20,
+                                      color: HomePage.heroHighlight,
+                                    ),
+                                  ),
                                 ),
-                              ),
+                                const SizedBox(width: 12),
+                                Text(
+                                  ctaLabel,
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                              ],
                             ),
-                            const SizedBox(width: 12),
-                            Text(
-                              ctaLabel,
-                              style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                          ],
+                          ),
                         ),
                       ),
-                    ),
+                    ],
                   ),
-                ],
-              ),
+                );
+              },
             ),
           ),
         ],
@@ -605,7 +648,7 @@ class _CategoryTile extends StatelessWidget {
                 border: Border.all(color: HomePage.cardBorder),
               ),
               alignment: Alignment.center,
-              child: _HomeIcon(
+              child: HomeIcon(
                 type: category.icon,
                 size: 38,
                 color: HomePage.heroBackground,
@@ -634,6 +677,7 @@ class _CategoryTile extends StatelessWidget {
 
 class _ContinueLearningCard extends StatelessWidget {
   const _ContinueLearningCard({
+    super.key,
     required this.data,
     required this.onResumePressed,
   });
@@ -684,7 +728,9 @@ class _ContinueLearningCard extends StatelessWidget {
                     ),
                     const SizedBox(height: 6),
                     Text(
-                      '${data.questionCount} Questions',
+                      data.canResume
+                          ? '${data.answeredCount} of ${data.questionCount} answered'
+                          : '${data.questionCount} Questions',
                       key: const ValueKey('home.continue.meta'),
                       style: const TextStyle(
                         fontSize: 14,
@@ -707,13 +753,21 @@ class _ContinueLearningCard extends StatelessWidget {
                     backgroundColor: HomePage.heroBackground,
                     foregroundColor: Colors.white,
                     elevation: 0,
+                    padding: const EdgeInsets.symmetric(horizontal: 4),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(18),
                     ),
                   ),
-                  child: const Text(
-                    'Resume',
-                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700),
+                  child: const FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Text(
+                      'Resume',
+                      maxLines: 1,
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
                   ),
                 ),
               ),
@@ -735,34 +789,41 @@ class _ProgressRing extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = compact ? 74.0 : 82.0;
 
+    // The ring sweeps round and the label counts up together, so the card
+    // reads as filling to the user's score rather than snapping to it. The
+    // same tween also animates when the score changes after an attempt.
     return SizedBox(
       width: size,
       height: size,
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          SizedBox(
-            width: size,
-            height: size,
-            child: CircularProgressIndicator(
-              key: const ValueKey('home.continue.progress'),
-              value: progress,
-              strokeWidth: compact ? 6 : 7,
-              backgroundColor: const Color(0xFFF0E8DC),
-              valueColor: const AlwaysStoppedAnimation<Color>(
-                HomePage.heroHighlight,
+      child: AnimatedCount(
+        value: progress,
+        duration: Motion.slow,
+        builder: (context, animated) => Stack(
+          alignment: Alignment.center,
+          children: [
+            SizedBox(
+              width: size,
+              height: size,
+              child: CircularProgressIndicator(
+                key: const ValueKey('home.continue.progress'),
+                value: animated,
+                strokeWidth: compact ? 6 : 7,
+                backgroundColor: const Color(0xFFF0E8DC),
+                valueColor: const AlwaysStoppedAnimation<Color>(
+                  HomePage.heroHighlight,
+                ),
               ),
             ),
-          ),
-          Text(
-            '${(progress * 100).round()}%',
-            style: const TextStyle(
-              fontSize: 15,
-              fontWeight: FontWeight.w700,
-              color: HomePage.heroBackground,
+            Text(
+              '${(animated * 100).round()}%',
+              style: const TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.w700,
+                color: HomePage.heroBackground,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -782,7 +843,9 @@ class _ProgressBar extends StatelessWidget {
         borderRadius: BorderRadius.circular(999),
       ),
       clipBehavior: Clip.antiAlias,
-      child: FractionallySizedBox(
+      child: AnimatedFractionallySizedBox(
+        duration: Motion.duration(context, Motion.slow),
+        curve: Motion.enter,
         alignment: Alignment.centerLeft,
         widthFactor: progress,
         child: DecoratedBox(
@@ -837,7 +900,7 @@ class _PopularQuizCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(18),
                 ),
                 alignment: Alignment.center,
-                child: _HomeIcon(
+                child: HomeIcon(
                   type: quiz.icon,
                   size: 40,
                   color: Color(quiz.tileForegroundHex),
@@ -975,8 +1038,9 @@ class _RatingPill extends StatelessWidget {
   }
 }
 
-class _HomeBottomNavigationBar extends StatelessWidget {
-  const _HomeBottomNavigationBar({
+class HomeBottomNavigationBar extends StatelessWidget {
+  const HomeBottomNavigationBar({
+    super.key,
     required this.items,
     required this.activeIndex,
     required this.onSelected,
@@ -1012,7 +1076,10 @@ class _HomeBottomNavigationBar extends StatelessWidget {
                   child: _NavItem(
                     item: items[i],
                     isActive: i == activeIndex,
-                    onTap: () => onSelected(i),
+                    onTap: () {
+                      Motion.tick();
+                      onSelected(i);
+                    },
                   ),
                 ),
             ],
@@ -1023,6 +1090,10 @@ class _HomeBottomNavigationBar extends StatelessWidget {
   }
 }
 
+/// One bottom-nav tab. The active tab's icon sits inside a navy circle
+/// that pops upward with a bouncy [Curves.easeOutBack] animation — the
+/// circle and the rise are both purely painted via [AnimatedContainer]'s
+/// size/transform tweens, so neighbouring tabs and the label never shift.
 class _NavItem extends StatelessWidget {
   const _NavItem({
     required this.item,
@@ -1034,67 +1105,104 @@ class _NavItem extends StatelessWidget {
   final bool isActive;
   final VoidCallback onTap;
 
+  /// Fixed for both states — only paint (transform/decoration), never
+  /// layout size, changes with [isActive]. That's what keeps the label
+  /// and neighbouring tabs from ever shifting.
+  static const _circleSize = 46.0;
+  static const _riseOffset = 18.0;
+  static const _popDuration = Duration(milliseconds: 300);
+
   @override
   Widget build(BuildContext context) {
-    final color = isActive ? HomePage.heroBackground : HomePage.mutedIcon;
+    final tint = isActive ? HomePage.heroHighlight : HomePage.mutedIcon;
 
     return InkWell(
       key: ValueKey('home.nav.${item.id}'),
       onTap: onTap,
-      borderRadius: BorderRadius.circular(16),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 6),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            _HomeIcon(
-              type: item.icon,
-              size: 24,
-              color: color,
-              accentColor: color,
+      borderRadius: BorderRadius.circular(20),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          AnimatedContainer(
+            key: isActive
+                ? ValueKey('home.nav.${item.id}.active')
+                : ValueKey('home.nav.${item.id}.inactive'),
+            duration: _popDuration,
+            curve: Curves.easeOutBack,
+            transformAlignment: Alignment.center,
+            transform: Matrix4.translationValues(
+              0,
+              isActive ? -_riseOffset : 0,
+              0,
             ),
-            const SizedBox(height: 6),
-            Text(
+            width: _circleSize,
+            height: _circleSize,
+            decoration: BoxDecoration(
+              color: isActive ? HomePage.heroBackground : Colors.transparent,
+              shape: BoxShape.circle,
+              boxShadow: isActive
+                  ? [
+                      BoxShadow(
+                        color: HomePage.heroBackground.withValues(alpha: 0.35),
+                        blurRadius: 14,
+                        offset: const Offset(0, 6),
+                      ),
+                    ]
+                  : const [],
+            ),
+            alignment: Alignment.center,
+            child: AnimatedSwitcher(
+              duration: const Duration(milliseconds: 200),
+              transitionBuilder: (child, animation) =>
+                  ScaleTransition(scale: animation, child: child),
+              child: HomeIcon(
+                key: ValueKey('home.nav.${item.id}.icon.$isActive'),
+                type: item.icon,
+                size: isActive ? 22 : 24,
+                color: isActive ? HomePage.heroHighlight : HomePage.mutedIcon,
+                accentColor: tint,
+                filled: isActive,
+              ),
+            ),
+          ),
+          const SizedBox(height: 6),
+          AnimatedDefaultTextStyle(
+            duration: const Duration(milliseconds: 220),
+            style: TextStyle(
+              fontSize: 11.5,
+              fontWeight: isActive ? FontWeight.w700 : FontWeight.w500,
+              color: tint,
+            ),
+            child: Text(
               item.label,
-              style: TextStyle(
-                fontSize: 12,
-                fontWeight: isActive ? FontWeight.w700 : FontWeight.w500,
-                color: color,
-              ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              textAlign: TextAlign.center,
             ),
-            const SizedBox(height: 8),
-            AnimatedContainer(
-              key: isActive
-                  ? ValueKey('home.nav.${item.id}.active')
-                  : ValueKey('home.nav.${item.id}.inactive'),
-              duration: const Duration(milliseconds: 180),
-              curve: Curves.easeOut,
-              width: isActive ? 28 : 12,
-              height: 3,
-              decoration: BoxDecoration(
-                color: isActive ? HomePage.heroHighlight : Colors.transparent,
-                borderRadius: BorderRadius.circular(999),
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
 }
 
-class _HomeIcon extends StatelessWidget {
-  const _HomeIcon({
+class HomeIcon extends StatelessWidget {
+  const HomeIcon({
+    super.key,
     required this.type,
     required this.size,
     required this.color,
     required this.accentColor,
+    this.filled = false,
   });
 
   final HomeIconType type;
   final double size;
   final Color color;
   final Color accentColor;
+
+  /// Solid variant instead of outlined, for the bottom nav's active tab.
+  final bool filled;
 
   @override
   Widget build(BuildContext context) {
@@ -1146,16 +1254,440 @@ class _HomeIcon extends StatelessWidget {
             ),
           ],
         );
+      case HomeIconType.labor:
+        return Icon(Icons.engineering_outlined, size: size, color: color);
+      case HomeIconType.taxation:
+        return Icon(Icons.currency_rupee_rounded, size: size, color: color);
+      case HomeIconType.cyber:
+        return Icon(Icons.security_rounded, size: size, color: color);
+      case HomeIconType.property:
+        return Icon(Icons.apartment_outlined, size: size, color: color);
+      case HomeIconType.banking:
+        return Icon(
+          Icons.account_balance_wallet_outlined,
+          size: size,
+          color: color,
+        );
+      case HomeIconType.environmental:
+        return Icon(Icons.eco_outlined, size: size, color: color);
       case HomeIconType.navHome:
-        return Icon(Icons.home_rounded, size: size, color: color);
-      case HomeIconType.navCategories:
-        return Icon(Icons.grid_view_rounded, size: size, color: color);
+        return Icon(
+          filled ? Icons.home_rounded : Icons.home_outlined,
+          size: size,
+          color: color,
+        );
+      case HomeIconType.navQuizzes:
+        return Icon(
+          filled ? Icons.quiz_rounded : Icons.quiz_outlined,
+          size: size,
+          color: color,
+        );
       case HomeIconType.navLeaderboard:
-        return Icon(Icons.emoji_events_outlined, size: size, color: color);
-      case HomeIconType.navBookmarks:
-        return Icon(Icons.bookmark_border_rounded, size: size, color: color);
+        return Icon(
+          filled ? Icons.emoji_events_rounded : Icons.emoji_events_outlined,
+          size: size,
+          color: color,
+        );
+      case HomeIconType.navLegalUpdates:
+        return Icon(
+          filled ? Icons.campaign_rounded : Icons.campaign_outlined,
+          size: size,
+          color: color,
+        );
       case HomeIconType.navProfile:
-        return Icon(Icons.person_outline_rounded, size: size, color: color);
+        return Icon(
+          filled ? Icons.person_rounded : Icons.person_outline_rounded,
+          size: size,
+          color: color,
+        );
     }
+  }
+}
+
+/// The three difficulty tiers, as the admin configured them, each starting a
+/// mixed-topic quiz. A tier the admin turned off simply doesn't appear.
+class _PracticeStrip extends StatefulWidget {
+  const _PracticeStrip({required this.api, required this.onSelected});
+
+  final QuizApi? api;
+  final ValueChanged<String>? onSelected;
+
+  @override
+  State<_PracticeStrip> createState() => _PracticeStripState();
+}
+
+class _PracticeStripState extends State<_PracticeStrip> {
+  late final QuizApi _api = widget.api ?? QuizApi();
+  late final Future<List<PracticeSetting>> _future = _api
+      .fetchPracticeSettings();
+
+  static const _tints = {
+    'easy': HomePage.easyColor,
+    'medium': HomePage.mediumColor,
+    'hard': HomePage.hardColor,
+  };
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<List<PracticeSetting>>(
+      future: _future,
+      builder: (context, snapshot) {
+        final settings = snapshot.hasError
+            ? const <PracticeSetting>[]
+            : (snapshot.data ?? const <PracticeSetting>[]);
+
+        if (snapshot.connectionState != ConnectionState.done ||
+            settings.isEmpty) {
+          // Nothing to show while loading, and nothing to say if the admin
+          // has every tier switched off.
+          return const SizedBox.shrink();
+        }
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 30),
+            const Text(
+              'Quick Practice',
+              key: ValueKey('home.section.practice'),
+              style: TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.w700,
+                color: HomePage.heroBackground,
+                letterSpacing: -0.3,
+              ),
+            ),
+            const SizedBox(height: 4),
+            const Text(
+              'Mixed questions from every topic, at the level you pick.',
+              style: TextStyle(fontSize: 13.5, color: HomePage.supportText),
+            ),
+            const SizedBox(height: 16),
+            Row(
+              children: [
+                for (final setting in settings) ...[
+                  Expanded(
+                    child: _PracticeCard(
+                      setting: setting,
+                      tint:
+                          _tints[setting.difficulty] ?? HomePage.heroHighlight,
+                      onTap: widget.onSelected == null
+                          ? null
+                          : () => widget.onSelected!(setting.difficulty),
+                    ),
+                  ),
+                  if (setting != settings.last) const SizedBox(width: 12),
+                ],
+              ],
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
+
+class _PracticeCard extends StatelessWidget {
+  const _PracticeCard({
+    required this.setting,
+    required this.tint,
+    required this.onTap,
+  });
+
+  final PracticeSetting setting;
+  final Color tint;
+  final VoidCallback? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final label =
+        setting.difficulty[0].toUpperCase() + setting.difficulty.substring(1);
+
+    return Material(
+      color: Colors.white,
+      clipBehavior: Clip.antiAlias,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+        side: const BorderSide(color: HomePage.cardBorder),
+      ),
+      child: InkWell(
+        key: ValueKey('home.practice.${setting.difficulty}'),
+        onTap: onTap == null
+            ? null
+            : () {
+                Motion.tick();
+                onTap!();
+              },
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+          child: Column(
+            children: [
+              Container(
+                width: 38,
+                height: 38,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: tint.withValues(alpha: 0.14),
+                ),
+                alignment: Alignment.center,
+                child: Icon(Icons.bolt_rounded, size: 20, color: tint),
+              ),
+              const SizedBox(height: 10),
+              Text(
+                label,
+                style: const TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w800,
+                  color: HomePage.heroBackground,
+                ),
+              ),
+              const SizedBox(height: 2),
+              Text(
+                '${setting.questionCount} questions',
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontSize: 11.5,
+                  color: HomePage.supportText,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// A few random questions from the backend. Tapping one turns it over to show
+/// the answer and its explanation — reading, not playing, so nothing is
+/// scored and no credits are spent.
+class _QuestionOfTheDay extends StatefulWidget {
+  const _QuestionOfTheDay({required this.api});
+
+  final QuizApi? api;
+
+  @override
+  State<_QuestionOfTheDay> createState() => _QuestionOfTheDayState();
+}
+
+class _QuestionOfTheDayState extends State<_QuestionOfTheDay> {
+  late final QuizApi _api = widget.api ?? QuizApi();
+  late Future<List<RemoteFlashQuestion>> _future = _load();
+  final _revealed = <int>{};
+
+  Future<List<RemoteFlashQuestion>> _load() =>
+      _api.fetchRandomQuestions(limit: 3);
+
+  void _shuffle() {
+    setState(() {
+      _revealed.clear();
+      _future = _load();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<List<RemoteFlashQuestion>>(
+      future: _future,
+      builder: (context, snapshot) {
+        final questions = snapshot.hasError
+            ? const <RemoteFlashQuestion>[]
+            : (snapshot.data ?? const <RemoteFlashQuestion>[]);
+
+        if (snapshot.connectionState != ConnectionState.done) {
+          return const SizedBox.shrink();
+        }
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 30),
+            Row(
+              children: [
+                const Expanded(
+                  child: Text(
+                    'Test Yourself',
+                    key: ValueKey('home.section.testYourself'),
+                    style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.w700,
+                      color: HomePage.heroBackground,
+                      letterSpacing: -0.3,
+                    ),
+                  ),
+                ),
+                TextButton.icon(
+                  key: const ValueKey('home.testYourself.shuffle'),
+                  onPressed: _shuffle,
+                  icon: const Icon(Icons.refresh_rounded, size: 18),
+                  label: const Text('Shuffle'),
+                  style: TextButton.styleFrom(
+                    foregroundColor: HomePage.heroHighlight,
+                    textStyle: const TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 4),
+            Text(
+              questions.isEmpty
+                  ? 'Questions appear here once the server has some.'
+                  : 'Tap a question to see the answer.',
+              key: const ValueKey('home.testYourself.hint'),
+              style: const TextStyle(
+                fontSize: 13.5,
+                color: HomePage.supportText,
+              ),
+            ),
+            const SizedBox(height: 16),
+            for (final question in questions) ...[
+              _FlashCard(
+                question: question,
+                isRevealed: _revealed.contains(question.id),
+                onTap: () => setState(() {
+                  if (!_revealed.remove(question.id)) {
+                    _revealed.add(question.id);
+                  }
+                }),
+              ),
+              const SizedBox(height: 12),
+            ],
+          ],
+        );
+      },
+    );
+  }
+}
+
+class _FlashCard extends StatelessWidget {
+  const _FlashCard({
+    required this.question,
+    required this.isRevealed,
+    required this.onTap,
+  });
+
+  final RemoteFlashQuestion question;
+  final bool isRevealed;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final answer = question.correctOption >= 0
+        ? question.options[question.correctOption]
+        : null;
+    final explanation = question.explanation?.core ?? '';
+
+    return Material(
+      color: Colors.white,
+      clipBehavior: Clip.antiAlias,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+        side: BorderSide(
+          color: isRevealed ? HomePage.heroHighlight : HomePage.cardBorder,
+        ),
+      ),
+      child: InkWell(
+        key: ValueKey('home.flash.${question.id}'),
+        onTap: () {
+          Motion.tick();
+          onTap();
+        },
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: Text(
+                      question.questionText,
+                      style: const TextStyle(
+                        fontSize: 15,
+                        height: 1.35,
+                        fontWeight: FontWeight.w700,
+                        color: HomePage.heroBackground,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Icon(
+                    isRevealed
+                        ? Icons.keyboard_arrow_up_rounded
+                        : Icons.keyboard_arrow_down_rounded,
+                    color: HomePage.heroHighlight,
+                  ),
+                ],
+              ),
+              if (question.quizTitle.isNotEmpty) ...[
+                const SizedBox(height: 4),
+                Text(
+                  question.quizTitle,
+                  style: const TextStyle(
+                    fontSize: 11.5,
+                    fontWeight: FontWeight.w600,
+                    color: HomePage.supportText,
+                  ),
+                ),
+              ],
+              if (isRevealed) ...[
+                const SizedBox(height: 12),
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: HomePage.easyColor.withValues(alpha: 0.08),
+                    borderRadius: BorderRadius.circular(14),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Icon(
+                            Icons.check_circle_rounded,
+                            size: 18,
+                            color: HomePage.easyColor,
+                          ),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: Text(
+                              answer ?? 'Answer unavailable.',
+                              key: ValueKey('home.flash.${question.id}.answer'),
+                              style: const TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w700,
+                                height: 1.3,
+                                color: HomePage.heroBackground,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      if (explanation.isNotEmpty) ...[
+                        const SizedBox(height: 8),
+                        Text(
+                          explanation,
+                          style: const TextStyle(
+                            fontSize: 13,
+                            height: 1.35,
+                            color: HomePage.supportText,
+                          ),
+                        ),
+                      ],
+                    ],
+                  ),
+                ),
+              ],
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }

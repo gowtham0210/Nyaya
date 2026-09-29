@@ -1,9 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:nyaya/app/auth_api.dart';
 import 'package:nyaya/features/auth/presentation/sign_in_page.dart';
 import 'package:nyaya/features/auth/presentation/sign_up_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+class _FakeAuthApi extends AuthApi {
+  @override
+  Future<AuthResult> register({
+    required String fullName,
+    required String email,
+    required String password,
+    String? phone,
+  }) async {
+    return AuthResult(
+      accessToken: 'fake-access-token',
+      refreshToken: 'fake-refresh-token',
+      fullName: fullName,
+      email: email,
+    );
+  }
+}
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+
+  setUp(() {
+    SharedPreferences.setMockInitialValues({});
+  });
+
   Future<void> pumpSignUpPage(
     WidgetTester tester, {
     Widget? home,
@@ -20,7 +45,7 @@ void main() {
       tester.view.resetPadding();
     });
 
-    await tester.pumpWidget(MaterialApp(home: home ?? const SignUpPage()));
+    await tester.pumpWidget(MaterialApp(home: home ?? SignUpPage()));
     await tester.pumpAndSettle();
   }
 
@@ -78,7 +103,7 @@ void main() {
   testWidgets('sign in screen routes into the signup screen', (
     WidgetTester tester,
   ) async {
-    await pumpSignUpPage(tester, home: const SignInPage());
+    await pumpSignUpPage(tester, home: SignInPage());
 
     await tester.ensureVisible(find.widgetWithText(OutlinedButton, 'SIGN UP'));
     await tester.tap(find.widgetWithText(OutlinedButton, 'SIGN UP'));
@@ -94,7 +119,10 @@ void main() {
     var completed = false;
     await pumpSignUpPage(
       tester,
-      home: SignUpPage(onSignUpCompleted: (_) => completed = true),
+      home: SignUpPage(
+        authApi: _FakeAuthApi(),
+        onSignUpCompleted: (_) => completed = true,
+      ),
     );
 
     Future<void> fill(String key, String text) async {

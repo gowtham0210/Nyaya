@@ -11,7 +11,11 @@ const _radioBorder = Color(0xFFB9C0CA);
 const _templeAsset = 'assets/backgrounds/temple_bg.png';
 
 class GoalSelectionPage extends StatefulWidget {
-  const GoalSelectionPage({super.key, required this.onContinue, this.viewModel});
+  const GoalSelectionPage({
+    super.key,
+    required this.onContinue,
+    this.viewModel,
+  });
 
   final ValueChanged<String> onContinue;
   final GoalSelectionViewModel? viewModel;
@@ -44,9 +48,7 @@ class _GoalSelectionPageState extends State<GoalSelectionPage> {
           const Positioned(
             left: 16,
             top: 80,
-            child: ExcludeSemantics(
-              child: DotPattern(width: 60, height: 60),
-            ),
+            child: ExcludeSemantics(child: DotPattern(width: 60, height: 60)),
           ),
           Positioned(
             left: 60,
@@ -93,20 +95,20 @@ class _GoalSelectionPageState extends State<GoalSelectionPage> {
                     key: const ValueKey('goal.heading.lead'),
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                          color: navy,
-                          fontFamily: 'serif',
-                          fontWeight: FontWeight.w700,
-                        ),
+                      color: navy,
+                      fontFamily: 'serif',
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                   Text(
                     'to Nyaya?',
                     key: const ValueKey('goal.heading.accent'),
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                          color: gold,
-                          fontFamily: 'serif',
-                          fontWeight: FontWeight.w700,
-                        ),
+                      color: gold,
+                      fontFamily: 'serif',
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                   const SizedBox(height: 8),
                   const Text(
@@ -175,10 +177,10 @@ class _GoalCard extends StatelessWidget {
   final VoidCallback onTap;
 
   IconData get _iconData => switch (goal.icon) {
-        GoalIconType.scales => Icons.balance,
-        GoalIconType.trophy => Icons.emoji_events_outlined,
-        GoalIconType.graduationCap => Icons.school_outlined,
-      };
+    GoalIconType.scales => Icons.balance,
+    GoalIconType.trophy => Icons.emoji_events_outlined,
+    GoalIconType.graduationCap => Icons.school_outlined,
+  };
 
   @override
   Widget build(BuildContext context) {

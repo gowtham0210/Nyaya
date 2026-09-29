@@ -6,14 +6,28 @@ class QuizResultViewModel {
   QuizResultViewModel({
     required this.outcomes,
     this.topicTitle = 'this topic',
-  });
+    String? headline,
+    int? total,
+    int? correctCount,
+  }) : _headlineOverride = headline,
+       _totalOverride = total,
+       _correctCountOverride = correctCount;
 
   final List<QuizOutcome> outcomes;
   final String topicTitle;
+  final String? _headlineOverride;
 
-  int get total => outcomes.length;
+  /// Set when the score covers more than the outcomes in hand — resuming a
+  /// half-finished attempt answers only the questions that were left, but
+  /// the result is for the whole quiz, so the server's totals are passed
+  /// through instead.
+  final int? _totalOverride;
+  final int? _correctCountOverride;
 
-  int get correctCount => outcomes.where((o) => o.isCorrect).length;
+  int get total => _totalOverride ?? outcomes.length;
+
+  int get correctCount =>
+      _correctCountOverride ?? outcomes.where((o) => o.isCorrect).length;
 
   int get wrongCount => total - correctCount;
 
@@ -30,7 +44,7 @@ class QuizResultViewModel {
 
   bool get showWeakStrip => weakCount > 0;
 
-  String get headline => 'Well Done!';
+  String get headline => _headlineOverride ?? 'Well Done!';
 
   String get subtitle => '$topicTitle — completed';
 }

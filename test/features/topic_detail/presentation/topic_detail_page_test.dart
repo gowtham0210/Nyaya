@@ -89,9 +89,7 @@ void main() {
     );
   });
 
-  testWidgets('tapping a quiz row reports its id', (
-    WidgetTester tester,
-  ) async {
+  testWidgets('tapping a quiz row reports its id', (WidgetTester tester) async {
     String? selected;
     await pumpTopicDetailPage(
       tester,

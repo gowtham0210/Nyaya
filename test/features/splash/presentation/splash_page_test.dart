@@ -130,41 +130,32 @@ void main() {
     semantics.dispose();
   });
 
-  testWidgets('NyayaApp waits for tap after the loading bar completes', (
-    WidgetTester tester,
-  ) async {
-    tester.view.reset();
-    tester.view.physicalSize = const Size(393, 852);
-    tester.view.devicePixelRatio = 1;
-    tester.view.padding = const FakeViewPadding(top: 59, bottom: 34);
-    addTearDown(() {
-      tester.view.resetPhysicalSize();
-      tester.view.resetDevicePixelRatio();
-      tester.view.resetPadding();
-    });
+  testWidgets(
+    'NyayaApp automatically continues once the loading bar completes, '
+    'with no tap required',
+    (WidgetTester tester) async {
+      tester.view.reset();
+      tester.view.physicalSize = const Size(393, 852);
+      tester.view.devicePixelRatio = 1;
+      tester.view.padding = const FakeViewPadding(top: 59, bottom: 34);
+      addTearDown(() {
+        tester.view.resetPhysicalSize();
+        tester.view.resetDevicePixelRatio();
+        tester.view.resetPadding();
+      });
 
-    await tester.pumpWidget(
-      const NyayaApp(splashDuration: Duration(milliseconds: 10)),
-    );
+      await tester.pumpWidget(
+        const NyayaApp(splashDuration: Duration(milliseconds: 10)),
+      );
 
-    expect(find.byKey(const ValueKey('splash.screen')), findsOneWidget);
-    expect(find.byKey(const ValueKey('home.headline')), findsNothing);
+      expect(find.byKey(const ValueKey('splash.screen')), findsOneWidget);
+      expect(find.byKey(const ValueKey('signin.temple')), findsNothing);
 
-    await tester.pump(const Duration(milliseconds: 10));
-    await tester.pump();
+      // No tap: just let the progress animation finish and the app settle.
+      await tester.pumpAndSettle();
 
-    final progress = tester.widget<LinearProgressIndicator>(
-      find.byKey(const ValueKey('splash.progress')),
-    );
-    expect(progress.value, 1);
-    expect(find.byKey(const ValueKey('splash.screen')), findsOneWidget);
-    expect(find.byKey(const ValueKey('splash.tap_target')), findsOneWidget);
-    expect(find.byKey(const ValueKey('home.headline')), findsNothing);
-
-    await tester.tap(find.byKey(const ValueKey('splash.tap_target')));
-    await tester.pumpAndSettle();
-
-    expect(find.byKey(const ValueKey('home.headline')), findsOneWidget);
-    expect(find.text('Spec-driven Flutter baseline'), findsOneWidget);
-  });
+      expect(find.byKey(const ValueKey('splash.screen')), findsNothing);
+      expect(find.byKey(const ValueKey('signin.temple')), findsOneWidget);
+    },
+  );
 }

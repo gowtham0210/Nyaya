@@ -1,5 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:http/http.dart' as http;
+import 'package:http/testing.dart';
+import 'package:nyaya/app/api_client.dart';
+import 'package:nyaya/features/quiz_question/data/quiz_api.dart';
+import 'package:nyaya/app/quiz_progress_store.dart';
 import 'package:nyaya/features/home/presentation/home_page.dart';
 import 'package:nyaya/features/home/presentation/home_view_model.dart';
 
@@ -52,14 +59,30 @@ void main() {
   testWidgets('AC-003 through AC-005 show categories and continue learning', (
     WidgetTester tester,
   ) async {
+    // The card reflects the user's real latest attempt; stand one in so the
+    // ring has a score to render.
+    QuizProgressStore.remote = const ContinueLearningSnapshot(
+      title: 'Indian Constitution Quiz',
+      questionCount: 15,
+      progress: 0.65,
+      canResume: false,
+    );
+    addTearDown(() => QuizProgressStore.remote = null);
+
     await pumpHomePage(tester);
 
     expect(find.text('Explore by Category'), findsOneWidget);
     expect(find.text('Constitutional Law'), findsOneWidget);
-    expect(find.text('Criminal Law'), findsOneWidget);
-    expect(find.text('Civil Law'), findsOneWidget);
-    expect(find.text('Contract Law'), findsOneWidget);
-    expect(find.text('Legal Reasoning'), findsOneWidget);
+    expect(find.text('Criminal & Evidence Law'), findsOneWidget);
+    expect(find.text('Civil & General Law'), findsOneWidget);
+    expect(find.text('Marriage & Family Law'), findsOneWidget);
+    expect(find.text('Labor & Industrial Law'), findsOneWidget);
+    expect(find.text('Corporate & Commercial Law'), findsOneWidget);
+    expect(find.text('Taxation Law'), findsOneWidget);
+    expect(find.text('Cyber & Intellectual Property'), findsOneWidget);
+    expect(find.text('Property & Real Estate Law'), findsOneWidget);
+    expect(find.text('Banking & Financial Law'), findsOneWidget);
+    expect(find.text('Environmental Law'), findsOneWidget);
 
     await tester.scrollUntilVisible(
       find.byKey(const ValueKey('home.section.continue')),
@@ -112,9 +135,134 @@ void main() {
     expect(find.byKey(const ValueKey('home.bottomNav')), findsOneWidget);
     expect(find.byKey(const ValueKey('home.nav.home.active')), findsOneWidget);
     expect(find.text('Home'), findsOneWidget);
-    expect(find.text('Categories'), findsOneWidget);
+    expect(find.text('Quizzes'), findsOneWidget);
     expect(find.text('Leaderboard'), findsOneWidget);
-    expect(find.text('Bookmarks'), findsOneWidget);
+    expect(find.text('Legal Updates'), findsOneWidget);
     expect(find.text('Profile'), findsOneWidget);
+  });
+
+  /// A backend that answers Home's two new sections.
+  QuizApi fakeApi({
+    List<Map<String, Object?>>? practice,
+    List<Map<String, Object?>>? questions,
+  }) {
+    return QuizApi(
+      client: ApiClient(
+        baseUrl: 'http://test/api/v1',
+        httpClient: MockClient((request) async {
+          final body = request.url.path.contains('random-questions')
+              ? {'items': questions ?? const []}
+              : {
+                  'items':
+                      practice ??
+                      const [
+                        {'difficulty': 'easy', 'questionCount': 10},
+                        {'difficulty': 'hard', 'questionCount': 10},
+                      ],
+                };
+          return http.Response(
+            jsonEncode(body),
+            200,
+            headers: {'content-type': 'application/json'},
+          );
+        }),
+      ),
+    );
+  }
+
+  testWidgets('Quick Practice shows the enabled tiers and reports a tap', (
+    WidgetTester tester,
+  ) async {
+    String? picked;
+    tester.view.physicalSize = const Size(393, 2200);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(() {
+      tester.view.resetPhysicalSize();
+      tester.view.resetDevicePixelRatio();
+    });
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: HomePage(
+          viewModel: const HomeViewModel(),
+          quizApi: fakeApi(),
+          onDifficultySelected: (difficulty) => picked = difficulty,
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    final easy = find.byKey(const ValueKey('home.practice.easy'));
+    await tester.scrollUntilVisible(
+      easy,
+      200,
+      scrollable: find.byType(Scrollable).first,
+    );
+    await tester.pumpAndSettle();
+    // Only the tiers the admin enabled appear.
+    expect(find.byKey(const ValueKey('home.practice.medium')), findsNothing);
+
+    await tester.tap(easy);
+    await tester.pumpAndSettle();
+
+    expect(picked, 'easy');
+  });
+
+  testWidgets('a Test Yourself question hides its answer until tapped', (
+    WidgetTester tester,
+  ) async {
+    tester.view.physicalSize = const Size(393, 2200);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(() {
+      tester.view.resetPhysicalSize();
+      tester.view.resetDevicePixelRatio();
+    });
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: HomePage(
+          viewModel: const HomeViewModel(),
+          quizApi: fakeApi(
+            questions: [
+              {
+                'id': 7,
+                'questionText': 'Which is the highest court in India?',
+                'quizTitle': 'Level 1',
+                'explanation': jsonEncode({'core': 'It is the apex court.'}),
+                'options': [
+                  {'id': 1, 'optionText': 'High Court', 'isCorrect': false},
+                  {'id': 2, 'optionText': 'Supreme Court', 'isCorrect': true},
+                ],
+              },
+            ],
+          ),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    final card = find.byKey(const ValueKey('home.flash.7'));
+    await tester.scrollUntilVisible(
+      card,
+      200,
+      scrollable: find.byType(Scrollable).first,
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('Which is the highest court in India?'), findsOneWidget);
+    // The answer stays hidden until the card is opened.
+    expect(find.byKey(const ValueKey('home.flash.7.answer')), findsNothing);
+
+    await tester.tap(card);
+    await tester.pumpAndSettle();
+
+    expect(find.byKey(const ValueKey('home.flash.7.answer')), findsOneWidget);
+    expect(find.text('Supreme Court'), findsOneWidget);
+    expect(find.text('It is the apex court.'), findsOneWidget);
+
+    // Tapping again turns it back over.
+    await tester.tap(card);
+    await tester.pumpAndSettle();
+    expect(find.byKey(const ValueKey('home.flash.7.answer')), findsNothing);
   });
 }

@@ -24,7 +24,7 @@ class NyayaApp extends StatelessWidget {
         splashDuration: splashDuration,
         child: AppSession.isOnboarded
             ? Builder(builder: buildWiredHomePage)
-            : const SignInPage(),
+            : SignInPage(),
       ),
     );
   }

@@ -4,11 +4,11 @@ import 'package:nyaya/features/quiz_result/presentation/quiz_result_view_model.d
 
 void main() {
   List<QuizOutcome> outcomes({required int correct, required int wrong}) => [
-        for (var i = 0; i < correct; i++)
-          QuizOutcome(questionId: 'c$i', chosenOption: 0, isCorrect: true),
-        for (var i = 0; i < wrong; i++)
-          QuizOutcome(questionId: 'w$i', chosenOption: 0, isCorrect: false),
-      ];
+    for (var i = 0; i < correct; i++)
+      QuizOutcome(questionId: 'c$i', chosenOption: 0, isCorrect: true),
+    for (var i = 0; i < wrong; i++)
+      QuizOutcome(questionId: 'w$i', chosenOption: 0, isCorrect: false),
+  ];
 
   test('derives the score, percent and counts from outcomes', () {
     final vm = QuizResultViewModel(

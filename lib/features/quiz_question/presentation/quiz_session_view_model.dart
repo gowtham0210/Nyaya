@@ -13,24 +13,68 @@ class QuizQuestion {
     required this.options,
     required this.correctOption,
     required this.explanation,
+    this.remoteId,
+    this.optionIds,
   });
 
   final String id;
   final String stem;
   final List<String> options;
+
+  /// Index of the right answer. Meaningful only for the bundled offline
+  /// questions — a question fetched from the backend arrives without its
+  /// answer key and carries -1 here until the server grades a pick.
   final int correctOption;
   final QuizExplanation explanation;
+
+  /// The backend's `questions.id`, or null for a bundled question.
+  final int? remoteId;
+
+  /// The backend's `question_options.id` values, index-aligned with
+  /// [options]. Null for a bundled question.
+  final List<int>? optionIds;
+}
+
+/// The server's ruling on one answer.
+class QuizVerdict {
+  const QuizVerdict({required this.isCorrect, required this.correctOption});
+
+  final bool isCorrect;
+
+  /// Index of the right answer, revealed once the pick is locked in. -1 when
+  /// the server did not say (only possible if a question has no correct
+  /// option recorded), which simply leaves nothing highlighted.
+  final int correctOption;
+}
+
+/// Grades one answer against the backend. Sessions built from the bundled
+/// question lists have no grader and settle every pick locally.
+abstract class QuizGrader {
+  Future<QuizVerdict> grade(QuizQuestion question, int optionIndex);
 }
 
 class QuizSessionViewModel {
-  QuizSessionViewModel({List<QuizQuestion>? questions})
-      : questions = questions ?? _sampleQuestions;
+  QuizSessionViewModel({
+    List<QuizQuestion>? questions,
+    QuizGrader? grader,
+    int startIndex = 0,
+    this.onAnswered,
+  }) : questions = questions ?? _sampleQuestions,
+       _grader = grader,
+       _currentIndex = startIndex;
+
+  /// Called with each graded answer as it happens — the credits store docks
+  /// a wrong one straight away rather than waiting for the quiz to end.
+  final void Function(bool isCorrect)? onAnswered;
 
   final List<QuizQuestion> questions;
 
+  /// Null for a bundled session, which knows its own answer key.
+  final QuizGrader? _grader;
+
   String get featureId => '011-quiz-question';
 
-  int _currentIndex = 0;
+  int _currentIndex;
 
   int get currentIndex => _currentIndex;
 
@@ -45,15 +89,64 @@ class QuizSessionViewModel {
 
   int? get selectedOption => _selectedOption;
 
-  bool get isAnswered => _selectedOption != null;
+  QuizVerdict? _verdict;
 
-  bool get isCorrect => _selectedOption == currentQuestion.correctOption;
+  bool get isAnswered => _verdict != null;
 
-  void answer(int optionIndex) {
-    if (isAnswered) {
+  bool get isCorrect => _verdict?.isCorrect ?? false;
+
+  /// Index of the right answer for the current question once it has been
+  /// answered, or null while it is still unanswered.
+  int? get revealedCorrectOption => _verdict?.correctOption;
+
+  bool _isGrading = false;
+
+  /// True while the server is being asked to grade a pick. The options are
+  /// inert during this window so a double-tap can't register twice.
+  bool get isGrading => _isGrading;
+
+  String? _gradingError;
+
+  /// Set when the server could not be reached to grade the last pick. The
+  /// pick is rolled back, so the user can simply tap again.
+  String? get gradingError => _gradingError;
+
+  /// Locks [optionIndex] in as the answer to the current question.
+  ///
+  /// For a bundled session the verdict is known from the question itself and
+  /// this completes synchronously, before the returned future is even
+  /// awaited. For a backend-backed session it posts the answer and resolves
+  /// only once the server replies.
+  Future<void> answer(int optionIndex) async {
+    if (isAnswered || _isGrading) {
       return;
     }
+
+    final grader = _grader;
+    if (grader == null) {
+      _selectedOption = optionIndex;
+      _verdict = QuizVerdict(
+        isCorrect: optionIndex == currentQuestion.correctOption,
+        correctOption: currentQuestion.correctOption,
+      );
+      onAnswered?.call(_verdict!.isCorrect);
+      return;
+    }
+
+    final question = currentQuestion;
     _selectedOption = optionIndex;
+    _gradingError = null;
+    _isGrading = true;
+    try {
+      _verdict = await grader.grade(question, optionIndex);
+      onAnswered?.call(_verdict!.isCorrect);
+    } on Object catch (error) {
+      // Leave the question unanswered so the tap can be retried.
+      _selectedOption = null;
+      _gradingError = error.toString();
+    } finally {
+      _isGrading = false;
+    }
   }
 
   final List<QuizOutcome> _outcomes = [];
@@ -66,7 +159,7 @@ class QuizSessionViewModel {
 
   void next() {
     final selected = _selectedOption;
-    if (selected == null || _isComplete) {
+    if (selected == null || !isAnswered || _isComplete) {
       return;
     }
     _outcomes.add(
@@ -82,6 +175,8 @@ class QuizSessionViewModel {
     }
     _currentIndex += 1;
     _selectedOption = null;
+    _verdict = null;
+    _gradingError = null;
   }
 }
 
@@ -100,7 +195,8 @@ class QuizOutcome {
 final List<QuizQuestion> _sampleQuestions = [
   const QuizQuestion(
     id: 'fir-meaning',
-    stem: 'You witness a theft and rush to the police station. What is the '
+    stem:
+        'You witness a theft and rush to the police station. What is the '
         'report you file called under the BNSS?',
     options: [
       'A charge sheet',
@@ -110,7 +206,8 @@ final List<QuizQuestion> _sampleQuestions = [
     ],
     correctOption: 1,
     explanation: QuizExplanation(
-      core: 'The first report of a cognizable offence to the police is the '
+      core:
+          'The first report of a cognizable offence to the police is the '
           'FIR. It sets the criminal process in motion.',
       reference: 'BNSS §173 (formerly CrPC §154)',
       takeaway: 'You can report a crime at any police station, free of cost.',
@@ -118,7 +215,8 @@ final List<QuizQuestion> _sampleQuestions = [
   ),
   const QuizQuestion(
     id: 'zero-fir',
-    stem: 'The crime happened in another district. Can the local police '
+    stem:
+        'The crime happened in another district. Can the local police '
         'still register your FIR?',
     options: [
       'No — only the police with jurisdiction can',
@@ -128,7 +226,8 @@ final List<QuizQuestion> _sampleQuestions = [
     ],
     correctOption: 1,
     explanation: QuizExplanation(
-      core: 'A Zero FIR can be filed at any police station regardless of '
+      core:
+          'A Zero FIR can be filed at any police station regardless of '
           'where the offence happened; it is then transferred.',
       reference: 'BNSS §173',
       takeaway: 'Never let jurisdiction be an excuse to turn you away.',
@@ -136,7 +235,8 @@ final List<QuizQuestion> _sampleQuestions = [
   ),
   const QuizQuestion(
     id: 'cognizable',
-    stem: 'For which kind of offence can police act without a court\'s '
+    stem:
+        'For which kind of offence can police act without a court\'s '
         'permission?',
     options: [
       'Cognizable offences',
@@ -146,14 +246,16 @@ final List<QuizQuestion> _sampleQuestions = [
     ],
     correctOption: 0,
     explanation: QuizExplanation(
-      core: 'Cognizable offences (the serious kind) let police register an '
+      core:
+          'Cognizable offences (the serious kind) let police register an '
           'FIR, investigate, and arrest without prior court approval.',
       reference: 'BNSS §2(1)(g)',
     ),
   ),
   const QuizQuestion(
     id: 'warrantless-arrest',
-    stem: 'The police stop Ravi at night and want to arrest him without a '
+    stem:
+        'The police stop Ravi at night and want to arrest him without a '
         'warrant. When is this legal under the BNSS?',
     options: [
       'Only if a magistrate has signed the order',
@@ -163,11 +265,13 @@ final List<QuizQuestion> _sampleQuestions = [
     ],
     correctOption: 1,
     explanation: QuizExplanation(
-      core: 'Police can arrest without a warrant for cognizable offences — '
+      core:
+          'Police can arrest without a warrant for cognizable offences — '
           'serious crimes where recording reasons is enough. A magistrate\'s '
           'warrant is needed only for the less serious, non-cognizable kind.',
       reference: 'BNSS §35 (formerly CrPC §41)',
-      takeaway: 'If arrested, you have the right to know the reason in '
+      takeaway:
+          'If arrested, you have the right to know the reason in '
           'writing.',
     ),
   ),
@@ -182,7 +286,8 @@ final List<QuizQuestion> _sampleQuestions = [
     ],
     correctOption: 0,
     explanation: QuizExplanation(
-      core: 'The grounds of arrest must be communicated at once; the '
+      core:
+          'The grounds of arrest must be communicated at once; the '
           'Constitution and the BNSS both guarantee it.',
       reference: 'Article 22(1); BNSS §47',
     ),
@@ -198,19 +303,22 @@ final List<QuizQuestion> _sampleQuestions = [
     ],
     correctOption: 1,
     explanation: QuizExplanation(
-      core: 'A woman may not be arrested after sunset and before sunrise '
+      core:
+          'A woman may not be arrested after sunset and before sunrise '
           'except with a magistrate\'s prior permission in exceptional cases.',
       reference: 'BNSS §43(5)',
     ),
   ),
   const QuizQuestion(
     id: 'magistrate-24h',
-    stem: 'After an arrest, the police must produce you before a magistrate '
+    stem:
+        'After an arrest, the police must produce you before a magistrate '
         'within…',
     options: ['12 hours', '24 hours', '48 hours', '7 days'],
     correctOption: 1,
     explanation: QuizExplanation(
-      core: '24 hours, excluding journey time. Detention beyond that without '
+      core:
+          '24 hours, excluding journey time. Detention beyond that without '
           'a magistrate\'s order is illegal.',
       reference: 'Article 22(2); BNSS §58',
       takeaway: 'Count the hours — this deadline protects you.',
@@ -227,14 +335,16 @@ final List<QuizQuestion> _sampleQuestions = [
     ],
     correctOption: 1,
     explanation: QuizExplanation(
-      core: 'For bailable offences bail is a matter of right, from the '
+      core:
+          'For bailable offences bail is a matter of right, from the '
           'police station itself or the court.',
       reference: 'BNSS §478',
     ),
   ),
   const QuizQuestion(
     id: 'anticipatory-bail',
-    stem: 'Fearing a false case, Meera wants bail before any arrest. What '
+    stem:
+        'Fearing a false case, Meera wants bail before any arrest. What '
         'does she seek?',
     options: [
       'Default bail',
@@ -244,26 +354,30 @@ final List<QuizQuestion> _sampleQuestions = [
     ],
     correctOption: 2,
     explanation: QuizExplanation(
-      core: 'Anticipatory bail is a direction that in the event of arrest, '
+      core:
+          'Anticipatory bail is a direction that in the event of arrest, '
           'the person shall be released on bail.',
       reference: 'BNSS §482 (formerly CrPC §438)',
     ),
   ),
   const QuizQuestion(
     id: 'police-custody',
-    stem: 'What is the longest total period of police custody a magistrate '
+    stem:
+        'What is the longest total period of police custody a magistrate '
         'can authorise?',
     options: ['24 hours', '15 days', '60 days', 'Unlimited'],
     correctOption: 1,
     explanation: QuizExplanation(
-      core: 'Police custody cannot exceed 15 days in total; beyond that, '
+      core:
+          'Police custody cannot exceed 15 days in total; beyond that, '
           'custody is judicial.',
       reference: 'BNSS §187',
     ),
   ),
   const QuizQuestion(
     id: 'legal-aid',
-    stem: 'You cannot afford a lawyer for your defence. What does the law '
+    stem:
+        'You cannot afford a lawyer for your defence. What does the law '
         'provide?',
     options: [
       'Nothing — hiring one is your problem',
@@ -273,7 +387,8 @@ final List<QuizQuestion> _sampleQuestions = [
     ],
     correctOption: 1,
     explanation: QuizExplanation(
-      core: 'Free legal aid is a constitutional promise; legal services '
+      core:
+          'Free legal aid is a constitutional promise; legal services '
           'authorities must provide a lawyer at State expense.',
       reference: 'Article 39A',
       takeaway: 'Ask the magistrate for a legal-aid lawyer — it is free.',
@@ -290,7 +405,8 @@ final List<QuizQuestion> _sampleQuestions = [
     ],
     correctOption: 1,
     explanation: QuizExplanation(
-      core: 'Routine handcuffing is unlawful. The BNSS permits it only for '
+      core:
+          'Routine handcuffing is unlawful. The BNSS permits it only for '
           'specified categories like habitual or violent offenders.',
       reference: 'BNSS §43(3)',
     ),

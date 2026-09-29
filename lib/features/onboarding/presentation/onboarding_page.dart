@@ -437,9 +437,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                     builder: (_) => SignUpPage(
                       onSignInRequested: (signUpContext) {
                         Navigator.of(signUpContext).pushReplacement(
-                          MaterialPageRoute<void>(
-                            builder: (_) => const SignInPage(),
-                          ),
+                          MaterialPageRoute<void>(builder: (_) => SignInPage()),
                         );
                       },
                     ),
@@ -452,9 +450,9 @@ class _OnboardingPageState extends State<OnboardingPage> {
             const SizedBox(height: 12),
             GestureDetector(
               onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute<void>(builder: (_) => const SignInPage()),
-                );
+                Navigator.of(
+                  context,
+                ).push(MaterialPageRoute<void>(builder: (_) => SignInPage()));
               },
               behavior: HitTestBehavior.opaque,
               child: Padding(
