@@ -14,5 +14,5 @@ Future<void> main() async {
   await AppSession.load();
   await AppLanguage.load();
   AppServices.languageCode = () => AppLanguage.current.value.languageCode;
-  runApp(const NyayaApp());
+  runApp(NyayaApp());
 }

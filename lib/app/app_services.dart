@@ -4,6 +4,7 @@ import '../core/network/api_client.dart';
 import '../features/auth/data/auth_api_client.dart';
 import '../features/auth/data/auth_repository.dart';
 import '../features/auth/data/auth_token_store.dart';
+import 'dev_flags.dart';
 
 /// App-wide singletons, created on first use. Pages and view models take
 /// their dependencies as constructor arguments; only the app wiring layer
@@ -21,7 +22,8 @@ class AppServices {
     readAccessToken: () => AuthTokenStore.accessToken,
     languageCode: () => languageCode(),
     refreshSession: () => authRepository.refresh(),
-    onSessionExpired: () => sessionExpired.value++,
+    // With sign-in skipped every call is a 401; don't bounce to sign-in.
+    onSessionExpired: skipSignInForDev ? null : () => sessionExpired.value++,
   );
 
   static final AuthRepository authRepository = AuthRepository(

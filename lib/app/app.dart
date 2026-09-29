@@ -8,16 +8,21 @@ import '../features/auth/presentation/sign_in_page.dart';
 import '../features/onboarding/presentation/welcome_page.dart';
 import '../features/splash/presentation/splash_bootstrap.dart';
 import 'app_session.dart';
+import 'dev_flags.dart';
 import 'main_shell.dart';
 import 'theme/app_theme.dart';
 
 class NyayaApp extends StatelessWidget {
-  const NyayaApp({
+  NyayaApp({
     super.key,
     this.splashDuration = const Duration(milliseconds: 1800),
-  });
+    bool? skipSignIn,
+  }) : skipSignIn = skipSignIn ?? skipSignInForDev;
 
   final Duration splashDuration;
+
+  /// Opens the tabs without signing in (see `dev_flags.dart`).
+  final bool skipSignIn;
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +42,7 @@ class NyayaApp extends StatelessWidget {
         ],
         home: SplashBootstrap(
           splashDuration: splashDuration,
-          child: AppSession.isOnboarded
+          child: skipSignIn || AppSession.isOnboarded
               ? const MainShell()
               : Builder(
                   builder: (context) => WelcomePage(

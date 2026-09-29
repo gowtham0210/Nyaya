@@ -145,7 +145,7 @@ void main() {
     });
 
     await tester.pumpWidget(
-      const NyayaApp(splashDuration: Duration(milliseconds: 10)),
+      NyayaApp(splashDuration: const Duration(milliseconds: 10)),
     );
 
     expect(find.byKey(const ValueKey('splash.screen')), findsOneWidget);
