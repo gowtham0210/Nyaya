@@ -9,11 +9,14 @@ void main() {
 
   setUp(() => SharedPreferences.setMockInitialValues({}));
 
-  test('AC-002 a fresh install starts in a supported device language', () async {
-    await AppLanguage.load(deviceLocale: const Locale('ta', 'IN'));
+  test(
+    'AC-002 a fresh install starts in a supported device language',
+    () async {
+      await AppLanguage.load(deviceLocale: const Locale('ta', 'IN'));
 
-    expect(AppLanguage.current.value, const Locale('ta'));
-  });
+      expect(AppLanguage.current.value, const Locale('ta'));
+    },
+  );
 
   test('AC-003 an unsupported device language falls back to English', () async {
     await AppLanguage.load(deviceLocale: const Locale('fr', 'FR'));

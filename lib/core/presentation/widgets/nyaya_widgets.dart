@@ -1,15 +1,17 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
+
+import '../../../app/theme/app_tokens.dart';
 import '../../localization/l10n.dart';
 
-const ivory = Color(0xFFFBF7F1);
-const waveBeige = Color(0xFFF1E5D7);
-const waveHighlight = Color(0xFFFFFFFF);
-const gold = Color(0xFFC89B3C);
-const dotGold = Color(0xFFE8D4B8);
-const progressTrack = Color(0xFFE9DED0);
-const navy = Color(0xFF1A2C3D);
-const bodyGrey = Color(0xFF4A5568);
+const ivory = NyayaColors.ivory;
+const waveBeige = NyayaColors.wave;
+const waveHighlight = NyayaColors.surface;
+const gold = NyayaColors.gold;
+const dotGold = NyayaColors.ornament;
+const progressTrack = NyayaColors.track;
+const navy = NyayaColors.ink;
+const bodyGrey = NyayaColors.inkMuted;
 
 const logoAsset = 'assets/branding/logo_mark.png';
 const wordmarkAsset = 'assets/branding/wordmark.png';
@@ -75,11 +77,11 @@ class BrandLockup extends StatelessWidget {
           key: _key('tagline'),
           textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                color: gold,
-                fontSize: taglineSize,
-                fontWeight: FontWeight.bold,
-                letterSpacing: taglineSpacing,
-              ),
+            color: gold,
+            fontSize: taglineSize,
+            fontWeight: FontWeight.bold,
+            letterSpacing: taglineSpacing,
+          ),
         ),
       ],
     );
@@ -123,7 +125,7 @@ class _DividerLine extends StatelessWidget {
       height: 1.0,
       decoration: BoxDecoration(
         color: gold,
-        borderRadius: BorderRadius.circular(999),
+        borderRadius: BorderRadius.circular(NyayaRadii.pill),
       ),
     );
   }
@@ -210,9 +212,7 @@ class BackgroundWave extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const IgnorePointer(
-      child: CustomPaint(
-        painter: _SplashBackdropPainter(),
-      ),
+      child: CustomPaint(painter: _SplashBackdropPainter()),
     );
   }
 }
@@ -223,17 +223,18 @@ class _SplashBackdropPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final topGlowPaint = Paint()
-      ..shader = RadialGradient(
-        colors: [
-          waveBeige.withValues(alpha: 0.30),
-          waveBeige.withValues(alpha: 0),
-        ],
-      ).createShader(
-        Rect.fromCircle(
-          center: Offset(size.width * 0.02, size.height * 0.03),
-          radius: size.width * 0.25,
-        ),
-      );
+      ..shader =
+          RadialGradient(
+            colors: [
+              waveBeige.withValues(alpha: 0.30),
+              waveBeige.withValues(alpha: 0),
+            ],
+          ).createShader(
+            Rect.fromCircle(
+              center: Offset(size.width * 0.02, size.height * 0.03),
+              radius: size.width * 0.25,
+            ),
+          );
     canvas.drawCircle(
       Offset(size.width * 0.02, size.height * 0.03),
       size.width * 0.25,
@@ -241,17 +242,18 @@ class _SplashBackdropPainter extends CustomPainter {
     );
 
     final bottomGlowPaint = Paint()
-      ..shader = RadialGradient(
-        colors: [
-          waveBeige.withValues(alpha: 0.34),
-          waveBeige.withValues(alpha: 0),
-        ],
-      ).createShader(
-        Rect.fromCircle(
-          center: Offset(size.width * 0.02, size.height * 1.02),
-          radius: size.width * 0.34,
-        ),
-      );
+      ..shader =
+          RadialGradient(
+            colors: [
+              waveBeige.withValues(alpha: 0.34),
+              waveBeige.withValues(alpha: 0),
+            ],
+          ).createShader(
+            Rect.fromCircle(
+              center: Offset(size.width * 0.02, size.height * 1.02),
+              radius: size.width * 0.34,
+            ),
+          );
     canvas.drawCircle(
       Offset(size.width * 0.02, size.height * 1.02),
       size.width * 0.34,

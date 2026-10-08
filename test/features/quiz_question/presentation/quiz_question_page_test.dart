@@ -52,14 +52,18 @@ void main() {
       ),
       findsOneWidget,
     );
-    expect(find.text('Only if a magistrate has signed the order'),
-        findsOneWidget);
-    expect(find.text('For any cognizable offence, with reasons recorded'),
-        findsOneWidget);
+    expect(
+      find.text('Only if a magistrate has signed the order'),
+      findsOneWidget,
+    );
+    expect(
+      find.text('For any cognizable offence, with reasons recorded'),
+      findsOneWidget,
+    );
     expect(find.text('Never — a warrant is always required'), findsOneWidget);
     expect(find.text('Only between sunrise and sunset'), findsOneWidget);
-    expect(find.text('SELECT AN ANSWER'), findsOneWidget);
-    expect(find.text('NEXT'), findsNothing);
+    expect(find.text('Select an answer'), findsOneWidget);
+    expect(find.text('Next'), findsNothing);
     expect(find.byKey(const ValueKey('quiz.explanation')), findsNothing);
   });
 
@@ -75,12 +79,14 @@ void main() {
     expect(find.byKey(const ValueKey('quiz.explanation')), findsOneWidget);
     expect(find.text('BNSS §35 (formerly CrPC §41)'), findsOneWidget);
     expect(
-      find.text('If arrested, you have the right to know the reason in '
-          'writing.'),
+      find.text(
+        'If arrested, you have the right to know the reason in '
+        'writing.',
+      ),
       findsOneWidget,
     );
-    expect(find.text('NEXT'), findsOneWidget);
-    expect(find.text('SELECT AN ANSWER'), findsNothing);
+    expect(find.text('Next'), findsOneWidget);
+    expect(find.text('Select an answer'), findsNothing);
   });
 
   testWidgets('a wrong pick shows Not quite and reveals the correct option', (
@@ -95,14 +101,16 @@ void main() {
     expect(
       tester.getSemantics(find.byKey(const ValueKey('quiz.option.C'))),
       isSemantics(
-        label: 'Option C. Never — a warrant is always required. '
+        label:
+            'Option C. Never — a warrant is always required. '
             'Your answer, wrong',
       ),
     );
     expect(
       tester.getSemantics(find.byKey(const ValueKey('quiz.option.B'))),
       isSemantics(
-        label: 'Option B. For any cognizable offence, with reasons recorded. '
+        label:
+            'Option B. For any cognizable offence, with reasons recorded. '
             'Correct answer',
       ),
     );
@@ -122,15 +130,14 @@ void main() {
     expect(
       tester.getSemantics(find.byKey(const ValueKey('quiz.option.C'))),
       isSemantics(
-        label: 'Option C. Never — a warrant is always required. '
+        label:
+            'Option C. Never — a warrant is always required. '
             'Your answer, wrong',
       ),
     );
   });
 
-  testWidgets('NEXT advances to a fresh question', (
-    WidgetTester tester,
-  ) async {
+  testWidgets('NEXT advances to a fresh question', (WidgetTester tester) async {
     await pumpQuizPage(tester, session: shortSession());
 
     await tester.tap(find.byKey(const ValueKey('quiz.option.B')));
@@ -143,7 +150,7 @@ void main() {
       find.textContaining('What is the report you file called'),
       findsOneWidget,
     );
-    expect(find.text('SELECT AN ANSWER'), findsOneWidget);
+    expect(find.text('Select an answer'), findsOneWidget);
     expect(find.byKey(const ValueKey('quiz.explanation')), findsNothing);
   });
 
@@ -200,4 +207,36 @@ void main() {
     expect(find.text('open'), findsOneWidget);
     expect(find.byKey(const ValueKey('quiz.exit')), findsNothing);
   });
+
+  testWidgets(
+    'spec 037 AC-006 the explanation scrolls into view above the footer',
+    (WidgetTester tester) async {
+      await pumpQuizPage(
+        tester,
+        session: shortSession(),
+        size: const Size(393, 667),
+      );
+
+      final optionB = find.byKey(const ValueKey('quiz.option.B'));
+      await tester.ensureVisible(optionB);
+      await tester.pumpAndSettle();
+      await tester.tap(optionB);
+      await tester.pumpAndSettle();
+
+      final explanation = tester.getRect(
+        find.byKey(const ValueKey('quiz.explanation')),
+      );
+      final footer = tester.getRect(find.byKey(const ValueKey('quiz.next')));
+      expect(explanation.bottom, lessThanOrEqualTo(footer.top));
+
+      // The next question starts at the top again.
+      await tester.tap(find.byKey(const ValueKey('quiz.next')));
+      await tester.pumpAndSettle();
+      expect(find.text('Question 2 of 2'), findsOneWidget);
+      expect(
+        tester.getRect(find.byKey(const ValueKey('quiz.option.A'))).top,
+        lessThan(footer.top),
+      );
+    },
+  );
 }

@@ -2,11 +2,14 @@ import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
+import '../../../app/theme/app_tokens.dart';
+
+import '../../../app/theme/app_typography.dart';
 import 'package:flutter/services.dart';
 
 import '../../../core/presentation/widgets/nyaya_widgets.dart';
 import '../data/auth_api_client.dart';
-import '../../../app/app_services.dart';
 import '../data/auth_token_store.dart';
 import '../data/firebase_phone_auth_service.dart';
 import 'widgets/auth_header.dart';
@@ -17,17 +20,16 @@ import 'auth_error_text.dart';
 const _otpLength = 6;
 const _resendCooldown = Duration(seconds: 45);
 
-/// The OTP verification screen (Figma 1.4), shown after the signup form is
-/// submitted so the user can confirm the code Firebase sent to their phone
-/// number.
+/// The OTP verification screen (Figma 1.4): the learner confirms the code
+/// Firebase sent to their phone, then [completeAuth] signs them in with the
+/// backend (phone login, spec 042).
 class OtpVerificationPage extends StatefulWidget {
   const OtpVerificationPage({
     super.key,
     required this.phoneNumber,
     required this.verificationId,
-    required this.fullName,
-    required this.profession,
-    required this.password,
+    required this.completeAuth,
+    this.phoneAuthService,
     this.resendToken,
     this.onVerified,
     this.onChangeNumber,
@@ -43,14 +45,16 @@ class OtpVerificationPage extends StatefulWidget {
   /// instead of starting a brand new one.
   final int? resendToken;
 
-  // Carried over from the signup form so the backend Signup call can fire
-  // from here, right after Firebase confirms the OTP.
-  final String fullName;
-  final String profession;
-  final String password;
+  /// The backend step once Firebase confirms the code, given the Firebase
+  /// ID token. Throws [AuthApiException] on failure; the page shows it and
+  /// a retry calls this again without re-verifying the spent code.
+  final Future<void> Function(String? firebaseIdToken) completeAuth;
 
-  /// Called once the OTP is confirmed, the backend account is created, and
-  /// the session tokens are stored (see `AuthRepository`/[AuthTokenStore]).
+  /// Defaults to Firebase; tests pass a fake.
+  final FirebasePhoneAuthService? phoneAuthService;
+
+  /// Called once the OTP is confirmed and [completeAuth] has stored the
+  /// session (see `AuthRepository`/[AuthTokenStore]).
   final VoidCallback? onVerified;
   final VoidCallback? onChangeNumber;
 
@@ -60,8 +64,8 @@ class OtpVerificationPage extends StatefulWidget {
 
 class _OtpVerificationPageState extends State<OtpVerificationPage> {
   // Deferred until first use — see the note in sign_up_page.dart.
-  late final _phoneAuthService = FirebasePhoneAuthService();
-  late final _authRepository = AppServices.authRepository;
+  late final _phoneAuthService =
+      widget.phoneAuthService ?? FirebasePhoneAuthService();
 
   late final List<TextEditingController> _controllers = List.generate(
     _otpLength,
@@ -134,7 +138,7 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
     FocusScope.of(context).unfocus();
     setState(() => _isVerifying = true);
 
-    // A retry after a backend failure skips straight to the signup call —
+    // A retry after a backend failure skips straight to the backend call —
     // the OTP was already consumed by Firebase on the first attempt.
     if (!_firebaseVerified) {
       final code = _enteredCode;
@@ -162,7 +166,7 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
       }
     }
 
-    await _completeSignup();
+    await _completeAuth();
   }
 
   /// Reads the Firebase ID token once, right after OTP verification — it's
@@ -175,15 +179,9 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
     _firebaseVerified = true;
   }
 
-  Future<void> _completeSignup() async {
+  Future<void> _completeAuth() async {
     try {
-      await _authRepository.signup(
-        fullName: widget.fullName,
-        profession: widget.profession,
-        phone: widget.phoneNumber,
-        password: widget.password,
-        firebaseIdToken: _firebaseIdToken,
-      );
+      await widget.completeAuth(_firebaseIdToken);
       // The ID token has done its job — drop it now that the backend
       // session has replaced it.
       _firebaseIdToken = null;
@@ -228,7 +226,7 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
           setState(() => _isResending = false);
           setState(() => _isVerifying = true);
           await _captureFirebaseIdToken();
-          await _completeSignup();
+          await _completeAuth();
         },
       );
     } on FirebaseAuthException catch (error) {
@@ -283,11 +281,10 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
                           context.l10n.signUpTitle,
                           textAlign: TextAlign.center,
                           style: const TextStyle(
-                            fontSize: 22,
+                            fontSize: 28,
                             fontWeight: FontWeight.w700,
                             color: navy,
-                            fontFamily: 'Serif',
-                            letterSpacing: -0.3,
+                            fontFamily: NyayaFonts.display,
                           ),
                         ),
                         const SizedBox(height: 6),
@@ -319,8 +316,8 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
       key: const ValueKey('otp.card'),
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: const Color(0xFFFFFDF9),
-        borderRadius: BorderRadius.circular(22),
+        color: NyayaColors.surfaceWarm,
+        borderRadius: BorderRadius.circular(NyayaRadii.md),
         border: Border.all(color: gold.withValues(alpha: 0.28)),
       ),
       child: Column(
@@ -330,10 +327,10 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
             context.l10n.otpTitle,
             textAlign: TextAlign.center,
             style: const TextStyle(
-              fontSize: 22,
+              fontSize: 28,
               fontWeight: FontWeight.w700,
               color: navy,
-              fontFamily: 'Serif',
+              fontFamily: NyayaFonts.display,
             ),
           ),
           const SizedBox(height: 10),
@@ -505,15 +502,15 @@ class _OtpDigitBox extends StatelessWidget {
           counterText: '',
           contentPadding: const EdgeInsets.symmetric(vertical: 12),
           border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
-            borderSide: const BorderSide(color: Color(0xFFE7DFD5)),
+            borderRadius: BorderRadius.circular(NyayaRadii.sm),
+            borderSide: const BorderSide(color: NyayaColors.hairline),
           ),
           enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
-            borderSide: const BorderSide(color: Color(0xFFE7DFD5)),
+            borderRadius: BorderRadius.circular(NyayaRadii.sm),
+            borderSide: const BorderSide(color: NyayaColors.hairline),
           ),
           focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(NyayaRadii.sm),
             borderSide: BorderSide(
               color: gold.withValues(alpha: 0.88),
               width: 1.6,

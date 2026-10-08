@@ -4,11 +4,11 @@ import 'package:nyaya/features/quiz_result/presentation/quiz_result_view_model.d
 
 void main() {
   List<QuizOutcome> outcomes({required int correct, required int wrong}) => [
-        for (var i = 0; i < correct; i++)
-          QuizOutcome(questionId: 'c$i', chosenOption: 0, isCorrect: true),
-        for (var i = 0; i < wrong; i++)
-          QuizOutcome(questionId: 'w$i', chosenOption: 0, isCorrect: false),
-      ];
+    for (var i = 0; i < correct; i++)
+      QuizOutcome(questionId: 'c$i', chosenOption: 0, isCorrect: true),
+    for (var i = 0; i < wrong; i++)
+      QuizOutcome(questionId: 'w$i', chosenOption: 0, isCorrect: false),
+  ];
 
   test('derives the score, percent and counts from outcomes', () {
     final vm = QuizResultViewModel(
@@ -43,5 +43,19 @@ void main() {
     expect(vm.weakCount, 0);
     expect(vm.showWeakStrip, isFalse);
     expect(vm.percentLabel, '100%');
+  });
+
+  test('spec 037 AC-005 the headline band follows the score', () {
+    ResultBand band(int correct, int wrong) => QuizResultViewModel(
+      outcomes: outcomes(correct: correct, wrong: wrong),
+    ).band;
+
+    expect(band(12, 0), ResultBand.excellent);
+    expect(band(9, 3), ResultBand.excellent); // 75%, as in the mockup
+    expect(band(7, 3), ResultBand.excellent); // 70%
+    expect(band(6, 4), ResultBand.good); // 60%
+    expect(band(4, 6), ResultBand.good); // 40%
+    expect(band(2, 10), ResultBand.keepGoing); // 17%
+    expect(QuizResultViewModel(outcomes: const []).band, ResultBand.keepGoing);
   });
 }

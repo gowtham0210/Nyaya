@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 
+import '../../../app/theme/app_tokens.dart';
+
 const _palette = [
-  Color(0xFF11233B),
-  Color(0xFFB9823A),
-  Color(0xFF2F6FED),
-  Color(0xFF1C9C90),
-  Color(0xFF7C4DFF),
+  NyayaColors.ink,
+  NyayaTones.bronzeInk,
+  NyayaTones.navyInk,
+  NyayaTones.tealInk,
+  NyayaTones.plumInk,
 ];
 
 /// A learner's photo, or their initials on a colour picked from the name

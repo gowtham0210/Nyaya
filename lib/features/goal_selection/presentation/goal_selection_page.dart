@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
 
+import '../../../app/theme/app_tokens.dart';
+
+import '../../../app/theme/app_typography.dart';
+
 import '../../../core/localization/l10n.dart';
 import '../../../core/presentation/widgets/nyaya_widgets.dart';
 import '../../onboarding/presentation/widgets/page_indicator.dart';
 import 'goal_selection_view_model.dart';
 
-const _selectedCardTint = Color(0xFFFDF6E9);
-const _cardBorder = Color(0xFFECE5DB);
-const _iconTileFill = Color(0xFFF7EAD2);
-const _radioBorder = Color(0xFFB9C0CA);
+const _selectedCardTint = NyayaColors.goldWash;
+const _cardBorder = NyayaColors.hairline;
+const _iconTileFill = NyayaColors.goldTint;
+const _radioBorder = NyayaColors.inkDisabled;
 const _templeAsset = 'assets/backgrounds/temple_bg.png';
 
 class GoalSelectionPage extends StatefulWidget {
@@ -100,7 +104,7 @@ class _GoalSelectionPageState extends State<GoalSelectionPage> {
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                       color: navy,
-                      fontFamily: 'serif',
+                      fontFamily: NyayaFonts.display,
                       fontWeight: FontWeight.w700,
                     ),
                   ),
@@ -110,7 +114,7 @@ class _GoalSelectionPageState extends State<GoalSelectionPage> {
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                       color: gold,
-                      fontFamily: 'serif',
+                      fontFamily: NyayaFonts.display,
                       fontWeight: FontWeight.w700,
                     ),
                   ),
@@ -138,16 +142,16 @@ class _GoalSelectionPageState extends State<GoalSelectionPage> {
                         backgroundColor: gold,
                         foregroundColor: Colors.white,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30),
+                          borderRadius: BorderRadius.circular(NyayaRadii.pill),
                         ),
                       ),
                       onPressed: () =>
                           widget.onContinue(_viewModel.selectedGoalId),
                       child: Text(
-                        l10n.commonContinue.toUpperCase(),
+                        l10n.commonContinue,
                         style: const TextStyle(
-                          fontWeight: FontWeight.w700,
-                          letterSpacing: 1.5,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
                     ),
@@ -191,20 +195,20 @@ class _GoalCard extends StatelessWidget {
       label: '$title. $description',
       child: InkWell(
         key: ValueKey('goal.card.${goal.id}'),
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(NyayaRadii.md),
         onTap: onTap,
         child: Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
             color: selected ? _selectedCardTint : Colors.white,
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(NyayaRadii.md),
             border: Border.all(
               color: selected ? gold : _cardBorder,
               width: selected ? 1.6 : 1,
             ),
             boxShadow: const [
               BoxShadow(
-                color: Color(0x14000000),
+                color: NyayaColors.shadowMid,
                 blurRadius: 12,
                 offset: Offset(0, 4),
               ),
@@ -217,7 +221,7 @@ class _GoalCard extends StatelessWidget {
                 height: 56,
                 decoration: BoxDecoration(
                   color: _iconTileFill,
-                  borderRadius: BorderRadius.circular(14),
+                  borderRadius: BorderRadius.circular(NyayaRadii.sm),
                 ),
                 child: Icon(goal.icon, color: navy, size: 30),
               ),

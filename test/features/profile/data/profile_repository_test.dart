@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:nyaya/core/network/api_client.dart';
+import 'package:nyaya/core/network/api_config.dart';
 import 'package:nyaya/features/profile/data/photo_picker.dart';
 import 'package:nyaya/features/profile/data/profile_repository.dart';
 
@@ -21,7 +22,7 @@ void main() {
     expect(overview.profile.fullName, 'Asha Rao');
     expect(overview.profile.profession, 'Law Student');
     expect(overview.profile.phone, '+919800000000');
-    expect(overview.profile.avatarUrl, endsWith(':5000/uploads/7.png'));
+    expect(overview.profile.avatarUrl, '${ApiConfig.baseUrl}/uploads/7.png');
     expect(overview.stats.streak, 4);
     expect(overview.stats.categoriesExplored, 3);
     expect(overview.stats.quizzesCompleted, 9);
@@ -55,7 +56,7 @@ void main() {
 
       final url = (await repository.fetchOverview()).profile.avatarUrl;
 
-      expect(url, endsWith(':5000/uploads/7.png'), reason: path);
+      expect(url, '${ApiConfig.baseUrl}/uploads/7.png', reason: path);
     }
     final absolute = ProfileRepository(
       fakeBackend(profileRoutes(avatarUrl: 'https://cdn.example/7.png')),

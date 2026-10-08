@@ -20,6 +20,12 @@ class AuthApiException implements Exception {
   String toString() => message;
 }
 
+/// The backend has no phone OTP login yet (`/auth/phone-login` is 404).
+class PhoneLoginUnavailableException extends AuthApiException {
+  PhoneLoginUnavailableException(AuthApiException error)
+    : super(error.message, statusCode: error.statusCode, cause: error.cause);
+}
+
 class AuthUser {
   const AuthUser({
     required this.id,
@@ -127,6 +133,46 @@ class AuthApiClient {
       'firebase_id_token': ?firebaseIdToken,
     });
     return AuthSession.fromJson(body);
+  }
+
+  /// Creates an email account (`/auth/register`, spec 041). No phone OTP;
+  /// [phone] is optional.
+  Future<AuthSession> register({
+    required String fullName,
+    required String email,
+    required String password,
+    String? phone,
+  }) async {
+    final body = await _post('/auth/register', {
+      'fullName': fullName,
+      'email': email,
+      'password': password,
+      'phone': ?phone,
+    });
+    return AuthSession.fromJson(body);
+  }
+
+  /// Signs in with a phone number Firebase just verified by OTP (spec 042).
+  /// Planned backend contract; a backend without it answers 404.
+  Future<AuthSession> phoneLogin({
+    required String firebaseIdToken,
+    required String phone,
+  }) async {
+    final body = await _post('/auth/phone-login', {
+      'firebase_id_token': firebaseIdToken,
+      'phone': phone,
+    });
+    return AuthSession.fromJson(body);
+  }
+
+  /// Saves the profession on the signed-in account (`PATCH /users/me`);
+  /// register has no profession field.
+  Future<void> updateProfession(String profession) async {
+    try {
+      await _client.patch('/users/me', body: {'profession': profession});
+    } on ApiException catch (error) {
+      throw AuthApiException.from(error);
+    }
   }
 
   Future<AuthSession> login({

@@ -1,68 +1,68 @@
 import 'package:flutter/material.dart';
 
+import '../../../../app/theme/app_tokens.dart';
+
 import '../../../../core/localization/l10n.dart';
 import '../../../../core/presentation/load_state.dart';
 import '../../../../core/presentation/widgets/load_state_view.dart';
+import '../../../../core/presentation/widgets/nyaya_skeleton.dart';
 import '../../../../core/presentation/widgets/nyaya_widgets.dart';
+import '../daily_question_page.dart';
 import '../daily_questions_view_model.dart';
 
-const _deepNavy = Color(0xFF11233B);
-const _supportText = Color(0xFF5E6878);
-const _cardBorder = Color(0xFFECE5DB);
-const _tileBackground = Color(0xFFF8F6F2);
-const _badgeColors = [_deepNavy, Color(0xFFB9823A)];
+const _deepNavy = NyayaColors.ink;
+const _supportText = NyayaColors.inkMuted;
 
-/// Home's Daily Questions card (spec 018). Its own load states render
-/// inside the card, so the rest of Home never waits on it.
+/// Home's compact Today's Question card (spec 046): a one-line preview and
+/// "Answer now", or the result once answered. Tapping opens the question
+/// on its own screen, so Home stays light.
 class DailyQuestionsSection extends StatelessWidget {
   const DailyQuestionsSection({super.key, required this.viewModel});
 
   final DailyQuestionsViewModel viewModel;
 
+  void _open(BuildContext context) => Navigator.of(context).push(
+    MaterialPageRoute<void>(
+      builder: (_) => DailyQuestionPage(viewModel: viewModel),
+    ),
+  );
+
   @override
   Widget build(BuildContext context) {
-    final l10n = context.l10n;
     return ListenableBuilder(
       listenable: viewModel,
       builder: (context, _) {
         final state = viewModel.state;
-        return Container(
+        final today = state is Loaded<DailyToday> ? state.data : null;
+        return Material(
           key: const ValueKey('home.section.daily'),
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(24),
-            border: Border.all(color: _cardBorder),
+          color: NyayaColors.surface,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(NyayaRadii.md),
+            side: const BorderSide(color: NyayaColors.hairline),
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _Header(
-                questionCount: state is Loaded<List<DailyQuestion>>
-                    ? state.data.length
-                    : null,
-              ),
-              const SizedBox(height: 14),
-              LoadStateView<List<DailyQuestion>>(
-                state: state,
-                onRetry: viewModel.load,
-                emptyMessage: l10n.homeDailyQuestionsEmpty,
-                emptyIcon: Icons.lightbulb_outline_rounded,
-                builder: (context, questions) => Column(
-                  children: [
-                    for (final (index, question) in questions.indexed) ...[
-                      if (index > 0) const SizedBox(height: 10),
-                      _QuestionTile(
-                        number: index + 1,
-                        question: question,
-                        revealed: viewModel.isRevealed(question.id),
-                        onToggle: () => viewModel.toggleAnswer(question.id),
-                      ),
-                    ],
-                  ],
+          clipBehavior: Clip.antiAlias,
+          child: InkWell(
+            // Only a loaded question opens; other states stay put.
+            onTap: today == null ? null : () => _open(context),
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: switch (state) {
+                Loading() => const NyayaSkeleton(
+                  key: ValueKey('loadState.loading'),
+                  lines: 2,
                 ),
-              ),
-            ],
+                Empty() => const _NoQuestion(),
+                Failed(:final error) => _Failed(
+                  message: failureMessage(context.l10n, error),
+                  onRetry: viewModel.load,
+                ),
+                Loaded(:final data) =>
+                  data.result == null
+                      ? _Unanswered(question: data.question!)
+                      : _Answered(result: data.result!),
+              },
+            ),
           ),
         );
       },
@@ -70,29 +70,37 @@ class DailyQuestionsSection extends StatelessWidget {
   }
 }
 
-class _Header extends StatelessWidget {
-  const _Header({required this.questionCount});
+/// The circle, label and two lines of text every state shares.
+class _CardRow extends StatelessWidget {
+  const _CardRow({
+    required this.icon,
+    required this.iconColor,
+    required this.labelColor,
+    required this.title,
+    required this.caption,
+    this.trailing,
+  });
 
-  /// Null until the questions load.
-  final int? questionCount;
+  final IconData icon;
+  final Color iconColor;
+  final Color labelColor;
+  final String title;
+  final String? caption;
+  final Widget? trailing;
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final count = questionCount;
+    final caption = this.caption;
+    final trailing = this.trailing;
     return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
-          width: 40,
-          height: 40,
-          decoration: const BoxDecoration(color: gold, shape: BoxShape.circle),
+          width: 44,
+          height: 44,
+          decoration: BoxDecoration(color: iconColor, shape: BoxShape.circle),
           alignment: Alignment.center,
-          child: const Icon(
-            Icons.lightbulb_outline_rounded,
-            color: Colors.white,
-            size: 20,
-          ),
+          child: Icon(icon, color: Colors.white, size: 22),
         ),
         const SizedBox(width: 12),
         Expanded(
@@ -100,233 +108,197 @@ class _Header extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                l10n.homeDailyQuestions,
-                style: const TextStyle(
-                  fontSize: 18,
+                l10n.homeDailyTitle,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  fontSize: 12,
                   fontWeight: FontWeight.w700,
-                  color: _deepNavy,
+                  color: labelColor,
                 ),
               ),
               const SizedBox(height: 3),
               Text(
-                l10n.homeDailyQuestionsSubtitle,
+                title,
+                key: const ValueKey('home.daily.title'),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
                 style: const TextStyle(
-                  fontSize: 13,
-                  color: _supportText,
-                  height: 1.35,
+                  fontSize: 15,
+                  fontWeight: FontWeight.w600,
+                  height: 1.3,
+                  color: _deepNavy,
                 ),
               ),
+              if (caption != null) ...[
+                const SizedBox(height: 3),
+                Text(
+                  caption,
+                  key: const ValueKey('home.daily.caption'),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(fontSize: 12, color: _supportText),
+                ),
+              ],
             ],
           ),
         ),
-        if (count != null) ...[
-          const SizedBox(width: 8),
-          Container(
-            key: const ValueKey('home.daily.count'),
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-            decoration: BoxDecoration(
-              color: gold.withValues(alpha: 0.14),
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Text(
-              l10n.questionCount(count),
-              style: const TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.w700,
-                color: _deepNavy,
-              ),
-            ),
-          ),
-        ],
+        if (trailing != null) ...[const SizedBox(width: 12), trailing],
       ],
     );
   }
 }
 
-class _QuestionTile extends StatelessWidget {
-  const _QuestionTile({
-    required this.number,
-    required this.question,
-    required this.revealed,
-    required this.onToggle,
-  });
+class _Unanswered extends StatelessWidget {
+  const _Unanswered({required this.question});
 
-  final int number;
   final DailyQuestion question;
-  final bool revealed;
-  final VoidCallback onToggle;
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final badgeColor = _badgeColors[(number - 1) % _badgeColors.length];
-    return Material(
-      color: _tileBackground,
-      clipBehavior: Clip.antiAlias,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(18),
-        side: revealed
-            ? const BorderSide(color: gold, width: 1.3)
-            : const BorderSide(color: _cardBorder),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Semantics(
-            button: true,
-            expanded: revealed,
-            label: l10n.homeDailyQuestionSemantics(
-              number,
-              question.question,
-              question.category,
+    final caption = [
+      if (question.category.isNotEmpty) question.category,
+      if (question.pointsReward > 0)
+        l10n.homeDailyPoints(question.pointsReward),
+    ].join(' · ');
+    // Large text: the button moves below, so the preview keeps its room.
+    final roomy = MediaQuery.textScalerOf(context).scale(1) <= 1.3;
+    const button = _AnswerNow();
+    return Semantics(
+      button: true,
+      label: '${l10n.homeDailyTitle}. ${question.question}',
+      hint: l10n.homeDailyAnswerNow,
+      child: ExcludeSemantics(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            _CardRow(
+              icon: Icons.lightbulb_outline_rounded,
+              iconColor: gold,
+              labelColor: NyayaColors.goldDeep,
+              title: question.question,
+              caption: caption.isEmpty ? null : caption,
+              trailing: roomy ? button : null,
             ),
-            child: InkWell(
-              key: ValueKey('home.daily.question.${question.id}'),
-              onTap: onToggle,
-              child: ExcludeSemantics(
-                child: Padding(
-                  padding: const EdgeInsets.all(12),
-                  child: _QuestionHeader(
-                    number: number,
-                    question: question,
-                    badgeColor: badgeColor,
-                    revealed: revealed,
-                  ),
-                ),
-              ),
+            if (!roomy) ...[
+              const SizedBox(height: 12),
+              const Align(alignment: Alignment.centerRight, child: button),
+            ],
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _AnswerNow extends StatelessWidget {
+  const _AnswerNow();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      key: const ValueKey('home.daily.answerNow'),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      decoration: BoxDecoration(
+        color: gold,
+        borderRadius: BorderRadius.circular(NyayaRadii.pill),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            context.l10n.homeDailyAnswerNow,
+            style: const TextStyle(
+              fontSize: 13,
+              fontWeight: FontWeight.w700,
+              color: _deepNavy,
             ),
           ),
-          if (revealed)
-            Padding(
-              padding: const EdgeInsets.fromLTRB(12, 0, 12, 12),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: Container(
-                  key: ValueKey('home.daily.answer.${question.id}'),
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    border: Border(
-                      left: BorderSide(color: badgeColor, width: 3),
-                    ),
-                  ),
-                  child: Text(
-                    question.answer,
-                    style: const TextStyle(
-                      fontSize: 14,
-                      height: 1.5,
-                      color: bodyGrey,
-                    ),
-                  ),
-                ),
-              ),
-            ),
+          const SizedBox(width: 4),
+          const Icon(Icons.arrow_forward_rounded, size: 16, color: _deepNavy),
         ],
       ),
     );
   }
 }
 
-class _QuestionHeader extends StatelessWidget {
-  const _QuestionHeader({
-    required this.number,
-    required this.question,
-    required this.badgeColor,
-    required this.revealed,
-  });
+class _Answered extends StatelessWidget {
+  const _Answered({required this.result});
 
-  final int number;
-  final DailyQuestion question;
-  final Color badgeColor;
-  final bool revealed;
+  final DailyResult result;
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Container(
-          width: 30,
-          height: 30,
-          decoration: BoxDecoration(color: badgeColor, shape: BoxShape.circle),
-          alignment: Alignment.center,
-          child: Text(
-            '$number',
-            style: const TextStyle(
-              fontSize: 13,
-              fontWeight: FontWeight.w800,
-              color: Colors.white,
-            ),
+    final accent = result.isCorrect ? NyayaColors.success : NyayaColors.danger;
+    final title =
+        '${l10n.homeDailyAnswered} · '
+        '${result.isCorrect ? l10n.quizVerdictCorrect : l10n.quizVerdictWrong}';
+    final caption = [
+      if (result.pointsEarned > 0) l10n.homeDailyEarned(result.pointsEarned),
+      l10n.homeDailyTomorrow,
+    ].join(' · ');
+    return Semantics(
+      key: const ValueKey('home.daily.answered'),
+      button: true,
+      label: '${l10n.homeDailyTitle}. $title. $caption',
+      child: ExcludeSemantics(
+        child: _CardRow(
+          icon: result.isCorrect ? Icons.check_rounded : Icons.close_rounded,
+          iconColor: accent,
+          labelColor: accent,
+          title: title,
+          caption: caption,
+          trailing: const Icon(
+            Icons.chevron_right_rounded,
+            color: NyayaColors.inkSubtle,
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _NoQuestion extends StatelessWidget {
+  const _NoQuestion();
+
+  @override
+  Widget build(BuildContext context) {
+    return _CardRow(
+      icon: Icons.lightbulb_outline_rounded,
+      iconColor: NyayaColors.inkDisabled,
+      labelColor: _supportText,
+      title: context.l10n.homeDailyNone,
+      caption: null,
+    );
+  }
+}
+
+class _Failed extends StatelessWidget {
+  const _Failed({required this.message, required this.onRetry});
+
+  final String message;
+  final VoidCallback onRetry;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        const Icon(Icons.cloud_off_rounded, color: _supportText),
         const SizedBox(width: 12),
         Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                question.question,
-                style: const TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w700,
-                  color: _deepNavy,
-                  height: 1.4,
-                ),
-              ),
-              const SizedBox(height: 8),
-              Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                crossAxisAlignment: WrapCrossAlignment.center,
-                children: [
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 9,
-                      vertical: 4,
-                    ),
-                    decoration: BoxDecoration(
-                      color: badgeColor.withValues(alpha: 0.12),
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(
-                        color: badgeColor.withValues(alpha: 0.35),
-                      ),
-                    ),
-                    child: Text(
-                      question.category,
-                      style: TextStyle(
-                        fontSize: 11.5,
-                        fontWeight: FontWeight.w700,
-                        color: badgeColor,
-                      ),
-                    ),
-                  ),
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        revealed
-                            ? l10n.homeDailyHideAnswer
-                            : l10n.homeDailyShowAnswer,
-                        style: const TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w600,
-                          color: gold,
-                        ),
-                      ),
-                      Icon(
-                        revealed
-                            ? Icons.expand_less_rounded
-                            : Icons.expand_more_rounded,
-                        size: 18,
-                        color: gold,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ],
+          child: Text(
+            message,
+            key: const ValueKey('loadState.error'),
+            style: const TextStyle(fontSize: 13, color: _supportText),
           ),
+        ),
+        TextButton(
+          key: const ValueKey('loadState.retry'),
+          onPressed: onRetry,
+          style: TextButton.styleFrom(foregroundColor: NyayaColors.goldDeep),
+          child: Text(context.l10n.commonRetry),
         ),
       ],
     );

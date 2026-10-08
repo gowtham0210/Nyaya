@@ -5,9 +5,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 /// Kept separate from the presentation layer so the OTP UI only ever talks
 /// to this service rather than `FirebaseAuth.instance` directly.
 class FirebasePhoneAuthService {
-  FirebasePhoneAuthService({FirebaseAuth? auth}) : _auth = auth ?? FirebaseAuth.instance;
+  FirebasePhoneAuthService({FirebaseAuth? auth}) : _authOverride = auth;
 
-  final FirebaseAuth _auth;
+  final FirebaseAuth? _authOverride;
+
+  // Read on first use, so pages and test fakes can be built without a
+  // configured Firebase app.
+  FirebaseAuth get _auth => _authOverride ?? FirebaseAuth.instance;
 
   /// Starts (or resends, when [forceResendingToken] is supplied) phone
   /// verification for [phoneNumber].
@@ -45,15 +49,15 @@ class FirebasePhoneAuthService {
   }
 
   /// Confirms the user-entered [smsCode] against [verificationId].
-  Future<UserCredential> verifyCode({
+  Future<void> verifyCode({
     required String verificationId,
     required String smsCode,
-  }) {
+  }) async {
     final credential = PhoneAuthProvider.credential(
       verificationId: verificationId,
       smsCode: smsCode,
     );
-    return _auth.signInWithCredential(credential);
+    await _auth.signInWithCredential(credential);
   }
 
   /// The current Firebase ID token, if a user is signed in.

@@ -47,6 +47,7 @@ dependencies:
   flutter_timezone: ^5.1.0
   package_info_plus: ^10.2.1
   url_launcher: ^6.3.2
+  flutter_secure_storage: ^11.2.0
 
 dev_dependencies:
   flutter_test:
@@ -58,6 +59,7 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^6.0.0
+  flutter_launcher_icons: ^0.14.4
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -77,6 +79,31 @@ flutter:
     - assets/patterns/
     - assets/onboarding/
     - assets/articles/
+    - assets/illustrations/
+    - assets/fonts/OFL-CormorantGaramond.txt
+    - assets/fonts/OFL-Inter.txt
+
+  # Brand type (spec 034): serif for display headings, sans for UI text.
+  # Indic scripts fall back to the platform's system fonts.
+  fonts:
+    - family: CormorantGaramond
+      fonts:
+        - asset: assets/fonts/CormorantGaramond-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/CormorantGaramond-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/CormorantGaramond-Bold.ttf
+          weight: 700
+    - family: Inter
+      fonts:
+        - asset: assets/fonts/Inter-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/Inter-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/Inter-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/Inter-Bold.ttf
+          weight: 700
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
@@ -103,3 +130,14 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
+
+# App icon: the scales-and-N mark on brand ivory. Regenerate with
+#   dart run flutter_launcher_icons
+flutter_launcher_icons:
+  image_path: assets/branding/app_icon.png
+  ios: true
+  remove_alpha_ios: true
+  android: true
+  min_sdk_android: 21
+  adaptive_icon_background: "#FBF7F1"
+  adaptive_icon_foreground: assets/branding/app_icon_foreground.png

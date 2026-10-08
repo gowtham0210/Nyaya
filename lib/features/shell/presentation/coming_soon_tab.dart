@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 
+import '../../../app/theme/app_tokens.dart';
+
+import '../../../app/theme/app_typography.dart';
+
 import '../../../core/localization/l10n.dart';
 import '../../../core/presentation/widgets/nyaya_icon.dart';
 import '../../../core/presentation/widgets/nyaya_widgets.dart';
@@ -48,8 +52,8 @@ class ComingSoonTab extends StatelessWidget {
                       title,
                       textAlign: TextAlign.center,
                       style: const TextStyle(
-                        fontFamily: 'serif',
-                        fontSize: 26,
+                        fontFamily: NyayaFonts.display,
+                        fontSize: 32,
                         fontWeight: FontWeight.w700,
                         color: navy,
                       ),
@@ -62,7 +66,7 @@ class ComingSoonTab extends StatelessWidget {
                       ),
                       decoration: BoxDecoration(
                         color: gold,
-                        borderRadius: BorderRadius.circular(999),
+                        borderRadius: BorderRadius.circular(NyayaRadii.pill),
                       ),
                       child: Text(
                         l10n.commonComingSoon,

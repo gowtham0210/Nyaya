@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+
+import '../../../app/theme/app_tokens.dart';
 import '../../../core/presentation/widgets/nyaya_widgets.dart';
+import '../../../app/theme/app_typography.dart';
 import 'widgets/get_started_button.dart';
 import '../../../core/localization/l10n.dart';
 
@@ -76,7 +79,7 @@ class _WelcomeLockup extends StatelessWidget {
           padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(NyayaRadii.sm),
             boxShadow: [
               BoxShadow(
                 color: navy.withValues(alpha: 0.08),
@@ -111,7 +114,7 @@ class _Heading extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final fontSize = _clamp(width * 0.068, 22, 28);
+    final fontSize = _clamp(width * 0.084, 28, 34);
     return Column(
       children: [
         Text(
@@ -121,8 +124,8 @@ class _Heading extends StatelessWidget {
             fontSize: fontSize,
             fontWeight: FontWeight.w700,
             color: navy,
-            fontFamily: 'Serif',
-            letterSpacing: -0.5,
+            fontFamily: NyayaFonts.display,
+            height: 1.1,
           ),
         ),
         Text(
@@ -132,8 +135,8 @@ class _Heading extends StatelessWidget {
             fontSize: fontSize,
             fontWeight: FontWeight.w700,
             color: gold,
-            fontFamily: 'Serif',
-            letterSpacing: -0.5,
+            fontFamily: NyayaFonts.display,
+            height: 1.1,
           ),
         ),
       ],
@@ -175,12 +178,8 @@ class _HeroIllustration extends StatelessWidget {
     final imageWidth = width * 0.72;
 
     return ClipRRect(
-      borderRadius: BorderRadius.circular(20),
-      child: Image.asset(
-        heroAsset,
-        width: imageWidth,
-        fit: BoxFit.cover,
-      ),
+      borderRadius: BorderRadius.circular(NyayaRadii.md),
+      child: Image.asset(heroAsset, width: imageWidth, fit: BoxFit.cover),
     );
   }
 }
@@ -251,10 +250,9 @@ class _FeatureItem extends StatelessWidget {
           title,
           textAlign: TextAlign.center,
           style: const TextStyle(
-            fontSize: 12,
-            fontWeight: FontWeight.w700,
+            fontSize: 13,
+            fontWeight: FontWeight.w600,
             color: navy,
-            fontFamily: 'Serif',
           ),
         ),
         const SizedBox(height: 4),
@@ -262,7 +260,7 @@ class _FeatureItem extends StatelessWidget {
           description,
           textAlign: TextAlign.center,
           style: const TextStyle(
-            fontSize: 10,
+            fontSize: 12,
             fontWeight: FontWeight.w400,
             color: bodyGrey,
             height: 1.3,

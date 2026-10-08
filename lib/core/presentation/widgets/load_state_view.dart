@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../localization/l10n.dart';
 import '../../network/api_client.dart';
 import '../load_state.dart';
+import 'nyaya_skeleton.dart';
 import 'nyaya_widgets.dart';
 
 /// Renders a [LoadState]: a spinner, [builder]'s content, an empty message,
@@ -28,10 +29,8 @@ class LoadStateView<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return switch (state) {
-      Loading() => const Center(
-        key: ValueKey('loadState.loading'),
-        child: CircularProgressIndicator(color: gold),
-      ),
+      // A skeleton hints at the content to come (spec 039).
+      Loading() => const NyayaSkeleton(key: ValueKey('loadState.loading')),
       Loaded(:final data) => builder(context, data),
       Empty() => _StateMessage(
         key: const ValueKey('loadState.empty'),

@@ -1,57 +1,88 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:nyaya/core/presentation/load_state.dart';
+import 'package:nyaya/features/topic_detail/data/topic_repository.dart';
 import 'package:nyaya/features/topic_detail/presentation/topic_detail_view_model.dart';
 
+import '../../../support/fake_backend.dart';
+import '../../../support/quiz_backend.dart';
+
 void main() {
-  test('exposes the BNSS sample topic with its ordered quizzes', () {
-    final viewModel = TopicDetailViewModel();
+  TopicDetailViewModel viewModel(Map<String, Object> routes) =>
+      TopicDetailViewModel(
+        repository: TopicRepository(fakeBackend(routes)),
+        categoryId: 3,
+        title: 'Criminal Procedure',
+      );
 
-    expect(viewModel.featureId, '010-topic-detail');
-    expect(viewModel.title, 'Arrest, Bail & Police Powers');
-    expect(viewModel.subtitle, 'Under BNSS — formerly CrPC');
-    expect(viewModel.quizCount, 6);
-    expect(viewModel.difficulty, TopicDifficulty.medium);
-    expect(viewModel.progress, 0.33);
-    expect(
-      viewModel.description,
-      'What the police can and cannot do — your rights during FIR, arrest, '
-      'custody and bail, under the new BNSS code.',
-    );
-    expect(
-      viewModel.sectionReference,
-      'Sections referenced: BNSS §35–§62 (formerly CrPC §41–§60)',
-    );
+  test('AC-002 progress and continue target come from attempts', () async {
+    final topic = viewModel(quizRoutes());
+    addTearDown(topic.dispose);
+    await topic.load();
 
-    expect(viewModel.quizzes, hasLength(4));
-    expect(viewModel.quizzes.map((quiz) => quiz.title).toList(), const [
-      'FIR Basics',
-      'Arrest & Your Rights',
-      'Custody & Remand',
-      'Bail: When & How',
-    ]);
-    expect(viewModel.quizzes.map((quiz) => quiz.status).toList(), const [
-      QuizStatus.completed,
-      QuizStatus.inProgress,
-      QuizStatus.notStarted,
-      QuizStatus.notStarted,
-    ]);
-    expect(viewModel.quizzes.first.questionCount, 10);
-    expect(viewModel.quizzes.first.difficulty, TopicDifficulty.easy);
+    expect(topic.state, isA<Loaded<List<TopicQuiz>>>());
+    expect(topic.completedCount, 1);
+    expect(topic.progress, closeTo(1 / 3, 0.001));
+    expect(topic.continueTarget?.id, 12);
+    expect(topic.continueNumber, 2);
   });
 
-  test('continue target is the in-progress quiz, labeled by position', () {
-    final viewModel = TopicDetailViewModel();
+  test('AC-002 with nothing started, the first quiz is next', () async {
+    final topic = viewModel(quizRoutes(attempts: []));
+    addTearDown(topic.dispose);
+    await topic.load();
 
-    expect(viewModel.continueQuizId, 'arrest-your-rights');
-    expect(viewModel.continueQuizNumber, 2);
+    expect(topic.progress, 0);
+    expect(topic.continueTarget?.id, 11);
+    expect(topic.continueTarget?.status, QuizStatus.notStarted);
   });
 
-  test('bookmark starts off and toggles', () {
-    final viewModel = TopicDetailViewModel();
+  test('AC-002 all done offers the first quiz again', () async {
+    final topic = viewModel(
+      quizRoutes(
+        attempts: [
+          for (final id in [11, 12, 13])
+            {'id': id, 'quizId': id, 'status': 'submitted'},
+        ],
+      ),
+    );
+    addTearDown(topic.dispose);
+    await topic.load();
 
-    expect(viewModel.isBookmarked, isFalse);
-    viewModel.toggleBookmark();
-    expect(viewModel.isBookmarked, isTrue);
-    viewModel.toggleBookmark();
-    expect(viewModel.isBookmarked, isFalse);
+    expect(topic.progress, 1);
+    expect(topic.continueTarget?.id, 11);
+    expect(topic.continueTarget?.status, QuizStatus.completed);
+  });
+
+  test('AC-002 locked quizzes are never the continue target', () async {
+    final topic = viewModel(
+      quizRoutes(
+        lockLast: true,
+        attempts: [
+          {'id': 1, 'quizId': 11, 'status': 'submitted'},
+          {'id': 2, 'quizId': 12, 'status': 'submitted'},
+        ],
+      ),
+    );
+    addTearDown(topic.dispose);
+    await topic.load();
+
+    expect(topic.continueTarget?.id, 11);
+  });
+
+  test('AC-002 difficulty is the most common, medium on a tie', () async {
+    final topic = viewModel(quizRoutes());
+    addTearDown(topic.dispose);
+    await topic.load();
+
+    expect(topic.difficulty, TopicDifficulty.medium);
+  });
+
+  test('AC-002 no quizzes is empty', () async {
+    final topic = viewModel(quizRoutes(categoryQuizzes: {'items': []}));
+    addTearDown(topic.dispose);
+    await topic.load();
+
+    expect(topic.state, isA<Empty<List<TopicQuiz>>>());
+    expect(topic.continueTarget, isNull);
   });
 }

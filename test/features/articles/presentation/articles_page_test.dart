@@ -221,7 +221,9 @@ void main() {
     tester.view.physicalSize = const Size(320, 640);
     await tester.pumpAndSettle();
 
-    await tester.tap(find.byKey(const ValueKey('articles.item.2')));
+    final item = find.byKey(const ValueKey('articles.item.2'));
+    await tester.scrollUntilVisible(item, 200);
+    await tester.tap(item);
     await tester.pumpAndSettle();
 
     expect(tester.takeException(), isNull);

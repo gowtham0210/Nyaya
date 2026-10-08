@@ -445,31 +445,6 @@ class AppLocalizationsKn extends AppLocalizations {
   String get homePopularQuizzes => 'ಜನಪ್ರಿಯ ಕ್ವಿಜ್‌ಗಳು';
 
   @override
-  String get homeDailyQuestions => 'ದೈನಂದಿನ ಪ್ರಶ್ನೆಗಳು';
-
-  @override
-  String get homeDailyQuestionsSubtitle =>
-      'ಇಂದಿನ ಯಾದೃಚ್ಛಿಕ ಪ್ರಶ್ನೆಗಳೊಂದಿಗೆ ನಿಮ್ಮ ಮನಸ್ಸನ್ನು ಚುರುಕುಗೊಳಿಸಿ';
-
-  @override
-  String get homeDailyQuestionsEmpty => 'ಇನ್ನೂ ಯಾವುದೇ ಪ್ರಶ್ನೆಗಳು ಲಭ್ಯವಿಲ್ಲ.';
-
-  @override
-  String get homeDailyShowAnswer => 'ಉತ್ತರ ತೋರಿಸಿ';
-
-  @override
-  String get homeDailyHideAnswer => 'ಉತ್ತರ ಮರೆಮಾಡಿ';
-
-  @override
-  String homeDailyQuestionSemantics(
-    int number,
-    String question,
-    String category,
-  ) {
-    return 'ಪ್ರಶ್ನೆ $number: $question. $category';
-  }
-
-  @override
   String get categoriesSubtitle =>
       'ವಿಷಯಗಳನ್ನು ಅನ್ವೇಷಿಸಿ ಮತ್ತು ನಿಮ್ಮ ಕಾನೂನು ಜ್ಞಾನವನ್ನು ಬಲಪಡಿಸಿ.';
 
@@ -495,6 +470,30 @@ class AppLocalizationsKn extends AppLocalizations {
   String topicContinueQuiz(int number) {
     return 'ಕ್ವಿಜ್ $number ಮುಂದುವರಿಸಿ';
   }
+
+  @override
+  String topicStartQuiz(int number) {
+    return 'ಕ್ವಿಜ್ $number ಪ್ರಾರಂಭಿಸಿ';
+  }
+
+  @override
+  String get topicPracticeAgain => 'ಮತ್ತೆ ಅಭ್ಯಾಸ ಮಾಡಿ';
+
+  @override
+  String get topicNoQuizzes => 'ಈ ವಿಷಯದಲ್ಲಿ ಇನ್ನೂ ಕ್ವಿಜ್‌ಗಳಿಲ್ಲ.';
+
+  @override
+  String quizUnlocksAt(int points) {
+    return '$points ಅಂಕಗಳಲ್ಲಿ ಅನ್‌ಲಾಕ್ ಆಗುತ್ತದೆ';
+  }
+
+  @override
+  String get quizAnswerFailed =>
+      'ನಿಮ್ಮ ಉತ್ತರವನ್ನು ಉಳಿಸಲಾಗಲಿಲ್ಲ. ಸಂಪರ್ಕ ಪರಿಶೀಲಿಸಿ ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.';
+
+  @override
+  String get quizSubmitFailed =>
+      'ನಿಮ್ಮ ಕ್ವಿಜ್ ಸಲ್ಲಿಸಲಾಗಲಿಲ್ಲ. ಸಂಪರ್ಕ ಪರಿಶೀಲಿಸಿ ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.';
 
   @override
   String get quizStatusCompleted => 'ಪೂರ್ಣಗೊಂಡಿದೆ';
@@ -554,6 +553,12 @@ class AppLocalizationsKn extends AppLocalizations {
 
   @override
   String get resultHeadline => 'ಶಾಭಾಷ್!';
+
+  @override
+  String get resultHeadlineGood => 'ಉತ್ತಮ ಪ್ರಗತಿ!';
+
+  @override
+  String get resultHeadlineKeepGoing => 'ಪ್ರಯತ್ನ ಮುಂದುವರಿಸಿ!';
 
   @override
   String resultCompleted(String topic) {
@@ -620,6 +625,9 @@ class AppLocalizationsKn extends AppLocalizations {
   String get legalUpdatesCategoryNotices => 'ಸೂಚನೆಗಳು';
 
   @override
+  String get legalUpdateViewImage => 'ಚಿತ್ರ ನೋಡಿ';
+
+  @override
   String get commonSoon => 'ಶೀಘ್ರದಲ್ಲಿ';
 
   @override
@@ -659,9 +667,6 @@ class AppLocalizationsKn extends AppLocalizations {
   @override
   String get homeAskNyayaBody =>
       'ನಿಮ್ಮ ಕಾನೂನು ಪ್ರಶ್ನೆಗಳನ್ನು ಸರಳ ಭಾಷೆಯಲ್ಲಿ ಕೇಳಿ. ಸ್ಪಷ್ಟ ಉತ್ತರಗಳನ್ನು ಪಡೆಯಿರಿ.';
-
-  @override
-  String get homeRecommended => 'ನಿಮಗಾಗಿ ಶಿಫಾರಸು ಮಾಡಲಾಗಿದೆ';
 
   @override
   String get articlesHeroTitle => 'ಕಲಿಯಿರಿ ಮತ್ತು ಅಪ್‌ಡೇಟ್ ಆಗಿರಿ';
@@ -972,4 +977,84 @@ class AppLocalizationsKn extends AppLocalizations {
 
   @override
   String get searchTypeQuizTopics => 'ಕ್ವಿಜ್ ವಿಷಯಗಳು';
+
+  @override
+  String get homeGreetingMorning => 'ಶುಭೋದಯ';
+
+  @override
+  String get homeGreetingAfternoon => 'ಶುಭ ಮಧ್ಯಾಹ್ನ';
+
+  @override
+  String get homeGreetingEvening => 'ಶುಭ ಸಂಜೆ';
+
+  @override
+  String homeStreakDays(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count ದಿನಗಳ ಸರಣಿ',
+      one: '1 ದಿನದ ಸರಣಿ',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get authMethodEmail => 'ಇಮೇಲ್';
+
+  @override
+  String get authMethodPhone => 'ಫೋನ್';
+
+  @override
+  String get fieldEmailLabel => 'ಇಮೇಲ್ ವಿಳಾಸ';
+
+  @override
+  String get fieldEmailHint => 'ನಿಮ್ಮ ಇಮೇಲ್ ನಮೂದಿಸಿ';
+
+  @override
+  String get validationEmailRequired => 'ಇಮೇಲ್ ಅಗತ್ಯವಿದೆ';
+
+  @override
+  String get validationEmailInvalid => 'ಸರಿಯಾದ ಇಮೇಲ್ ನಮೂದಿಸಿ';
+
+  @override
+  String get fieldPhoneOptionalLabel => 'ಫೋನ್ ಸಂಖ್ಯೆ (ಐಚ್ಛಿಕ)';
+
+  @override
+  String get signUpCreateAccount => 'ಖಾತೆ ರಚಿಸಿ';
+
+  @override
+  String get authPhoneLoginUnavailable =>
+      'ಫೋನ್ ಸೈನ್-ಇನ್ ಇನ್ನೂ ಲಭ್ಯವಿಲ್ಲ. ದಯವಿಟ್ಟು ಇಮೇಲ್ ಬಳಸಿ.';
+
+  @override
+  String get homeDailyTitle => 'ಇಂದಿನ ಪ್ರಶ್ನೆ';
+
+  @override
+  String get homeDailySubtitle =>
+      'ದಿನಕ್ಕೆ ಒಂದು ಪ್ರಶ್ನೆ. ನಿಮ್ಮ ಸರಣಿ ಮುಂದುವರಿಸಲು ಉತ್ತರಿಸಿ.';
+
+  @override
+  String homeDailyPoints(int points) {
+    return '+$points ಅಂಕಗಳು';
+  }
+
+  @override
+  String homeDailyEarned(int points) {
+    return '+$points ಅಂಕ ಗಳಿಸಿದಿರಿ';
+  }
+
+  @override
+  String get homeDailyComeBack => 'ಹೊಸ ಪ್ರಶ್ನೆಗಾಗಿ ನಾಳೆ ಮತ್ತೆ ಬನ್ನಿ.';
+
+  @override
+  String get homeDailyNone => 'ಇಂದು ಪ್ರಶ್ನೆ ಇಲ್ಲ. ನಾಳೆ ಮತ್ತೆ ನೋಡಿ.';
+
+  @override
+  String get homeDailyAnswerNow => 'ಈಗ ಉತ್ತರಿಸಿ';
+
+  @override
+  String get homeDailyAnswered => 'ಉತ್ತರಿಸಲಾಗಿದೆ';
+
+  @override
+  String get homeDailyTomorrow => 'ನಾಳೆ ಹೊಸ ಪ್ರಶ್ನೆ';
 }

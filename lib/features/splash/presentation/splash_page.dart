@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+
+import '../../../app/theme/app_tokens.dart';
 import '../../../core/presentation/widgets/nyaya_widgets.dart';
 import '../../../core/localization/l10n.dart';
 
@@ -62,10 +64,7 @@ class SplashPage extends StatelessWidget {
               left: width * 0.02,
               top: height * 0.07,
               child: IgnorePointer(
-                child: DotPattern(
-                  width: width * 0.14,
-                  height: width * 0.11,
-                ),
+                child: DotPattern(width: width * 0.14, height: width * 0.11),
               ),
             ),
             Positioned(
@@ -103,10 +102,7 @@ class SplashPage extends StatelessWidget {
               right: width * 0.08,
               bottom: height * 0.055,
               child: IgnorePointer(
-                child: DotPattern(
-                  width: width * 0.14,
-                  height: width * 0.11,
-                ),
+                child: DotPattern(width: width * 0.14, height: width * 0.11),
               ),
             ),
             SafeArea(
@@ -158,7 +154,9 @@ class SplashPage extends StatelessWidget {
                             ),
                             child: ExcludeSemantics(
                               child: ClipRRect(
-                                borderRadius: BorderRadius.circular(999),
+                                borderRadius: BorderRadius.circular(
+                                  NyayaRadii.pill,
+                                ),
                                 child: SizedBox(
                                   width: progressWidth,
                                   height: progressHeight,

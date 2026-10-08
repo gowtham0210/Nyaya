@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:nyaya/app/theme/app_tokens.dart';
 import 'package:nyaya/core/presentation/widgets/initials_avatar.dart';
 
 void main() {
@@ -27,6 +28,6 @@ void main() {
       ),
     );
     // 'Asha Rao' code units sum to 703; 703 % 5 = 3 → the fourth colour.
-    expect(colorFor('Asha Rao'), const Color(0xFF1C9C90));
+    expect(colorFor('Asha Rao'), NyayaTones.tealInk);
   });
 }

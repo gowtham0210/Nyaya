@@ -63,20 +63,23 @@ void main() {
     expect(sent.headers.containsKey('Authorization'), isFalse);
   });
 
-  test('AC-003 adds lang for non-English and keeps other query params', () async {
-    late Uri requested;
-    final client = ApiClient(
-      languageCode: () => 'ta',
-      httpClient: MockClient((request) async {
-        requested = request.url;
-        return jsonResponse({});
-      }),
-    );
+  test(
+    'AC-003 adds lang for non-English and keeps other query params',
+    () async {
+      late Uri requested;
+      final client = ApiClient(
+        languageCode: () => 'ta',
+        httpClient: MockClient((request) async {
+          requested = request.url;
+          return jsonResponse({});
+        }),
+      );
 
-    await client.get('/daily-questions/random', query: {'count': '3'});
+      await client.get('/daily-questions/random', query: {'count': '3'});
 
-    expect(requested.queryParameters, {'count': '3', 'lang': 'ta'});
-  });
+      expect(requested.queryParameters, {'count': '3', 'lang': 'ta'});
+    },
+  );
 
   test('AC-003 omits lang for English', () async {
     late Uri requested;
@@ -95,32 +98,39 @@ void main() {
 
   test('AC-006 404 throws ApiNotFoundException', () async {
     final client = ApiClient(
-      httpClient: MockClient((_) async => jsonResponse({'message': 'Nope'}, 404)),
+      httpClient: MockClient(
+        (_) async => jsonResponse({'message': 'Nope'}, 404),
+      ),
     );
 
     expect(client.get('/articles/9'), throwsA(isA<ApiNotFoundException>()));
   });
 
-  test('AC-006 500 throws ApiServerException with the backend message', () async {
-    final client = ApiClient(
-      httpClient: MockClient(
-        (_) async => jsonResponse({'message': 'Database down'}, 500),
-      ),
-    );
+  test(
+    'AC-006 500 throws ApiServerException with the backend message',
+    () async {
+      final client = ApiClient(
+        httpClient: MockClient(
+          (_) async => jsonResponse({'message': 'Database down'}, 500),
+        ),
+      );
 
-    expect(
-      client.get('/articles'),
-      throwsA(
-        isA<ApiServerException>()
-            .having((e) => e.statusCode, 'statusCode', 500)
-            .having((e) => e.message, 'message', 'Database down'),
-      ),
-    );
-  });
+      expect(
+        client.get('/articles'),
+        throwsA(
+          isA<ApiServerException>()
+              .having((e) => e.statusCode, 'statusCode', 500)
+              .having((e) => e.message, 'message', 'Database down'),
+        ),
+      );
+    },
+  );
 
   test('AC-006 a transport error throws ApiOfflineException', () async {
     final client = ApiClient(
-      httpClient: MockClient((_) async => throw http.ClientException('refused')),
+      httpClient: MockClient(
+        (_) async => throw http.ClientException('refused'),
+      ),
     );
 
     expect(client.get('/articles'), throwsA(isA<ApiOfflineException>()));
@@ -149,23 +159,26 @@ void main() {
     expect(seen, ['Bearer expired', 'Bearer fresh']);
   });
 
-  test('AC-005 a 401 with a failed refresh reports the session expired', () async {
-    var expired = false;
-    final client = ApiClient(
-      readAccessToken: () => 'expired',
-      refreshSession: () async => false,
-      onSessionExpired: () => expired = true,
-      httpClient: MockClient(
-        (_) async => jsonResponse({'message': 'Invalid token'}, 401),
-      ),
-    );
+  test(
+    'AC-005 a 401 with a failed refresh reports the session expired',
+    () async {
+      var expired = false;
+      final client = ApiClient(
+        readAccessToken: () => 'expired',
+        refreshSession: () async => false,
+        onSessionExpired: () => expired = true,
+        httpClient: MockClient(
+          (_) async => jsonResponse({'message': 'Invalid token'}, 401),
+        ),
+      );
 
-    await expectLater(
-      client.get('/users/me'),
-      throwsA(isA<ApiUnauthorizedException>()),
-    );
-    expect(expired, isTrue);
-  });
+      await expectLater(
+        client.get('/users/me'),
+        throwsA(isA<ApiUnauthorizedException>()),
+      );
+      expect(expired, isTrue);
+    },
+  );
 
   test('AC-007 POST sends a JSON body', () async {
     late http.Request sent;
@@ -183,7 +196,10 @@ void main() {
 
     expect(sent.method, 'POST');
     expect(sent.headers['Content-Type'], startsWith('application/json'));
-    expect(jsonDecode(sent.body), {'subject': 'Help', 'message': 'App crashed'});
+    expect(jsonDecode(sent.body), {
+      'subject': 'Help',
+      'message': 'App crashed',
+    });
     expect(body['id'], 7);
   });
 

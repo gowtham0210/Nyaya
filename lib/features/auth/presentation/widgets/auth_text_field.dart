@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+
+import '../../../../app/theme/app_tokens.dart';
 import '../../../../core/presentation/widgets/nyaya_widgets.dart';
 
 /// Shared labeled input field style for the login and sign-up cards:
 /// bold navy label above a rounded, icon-prefixed field.
+///
+/// [indianMobileFormatters] keeps a phone field to 10 digits.
 class AuthTextField extends StatelessWidget {
   const AuthTextField({
     super.key,
@@ -20,6 +25,7 @@ class AuthTextField extends StatelessWidget {
     this.readOnly = false,
     this.onTap,
     this.autofillHints,
+    this.inputFormatters,
   });
 
   final String label;
@@ -39,13 +45,14 @@ class AuthTextField extends StatelessWidget {
   final bool readOnly;
   final VoidCallback? onTap;
   final Iterable<String>? autofillHints;
+  final List<TextInputFormatter>? inputFormatters;
 
   @override
   Widget build(BuildContext context) {
-    const borderColor = Color(0xFFE7DFD5);
-    const fillColor = Color(0xFFFFFCF8);
-    const hintColor = Color(0xFF8A94A6);
-    const errorColor = Color(0xFFB64A4A);
+    const borderColor = NyayaColors.hairline;
+    const fillColor = NyayaColors.surfaceWarm;
+    const hintColor = NyayaColors.inkSubtle;
+    const errorColor = NyayaColors.danger;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -69,6 +76,7 @@ class AuthTextField extends StatelessWidget {
           textInputAction: textInputAction,
           validator: validator,
           autofillHints: autofillHints?.toList(),
+          inputFormatters: inputFormatters,
           cursorColor: navy,
           enableSuggestions: !obscureText,
           autocorrect: !obscureText,
@@ -95,26 +103,26 @@ class AuthTextField extends StatelessWidget {
               vertical: 16,
             ),
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(14),
+              borderRadius: BorderRadius.circular(NyayaRadii.sm),
               borderSide: const BorderSide(color: borderColor),
             ),
             enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(14),
+              borderRadius: BorderRadius.circular(NyayaRadii.sm),
               borderSide: const BorderSide(color: borderColor),
             ),
             focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(14),
+              borderRadius: BorderRadius.circular(NyayaRadii.sm),
               borderSide: BorderSide(
                 color: gold.withValues(alpha: 0.85),
                 width: 1.5,
               ),
             ),
             errorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(14),
+              borderRadius: BorderRadius.circular(NyayaRadii.sm),
               borderSide: const BorderSide(color: errorColor, width: 1.2),
             ),
             focusedErrorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(14),
+              borderRadius: BorderRadius.circular(NyayaRadii.sm),
               borderSide: const BorderSide(color: errorColor, width: 1.4),
             ),
           ),
@@ -155,10 +163,16 @@ class _PrefixWithText extends StatelessWidget {
               color: bodyGrey.withValues(alpha: 0.7),
             ),
             const SizedBox(width: 8),
-            Container(width: 1, height: 20, color: const Color(0xFFE7DFD5)),
+            Container(width: 1, height: 20, color: NyayaColors.hairline),
           ],
         ),
       ),
     );
   }
 }
+
+/// Digits only, at most 10: an Indian mobile number after the fixed "+91".
+final indianMobileFormatters = <TextInputFormatter>[
+  FilteringTextInputFormatter.digitsOnly,
+  LengthLimitingTextInputFormatter(10),
+];

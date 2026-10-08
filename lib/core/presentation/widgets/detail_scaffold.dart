@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 
-const brandNavy = Color(0xFF11233B);
-const brandGold = Color(0xFFB9823A);
-const brandSupportText = Color(0xFF5E6878);
-const brandDanger = Color(0xFFD64545);
-const brandSuccess = Color(0xFF1FA35B);
-const brandBackground = Color(0xFFF8F6F2);
-const _cardBorder = Color(0xFFECE5DB);
+import '../../../app/theme/app_tokens.dart';
+
+const brandNavy = NyayaColors.ink;
+const brandGold = NyayaColors.goldDeep;
+const brandSupportText = NyayaColors.inkMuted;
+const brandDanger = NyayaColors.danger;
+const brandSuccess = NyayaColors.success;
+const brandBackground = NyayaColors.ivory;
+const _cardBorder = NyayaColors.hairline;
 
 /// The shared frame for detail screens opened from Profile: title bar and a
 /// padded, scrolling list.
@@ -49,7 +51,7 @@ class DetailCard extends StatelessWidget {
     return Material(
       color: Colors.white,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(NyayaRadii.md),
         side: const BorderSide(color: _cardBorder),
       ),
       clipBehavior: Clip.antiAlias,

@@ -43,6 +43,15 @@ abstract class LoadStateNotifier<T> extends ChangeNotifier {
     }
   }
 
+  /// Shows [data] now, e.g. a server reply to an action, and drops any
+  /// load still in flight.
+  @protected
+  void setData(T data) {
+    _started = true;
+    _loadId++;
+    _setState(isEmpty(data) ? Empty<T>() : Loaded<T>(data));
+  }
+
   void _setState(LoadState<T> state) {
     if (_disposed) {
       return;

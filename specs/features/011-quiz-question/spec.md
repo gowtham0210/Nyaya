@@ -1,6 +1,6 @@
 # 011-quiz-question Quiz Question Screen
 
-Status: Implemented
+Status: Implemented (038 adds backend play via `RemoteQuizSession`; the sample session stays for tests)
 Last Updated: 2026-07-19
 Owner:
 Related ADRs: `../../adr/0001-adopt-spec-driven-development.md`

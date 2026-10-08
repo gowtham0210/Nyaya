@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+
+import '../../../app/theme/app_tokens.dart';
 import 'package:intl/intl.dart';
 
 import '../../../core/localization/l10n.dart';
@@ -140,9 +142,9 @@ class _EmergencyNote extends StatelessWidget {
       label: context.l10n.helpResEmergency,
       child: Material(
         color: brandDanger.withValues(alpha: 0.08),
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(NyayaRadii.sm),
         child: InkWell(
-          borderRadius: BorderRadius.circular(14),
+          borderRadius: BorderRadius.circular(NyayaRadii.sm),
           onTap: onCall,
           child: ExcludeSemantics(
             child: Padding(
@@ -295,7 +297,7 @@ class _Chip extends StatelessWidget {
     return DecoratedBox(
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.12),
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(NyayaRadii.sm),
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),

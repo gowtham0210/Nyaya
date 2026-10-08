@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../../app/theme/app_typography.dart';
+
 import '../../../../core/localization/l10n.dart';
 import '../../../../core/presentation/widgets/detail_scaffold.dart';
 import '../../../categories/presentation/categories_view_model.dart';
@@ -47,8 +49,9 @@ class _FilterSheetState extends State<FilterSheet> {
             Text(
               l10n.filterTitle,
               style: const TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.w800,
+                fontSize: 26,
+                fontFamily: NyayaFonts.display,
+                fontWeight: FontWeight.w700,
                 color: brandNavy,
               ),
             ),

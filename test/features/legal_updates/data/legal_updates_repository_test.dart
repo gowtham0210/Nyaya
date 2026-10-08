@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:nyaya/core/network/api_config.dart';
 import 'package:nyaya/features/legal_updates/data/legal_updates_repository.dart';
 
 import '../../../support/fake_backend.dart';
@@ -62,5 +63,45 @@ void main() {
 
     expect(update.date, isNull);
     expect(update.rawDate, 'soon');
+  });
+
+  test('047 AC-001 image URLs are absolute; a blank one is null', () async {
+    final repository = LegalUpdatesRepository(
+      fakeBackend({
+        '/legal-updates': {
+          'items': [
+            {
+              'id': 1,
+              'category': 'Notices',
+              'title': 'Relative',
+              'updateDate': '2026-09-03',
+              'imageUrl': '/uploads/a.png',
+            },
+            {
+              'id': 2,
+              'category': 'Notices',
+              'title': 'Absolute',
+              'updateDate': '2026-09-02',
+              'imageUrl': 'https://cdn.example.com/b.png',
+            },
+            {
+              'id': 3,
+              'category': 'Notices',
+              'title': 'Blank',
+              'updateDate': '2026-09-01',
+              'imageUrl': ' ',
+            },
+          ],
+        },
+      }),
+    );
+
+    final updates = await repository.fetchUpdates();
+
+    expect(updates.map((u) => u.imageUrl), [
+      '${ApiConfig.baseUrl}/uploads/a.png',
+      'https://cdn.example.com/b.png',
+      null,
+    ]);
   });
 }

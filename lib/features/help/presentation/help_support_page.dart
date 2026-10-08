@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+
+import '../../../app/theme/app_tokens.dart';
 import 'package:intl/intl.dart';
 
 import '../../../core/localization/l10n.dart';
@@ -153,11 +155,11 @@ class _RequestCard extends StatelessWidget {
       SupportStatus.open => (l10n.supportStatusOpen, brandGold),
       SupportStatus.inProgress => (
         l10n.supportStatusInProgress,
-        const Color(0xFF2F6FED),
+        NyayaColors.info,
       ),
       SupportStatus.resolved => (
         l10n.supportStatusResolved,
-        const Color(0xFF1FA35B),
+        NyayaColors.success,
       ),
       SupportStatus.closed => (l10n.supportStatusClosed, brandSupportText),
     };
@@ -187,7 +189,7 @@ class _RequestCard extends StatelessWidget {
                     DecoratedBox(
                       decoration: BoxDecoration(
                         color: color.withValues(alpha: 0.12),
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: BorderRadius.circular(NyayaRadii.sm),
                       ),
                       child: Padding(
                         padding: const EdgeInsets.symmetric(

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../app/theme/app_typography.dart';
+
 import '../../../core/localization/l10n.dart';
 import '../../../core/presentation/widgets/nyaya_widgets.dart';
 import '../data/app_version.dart';
@@ -45,9 +47,9 @@ class _AboutPageState extends State<AboutPage> {
           child: Text(
             l10n.appTitle,
             style: const TextStyle(
-              fontSize: 26,
+              fontSize: 32,
               fontWeight: FontWeight.w800,
-              fontFamily: 'serif',
+              fontFamily: NyayaFonts.display,
               color: brandNavy,
             ),
           ),

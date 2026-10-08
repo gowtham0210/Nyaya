@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
 
+import '../../../app/theme/app_tokens.dart';
+
+import '../../../app/theme/app_typography.dart';
+
 import '../../../core/localization/l10n.dart';
 import 'article_text.dart';
 import 'articles_view_model.dart';
 
-const _pageBackground = Color(0xFFF8F6F2);
-const _navy = Color(0xFF11233B);
-const _gold = Color(0xFFB9823A);
-const _supportText = Color(0xFF5E6878);
-const _cardBorder = Color(0xFFECE5DB);
+const _pageBackground = NyayaColors.ivory;
+const _navy = NyayaColors.ink;
+const _gold = NyayaColors.goldDeep;
+const _supportText = NyayaColors.inkMuted;
+const _cardBorder = NyayaColors.hairline;
 
 /// One article's full text (spec 019). Empty sections are hidden.
 class ArticleDetailPage extends StatelessWidget {
@@ -44,8 +48,9 @@ class ArticleDetailPage extends StatelessWidget {
           Text(
             numberedTitle(number, article),
             style: const TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.w800,
+              fontSize: 30,
+              fontFamily: NyayaFonts.display,
+              fontWeight: FontWeight.w700,
               height: 1.3,
               color: _navy,
             ),
@@ -57,7 +62,7 @@ class ArticleDetailPage extends StatelessWidget {
               child: DecoratedBox(
                 decoration: BoxDecoration(
                   color: _gold.withValues(alpha: 0.12),
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(NyayaRadii.xs),
                 ),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
@@ -152,7 +157,7 @@ class _Section extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(NyayaRadii.md),
         border: Border.all(color: _cardBorder),
       ),
       child: Column(

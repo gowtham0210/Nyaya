@@ -1,150 +1,123 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:http/http.dart' as http;
+import 'package:nyaya/features/topic_detail/data/topic_repository.dart';
 import 'package:nyaya/features/topic_detail/presentation/topic_detail_page.dart';
 import 'package:nyaya/features/topic_detail/presentation/topic_detail_view_model.dart';
 
+import '../../../support/fake_backend.dart';
+import '../../../support/quiz_backend.dart';
+
 void main() {
-  Future<void> pumpTopicDetailPage(
+  Future<TopicDetailViewModel> pumpTopicPage(
     WidgetTester tester, {
-    ValueChanged<String>? onQuizSelected,
-    ValueChanged<String>? onContinueQuiz,
-    TopicDetailViewModel? viewModel,
-    Size size = const Size(393, 852),
+    Map<String, Object>? routes,
+    ValueChanged<TopicQuiz>? onQuizSelected,
   }) async {
     tester.view.reset();
-    tester.view.physicalSize = size;
+    tester.view.physicalSize = const Size(393, 852);
     tester.view.devicePixelRatio = 1;
     tester.view.padding = const FakeViewPadding(top: 59, bottom: 34);
-    addTearDown(() {
-      tester.view.resetPhysicalSize();
-      tester.view.resetDevicePixelRatio();
-      tester.view.resetPadding();
-    });
+    addTearDown(tester.view.reset);
+    final viewModel = TopicDetailViewModel(
+      repository: TopicRepository(fakeBackend(routes ?? quizRoutes())),
+      categoryId: 3,
+      title: 'Criminal Procedure',
+      description: 'Arrest, bail and police powers.',
+    );
+    addTearDown(viewModel.dispose);
 
     await tester.pumpWidget(
       MaterialApp(
         home: TopicDetailPage(
-          onQuizSelected: onQuizSelected ?? (_) {},
-          onContinueQuiz: onContinueQuiz ?? (_) {},
           viewModel: viewModel,
+          onQuizSelected: onQuizSelected ?? (_) {},
         ),
       ),
     );
     await tester.pumpAndSettle();
+    return viewModel;
   }
 
-  testWidgets('shows the topic header, description and section strip', (
-    WidgetTester tester,
+  testWidgets('AC-003 the header shows real counts and progress', (
+    tester,
   ) async {
-    await pumpTopicDetailPage(tester);
+    await pumpTopicPage(tester);
 
-    expect(find.text('Arrest, Bail & Police Powers'), findsOneWidget);
-    expect(find.text('Under BNSS — formerly CrPC'), findsOneWidget);
-    expect(find.text('6 quizzes'), findsOneWidget);
+    expect(find.text('Criminal Procedure'), findsOneWidget);
+    expect(find.text('3 quizzes'), findsOneWidget);
     expect(find.text('MEDIUM'), findsOneWidget);
     expect(find.text('33%'), findsOneWidget);
-    expect(
-      find.text(
-        'What the police can and cannot do — your rights during FIR, arrest, '
-        'custody and bail, under the new BNSS code.',
-      ),
-      findsOneWidget,
-    );
-    expect(
-      find.text('Sections referenced: BNSS §35–§62 (formerly CrPC §41–§60)'),
-      findsOneWidget,
-    );
-    expect(find.byKey(const ValueKey('topic.back')), findsOneWidget);
-    expect(find.byKey(const ValueKey('topic.bookmark')), findsOneWidget);
+    expect(find.text('Arrest, bail and police powers.'), findsOneWidget);
+    // Unbuilt controls stay hidden (spec 035): bookmarks aren't saved.
+    expect(find.byKey(const ValueKey('topic.bookmark')), findsNothing);
   });
 
-  testWidgets('lists the four quizzes with their state affordances', (
-    WidgetTester tester,
+  testWidgets('AC-003 rows show each quiz status from attempts', (
+    tester,
   ) async {
-    await pumpTopicDetailPage(tester);
+    await pumpTopicPage(tester);
 
-    expect(find.text('FIR Basics'), findsOneWidget);
+    expect(find.byKey(const ValueKey('topic.quiz.completed.11')), findsOne);
+    expect(find.byKey(const ValueKey('topic.quiz.resume.12')), findsOne);
+    expect(find.byKey(const ValueKey('topic.quiz.chevron.13')), findsOne);
     expect(find.text('10 Questions · Easy'), findsOneWidget);
-    expect(find.text('Arrest & Your Rights'), findsOneWidget);
-    expect(find.text('12 Questions · Medium'), findsOneWidget);
-    expect(find.text('Custody & Remand'), findsOneWidget);
-    expect(find.text('Bail: When & How'), findsOneWidget);
-    expect(find.text('14 Questions · Hard'), findsOneWidget);
-
-    expect(
-      find.byKey(const ValueKey('topic.quiz.completed.fir-basics')),
-      findsOneWidget,
-    );
-    expect(
-      find.byKey(const ValueKey('topic.quiz.resume.arrest-your-rights')),
-      findsOneWidget,
-    );
-    expect(
-      find.byKey(const ValueKey('topic.quiz.chevron.custody-remand')),
-      findsOneWidget,
-    );
-    expect(
-      find.byKey(const ValueKey('topic.quiz.chevron.bail-when-how')),
-      findsOneWidget,
-    );
   });
 
-  testWidgets('tapping a quiz row reports its id', (
-    WidgetTester tester,
+  testWidgets('AC-003 tapping a quiz and Continue report the quiz', (
+    tester,
   ) async {
-    String? selected;
-    await pumpTopicDetailPage(
-      tester,
-      onQuizSelected: (quizId) => selected = quizId,
-    );
+    final opened = <int>[];
+    await pumpTopicPage(tester, onQuizSelected: (quiz) => opened.add(quiz.id));
 
-    await tester.ensureVisible(
-      find.byKey(const ValueKey('topic.quiz.custody-remand')),
-    );
-    await tester.tap(find.byKey(const ValueKey('topic.quiz.custody-remand')));
-    await tester.pumpAndSettle();
-
-    expect(selected, 'custody-remand');
-  });
-
-  testWidgets('the continue CTA reports the in-progress quiz', (
-    WidgetTester tester,
-  ) async {
-    String? continued;
-    await pumpTopicDetailPage(
-      tester,
-      onContinueQuiz: (quizId) => continued = quizId,
-    );
-
-    expect(find.text('CONTINUE QUIZ 2'), findsOneWidget);
+    await tester.tap(find.byKey(const ValueKey('topic.quiz.11')));
+    expect(find.text('Continue quiz 2'), findsOneWidget);
     await tester.tap(find.byKey(const ValueKey('topic.continue')));
-    await tester.pumpAndSettle();
 
-    expect(continued, 'arrest-your-rights');
+    expect(opened, [11, 12]);
   });
 
-  testWidgets('the bookmark icon toggles between saved and unsaved', (
-    WidgetTester tester,
+  testWidgets('AC-003 a fresh topic offers Start quiz 1', (tester) async {
+    await pumpTopicPage(tester, routes: quizRoutes(attempts: []));
+
+    expect(find.text('Start quiz 1'), findsOneWidget);
+    expect(find.text('0%'), findsOneWidget);
+  });
+
+  testWidgets('AC-003 a locked quiz says when it unlocks and is inert', (
+    tester,
   ) async {
-    await pumpTopicDetailPage(tester);
+    final opened = <int>[];
+    await pumpTopicPage(
+      tester,
+      routes: quizRoutes(lockLast: true),
+      onQuizSelected: (quiz) => opened.add(quiz.id),
+    );
 
-    expect(find.byIcon(Icons.bookmark_border), findsOneWidget);
-    await tester.tap(find.byKey(const ValueKey('topic.bookmark')));
-    await tester.pumpAndSettle();
+    expect(find.byKey(const ValueKey('topic.quiz.locked.13')), findsOne);
+    expect(find.text('Unlocks at 200 points'), findsOneWidget);
+    await tester.tap(find.byKey(const ValueKey('topic.quiz.13')));
+    expect(opened, isEmpty);
+  });
 
-    expect(find.byIcon(Icons.bookmark), findsOneWidget);
-    expect(find.byIcon(Icons.bookmark_border), findsNothing);
+  testWidgets('AC-003 a failure shows Retry and no Continue button', (
+    tester,
+  ) async {
+    final routes = quizRoutes()
+      ..['/categories/3/quizzes'] = http.Response('{"message":"boom"}', 500);
+    await pumpTopicPage(tester, routes: routes);
+
+    expect(find.byKey(const ValueKey('loadState.retry')), findsOneWidget);
+    expect(find.byKey(const ValueKey('topic.continue')), findsNothing);
   });
 
   testWidgets('quiz rows announce their status to screen readers', (
-    WidgetTester tester,
+    tester,
   ) async {
-    await pumpTopicDetailPage(tester);
+    await pumpTopicPage(tester);
 
     expect(
-      tester.getSemantics(
-        find.byKey(const ValueKey('topic.quiz.arrest-your-rights')),
-      ),
+      tester.getSemantics(find.byKey(const ValueKey('topic.quiz.12'))),
       isSemantics(
         isButton: true,
         hasTapAction: true,

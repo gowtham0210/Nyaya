@@ -1,4 +1,6 @@
 import '../../../core/network/api_client.dart';
+import '../../../core/network/api_config.dart';
+import '../../../core/network/json_text.dart';
 
 /// A legal update as the backend returns it.
 class LegalUpdate {
@@ -10,6 +12,7 @@ class LegalUpdate {
     required this.rawDate,
     this.date,
     this.source,
+    this.imageUrl,
   });
 
   final int id;
@@ -25,6 +28,9 @@ class LegalUpdate {
   /// Parsed [rawDate] in local time; null when it isn't a date.
   final DateTime? date;
   final String? source;
+
+  /// Absolute image URL; null when the update has none.
+  final String? imageUrl;
 }
 
 /// Updates from `GET /legal-updates`, newest first.
@@ -51,7 +57,6 @@ class LegalUpdatesRepository {
 
   LegalUpdate _toUpdate(Map<String, dynamic> json) {
     final rawDate = json['updateDate'] as String? ?? '';
-    final source = (json['source'] as String?)?.trim();
     return LegalUpdate(
       id: json['id'] as int,
       category: json['category'] as String,
@@ -59,7 +64,8 @@ class LegalUpdatesRepository {
       summary: json['summary'] as String? ?? '',
       rawDate: rawDate,
       date: DateTime.tryParse(rawDate)?.toLocal(),
-      source: source == null || source.isEmpty ? null : source,
+      source: jsonText(json['source']),
+      imageUrl: ApiConfig.absoluteUrl(jsonText(json['imageUrl'])),
     );
   }
 }

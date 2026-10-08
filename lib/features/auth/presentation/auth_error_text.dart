@@ -8,6 +8,9 @@ import '../../../core/network/api_client.dart';
 /// is shown as returned (the request carries the app language); otherwise
 /// the app's localized text, never an English fallback.
 String authApiErrorText(AppLocalizations l10n, AuthApiException error) {
+  if (error is PhoneLoginUnavailableException) {
+    return l10n.authPhoneLoginUnavailable;
+  }
   final cause = error.cause;
   return switch (cause) {
     ApiOfflineException() => l10n.errorOffline,

@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 
+import '../../../../app/theme/app_tokens.dart';
+
 import '../../../../core/localization/l10n.dart';
 
-const _navy = Color(0xFF11233B);
-const _gold = Color(0xFFD3A247);
-const _supportText = Color(0xFF5E6878);
-const _cardBorder = Color(0xFFECE5DB);
-const _soonBackground = Color(0xFFFDE8E8);
-const _soonText = Color(0xFFD64545);
+const _navy = NyayaColors.ink;
+const _gold = NyayaColors.goldBright;
+const _supportText = NyayaColors.inkMuted;
+const _cardBorder = NyayaColors.hairline;
+const _soonBackground = NyayaColors.goldTint;
+const _soonText = NyayaColors.goldDeep;
 
 /// Home's Ask Nyaya card, marked "Soon" until the feature exists (spec 026).
 class AskNyayaCard extends StatelessWidget {
@@ -22,7 +24,7 @@ class AskNyayaCard extends StatelessWidget {
       key: const ValueKey('home.askNyaya'),
       color: Colors.white,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(NyayaRadii.md),
         side: const BorderSide(color: _cardBorder),
       ),
       clipBehavior: Clip.antiAlias,
@@ -44,7 +46,7 @@ class AskNyayaCard extends StatelessWidget {
                     height: 52,
                     decoration: BoxDecoration(
                       color: _gold.withValues(alpha: 0.14),
-                      borderRadius: BorderRadius.circular(16),
+                      borderRadius: BorderRadius.circular(NyayaRadii.sm),
                     ),
                     child: const Icon(
                       Icons.forum_outlined,
@@ -74,7 +76,9 @@ class AskNyayaCard extends StatelessWidget {
                               key: const ValueKey('home.askNyaya.soon'),
                               decoration: BoxDecoration(
                                 color: _soonBackground,
-                                borderRadius: BorderRadius.circular(8),
+                                borderRadius: BorderRadius.circular(
+                                  NyayaRadii.xs,
+                                ),
                               ),
                               child: Padding(
                                 padding: const EdgeInsets.symmetric(

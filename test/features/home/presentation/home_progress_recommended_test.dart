@@ -43,7 +43,12 @@ Map<String, Object> backend({
     ],
   },
   '/categories/2/quizzes': {'items': []},
-  '/daily-questions/random': {'items': []},
+  '/daily-questions/today': {
+    'date': '2026-10-06',
+    'answered': false,
+    'question': null,
+    'result': null,
+  },
   '/legal-updates': {'items': []},
 };
 
@@ -56,8 +61,9 @@ void main() {
     Map<String, Object> routes, {
     Locale locale = const Locale('en'),
     VoidCallback? onResumePressed,
-    ValueChanged<CategoryData>? onRecommendedSelected,
-    VoidCallback? onViewAllRecommendedPressed,
+    ValueChanged<CategoryData>? onCategorySelected,
+    VoidCallback? onViewAllCategoriesPressed,
+    VoidCallback? onAskNyayaPressed,
   }) async {
     final client = fakeBackend(routes);
     progressViewModel = LearningProgressViewModel(
@@ -86,8 +92,9 @@ void main() {
         progress: progressViewModel,
         categories: categoriesViewModel,
         onResumePressed: onResumePressed,
-        onRecommendedSelected: onRecommendedSelected,
-        onViewAllRecommendedPressed: onViewAllRecommendedPressed,
+        onCategorySelected: onCategorySelected,
+        onViewAllCategoriesPressed: onViewAllCategoriesPressed,
+        onAskNyayaPressed: onAskNyayaPressed,
       ),
       locale: locale,
     );
@@ -113,9 +120,8 @@ void main() {
       await pumpHome(tester, backend(), onResumePressed: () => resumed++);
       await scrollTo(tester, find.byKey(const ValueKey('home.continue.card')));
 
-      expect(find.text('75%'), findsOneWidget);
       expect(find.text('6 quizzes completed'), findsOneWidget);
-      expect(find.text('240 points'), findsOneWidget);
+      expect(find.text('240 points · Accuracy 75%'), findsOneWidget);
       expect(find.text('Indian Constitution Quiz'), findsNothing);
 
       await tester.tap(find.byKey(const ValueKey('home.continue.resume')));
@@ -160,14 +166,18 @@ void main() {
         ),
         findsOneWidget,
       );
-      expect(find.byKey(const ValueKey('home.askNyaya')), findsOneWidget);
+      expect(
+        find.byKey(const ValueKey('home.section.explore')),
+        findsOneWidget,
+      );
     });
   });
 
-  testWidgets('AC-005 Ask Nyaya shows Soon and a coming-soon message', (
+  testWidgets('AC-005 a wired Ask Nyaya card shows Soon and reports taps', (
     tester,
   ) async {
-    await pumpHome(tester, backend());
+    var taps = 0;
+    await pumpHome(tester, backend(), onAskNyayaPressed: () => taps++);
     final card = find.byKey(const ValueKey('home.askNyaya'));
     await scrollTo(tester, card);
 
@@ -176,12 +186,19 @@ void main() {
       findsOneWidget,
     );
     await tester.tap(card);
-    await tester.pump();
-
-    expect(find.text('Ask Nyaya coming soon.'), findsOneWidget);
+    expect(taps, 1);
   });
 
-  group('Recommended', () {
+  testWidgets('spec 035 AC-001 an unwired Ask Nyaya card stays hidden', (
+    tester,
+  ) async {
+    await pumpHome(tester, backend());
+    await scrollTo(tester, find.byKey(const ValueKey('home.section.explore')));
+
+    expect(find.byKey(const ValueKey('home.askNyaya')), findsNothing);
+  });
+
+  group('Explore by Category (specs 026, 040)', () {
     testWidgets('AC-006 shows categories with quiz counts; taps report', (
       tester,
     ) async {
@@ -189,14 +206,17 @@ void main() {
       await pumpHome(
         tester,
         backend(),
-        onRecommendedSelected: (category) => selected.add(category.slug),
+        onCategorySelected: (category) => selected.add(category.slug),
       );
       await scrollTo(
         tester,
-        find.byKey(const ValueKey('home.section.recommended')),
+        find.byKey(const ValueKey('home.section.explore')),
       );
 
-      expect(find.text('Recommended for you'), findsOneWidget);
+      // One category section: the sample strip is gone (spec 040).
+      expect(find.text('Explore by Category'), findsOneWidget);
+      expect(find.text('Recommended for you'), findsNothing);
+      expect(find.text('Constitutional Law'), findsNothing);
       expect(find.text('2 quizzes'), findsOneWidget);
       expect(find.text('0 quizzes'), findsOneWidget);
 
@@ -211,10 +231,10 @@ void main() {
       await pumpHome(
         tester,
         backend(),
-        onViewAllRecommendedPressed: () => taps++,
+        onViewAllCategoriesPressed: () => taps++,
       );
       final viewAll = find.byKey(
-        const ValueKey('home.section.recommended.viewAll'),
+        const ValueKey('home.section.explore.viewAll'),
       );
       await scrollTo(tester, viewAll);
 
@@ -254,7 +274,12 @@ void main() {
   });
 
   testWidgets('AC-009 new strings are in Hindi', (tester) async {
-    await pumpHome(tester, backend(), locale: const Locale('hi'));
+    await pumpHome(
+      tester,
+      backend(),
+      locale: const Locale('hi'),
+      onAskNyayaPressed: () {},
+    );
     await scrollTo(tester, find.byKey(const ValueKey('home.continue.card')));
     expect(find.text('6 क्विज़ पूरे हुए'), findsOneWidget);
 
@@ -262,11 +287,8 @@ void main() {
     expect(find.text('न्याय से पूछें'), findsOneWidget);
     expect(find.text('Ask Nyaya'), findsNothing);
 
-    await scrollTo(
-      tester,
-      find.byKey(const ValueKey('home.section.recommended')),
-    );
-    expect(find.text('आपके लिए सुझाया गया'), findsOneWidget);
+    await scrollTo(tester, find.byKey(const ValueKey('home.section.explore')));
+    expect(find.text('श्रेणी के अनुसार देखें'), findsOneWidget);
   });
 
   testWidgets('NFR-002 the progress card fits a 360 px phone', (tester) async {
@@ -281,7 +303,7 @@ void main() {
   testWidgets('Ask Nyaya and recommended cards are labelled buttons', (
     tester,
   ) async {
-    await pumpHome(tester, backend());
+    await pumpHome(tester, backend(), onAskNyayaPressed: () {});
     final ask = find.byKey(const ValueKey('home.askNyaya.button'));
     await scrollTo(tester, ask);
 

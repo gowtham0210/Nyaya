@@ -165,25 +165,6 @@
   "homeExploreByCategory": "Explore by Category",
   "homeContinueLearning": "Continue Learning",
   "homePopularQuizzes": "Popular Quizzes",
-  "homeDailyQuestions": "Daily Questions",
-  "homeDailyQuestionsSubtitle": "Sharpen your mind with today's random questions",
-  "homeDailyQuestionsEmpty": "No questions available yet.",
-  "homeDailyShowAnswer": "Show answer",
-  "homeDailyHideAnswer": "Hide answer",
-  "homeDailyQuestionSemantics": "Question {number}: {question}. {category}",
-  "@homeDailyQuestionSemantics": {
-    "placeholders": {
-      "number": {
-        "type": "int"
-      },
-      "question": {
-        "type": "String"
-      },
-      "category": {
-        "type": "String"
-      }
-    }
-  },
   "categoriesSubtitle": "Explore topics and strengthen your legal knowledge.",
   "categoriesSearchHint": "Search categories",
   "categoriesNoMatch": "No categories match your search.",
@@ -192,6 +173,26 @@
   "topicRemoveBookmark": "Remove bookmark",
   "topicQuizzesHeading": "Quizzes",
   "topicContinueQuiz": "Continue quiz {number}",
+  "topicStartQuiz": "Start quiz {number}",
+  "@topicStartQuiz": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "topicPracticeAgain": "Practice again",
+  "topicNoQuizzes": "No quizzes in this topic yet.",
+  "quizUnlocksAt": "Unlocks at {points} points",
+  "@quizUnlocksAt": {
+    "placeholders": {
+      "points": {
+        "type": "int"
+      }
+    }
+  },
+  "quizAnswerFailed": "Couldn't save your answer. Check your connection and try again.",
+  "quizSubmitFailed": "Couldn't submit your quiz. Check your connection and try again.",
   "@topicContinueQuiz": {
     "placeholders": {
       "number": {
@@ -249,6 +250,8 @@
   "quizVerdictCorrect": "Correct!",
   "quizVerdictWrong": "Not quite",
   "resultHeadline": "Well Done!",
+  "resultHeadlineGood": "Good progress!",
+  "resultHeadlineKeepGoing": "Keep going!",
   "resultCompleted": "{topic} — completed",
   "@resultCompleted": {
     "placeholders": {
@@ -303,6 +306,7 @@
   "legalUpdatesCategoryLegislation": "Legislation",
   "legalUpdatesCategoryReforms": "Reforms",
   "legalUpdatesCategoryNotices": "Notices",
+  "legalUpdateViewImage": "View image",
   "commonSoon": "Soon",
   "homeProgressQuizzesCompleted": "{count, plural, =1{1 quiz completed} other{{count} quizzes completed}}",
   "@homeProgressQuizzesCompleted": {
@@ -331,7 +335,6 @@
   "homeProgressEmpty": "No quizzes yet. Take your first quiz!",
   "homeAskNyayaTitle": "Ask Nyaya",
   "homeAskNyayaBody": "Ask your legal questions in simple language. Get clear answers.",
-  "homeRecommended": "Recommended for you",
   "articlesHeroTitle": "Learn & Stay Updated",
   "articlesHeroSubtitle": "Stay informed. Understand the law.",
   "articlesPart": "Part {part} · {title}",
@@ -482,5 +485,48 @@
   "filterCategory": "Category",
   "filterClearAll": "Clear all",
   "filterApply": "Apply filters",
-  "searchTypeQuizTopics": "Quiz topics"
+  "searchTypeQuizTopics": "Quiz topics",
+  "homeGreetingMorning": "Good morning",
+  "homeGreetingAfternoon": "Good afternoon",
+  "homeGreetingEvening": "Good evening",
+  "homeStreakDays": "{count, plural, =1{1-day streak} other{{count}-day streak}}",
+  "@homeStreakDays": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "authMethodEmail": "Email",
+  "authMethodPhone": "Phone",
+  "fieldEmailLabel": "Email Address",
+  "fieldEmailHint": "Enter your email",
+  "validationEmailRequired": "Email is required",
+  "validationEmailInvalid": "Enter a valid email",
+  "fieldPhoneOptionalLabel": "Phone Number (optional)",
+  "signUpCreateAccount": "Create account",
+  "authPhoneLoginUnavailable": "Phone sign-in isn't available yet. Please use email.",
+  "homeDailyTitle": "Today's Question",
+  "homeDailySubtitle": "One question a day. Answer to keep your streak.",
+  "homeDailyPoints": "+{points} points",
+  "homeDailyEarned": "+{points} earned",
+  "homeDailyComeBack": "Come back tomorrow for a new question.",
+  "homeDailyNone": "No question today. Check back tomorrow.",
+  "@homeDailyPoints": {
+    "placeholders": {
+      "points": {
+        "type": "int"
+      }
+    }
+  },
+  "@homeDailyEarned": {
+    "placeholders": {
+      "points": {
+        "type": "int"
+      }
+    }
+  },
+  "homeDailyAnswerNow": "Answer now",
+  "homeDailyAnswered": "Answered",
+  "homeDailyTomorrow": "New question tomorrow"
 }

@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 
+import '../../../../app/theme/app_tokens.dart';
+
 import '../../../../core/localization/l10n.dart';
 import '../article_text.dart';
 import '../articles_view_model.dart';
 
-const _navy = Color(0xFF11233B);
-const _supportText = Color(0xFF5E6878);
-const _cardBorder = Color(0xFFECE5DB);
-const _badgeColors = [_navy, Color(0xFFB9823A)];
+const _navy = NyayaColors.ink;
+const _supportText = NyayaColors.inkMuted;
+const _cardBorder = NyayaColors.hairline;
+const _badgeColors = [_navy, NyayaColors.goldDeep];
 
 /// One article in the list: tap to expand a preview, then "Read article".
 class ArticleListItem extends StatelessWidget {
@@ -34,7 +36,7 @@ class ArticleListItem extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(NyayaRadii.md),
         border: Border.all(color: expanded ? badgeColor : _cardBorder),
       ),
       clipBehavior: Clip.antiAlias,

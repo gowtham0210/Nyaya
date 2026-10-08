@@ -2,6 +2,19 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<!-- Firebase phone sign-in: lets the reCAPTCHA fallback return to the
+	     app. The scheme is the iOS GOOGLE_APP_ID with ':' as '-'. -->
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>app-1-662408573262-ios-38943910e63e9930c7ee1f</string>
+			</array>
+		</dict>
+	</array>
 	<key>NSCameraUsageDescription</key>
 	<string>Nyaya uses the camera to take your profile photo.</string>
 	<key>NSPhotoLibraryUsageDescription</key>

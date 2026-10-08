@@ -93,16 +93,8 @@ class ProfileRepository {
     fullName: json['fullName'] as String,
     phone: jsonText(json['phone']),
     profession: jsonText(json['profession']),
-    avatarUrl: _absoluteUrl(jsonText(json['avatarUrl'])),
+    avatarUrl: ApiConfig.absoluteUrl(jsonText(json['avatarUrl'])),
   );
-
-  /// The backend sends upload paths relative to its origin.
-  static String? _absoluteUrl(String? path) {
-    if (path == null || path.startsWith('http')) {
-      return path;
-    }
-    return '${ApiConfig.baseUrl}${path.startsWith('/') ? '' : '/'}$path';
-  }
 
   static int _int(Object? value) => (value as num?)?.toInt() ?? 0;
 }

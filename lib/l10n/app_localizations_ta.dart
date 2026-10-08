@@ -446,31 +446,6 @@ class AppLocalizationsTa extends AppLocalizations {
   String get homePopularQuizzes => 'பிரபலமான வினாடி வினாக்கள்';
 
   @override
-  String get homeDailyQuestions => 'தினசரி கேள்விகள்';
-
-  @override
-  String get homeDailyQuestionsSubtitle =>
-      'இன்றைய சீரற்ற கேள்விகளுடன் உங்கள் மனதைக் கூர்மைப்படுத்துங்கள்';
-
-  @override
-  String get homeDailyQuestionsEmpty => 'இன்னும் கேள்விகள் இல்லை.';
-
-  @override
-  String get homeDailyShowAnswer => 'பதிலைக் காட்டு';
-
-  @override
-  String get homeDailyHideAnswer => 'பதிலை மறை';
-
-  @override
-  String homeDailyQuestionSemantics(
-    int number,
-    String question,
-    String category,
-  ) {
-    return 'கேள்வி $number: $question. $category';
-  }
-
-  @override
   String get categoriesSubtitle =>
       'தலைப்புகளை ஆராய்ந்து உங்கள் சட்ட அறிவை வலுப்படுத்துங்கள்.';
 
@@ -496,6 +471,31 @@ class AppLocalizationsTa extends AppLocalizations {
   String topicContinueQuiz(int number) {
     return 'வினாடி வினா $number தொடரவும்';
   }
+
+  @override
+  String topicStartQuiz(int number) {
+    return 'வினாடி வினா $number தொடங்கவும்';
+  }
+
+  @override
+  String get topicPracticeAgain => 'மீண்டும் பயிற்சி செய்யவும்';
+
+  @override
+  String get topicNoQuizzes =>
+      'இந்தத் தலைப்பில் இன்னும் வினாடி வினாக்கள் இல்லை.';
+
+  @override
+  String quizUnlocksAt(int points) {
+    return '$points புள்ளிகளில் திறக்கும்';
+  }
+
+  @override
+  String get quizAnswerFailed =>
+      'உங்கள் பதிலைச் சேமிக்க முடியவில்லை. இணைப்பைச் சரிபார்த்து மீண்டும் முயற்சிக்கவும்.';
+
+  @override
+  String get quizSubmitFailed =>
+      'உங்கள் வினாடி வினாவைச் சமர்ப்பிக்க முடியவில்லை. இணைப்பைச் சரிபார்த்து மீண்டும் முயற்சிக்கவும்.';
 
   @override
   String get quizStatusCompleted => 'முடிந்தது';
@@ -555,6 +555,12 @@ class AppLocalizationsTa extends AppLocalizations {
 
   @override
   String get resultHeadline => 'அருமை!';
+
+  @override
+  String get resultHeadlineGood => 'நல்ல முன்னேற்றம்!';
+
+  @override
+  String get resultHeadlineKeepGoing => 'தொடர்ந்து முயலுங்கள்!';
 
   @override
   String resultCompleted(String topic) {
@@ -621,6 +627,9 @@ class AppLocalizationsTa extends AppLocalizations {
   String get legalUpdatesCategoryNotices => 'அறிவிப்புகள்';
 
   @override
+  String get legalUpdateViewImage => 'படத்தைப் பார்க்கவும்';
+
+  @override
   String get commonSoon => 'விரைவில்';
 
   @override
@@ -660,9 +669,6 @@ class AppLocalizationsTa extends AppLocalizations {
   @override
   String get homeAskNyayaBody =>
       'உங்கள் சட்ட கேள்விகளை எளிய மொழியில் கேளுங்கள். தெளிவான பதில்கள் பெறுங்கள்.';
-
-  @override
-  String get homeRecommended => 'உங்களுக்கான பரிந்துரைகள்';
 
   @override
   String get articlesHeroTitle => 'கற்றுக்கொண்டு புதுப்பித்த நிலையில் இருங்கள்';
@@ -975,4 +981,84 @@ class AppLocalizationsTa extends AppLocalizations {
 
   @override
   String get searchTypeQuizTopics => 'வினாடி வினா தலைப்புகள்';
+
+  @override
+  String get homeGreetingMorning => 'காலை வணக்கம்';
+
+  @override
+  String get homeGreetingAfternoon => 'மதிய வணக்கம்';
+
+  @override
+  String get homeGreetingEvening => 'மாலை வணக்கம்';
+
+  @override
+  String homeStreakDays(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count நாள் தொடர்',
+      one: '1 நாள் தொடர்',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get authMethodEmail => 'மின்னஞ்சல்';
+
+  @override
+  String get authMethodPhone => 'தொலைபேசி';
+
+  @override
+  String get fieldEmailLabel => 'மின்னஞ்சல் முகவரி';
+
+  @override
+  String get fieldEmailHint => 'உங்கள் மின்னஞ்சலை உள்ளிடவும்';
+
+  @override
+  String get validationEmailRequired => 'மின்னஞ்சல் தேவை';
+
+  @override
+  String get validationEmailInvalid => 'சரியான மின்னஞ்சலை உள்ளிடவும்';
+
+  @override
+  String get fieldPhoneOptionalLabel => 'தொலைபேசி எண் (விருப்பத்தேர்வு)';
+
+  @override
+  String get signUpCreateAccount => 'கணக்கை உருவாக்கு';
+
+  @override
+  String get authPhoneLoginUnavailable =>
+      'தொலைபேசி உள்நுழைவு இன்னும் கிடைக்கவில்லை. மின்னஞ்சலைப் பயன்படுத்தவும்.';
+
+  @override
+  String get homeDailyTitle => 'இன்றைய கேள்வி';
+
+  @override
+  String get homeDailySubtitle =>
+      'தினமும் ஒரு கேள்வி. உங்கள் தொடரைத் தக்கவைக்க பதிலளியுங்கள்.';
+
+  @override
+  String homeDailyPoints(int points) {
+    return '+$points புள்ளிகள்';
+  }
+
+  @override
+  String homeDailyEarned(int points) {
+    return '+$points புள்ளிகள் பெற்றீர்கள்';
+  }
+
+  @override
+  String get homeDailyComeBack => 'புதிய கேள்விக்கு நாளை மீண்டும் வாருங்கள்.';
+
+  @override
+  String get homeDailyNone => 'இன்று கேள்வி இல்லை. நாளை மீண்டும் பாருங்கள்.';
+
+  @override
+  String get homeDailyAnswerNow => 'இப்போது பதிலளி';
+
+  @override
+  String get homeDailyAnswered => 'பதிலளிக்கப்பட்டது';
+
+  @override
+  String get homeDailyTomorrow => 'நாளை புதிய கேள்வி';
 }

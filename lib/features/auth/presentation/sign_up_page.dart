@@ -1,24 +1,30 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
+import '../../../app/theme/app_tokens.dart';
+
+import '../../../app/theme/app_typography.dart';
 
 import '../../../app/post_sign_up_flow.dart';
 import '../../../core/presentation/widgets/nyaya_widgets.dart';
 import '../data/auth_api_client.dart';
+import '../data/auth_repository.dart';
 import '../../../app/app_services.dart';
-import '../data/firebase_phone_auth_service.dart';
-import 'otp_verification_page.dart';
 import 'widgets/auth_header.dart';
 import 'widgets/auth_primary_button.dart';
 import 'widgets/auth_text_field.dart';
 import '../../../core/localization/l10n.dart';
 import 'auth_error_text.dart';
+import 'email_validation.dart';
 import 'name_validation.dart';
 import 'profession.dart';
 
 class SignUpPage extends StatefulWidget {
-  const SignUpPage({super.key, this.onSignInRequested});
+  const SignUpPage({super.key, this.onSignInRequested, this.authRepository});
 
   final void Function(BuildContext context)? onSignInRequested;
+
+  /// Defaults to the app's; tests pass their own.
+  final AuthRepository? authRepository;
 
   @override
   State<SignUpPage> createState() => _SignUpPageState();
@@ -27,18 +33,19 @@ class SignUpPage extends StatefulWidget {
 class _SignUpPageState extends State<SignUpPage> {
   final _formKey = GlobalKey<FormState>();
   final _fullNameController = TextEditingController();
+  final _emailController = TextEditingController();
   final _professionController = TextEditingController();
   final _passwordController = TextEditingController();
   final _phoneController = TextEditingController();
 
-  // Deferred until first use so widget tests that never submit the form
-  // don't need a configured Firebase app just to render this page.
-  late final _phoneAuthService = FirebasePhoneAuthService();
-  late final _authRepository = AppServices.authRepository;
+  // Email sign-up straight to the backend, no phone OTP (spec 041). The
+  // OTP page and Firebase service stay for when phone sign-up returns.
+  late final _authRepository =
+      widget.authRepository ?? AppServices.authRepository;
 
   var _obscurePassword = true;
   var _hasAttemptedSubmit = false;
-  var _isSendingOtp = false;
+  var _isSubmitting = false;
 
   /// The picked profession. The field shows its localized label; the
   /// backend gets its stable English [Profession.value].
@@ -60,6 +67,7 @@ class _SignUpPageState extends State<SignUpPage> {
   @override
   void dispose() {
     _fullNameController.dispose();
+    _emailController.dispose();
     _professionController.dispose();
     _passwordController.dispose();
     _phoneController.dispose();
@@ -101,11 +109,10 @@ class _SignUpPageState extends State<SignUpPage> {
                           key: const ValueKey('signup.title'),
                           textAlign: TextAlign.center,
                           style: const TextStyle(
-                            fontSize: 22,
+                            fontSize: 28,
                             fontWeight: FontWeight.w700,
                             color: navy,
-                            fontFamily: 'Serif',
-                            letterSpacing: -0.3,
+                            fontFamily: NyayaFonts.display,
                           ),
                         ),
                         const SizedBox(height: 6),
@@ -142,8 +149,8 @@ class _SignUpPageState extends State<SignUpPage> {
       key: const ValueKey('signup.card'),
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: const Color(0xFFFFFDF9),
-        borderRadius: BorderRadius.circular(22),
+        color: NyayaColors.surfaceWarm,
+        borderRadius: BorderRadius.circular(NyayaRadii.md),
         border: Border.all(color: gold.withValues(alpha: 0.28)),
       ),
       child: Form(
@@ -163,6 +170,17 @@ class _SignUpPageState extends State<SignUpPage> {
               textCapitalization: TextCapitalization.words,
               autofillHints: const [AutofillHints.name],
               validator: _validateFullName,
+            ),
+            const SizedBox(height: 16),
+            AuthTextField(
+              key: const ValueKey('signup.field.email'),
+              label: context.l10n.fieldEmailLabel,
+              hint: context.l10n.fieldEmailHint,
+              icon: Icons.mail_outline_rounded,
+              controller: _emailController,
+              keyboardType: TextInputType.emailAddress,
+              autofillHints: const [AutofillHints.email],
+              validator: (value) => validateEmail(context.l10n, value),
             ),
             const SizedBox(height: 16),
             AuthTextField(
@@ -207,7 +225,7 @@ class _SignUpPageState extends State<SignUpPage> {
             const SizedBox(height: 16),
             AuthTextField(
               key: const ValueKey('signup.field.phone'),
-              label: context.l10n.fieldPhoneLabel,
+              label: context.l10n.fieldPhoneOptionalLabel,
               hint: context.l10n.fieldPhoneHint,
               icon: Icons.call_outlined,
               controller: _phoneController,
@@ -215,14 +233,15 @@ class _SignUpPageState extends State<SignUpPage> {
               textInputAction: TextInputAction.done,
               autofillHints: const [AutofillHints.telephoneNumber],
               prefixText: '+91',
+              inputFormatters: indianMobileFormatters,
               validator: _validatePhone,
             ),
             const SizedBox(height: 20),
             AuthPrimaryButton(
-              key: const ValueKey('signup.button.sendOtp'),
-              label: context.l10n.signUpSendOtp,
+              key: const ValueKey('signup.button.create'),
+              label: context.l10n.signUpCreateAccount,
               backgroundColor: gold,
-              isLoading: _isSendingOtp,
+              isLoading: _isSubmitting,
               onPressed: _submitForm,
             ),
           ],
@@ -238,7 +257,9 @@ class _SignUpPageState extends State<SignUpPage> {
       context: context,
       backgroundColor: Colors.white,
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(NyayaRadii.md),
+        ),
       ),
       builder: (sheetContext) => SafeArea(
         child: Padding(
@@ -251,8 +272,8 @@ class _SignUpPageState extends State<SignUpPage> {
                 height: 4,
                 margin: const EdgeInsets.only(bottom: 16),
                 decoration: BoxDecoration(
-                  color: const Color(0xFFE7DFD5),
-                  borderRadius: BorderRadius.circular(999),
+                  color: NyayaColors.hairline,
+                  borderRadius: BorderRadius.circular(NyayaRadii.pill),
                 ),
               ),
               for (final profession in Profession.values) ...[
@@ -302,10 +323,11 @@ class _SignUpPageState extends State<SignUpPage> {
 
   String? _validatePhone(String? value) {
     final digits = (value ?? '').replaceAll(RegExp(r'\D'), '');
+    // Optional (spec 041), but a number given must be complete.
     if (digits.isEmpty) {
-      return context.l10n.validationPhoneRequired;
+      return null;
     }
-    if (digits.length < 10 || digits.length > 15) {
+    if (digits.length != 10) {
       return context.l10n.validationPhoneInvalid;
     }
     return null;
@@ -321,89 +343,27 @@ class _SignUpPageState extends State<SignUpPage> {
     }
 
     final digits = _phoneController.text.replaceAll(RegExp(r'\D'), '');
-    final phoneNumber = '+91$digits';
-    final fullName = _fullNameController.text.trim();
-    final profession = _profession!.value;
-    // Trimmed so a stray keyboard-inserted space doesn't silently make this
-    // password different from what Login sends later (see sign_in_page.dart).
-    final password = _passwordController.text.trim();
-    setState(() => _isSendingOtp = true);
-
+    setState(() => _isSubmitting = true);
     try {
-      await _phoneAuthService.sendVerificationCode(
-        phoneNumber: phoneNumber,
-        onCodeSent: (verificationId, resendToken) {
-          if (!mounted) return;
-          setState(() => _isSendingOtp = false);
-          Navigator.of(context).push(
-            MaterialPageRoute<void>(
-              builder: (otpContext) => OtpVerificationPage(
-                phoneNumber: phoneNumber,
-                verificationId: verificationId,
-                resendToken: resendToken,
-                fullName: fullName,
-                profession: profession,
-                password: password,
-                onChangeNumber: () => Navigator.of(otpContext).pop(),
-                onVerified: () => startPostSignUpFlow(otpContext),
-              ),
-            ),
-          );
-        },
-        onVerificationFailed: (error) {
-          if (!mounted) return;
-          setState(() => _isSendingOtp = false);
-          _showMessage(firebaseAuthErrorText(context.l10n, error));
-        },
-        onAutoVerified: (credential) async {
-          // Android could silently confirm the device without ever showing
-          // an OTP screen — finish the backend signup right here instead.
-          final firebaseIdToken = await _phoneAuthService.getIdToken();
-          await _completeSignup(
-            fullName: fullName,
-            profession: profession,
-            phone: phoneNumber,
-            password: password,
-            firebaseIdToken: firebaseIdToken,
-          );
-        },
-      );
-    } on FirebaseAuthException catch (error) {
-      if (!mounted) return;
-      setState(() => _isSendingOtp = false);
-      _showMessage(firebaseAuthErrorText(context.l10n, error));
-    } catch (_) {
-      if (!mounted) return;
-      setState(() => _isSendingOtp = false);
-      _showMessage(context.l10n.errorOffline);
-    }
-  }
-
-  Future<void> _completeSignup({
-    required String fullName,
-    required String profession,
-    required String phone,
-    required String password,
-    String? firebaseIdToken,
-  }) async {
-    try {
-      await _authRepository.signup(
-        fullName: fullName,
-        profession: profession,
-        phone: phone,
-        password: password,
-        firebaseIdToken: firebaseIdToken,
+      await _authRepository.register(
+        fullName: _fullNameController.text.trim(),
+        email: _emailController.text.trim().toLowerCase(),
+        // Trimmed so a stray keyboard-inserted space doesn't silently make
+        // this password different from what Login sends later.
+        password: _passwordController.text.trim(),
+        profession: _profession!.value,
+        phone: digits.isEmpty ? null : '+91$digits',
       );
       if (!mounted) return;
-      setState(() => _isSendingOtp = false);
+      setState(() => _isSubmitting = false);
       startPostSignUpFlow(context);
     } on AuthApiException catch (error) {
       if (!mounted) return;
-      setState(() => _isSendingOtp = false);
+      setState(() => _isSubmitting = false);
       _showMessage(authApiErrorText(context.l10n, error));
     } catch (_) {
       if (!mounted) return;
-      setState(() => _isSendingOtp = false);
+      setState(() => _isSubmitting = false);
       _showMessage(context.l10n.errorOffline);
     }
   }
@@ -442,8 +402,8 @@ class _ProfessionOptionTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const borderColor = Color(0xFFE7DFD5);
-    const fillColor = Color(0xFFFFFCF8);
+    const borderColor = NyayaColors.hairline;
+    const fillColor = NyayaColors.surfaceWarm;
     final selectedFill = gold.withValues(alpha: 0.14);
     final selectedBorder = gold.withValues(alpha: 0.6);
 
@@ -452,12 +412,12 @@ class _ProfessionOptionTile extends StatelessWidget {
       child: InkWell(
         key: ValueKey('signup.profession.option.$label'),
         onTap: onTap,
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(NyayaRadii.sm),
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
           decoration: BoxDecoration(
             color: isSelected ? selectedFill : fillColor,
-            borderRadius: BorderRadius.circular(14),
+            borderRadius: BorderRadius.circular(NyayaRadii.sm),
             border: Border.all(
               color: isSelected ? selectedBorder : borderColor,
               width: isSelected ? 1.4 : 1,

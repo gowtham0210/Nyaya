@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../app/theme/app_tokens.dart';
+
 import '../../../core/localization/l10n.dart';
 import '../../../core/presentation/show_message.dart';
 import '../../../core/presentation/widgets/initials_avatar.dart';
@@ -9,9 +11,9 @@ import '../../auth/presentation/profession.dart';
 import '../data/photo_picker.dart';
 import 'edit_profile_view_model.dart';
 
-const _pageBackground = Color(0xFFF8F6F2);
-const _navy = Color(0xFF11233B);
-const _danger = Color(0xFFD64545);
+const _pageBackground = NyayaColors.ivory;
+const _navy = NyayaColors.ink;
+const _danger = NyayaColors.danger;
 
 /// Edit name, profession and photo (spec 027). Saving closes the page;
 /// a failure keeps the edits and shows why.

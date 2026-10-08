@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../core/localization/l10n.dart';
 import '../../../core/presentation/widgets/load_state_view.dart';
+import 'legal_update_detail_page.dart';
 import 'legal_updates_view_model.dart';
 import 'widgets/legal_update_card.dart';
 
@@ -29,7 +30,10 @@ class LegalUpdatesSection extends StatelessWidget {
           children: [
             for (final (index, update) in updates.take(homeCount).indexed) ...[
               if (index > 0) const SizedBox(height: 12),
-              LegalUpdateCard(update: update),
+              LegalUpdateCard(
+                update: update,
+                onTap: () => openLegalUpdate(context, update),
+              ),
             ],
           ],
         ),

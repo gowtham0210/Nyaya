@@ -13,7 +13,7 @@ Rebuild each feature in `main`'s structure (spec → view model/repository → s
 - Auth: phone + OTP (Firebase) only. Nisha's email/password login is not ported.
 - Tabs: Home, Categories, Leaderboard, Articles, Profile. Bookmarks dropped for now.
 - Languages: en, hi, ta, te, kn in v1, via `flutter_localizations` + `.arb` files.
-- Backend: shared repo, runs locally only (port 5000). All data features must handle backend-down gracefully.
+- Backend: shared repo, hosted at `https://nyayaapi.deepwebstudio.dev` (app default since 2026-10-06; override with `--dart-define=API_BASE_URL`). All data features must handle backend-down gracefully.
 - Porting: done by Gowtham.
 
 ## Phase 0 — Housekeeping

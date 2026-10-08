@@ -8,7 +8,11 @@ import '../../../support/localized_app.dart';
 
 void main() {
   testWidgets('Welcome renders in Tamil', (tester) async {
-    await pumpLocalized(tester, const WelcomePage(), locale: const Locale('ta'));
+    await pumpLocalized(
+      tester,
+      const WelcomePage(),
+      locale: const Locale('ta'),
+    );
 
     expect(find.text('சட்டம் எளிதாக,'), findsOneWidget);
     expect(find.text('சட்டங்களைக் கற்றுக்கொள்ளுங்கள்'), findsOneWidget);

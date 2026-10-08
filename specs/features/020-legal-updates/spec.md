@@ -19,7 +19,7 @@ Learners can't see recent law changes in the app.
 
 ## Non-Goals
 
-- Update detail screen (cards aren't tappable yet).
+- Update detail screen (done in spec 047).
 - Category filter chips (Nisha had them on the Articles tab).
 - Bookmarking updates.
 - Reloading when the language changes (done in spec 028, issue #35).
@@ -96,4 +96,4 @@ Learners can't see recent law changes in the app.
 ## Open Questions
 
 - Should the backend sort and page updates, or send a `limit` for Home?
-- Should cards open a detail screen or the source link?
+- ~~Should cards open a detail screen or the source link?~~ Detail screen (spec 047).

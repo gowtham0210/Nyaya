@@ -57,7 +57,7 @@ void main() {
       find.text('Master your LLB subjects, concept by concept'),
       findsOneWidget,
     );
-    expect(find.text('CONTINUE'), findsOneWidget);
+    expect(find.text('Continue'), findsOneWidget);
     expect(find.text('You can switch goals later in Profile.'), findsOneWidget);
   });
 

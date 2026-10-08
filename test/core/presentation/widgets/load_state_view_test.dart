@@ -4,6 +4,7 @@ import 'package:nyaya/core/localization/l10n.dart';
 import 'package:nyaya/core/network/api_client.dart';
 import 'package:nyaya/core/presentation/load_state.dart';
 import 'package:nyaya/core/presentation/widgets/load_state_view.dart';
+import 'package:nyaya/core/presentation/widgets/nyaya_skeleton.dart';
 
 void main() {
   Future<void> pumpView(
@@ -30,11 +31,12 @@ void main() {
     await tester.pump();
   }
 
-  testWidgets('AC-008 loading shows a progress indicator', (tester) async {
+  testWidgets('AC-008 loading shows a skeleton (spec 039)', (tester) async {
     await pumpView(tester, const Loading());
 
     expect(find.byKey(const ValueKey('loadState.loading')), findsOneWidget);
-    expect(find.byType(CircularProgressIndicator), findsOneWidget);
+    expect(find.byType(NyayaSkeleton), findsOneWidget);
+    expect(find.byType(CircularProgressIndicator), findsNothing);
   });
 
   testWidgets('AC-008 loaded shows the content', (tester) async {
@@ -78,7 +80,10 @@ void main() {
       onRetry: () {},
     );
 
-    expect(find.text('Something went wrong. Please try again.'), findsOneWidget);
+    expect(
+      find.text('Something went wrong. Please try again.'),
+      findsOneWidget,
+    );
     expect(find.text('Database down'), findsNothing);
   });
 

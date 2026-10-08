@@ -51,6 +51,36 @@ void main() {
     );
   });
 
+  test('spec 041 register signs in, then saves the profession', () async {
+    final calls = <String>[];
+    final repository = repositoryWith((request) async {
+      calls.add('${request.method} ${request.url.path} ${request.body}');
+      return request.url.path.endsWith('/auth/register')
+          ? jsonResponse({
+              'accessToken': 'a1',
+              'refreshToken': 'r1',
+              'user': {'id': 9, 'fullName': 'Asha'},
+            }, 201)
+          : jsonResponse({'message': 'boom'}, 500);
+    });
+
+    final user = await repository.register(
+      fullName: 'Asha',
+      email: 'asha@example.com',
+      password: 'passw0rd1',
+      profession: 'Law Student',
+    );
+
+    // A failed profession save doesn't undo the new account.
+    expect(user?.fullName, 'Asha');
+    expect(AuthTokenStore.accessToken, 'a1');
+    expect(calls, [
+      'POST /api/v1/auth/register '
+          '{"fullName":"Asha","email":"asha@example.com","password":"passw0rd1"}',
+      'PATCH /api/v1/users/me {"profession":"Law Student"}',
+    ]);
+  });
+
   test('refresh swaps in the new tokens', () async {
     AuthTokenStore.saveSession(accessToken: 'old', refreshToken: 'r-old');
     final repository = repositoryWith((request) async {

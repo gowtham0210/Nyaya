@@ -884,46 +884,6 @@ abstract class AppLocalizations {
   /// **'Popular Quizzes'**
   String get homePopularQuizzes;
 
-  /// No description provided for @homeDailyQuestions.
-  ///
-  /// In en, this message translates to:
-  /// **'Daily Questions'**
-  String get homeDailyQuestions;
-
-  /// No description provided for @homeDailyQuestionsSubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Sharpen your mind with today\'s random questions'**
-  String get homeDailyQuestionsSubtitle;
-
-  /// No description provided for @homeDailyQuestionsEmpty.
-  ///
-  /// In en, this message translates to:
-  /// **'No questions available yet.'**
-  String get homeDailyQuestionsEmpty;
-
-  /// No description provided for @homeDailyShowAnswer.
-  ///
-  /// In en, this message translates to:
-  /// **'Show answer'**
-  String get homeDailyShowAnswer;
-
-  /// No description provided for @homeDailyHideAnswer.
-  ///
-  /// In en, this message translates to:
-  /// **'Hide answer'**
-  String get homeDailyHideAnswer;
-
-  /// No description provided for @homeDailyQuestionSemantics.
-  ///
-  /// In en, this message translates to:
-  /// **'Question {number}: {question}. {category}'**
-  String homeDailyQuestionSemantics(
-    int number,
-    String question,
-    String category,
-  );
-
   /// No description provided for @categoriesSubtitle.
   ///
   /// In en, this message translates to:
@@ -971,6 +931,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Continue quiz {number}'**
   String topicContinueQuiz(int number);
+
+  /// No description provided for @topicStartQuiz.
+  ///
+  /// In en, this message translates to:
+  /// **'Start quiz {number}'**
+  String topicStartQuiz(int number);
+
+  /// No description provided for @topicPracticeAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Practice again'**
+  String get topicPracticeAgain;
+
+  /// No description provided for @topicNoQuizzes.
+  ///
+  /// In en, this message translates to:
+  /// **'No quizzes in this topic yet.'**
+  String get topicNoQuizzes;
+
+  /// No description provided for @quizUnlocksAt.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlocks at {points} points'**
+  String quizUnlocksAt(int points);
+
+  /// No description provided for @quizAnswerFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t save your answer. Check your connection and try again.'**
+  String get quizAnswerFailed;
+
+  /// No description provided for @quizSubmitFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t submit your quiz. Check your connection and try again.'**
+  String get quizSubmitFailed;
 
   /// No description provided for @quizStatusCompleted.
   ///
@@ -1060,6 +1056,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Well Done!'**
   String get resultHeadline;
+
+  /// No description provided for @resultHeadlineGood.
+  ///
+  /// In en, this message translates to:
+  /// **'Good progress!'**
+  String get resultHeadlineGood;
+
+  /// No description provided for @resultHeadlineKeepGoing.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep going!'**
+  String get resultHeadlineKeepGoing;
 
   /// No description provided for @resultCompleted.
   ///
@@ -1157,6 +1165,12 @@ abstract class AppLocalizations {
   /// **'Notices'**
   String get legalUpdatesCategoryNotices;
 
+  /// No description provided for @legalUpdateViewImage.
+  ///
+  /// In en, this message translates to:
+  /// **'View image'**
+  String get legalUpdateViewImage;
+
   /// No description provided for @commonSoon.
   ///
   /// In en, this message translates to:
@@ -1198,12 +1212,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Ask your legal questions in simple language. Get clear answers.'**
   String get homeAskNyayaBody;
-
-  /// No description provided for @homeRecommended.
-  ///
-  /// In en, this message translates to:
-  /// **'Recommended for you'**
-  String get homeRecommended;
 
   /// No description provided for @articlesHeroTitle.
   ///
@@ -1756,6 +1764,138 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Quiz topics'**
   String get searchTypeQuizTopics;
+
+  /// No description provided for @homeGreetingMorning.
+  ///
+  /// In en, this message translates to:
+  /// **'Good morning'**
+  String get homeGreetingMorning;
+
+  /// No description provided for @homeGreetingAfternoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Good afternoon'**
+  String get homeGreetingAfternoon;
+
+  /// No description provided for @homeGreetingEvening.
+  ///
+  /// In en, this message translates to:
+  /// **'Good evening'**
+  String get homeGreetingEvening;
+
+  /// No description provided for @homeStreakDays.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1-day streak} other{{count}-day streak}}'**
+  String homeStreakDays(int count);
+
+  /// No description provided for @authMethodEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Email'**
+  String get authMethodEmail;
+
+  /// No description provided for @authMethodPhone.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone'**
+  String get authMethodPhone;
+
+  /// No description provided for @fieldEmailLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Email Address'**
+  String get fieldEmailLabel;
+
+  /// No description provided for @fieldEmailHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your email'**
+  String get fieldEmailHint;
+
+  /// No description provided for @validationEmailRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Email is required'**
+  String get validationEmailRequired;
+
+  /// No description provided for @validationEmailInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid email'**
+  String get validationEmailInvalid;
+
+  /// No description provided for @fieldPhoneOptionalLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone Number (optional)'**
+  String get fieldPhoneOptionalLabel;
+
+  /// No description provided for @signUpCreateAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Create account'**
+  String get signUpCreateAccount;
+
+  /// No description provided for @authPhoneLoginUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone sign-in isn\'t available yet. Please use email.'**
+  String get authPhoneLoginUnavailable;
+
+  /// No description provided for @homeDailyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Today\'s Question'**
+  String get homeDailyTitle;
+
+  /// No description provided for @homeDailySubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'One question a day. Answer to keep your streak.'**
+  String get homeDailySubtitle;
+
+  /// No description provided for @homeDailyPoints.
+  ///
+  /// In en, this message translates to:
+  /// **'+{points} points'**
+  String homeDailyPoints(int points);
+
+  /// No description provided for @homeDailyEarned.
+  ///
+  /// In en, this message translates to:
+  /// **'+{points} earned'**
+  String homeDailyEarned(int points);
+
+  /// No description provided for @homeDailyComeBack.
+  ///
+  /// In en, this message translates to:
+  /// **'Come back tomorrow for a new question.'**
+  String get homeDailyComeBack;
+
+  /// No description provided for @homeDailyNone.
+  ///
+  /// In en, this message translates to:
+  /// **'No question today. Check back tomorrow.'**
+  String get homeDailyNone;
+
+  /// No description provided for @homeDailyAnswerNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Answer now'**
+  String get homeDailyAnswerNow;
+
+  /// No description provided for @homeDailyAnswered.
+  ///
+  /// In en, this message translates to:
+  /// **'Answered'**
+  String get homeDailyAnswered;
+
+  /// No description provided for @homeDailyTomorrow.
+  ///
+  /// In en, this message translates to:
+  /// **'New question tomorrow'**
+  String get homeDailyTomorrow;
 }
 
 class _AppLocalizationsDelegate

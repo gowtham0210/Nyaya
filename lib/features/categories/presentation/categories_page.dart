@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 
+import '../../../app/theme/app_tokens.dart';
+
+import '../../../app/theme/app_typography.dart';
+
 import '../../../core/localization/l10n.dart';
 import '../../../core/presentation/widgets/load_state_view.dart';
 import '../../../core/presentation/widgets/nyaya_icon.dart';
@@ -11,15 +15,19 @@ class CategoriesPage extends StatefulWidget {
     super.key,
     required this.viewModel,
     this.onCategorySelected,
+    this.onFiltersPressed,
   });
 
   final CategoriesViewModel viewModel;
   final ValueChanged<CategoryData>? onCategorySelected;
 
-  static const pageBackground = Color(0xFFF8F6F2);
-  static const heroBackground = Color(0xFF11233B);
-  static const supportText = Color(0xFF5E6878);
-  static const cardBorder = Color(0xFFECE5DB);
+  /// Null hides the Filters button until a filter screen exists.
+  final VoidCallback? onFiltersPressed;
+
+  static const pageBackground = NyayaColors.ivory;
+  static const heroBackground = NyayaColors.ink;
+  static const supportText = NyayaColors.inkMuted;
+  static const cardBorder = NyayaColors.hairline;
 
   @override
   State<CategoriesPage> createState() => _CategoriesPageState();
@@ -69,11 +77,10 @@ class _CategoriesPageState extends State<CategoriesPage> {
                           l10n.navCategories,
                           key: const ValueKey('categories.header.title'),
                           style: const TextStyle(
-                            fontSize: 26,
+                            fontSize: 32,
                             fontWeight: FontWeight.w700,
                             color: CategoriesPage.heroBackground,
-                            fontFamily: 'serif',
-                            letterSpacing: -0.3,
+                            fontFamily: NyayaFonts.display,
                           ),
                         ),
                         const SizedBox(height: 6),
@@ -101,13 +108,10 @@ class _CategoriesPageState extends State<CategoriesPage> {
                       hint: l10n.categoriesSearchHint,
                     ),
                   ),
-                  const SizedBox(width: 10),
-                  _FilterButton(
-                    onTap: () => _showPlaceholder(
-                      context,
-                      l10n.featureComingSoon(l10n.categoriesFilters),
-                    ),
-                  ),
+                  if (widget.onFiltersPressed case final onFilters?) ...[
+                    const SizedBox(width: 10),
+                    _FilterButton(onTap: onFilters),
+                  ],
                 ],
               ),
               const SizedBox(height: 20),
@@ -234,13 +238,13 @@ class _FilterButton extends StatelessWidget {
     return InkWell(
       key: const ValueKey('categories.filter'),
       onTap: onTap,
-      borderRadius: BorderRadius.circular(16),
+      borderRadius: BorderRadius.circular(NyayaRadii.sm),
       child: Container(
         width: 52,
         height: 52,
         decoration: BoxDecoration(
           color: ivory,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(NyayaRadii.sm),
           border: Border.all(color: CategoriesPage.cardBorder),
         ),
         alignment: Alignment.center,
@@ -267,7 +271,7 @@ class _SearchField extends StatelessWidget {
       key: const ValueKey('categories.search'),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(18),
+        borderRadius: BorderRadius.circular(NyayaRadii.md),
         border: Border.all(color: CategoriesPage.cardBorder),
       ),
       child: TextField(
@@ -304,11 +308,11 @@ class _CategoryCard extends StatelessWidget {
     return InkWell(
       key: ValueKey('categories.card.${category.slug}'),
       onTap: onTap,
-      borderRadius: BorderRadius.circular(22),
+      borderRadius: BorderRadius.circular(NyayaRadii.md),
       child: Container(
         decoration: BoxDecoration(
           color: Color(category.tintHex),
-          borderRadius: BorderRadius.circular(22),
+          borderRadius: BorderRadius.circular(NyayaRadii.md),
         ),
         padding: const EdgeInsets.all(16),
         child: Column(

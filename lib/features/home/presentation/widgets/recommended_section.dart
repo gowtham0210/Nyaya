@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 
+import '../../../../app/theme/app_tokens.dart';
+
 import '../../../../core/localization/l10n.dart';
 import '../../../../core/presentation/widgets/load_state_view.dart';
 import '../../../../core/presentation/widgets/nyaya_icon.dart';
 import '../../../categories/presentation/categories_view_model.dart';
 
-const _navy = Color(0xFF11233B);
-const _supportText = Color(0xFF5E6878);
-const _cardBorder = Color(0xFFECE5DB);
+const _navy = NyayaColors.ink;
+const _supportText = NyayaColors.inkMuted;
+const _cardBorder = NyayaColors.hairline;
 
-/// Home's "Recommended for you" strip of backend categories (spec 026).
-/// Shares the Categories tab's view model.
+/// Home's "Explore by Category" strip of backend categories (specs 026,
+/// 040). Shares the Categories tab's view model.
 class RecommendedSection extends StatelessWidget {
   const RecommendedSection({
     super.key,
@@ -53,11 +55,11 @@ class RecommendedSection extends StatelessWidget {
   }
 }
 
-/// Card height for the strip and grid; grows with the text size.
+/// Card height for the strip; grows with the text size.
 double recommendedCardHeight(BuildContext context) =>
     70 + MediaQuery.textScalerOf(context).scale(95);
 
-/// A category card for the Recommended strip and its see-all grid.
+/// A category card for Home's category strip.
 class RecommendedCard extends StatelessWidget {
   const RecommendedCard({
     super.key,
@@ -82,7 +84,7 @@ class RecommendedCard extends StatelessWidget {
       child: Material(
         color: Colors.white,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(NyayaRadii.md),
           side: const BorderSide(color: _cardBorder),
         ),
         clipBehavior: Clip.antiAlias,
@@ -99,7 +101,7 @@ class RecommendedCard extends StatelessWidget {
                     height: 48,
                     decoration: BoxDecoration(
                       color: Color(category.tintHex),
-                      borderRadius: BorderRadius.circular(14),
+                      borderRadius: BorderRadius.circular(NyayaRadii.sm),
                     ),
                     alignment: Alignment.center,
                     child: NyayaIcon(

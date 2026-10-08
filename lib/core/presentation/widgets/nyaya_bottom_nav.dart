@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 
+import '../../../app/theme/app_motion.dart';
+import '../../../app/theme/app_tokens.dart';
+
 import 'nyaya_icon.dart';
 
-const navBarActive = Color(0xFF11233B);
-const navBarInactive = Color(0xFF8B95A5);
-const navBarIndicator = Color(0xFFD3A247);
-const navBarBorder = Color(0xFFECE5DB);
+const navBarActive = NyayaColors.ink;
+const navBarInactive = NyayaColors.inkSubtle;
+const navBarIndicator = NyayaColors.goldBright;
+const navBarBorder = NyayaColors.hairline;
 
 /// The five-tab bottom navigation bar shared by every main-tab screen
 /// (Home, Categories, Leaderboard, Articles, Profile).
@@ -40,17 +43,44 @@ class NyayaBottomNavBar extends StatelessWidget {
         top: false,
         child: Padding(
           padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
-          child: Row(
-            children: [
-              for (var i = 0; i < items.length; i++)
-                Expanded(
-                  child: _NavItem(
-                    item: items[i],
-                    isActive: i == activeIndex,
-                    onTap: () => onSelected(i),
+          // One indicator slides between tabs (spec 039).
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              final slot = constraints.maxWidth / items.length;
+              return Stack(
+                children: [
+                  Row(
+                    children: [
+                      for (var i = 0; i < items.length; i++)
+                        Expanded(
+                          child: _NavItem(
+                            item: items[i],
+                            isActive: i == activeIndex,
+                            onTap: () => onSelected(i),
+                          ),
+                        ),
+                    ],
                   ),
-                ),
-            ],
+                  AnimatedPositioned(
+                    key: const ValueKey('nav.indicator'),
+                    duration: NyayaMotion.of(context, NyayaMotion.medium),
+                    curve: NyayaMotion.curve,
+                    left: slot * activeIndex + (slot - _indicatorWidth) / 2,
+                    bottom: 6,
+                    width: _indicatorWidth,
+                    height: 3,
+                    child: const DecoratedBox(
+                      decoration: BoxDecoration(
+                        color: navBarIndicator,
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(NyayaRadii.pill),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            },
           ),
         ),
       ),
@@ -76,7 +106,7 @@ class _NavItem extends StatelessWidget {
     return InkWell(
       key: ValueKey('nav.${item.id}'),
       onTap: onTap,
-      borderRadius: BorderRadius.circular(16),
+      borderRadius: BorderRadius.circular(NyayaRadii.sm),
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 6),
         child: Column(
@@ -89,27 +119,29 @@ class _NavItem extends StatelessWidget {
               accentColor: color,
             ),
             const SizedBox(height: 6),
-            Text(
-              item.label,
-              style: TextStyle(
-                fontSize: 12,
-                fontWeight: isActive ? FontWeight.w700 : FontWeight.w500,
-                color: color,
+            // One line, shrunk to fit: long labels (e.g. translations) never
+            // wrap, and the weight stays fixed so tabs don't shift (spec 037).
+            FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(
+                item.label,
+                maxLines: 1,
+                softWrap: false,
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
+                  color: color,
+                ),
               ),
             ),
             const SizedBox(height: 8),
-            AnimatedContainer(
+            // Holds the indicator's place; the bar itself slides above.
+            SizedBox(
               key: isActive
                   ? ValueKey('nav.${item.id}.active')
                   : ValueKey('nav.${item.id}.inactive'),
-              duration: const Duration(milliseconds: 180),
-              curve: Curves.easeOut,
-              width: isActive ? 28 : 12,
+              width: _indicatorWidth,
               height: 3,
-              decoration: BoxDecoration(
-                color: isActive ? navBarIndicator : Colors.transparent,
-                borderRadius: BorderRadius.circular(999),
-              ),
             ),
           ],
         ),
@@ -117,3 +149,5 @@ class _NavItem extends StatelessWidget {
     );
   }
 }
+
+const double _indicatorWidth = 28;

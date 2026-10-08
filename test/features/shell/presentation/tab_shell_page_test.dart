@@ -104,6 +104,28 @@ void main() {
     expect(find.text('home body'), findsOneWidget);
     expect(find.byKey(const ValueKey('nav.home.active')), findsOneWidget);
   });
+
+  testWidgets('spec 037 AC-003 long nav labels stay on one line', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(320, 640);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+    await pumpShell(tester, [
+      tab('home', (_) => const SizedBox()),
+      tab('categories', (_) => const SizedBox()),
+      tab('leaderboard', (_) => const SizedBox()),
+      tab('articles', (_) => const SizedBox()),
+      tab('profile', (_) => const SizedBox()),
+    ]);
+
+    final label = tester.widget<Text>(find.text('LEADERBOARD'));
+    expect(label.maxLines, 1);
+    expect(label.softWrap, isFalse);
+    expect(tester.takeException(), isNull);
+    // Selecting keeps the same weight, so the row doesn't shift.
+    expect(label.style?.fontWeight, FontWeight.w600);
+  });
 }
 
 class _Counter extends StatefulWidget {

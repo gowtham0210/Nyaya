@@ -1,159 +1,95 @@
-import 'dart:async';
-
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
-import 'package:http/testing.dart';
 import 'package:nyaya/core/network/api_client.dart';
 import 'package:nyaya/core/presentation/load_state.dart';
 import 'package:nyaya/features/home/data/daily_questions_repository.dart';
 import 'package:nyaya/features/home/presentation/daily_questions_view_model.dart';
 
+import '../../../support/daily_backend.dart';
 import '../../../support/fake_backend.dart';
 
-const twoQuestions = {
-  'items': [
-    {
-      'id': 1,
-      'category': 'Constitutional Law',
-      'question': 'Which article protects the right to life?',
-      'answer': 'Article 21.',
-    },
-    {
-      'id': 2,
-      'category': 'Criminal Law',
-      'question': 'What replaced the IPC in 2024?',
-      'answer': 'The Bharatiya Nyaya Sanhita.',
-    },
-  ],
-};
-
-DailyQuestionsViewModel viewModelWith(ApiClient client) =>
-    DailyQuestionsViewModel(repository: DailyQuestionsRepository(client));
-
+/// Spec 045 AC-002 (plus 018's load states).
 void main() {
-  test('AC-002 loading then loaded with the questions', () async {
-    final viewModel = viewModelWith(
-      fakeBackend({'/daily-questions/random': twoQuestions}),
+  late int answeredCalls;
+
+  DailyQuestionsViewModel viewModelWith(Map<String, Object> routes) {
+    answeredCalls = 0;
+    final viewModel = DailyQuestionsViewModel(
+      repository: DailyQuestionsRepository(fakeBackend(routes)),
+      onAnswered: () => answeredCalls++,
     );
+    addTearDown(viewModel.dispose);
+    return viewModel;
+  }
 
-    final loading = viewModel.load();
-    expect(viewModel.state, isA<Loading<List<DailyQuestion>>>());
-    await loading;
+  DailyToday loaded(DailyQuestionsViewModel viewModel) =>
+      (viewModel.state as Loaded<DailyToday>).data;
 
-    final questions = (viewModel.state as Loaded<List<DailyQuestion>>).data;
-    expect(questions.map((q) => q.question), [
-      'Which article protects the right to life?',
-      'What replaced the IPC in 2024?',
-    ]);
+  test('loads today; no question is the empty state', () async {
+    final viewModel = viewModelWith(dailyRoutes());
+    expect(viewModel.state, isA<Loading<DailyToday>>());
+    await viewModel.load();
+    expect(loaded(viewModel).question!.options, hasLength(3));
+
+    final empty = viewModelWith({'/daily-questions/today': noDailyQuestion});
+    await empty.load();
+    expect(empty.state, isA<Empty<DailyToday>>());
   });
 
-  test('AC-002 no questions is the empty state', () async {
-    final viewModel = viewModelWith(
-      fakeBackend({
-        '/daily-questions/random': {'items': []},
-      }),
-    );
-
+  test('a failed load is the error state; load() recovers', () async {
+    final routes = <String, Object>{
+      '/daily-questions/today': http.Response('{"message":"down"}', 500),
+    };
+    final viewModel = viewModelWith(routes);
     await viewModel.load();
+    expect(viewModel.state, isA<Failed<DailyToday>>());
 
-    expect(viewModel.state, isA<Empty<List<DailyQuestion>>>());
+    routes.addAll(dailyRoutes());
+    await viewModel.load();
+    expect(viewModel.state, isA<Loaded<DailyToday>>());
   });
 
-  test('AC-002 a failure is the error state and load() recovers', () async {
-    var online = false;
-    final viewModel = viewModelWith(
-      ApiClient(
-        httpClient: MockClient((request) async {
-          if (!online) {
-            throw http.ClientException('offline');
-          }
-          return http.Response(
-            '{"items":[{"id":1,"category":"Civil Law",'
-            '"question":"Q?","answer":"A."}]}',
-            200,
-          );
-        }),
-      ),
-    );
-
+  test('answering grades in place and runs onAnswered once', () async {
+    final answers = <int>[];
+    final viewModel = viewModelWith(dailyRoutes(answers: answers));
     await viewModel.load();
-    final failed = viewModel.state as Failed<List<DailyQuestion>>;
-    expect(failed.error, isA<ApiOfflineException>());
 
-    online = true;
-    await viewModel.load();
-    expect(viewModel.state, isA<Loaded<List<DailyQuestion>>>());
+    final pending = viewModel.answer(13);
+    expect(viewModel.sending, 13);
+    // A second tap while the first is in flight is ignored.
+    expect(await viewModel.answer(12), isNull);
+    final result = await pending;
+
+    expect(answers, [13]);
+    expect(result!.isCorrect, isFalse);
+    expect(loaded(viewModel).result!.correctOptionId, 12);
+    expect(viewModel.sending, isNull);
+    expect(answeredCalls, 1);
   });
 
-  test('AC-002 an unreadable response is the error state', () async {
+  test('a failed answer keeps the question open and reports it', () async {
     final viewModel = viewModelWith(
-      fakeBackend({
-        '/daily-questions/random': {
-          'items': [
-            {'id': 1, 'category': 'Civil Law', 'question': null},
-          ],
-        },
-      }),
+      dailyRoutes(answerResponse: http.Response('{"message":"x"}', 500)),
     );
-
     await viewModel.load();
 
-    expect(viewModel.state, isA<Failed<List<DailyQuestion>>>());
+    await expectLater(viewModel.answer(12), throwsA(isA<ApiException>()));
+    expect(loaded(viewModel).answered, isFalse);
+    expect(viewModel.sending, isNull);
+    expect(answeredCalls, 0);
   });
 
-  test('AC-002 a newer load wins over a slower earlier one', () async {
-    final firstResponse = Completer<http.Response>();
-    var calls = 0;
-    final viewModel = viewModelWith(
-      ApiClient(
-        httpClient: MockClient((request) async {
-          calls++;
-          if (calls == 1) {
-            return firstResponse.future;
-          }
-          return http.Response(
-            '{"items":[{"id":2,"category":"C","question":"New?","answer":"A."}]}',
-            200,
-          );
-        }),
-      ),
+  test('already answered elsewhere (409) reloads to show it', () async {
+    final routes = dailyRoutes(
+      answerResponse: http.Response('{"message":"already"}', 409),
     );
-
-    final slow = viewModel.load();
+    final viewModel = viewModelWith(routes);
     await viewModel.load();
-    firstResponse.complete(
-      http.Response(
-        '{"items":[{"id":1,"category":"C","question":"Old?","answer":"A."}]}',
-        200,
-      ),
-    );
-    await slow;
+    routes['/daily-questions/today'] = dailyToday(selectedOptionId: 11);
 
-    final questions = (viewModel.state as Loaded<List<DailyQuestion>>).data;
-    expect(questions.single.question, 'New?');
+    expect(await viewModel.answer(12), isNull);
+
+    expect(loaded(viewModel).result!.selectedOptionId, 11);
+    expect(answeredCalls, 0);
   });
-
-  test(
-    'AC-003 toggling reveals then hides an answer; reload hides all',
-    () async {
-      final viewModel = viewModelWith(
-        fakeBackend({'/daily-questions/random': twoQuestions}),
-      );
-      await viewModel.load();
-
-      expect(viewModel.isRevealed(1), isFalse);
-      viewModel.toggleAnswer(1);
-      expect(viewModel.isRevealed(1), isTrue);
-      expect(viewModel.isRevealed(2), isFalse);
-      viewModel.toggleAnswer(1);
-      expect(viewModel.isRevealed(1), isFalse);
-
-      viewModel
-        ..toggleAnswer(1)
-        ..toggleAnswer(2);
-      await viewModel.load();
-      expect(viewModel.isRevealed(1), isFalse);
-      expect(viewModel.isRevealed(2), isFalse);
-    },
-  );
 }

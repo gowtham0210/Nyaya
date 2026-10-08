@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 
+import '../../../app/theme/app_tokens.dart';
+
 import '../../../core/localization/l10n.dart';
 import '../../../core/presentation/widgets/load_state_view.dart';
+import 'legal_update_detail_page.dart';
 import 'legal_updates_view_model.dart';
 import 'widgets/legal_update_card.dart';
 
-const _pageBackground = Color(0xFFF8F6F2);
-const _navy = Color(0xFF11233B);
+const _pageBackground = NyayaColors.ivory;
+const _navy = NyayaColors.ink;
 
 /// All legal updates, opened from Home's "View All" (spec 020). Shares
 /// Home's view model, so it shows what Home loaded without reloading.
@@ -41,8 +44,10 @@ class LegalUpdatesPage extends StatelessWidget {
             padding: const EdgeInsets.fromLTRB(24, 8, 24, 24),
             itemCount: updates.length,
             separatorBuilder: (_, _) => const SizedBox(height: 12),
-            itemBuilder: (context, index) =>
-                LegalUpdateCard(update: updates[index]),
+            itemBuilder: (context, index) => LegalUpdateCard(
+              update: updates[index],
+              onTap: () => openLegalUpdate(context, updates[index]),
+            ),
           ),
         ),
       ),

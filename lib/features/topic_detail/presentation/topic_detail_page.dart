@@ -1,35 +1,54 @@
 import 'package:flutter/material.dart';
 
+import '../../../app/theme/app_tokens.dart';
+
+import '../../../app/theme/app_typography.dart';
+
 import '../../../core/localization/l10n.dart';
+import '../../../core/presentation/widgets/load_state_view.dart';
 import '../../../core/presentation/widgets/nyaya_widgets.dart';
 import 'topic_detail_view_model.dart';
 
-const _cardBorder = Color(0xFFECE5DB);
-const _sectionStripFill = Color(0xFFF7EFE2);
-const _easyGreen = Color(0xFF1FA35B);
-const _mediumGold = Color(0xFFD19A2E);
-const _hardRed = Color(0xFFD64545);
+const _cardBorder = NyayaColors.hairline;
+const _easyGreen = NyayaDifficulty.easy;
+const _mediumGold = NyayaDifficulty.medium;
+const _hardRed = NyayaDifficulty.hard;
 const _templeAsset = 'assets/backgrounds/temple_bg.png';
 
 class TopicDetailPage extends StatefulWidget {
   const TopicDetailPage({
     super.key,
+    required this.viewModel,
     required this.onQuizSelected,
-    required this.onContinueQuiz,
-    this.viewModel,
   });
 
-  final ValueChanged<String> onQuizSelected;
-  final ValueChanged<String> onContinueQuiz;
-  final TopicDetailViewModel? viewModel;
+  /// The topic's quizzes and progress from the backend (spec 038).
+  final TopicDetailViewModel viewModel;
+
+  /// Opens a quiz; also used by the bottom Start/Continue button.
+  final ValueChanged<TopicQuiz> onQuizSelected;
 
   @override
   State<TopicDetailPage> createState() => _TopicDetailPageState();
 }
 
 class _TopicDetailPageState extends State<TopicDetailPage> {
-  late final TopicDetailViewModel _viewModel =
-      widget.viewModel ?? TopicDetailViewModel();
+  TopicDetailViewModel get _viewModel => widget.viewModel;
+
+  @override
+  void initState() {
+    super.initState();
+    _viewModel.ensureLoaded();
+  }
+
+  String _continueLabel(AppLocalizations l10n, TopicQuiz target) =>
+      switch (target.status) {
+        QuizStatus.inProgress => l10n.topicContinueQuiz(
+          _viewModel.continueNumber,
+        ),
+        QuizStatus.notStarted => l10n.topicStartQuiz(_viewModel.continueNumber),
+        QuizStatus.completed => l10n.topicPracticeAgain,
+      };
 
   @override
   Widget build(BuildContext context) {
@@ -55,163 +74,145 @@ class _TopicDetailPageState extends State<TopicDetailPage> {
             child: ExcludeSemantics(child: BackgroundWave()),
           ),
           SafeArea(
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 12),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      IconButton(
-                        key: const ValueKey('topic.back'),
-                        onPressed: () => Navigator.maybePop(context),
-                        icon: const Icon(Icons.arrow_back, color: navy),
-                        tooltip: MaterialLocalizations.of(
-                          context,
-                        ).backButtonTooltip,
+            child: ListenableBuilder(
+              listenable: _viewModel,
+              builder: (context, _) {
+                final target = _viewModel.continueTarget;
+                return Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 12),
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: IconButton(
+                          key: const ValueKey('topic.back'),
+                          onPressed: () => Navigator.maybePop(context),
+                          icon: const Icon(Icons.arrow_back, color: navy),
+                          tooltip: MaterialLocalizations.of(
+                            context,
+                          ).backButtonTooltip,
+                        ),
                       ),
-                      IconButton(
-                        key: const ValueKey('topic.bookmark'),
-                        onPressed: () => setState(_viewModel.toggleBookmark),
-                        icon: Icon(
-                          _viewModel.isBookmarked
-                              ? Icons.bookmark
-                              : Icons.bookmark_border,
-                          color: gold,
-                        ),
-                        tooltip: _viewModel.isBookmarked
-                            ? l10n.topicRemoveBookmark
-                            : l10n.topicBookmark,
-                      ),
-                    ],
-                  ),
-                ),
-                Expanded(
-                  child: SingleChildScrollView(
-                    padding: const EdgeInsets.symmetric(horizontal: 24),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          _viewModel.title,
-                          style: Theme.of(context).textTheme.headlineMedium
-                              ?.copyWith(
-                                color: navy,
-                                fontFamily: 'serif',
-                                fontWeight: FontWeight.w700,
-                              ),
-                        ),
-                        const SizedBox(height: 6),
-                        Text(
-                          _viewModel.subtitle,
-                          style: const TextStyle(color: bodyGrey, fontSize: 14),
-                        ),
-                        const SizedBox(height: 16),
-                        Row(
+                    ),
+                    Expanded(
+                      child: RefreshIndicator(
+                        onRefresh: _viewModel.load,
+                        child: ListView(
+                          key: const ValueKey('topic.scroll'),
+                          padding: const EdgeInsets.symmetric(horizontal: 24),
                           children: [
                             Text(
-                              l10n.quizCount(_viewModel.quizCount),
-                              style: const TextStyle(
-                                color: bodyGrey,
-                                fontSize: 14,
-                              ),
-                            ),
-                            const SizedBox(width: 12),
-                            _DifficultyChip(difficulty: _viewModel.difficulty),
-                            const SizedBox(width: 12),
-                            _ProgressRing(progress: _viewModel.progress),
-                          ],
-                        ),
-                        const SizedBox(height: 16),
-                        Text(
-                          _viewModel.description,
-                          style: const TextStyle(
-                            color: bodyGrey,
-                            fontSize: 14,
-                            height: 1.5,
-                          ),
-                        ),
-                        const SizedBox(height: 16),
-                        Container(
-                          padding: const EdgeInsets.all(12),
-                          decoration: BoxDecoration(
-                            color: _sectionStripFill,
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Row(
-                            children: [
-                              const Icon(
-                                Icons.menu_book_outlined,
-                                color: gold,
-                                size: 20,
-                              ),
-                              const SizedBox(width: 10),
-                              Expanded(
-                                child: Text(
-                                  _viewModel.sectionReference,
-                                  style: const TextStyle(
-                                    color: bodyGrey,
-                                    fontSize: 13,
+                              _viewModel.title,
+                              key: const ValueKey('topic.title'),
+                              style: Theme.of(context).textTheme.headlineMedium
+                                  ?.copyWith(
+                                    color: navy,
+                                    fontFamily: NyayaFonts.display,
+                                    fontWeight: FontWeight.w700,
                                   ),
+                            ),
+                            if (_viewModel.quizzes.isNotEmpty) ...[
+                              const SizedBox(height: 16),
+                              Row(
+                                children: [
+                                  Text(
+                                    l10n.quizCount(_viewModel.quizzes.length),
+                                    style: const TextStyle(
+                                      color: bodyGrey,
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 12),
+                                  _DifficultyChip(
+                                    difficulty: _viewModel.difficulty,
+                                  ),
+                                  const SizedBox(width: 12),
+                                  _ProgressRing(progress: _viewModel.progress),
+                                ],
+                              ),
+                            ],
+                            if (_viewModel.description case final text?
+                                when text.trim().isNotEmpty) ...[
+                              const SizedBox(height: 16),
+                              Text(
+                                text,
+                                style: const TextStyle(
+                                  color: bodyGrey,
+                                  fontSize: 14,
+                                  height: 1.5,
                                 ),
                               ),
                             ],
-                          ),
-                        ),
-                        const SizedBox(height: 20),
-                        Text(
-                          l10n.topicQuizzesHeading,
-                          style: Theme.of(context).textTheme.titleLarge
-                              ?.copyWith(
-                                color: navy,
-                                fontFamily: 'serif',
-                                fontWeight: FontWeight.w700,
+                            const SizedBox(height: 20),
+                            Text(
+                              l10n.topicQuizzesHeading,
+                              style: Theme.of(context).textTheme.titleLarge
+                                  ?.copyWith(
+                                    color: navy,
+                                    fontFamily: NyayaFonts.display,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                            ),
+                            const SizedBox(height: 12),
+                            LoadStateView<List<TopicQuiz>>(
+                              state: _viewModel.state,
+                              onRetry: _viewModel.load,
+                              emptyMessage: l10n.topicNoQuizzes,
+                              emptyIcon: Icons.quiz_outlined,
+                              builder: (context, quizzes) => Column(
+                                children: [
+                                  for (final (index, quiz) in quizzes.indexed)
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                        bottom: 12,
+                                      ),
+                                      child: _QuizRow(
+                                        position: index + 1,
+                                        quiz: quiz,
+                                        onTap: quiz.isLocked
+                                            ? null
+                                            : () => widget.onQuizSelected(quiz),
+                                      ),
+                                    ),
+                                ],
                               ),
+                            ),
+                            const SizedBox(height: 80),
+                          ],
                         ),
-                        const SizedBox(height: 12),
-                        for (final (index, quiz)
-                            in _viewModel.quizzes.indexed) ...[
-                          _QuizRow(
-                            position: index + 1,
-                            quiz: quiz,
-                            onTap: () => widget.onQuizSelected(quiz.id),
+                      ),
+                    ),
+                    if (target != null)
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(24, 8, 24, 12),
+                        child: SizedBox(
+                          height: 54,
+                          width: double.infinity,
+                          child: ElevatedButton(
+                            key: const ValueKey('topic.continue'),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: gold,
+                              foregroundColor: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(
+                                  NyayaRadii.pill,
+                                ),
+                              ),
+                            ),
+                            onPressed: () => widget.onQuizSelected(target),
+                            child: Text(
+                              _continueLabel(l10n, target),
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
                           ),
-                          const SizedBox(height: 12),
-                        ],
-                        const SizedBox(height: 80),
-                      ],
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(24, 8, 24, 12),
-                  child: SizedBox(
-                    height: 54,
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      key: const ValueKey('topic.continue'),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: gold,
-                        foregroundColor: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30),
                         ),
                       ),
-                      onPressed: () =>
-                          widget.onContinueQuiz(_viewModel.continueQuizId),
-                      child: Text(
-                        l10n
-                            .topicContinueQuiz(_viewModel.continueQuizNumber)
-                            .toUpperCase(),
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w700,
-                          letterSpacing: 1.5,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
+                  ],
+                );
+              },
             ),
           ),
         ],
@@ -239,7 +240,7 @@ class _DifficultyChip extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
       decoration: BoxDecoration(
         color: color,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(NyayaRadii.md),
       ),
       child: Text(
         label,
@@ -296,7 +297,9 @@ class _QuizRow extends StatelessWidget {
 
   final int position;
   final TopicQuiz quiz;
-  final VoidCallback onTap;
+
+  /// Null for a locked quiz.
+  final VoidCallback? onTap;
 
   String _statusLabel(AppLocalizations l10n) => switch (quiz.status) {
     QuizStatus.completed => l10n.quizStatusCompleted,
@@ -304,67 +307,75 @@ class _QuizRow extends StatelessWidget {
     QuizStatus.notStarted => l10n.quizStatusNotStarted,
   };
 
-  Widget _trailing(AppLocalizations l10n) => switch (quiz.status) {
-    QuizStatus.completed => Container(
-      key: ValueKey('topic.quiz.completed.${quiz.id}'),
-      width: 30,
-      height: 30,
-      decoration: const BoxDecoration(
-        color: _easyGreen,
-        shape: BoxShape.circle,
-      ),
-      child: const Icon(Icons.check, color: Colors.white, size: 18),
-    ),
-    QuizStatus.inProgress => Container(
-      key: ValueKey('topic.quiz.resume.${quiz.id}'),
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-      decoration: BoxDecoration(
-        color: navy,
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Text(
-        l10n.commonResume.toUpperCase(),
-        style: const TextStyle(
-          color: Colors.white,
-          fontSize: 12,
-          fontWeight: FontWeight.w700,
-          letterSpacing: 0.8,
-        ),
-      ),
-    ),
-    QuizStatus.notStarted => Icon(
-      Icons.chevron_right,
-      key: ValueKey('topic.quiz.chevron.${quiz.id}'),
-      color: bodyGrey,
-    ),
-  };
+  Widget _trailing(AppLocalizations l10n) => quiz.isLocked
+      ? Icon(
+          Icons.lock_outline_rounded,
+          key: ValueKey('topic.quiz.locked.${quiz.id}'),
+          color: bodyGrey,
+        )
+      : switch (quiz.status) {
+          QuizStatus.completed => Container(
+            key: ValueKey('topic.quiz.completed.${quiz.id}'),
+            width: 30,
+            height: 30,
+            decoration: const BoxDecoration(
+              color: _easyGreen,
+              shape: BoxShape.circle,
+            ),
+            child: const Icon(Icons.check, color: Colors.white, size: 18),
+          ),
+          QuizStatus.inProgress => Container(
+            key: ValueKey('topic.quiz.resume.${quiz.id}'),
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+            decoration: BoxDecoration(
+              color: navy,
+              borderRadius: BorderRadius.circular(NyayaRadii.md),
+            ),
+            child: Text(
+              l10n.commonResume,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 13,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+          QuizStatus.notStarted => Icon(
+            Icons.chevron_right,
+            key: ValueKey('topic.quiz.chevron.${quiz.id}'),
+            color: bodyGrey,
+          ),
+        };
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final difficulty = _difficultyLabel(l10n, quiz.difficulty);
+    final lockNote = quiz.isLocked && quiz.requiredPoints != null
+        ? l10n.quizUnlocksAt(quiz.requiredPoints!)
+        : null;
     return Semantics(
       button: true,
       label: l10n.topicQuizSemantics(
         quiz.title,
         quiz.questionCount,
         difficulty,
-        _statusLabel(l10n),
+        lockNote ?? _statusLabel(l10n),
       ),
       child: InkWell(
         key: ValueKey('topic.quiz.${quiz.id}'),
-        borderRadius: BorderRadius.circular(18),
+        borderRadius: BorderRadius.circular(NyayaRadii.md),
         onTap: onTap,
         child: ExcludeSemantics(
           child: Container(
             padding: const EdgeInsets.all(14),
             decoration: BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.circular(18),
+              borderRadius: BorderRadius.circular(NyayaRadii.md),
               border: Border.all(color: _cardBorder),
               boxShadow: const [
                 BoxShadow(
-                  color: Color(0x0F000000),
+                  color: NyayaColors.shadowSoft,
                   blurRadius: 10,
                   offset: Offset(0, 3),
                 ),
@@ -404,8 +415,9 @@ class _QuizRow extends StatelessWidget {
                       ),
                       const SizedBox(height: 3),
                       Text(
-                        '${l10n.questionCount(quiz.questionCount)} · '
-                        '$difficulty',
+                        lockNote ??
+                            '${l10n.questionCount(quiz.questionCount)} · '
+                                '$difficulty',
                         style: const TextStyle(color: bodyGrey, fontSize: 13),
                       ),
                     ],

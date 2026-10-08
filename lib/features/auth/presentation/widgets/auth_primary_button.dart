@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+
+import '../../../../app/theme/app_tokens.dart';
 import '../../../../core/presentation/widgets/nyaya_widgets.dart';
 
 /// Centered, ~60%-width pill button used for the primary action on the
@@ -35,7 +37,7 @@ class AuthPrimaryButton extends StatelessWidget {
               elevation: 0,
               shadowColor: Colors.transparent,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(26),
+                borderRadius: BorderRadius.circular(NyayaRadii.md),
               ),
             ),
             child: isLoading

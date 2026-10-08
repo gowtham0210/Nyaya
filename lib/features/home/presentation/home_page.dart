@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
 
+import '../../../app/theme/app_tokens.dart';
+
+import '../../../app/theme/app_typography.dart';
+
 import '../../../core/localization/l10n.dart';
+import '../../../core/presentation/load_state.dart';
 import '../../../core/presentation/show_message.dart';
 import '../../../core/presentation/widgets/nyaya_icon.dart';
 import '../../../core/presentation/widgets/nyaya_widgets.dart';
 import '../../legal_updates/presentation/legal_updates_section.dart';
 import '../../legal_updates/presentation/legal_updates_view_model.dart';
 import '../../categories/presentation/categories_view_model.dart';
+import '../../profile/presentation/profile_view_model.dart';
 import 'daily_questions_view_model.dart';
 import 'home_view_model.dart';
 import 'learning_progress_view_model.dart';
@@ -23,8 +29,9 @@ class HomePage extends StatefulWidget {
     required this.legalUpdates,
     required this.progress,
     required this.categories,
+    this.profile,
+    this.clock = DateTime.now,
     this.onNotificationsPressed,
-    this.onStartQuizPressed,
     this.onResumePressed,
     this.onViewAllCategoriesPressed,
     this.onViewAllPopularPressed,
@@ -32,9 +39,6 @@ class HomePage extends StatefulWidget {
     this.onQuizSelected,
     this.onViewAllLegalUpdatesPressed,
     this.onAskNyayaPressed,
-    this.onRecommendedSelected,
-    this.onViewAllRecommendedPressed,
-    this.onSearchPressed,
   });
 
   final HomeViewModel viewModel;
@@ -42,30 +46,33 @@ class HomePage extends StatefulWidget {
   final LegalUpdatesViewModel legalUpdates;
   final LearningProgressViewModel progress;
 
-  /// Backend categories for Recommended; shared with the Categories tab.
+  /// Backend categories; shared with the Categories tab.
   final CategoriesViewModel categories;
+
+  /// The learner's name and streak for the greeting (spec 040); shared
+  /// with the Profile tab. Null greets without a name.
+  final ProfileViewModel? profile;
+
+  /// The time of day for the greeting.
+  final DateTime Function() clock;
   final VoidCallback? onNotificationsPressed;
-  final VoidCallback? onStartQuizPressed;
   final VoidCallback? onResumePressed;
   final VoidCallback? onViewAllCategoriesPressed;
   final VoidCallback? onViewAllPopularPressed;
-  final ValueChanged<HomeCategoryData>? onCategorySelected;
+  final ValueChanged<CategoryData>? onCategorySelected;
   final ValueChanged<PopularQuizData>? onQuizSelected;
   final VoidCallback? onViewAllLegalUpdatesPressed;
   final VoidCallback? onAskNyayaPressed;
-  final ValueChanged<CategoryData>? onRecommendedSelected;
-  final VoidCallback? onViewAllRecommendedPressed;
-  final VoidCallback? onSearchPressed;
 
-  static const pageBackground = Color(0xFFF8F6F2);
-  static const heroBackground = Color(0xFF11233B);
-  static const heroHighlight = Color(0xFFD3A247);
-  static const supportText = Color(0xFF5E6878);
-  static const cardBorder = Color(0xFFECE5DB);
-  static const mutedIcon = Color(0xFF8B95A5);
-  static const mediumColor = Color(0xFFD19A2E);
-  static const hardColor = Color(0xFFD64545);
-  static const easyColor = Color(0xFF1FA35B);
+  static const pageBackground = NyayaColors.ivory;
+  static const heroBackground = NyayaColors.ink;
+  static const heroHighlight = NyayaColors.goldBright;
+  static const supportText = NyayaColors.inkMuted;
+  static const cardBorder = NyayaColors.hairline;
+  static const mutedIcon = NyayaColors.inkSubtle;
+  static const mediumColor = NyayaDifficulty.medium;
+  static const hardColor = NyayaDifficulty.hard;
+  static const easyColor = NyayaDifficulty.easy;
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -79,6 +86,7 @@ class _HomePageState extends State<HomePage> {
     widget.dailyQuestions.load();
     widget.categories.ensureLoaded();
     widget.legalUpdates.load();
+    widget.profile?.ensureLoaded();
   }
 
   @override
@@ -94,59 +102,16 @@ class _HomePageState extends State<HomePage> {
           padding: const EdgeInsets.fromLTRB(24, 12, 24, 24),
           children: [
             _HeaderRow(
+              profile: widget.profile,
+              clock: widget.clock,
               hasUnreadNotifications: viewModel.hasUnreadNotifications,
-              onNotificationsPressed: _orPlaceholder(
-                widget.onNotificationsPressed,
-                l10n.featureComingSoon(l10n.homeNotifications),
-              ),
+              onNotificationsPressed: widget.onNotificationsPressed,
             ),
-            const SizedBox(height: 16),
-            _SearchBar(
-              onPressed: _orPlaceholder(
-                widget.onSearchPressed,
-                l10n.commonComingSoon,
-              ),
-            ),
-            const SizedBox(height: 20),
-            _HeroBanner(
-              leadLine: l10n.homeHeroLead,
-              accentLine: l10n.homeHeroAccent,
-              trailLine: l10n.homeHeroTrail,
-              supportingCopy: l10n.homeHeroSupport,
-              ctaLabel: l10n.homeStartQuiz,
-              onPressed: _orPlaceholder(
-                widget.onStartQuizPressed,
-                l10n.commonComingSoon,
-              ),
-            ),
-            const SizedBox(height: 28),
-            _SectionHeader(
-              key: const ValueKey('home.section.explore'),
-              title: l10n.homeExploreByCategory,
-              actionLabel: l10n.commonViewAll,
-              onPressed: _orPlaceholder(
-                widget.onViewAllCategoriesPressed,
-                l10n.commonComingSoon,
-              ),
-            ),
-            const SizedBox(height: 16),
-            _CategoryStrip(
-              categories: viewModel.categories,
-              onCategorySelected: _orPlaceholderWith(
-                widget.onCategorySelected,
-                (category) => l10n.featureComingSoon(category.label),
-              ),
-            ),
-            const SizedBox(height: 30),
+            const SizedBox(height: 24),
             Text(
               l10n.homeContinueLearning,
               key: const ValueKey('home.section.continue'),
-              style: const TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.w700,
-                color: HomePage.heroBackground,
-                letterSpacing: -0.3,
-              ),
+              style: _sectionTitleStyle,
             ),
             const SizedBox(height: 16),
             LearningProgressCard(
@@ -156,23 +121,44 @@ class _HomePageState extends State<HomePage> {
                 l10n.commonComingSoon,
               ),
             ),
-            const SizedBox(height: 16),
-            AskNyayaCard(
-              onPressed: _orPlaceholder(
-                widget.onAskNyayaPressed,
-                l10n.featureComingSoon(l10n.homeAskNyayaTitle),
-              ),
-            ),
             const SizedBox(height: 28),
+            // Unbuilt features stay hidden until they're wired (spec 035).
+            if (widget.onAskNyayaPressed case final onAskNyaya?) ...[
+              AskNyayaCard(onPressed: onAskNyaya),
+              const SizedBox(height: 28),
+            ],
+            // Content first: the daily habit sits above browsing (spec 040).
             DailyQuestionsSection(viewModel: widget.dailyQuestions),
             const SizedBox(height: 28),
+            // Popular quizzes are sample data; shown once quizzes open.
+            if (widget.onQuizSelected case final onQuizSelected?) ...[
+              _SectionHeader(
+                key: const ValueKey('home.section.popular'),
+                title: l10n.homePopularQuizzes,
+                actionLabel: l10n.commonViewAll,
+                onPressed: _orPlaceholder(
+                  widget.onViewAllPopularPressed,
+                  l10n.commonComingSoon,
+                ),
+              ),
+              const SizedBox(height: 16),
+              for (final quiz in viewModel.popularQuizzes) ...[
+                _PopularQuizCard(
+                  quiz: quiz,
+                  onPressed: () => onQuizSelected(quiz),
+                ),
+                const SizedBox(height: 16),
+              ],
+              const SizedBox(height: 12),
+            ],
+            // One category section, from the backend (spec 040).
             _SectionHeader(
-              key: const ValueKey('home.section.recommended'),
-              actionKey: const ValueKey('home.section.recommended.viewAll'),
-              title: l10n.homeRecommended,
+              key: const ValueKey('home.section.explore'),
+              actionKey: const ValueKey('home.section.explore.viewAll'),
+              title: l10n.homeExploreByCategory,
               actionLabel: l10n.commonViewAll,
               onPressed: _orPlaceholder(
-                widget.onViewAllRecommendedPressed,
+                widget.onViewAllCategoriesPressed,
                 l10n.commonComingSoon,
               ),
             ),
@@ -180,32 +166,11 @@ class _HomePageState extends State<HomePage> {
             RecommendedSection(
               viewModel: widget.categories,
               onCategorySelected: _orPlaceholderWith(
-                widget.onRecommendedSelected,
+                widget.onCategorySelected,
                 (category) => l10n.featureComingSoon(category.label),
               ),
             ),
             const SizedBox(height: 28),
-            _SectionHeader(
-              key: const ValueKey('home.section.popular'),
-              title: l10n.homePopularQuizzes,
-              actionLabel: l10n.commonViewAll,
-              onPressed: _orPlaceholder(
-                widget.onViewAllPopularPressed,
-                l10n.commonComingSoon,
-              ),
-            ),
-            const SizedBox(height: 16),
-            for (final quiz in viewModel.popularQuizzes) ...[
-              _PopularQuizCard(
-                quiz: quiz,
-                onPressed: () => _orPlaceholderWith<PopularQuizData>(
-                  widget.onQuizSelected,
-                  (quiz) => l10n.featureComingSoon(quiz.title),
-                )(quiz),
-              ),
-              const SizedBox(height: 16),
-            ],
-            const SizedBox(height: 12),
             _SectionHeader(
               key: const ValueKey('home.section.legalUpdates'),
               actionKey: const ValueKey('home.section.legalUpdates.viewAll'),
@@ -236,367 +201,241 @@ class _HomePageState extends State<HomePage> {
   ) => callback ?? (item) => showMessage(context, message(item));
 }
 
-/// Looks like a search field; opens search (spec 033).
-class _SearchBar extends StatelessWidget {
-  const _SearchBar({required this.onPressed});
+/// Section titles sit below the greeting in the hierarchy (spec 040).
+const _sectionTitleStyle = TextStyle(
+  fontSize: 22,
+  fontFamily: NyayaFonts.display,
+  fontWeight: FontWeight.w700,
+  color: HomePage.heroBackground,
+);
 
-  final VoidCallback onPressed;
+/// A compact header: logo, a greeting with the learner's first name, and
+/// their streak (spec 040).
+class _HeaderRow extends StatelessWidget {
+  const _HeaderRow({
+    required this.profile,
+    required this.clock,
+    required this.hasUnreadNotifications,
+    required this.onNotificationsPressed,
+  });
+
+  final ProfileViewModel? profile;
+  final DateTime Function() clock;
+  final bool hasUnreadNotifications;
+
+  /// Null hides the bell until notifications exist.
+  final VoidCallback? onNotificationsPressed;
 
   @override
   Widget build(BuildContext context) {
-    final hint = context.l10n.searchHint;
-    return Semantics(
-      key: const ValueKey('home.search'),
-      button: true,
-      label: hint,
-      child: Material(
-        color: Colors.white,
-        shape: const StadiumBorder(
-          side: BorderSide(color: HomePage.cardBorder),
+    final profile = this.profile;
+    if (profile == null) return _build(context, null);
+    return ListenableBuilder(
+      listenable: profile,
+      builder: (context, _) => _build(context, switch (profile.state) {
+        Loaded(:final data) => data,
+        _ => null,
+      }),
+    );
+  }
+
+  Widget _build(BuildContext context, ProfileOverview? overview) {
+    final streak = overview?.stats.streak ?? 0;
+    return Row(
+      key: const ValueKey('home.header'),
+      children: [
+        Image.asset(
+          logoAsset,
+          width: 40,
+          height: 40,
+          fit: BoxFit.contain,
+          excludeFromSemantics: true,
         ),
-        child: InkWell(
-          customBorder: const StadiumBorder(),
-          onTap: onPressed,
-          child: ExcludeSemantics(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
-              child: Row(
-                children: [
-                  const Icon(Icons.search_rounded, color: HomePage.mutedIcon),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: Text(
-                      hint,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        fontSize: 15,
-                        color: HomePage.supportText,
-                      ),
-                    ),
-                  ),
-                  const Icon(Icons.tune_rounded, color: HomePage.mutedIcon),
-                ],
-              ),
-            ),
+        const SizedBox(width: 12),
+        Expanded(
+          child: _Greeting(
+            greeting: _greeting(context.l10n, clock()),
+            name: _firstName(overview?.profile.fullName),
           ),
         ),
+        if (streak > 0) ...[
+          const SizedBox(width: 12),
+          _StreakChip(days: streak),
+        ],
+        if (onNotificationsPressed != null) ...[
+          const SizedBox(width: 8),
+          _NotificationBell(
+            hasUnread: hasUnreadNotifications,
+            onPressed: onNotificationsPressed!,
+          ),
+        ],
+      ],
+    );
+  }
+
+  static String _greeting(AppLocalizations l10n, DateTime now) =>
+      switch (now.hour) {
+        < 12 => l10n.homeGreetingMorning,
+        < 17 => l10n.homeGreetingAfternoon,
+        _ => l10n.homeGreetingEvening,
+      };
+
+  static String? _firstName(String? fullName) {
+    final first = fullName?.trim().split(RegExp(r'\s+')).first ?? '';
+    return first.isEmpty ? null : first;
+  }
+}
+
+class _Greeting extends StatelessWidget {
+  const _Greeting({required this.greeting, required this.name});
+
+  final String greeting;
+  final String? name;
+
+  static const _nameStyle = TextStyle(
+    fontSize: 26,
+    fontFamily: NyayaFonts.display,
+    fontWeight: FontWeight.w700,
+    height: 1.15,
+    color: HomePage.heroBackground,
+  );
+
+  @override
+  Widget build(BuildContext context) {
+    final name = this.name;
+    return Semantics(
+      container: true,
+      header: true,
+      label: name == null ? greeting : '$greeting, $name',
+      child: ExcludeSemantics(
+        child: name == null
+            ? Text(
+                greeting,
+                key: const ValueKey('home.greeting'),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: _nameStyle,
+              )
+            : Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    greeting,
+                    key: const ValueKey('home.greeting'),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                      color: HomePage.supportText,
+                    ),
+                  ),
+                  Text(
+                    name,
+                    key: const ValueKey('home.greeting.name'),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: _nameStyle,
+                  ),
+                ],
+              ),
       ),
     );
   }
 }
 
-class _HeaderRow extends StatelessWidget {
-  const _HeaderRow({
-    required this.hasUnreadNotifications,
-    required this.onNotificationsPressed,
-  });
+class _StreakChip extends StatelessWidget {
+  const _StreakChip({required this.days});
 
-  final bool hasUnreadNotifications;
-  final VoidCallback onNotificationsPressed;
+  final int days;
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      key: const ValueKey('home.header'),
-      children: [
-        const Expanded(child: _HeaderBrand()),
-        Stack(
-          clipBehavior: Clip.none,
-          children: [
-            DecoratedBox(
-              decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.78),
-                shape: BoxShape.circle,
-                boxShadow: [
-                  BoxShadow(
-                    color: HomePage.heroBackground.withValues(alpha: 0.06),
-                    blurRadius: 16,
-                    offset: const Offset(0, 8),
-                  ),
-                ],
-              ),
-              child: IconButton(
-                key: const ValueKey('home.notification.button'),
-                onPressed: onNotificationsPressed,
-                tooltip: context.l10n.homeNotifications,
-                icon: const Icon(
-                  Icons.notifications_none_rounded,
-                  size: 28,
-                  color: HomePage.heroBackground,
-                ),
-                splashRadius: 24,
-              ),
-            ),
-            if (hasUnreadNotifications)
-              const Positioned(
-                key: ValueKey('home.notification.badge'),
-                right: 6,
-                top: 8,
-                child: DecoratedBox(
-                  decoration: BoxDecoration(
-                    color: HomePage.heroHighlight,
-                    shape: BoxShape.circle,
-                  ),
-                  child: SizedBox(width: 10, height: 10),
-                ),
-              ),
-          ],
-        ),
-      ],
-    );
-  }
-}
-
-class _HeaderBrand extends StatelessWidget {
-  const _HeaderBrand();
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      key: const ValueKey('home.brand'),
-      children: [
-        Image.asset(
-          logoAsset,
-          width: 48,
-          height: 48,
-          fit: BoxFit.contain,
-          excludeFromSemantics: true,
-        ),
-        const SizedBox(width: 8),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+    return Semantics(
+      key: const ValueKey('home.streak'),
+      container: true,
+      label: context.l10n.homeStreakDays(days),
+      child: ExcludeSemantics(
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+          decoration: BoxDecoration(
+            color: NyayaColors.goldWash,
+            borderRadius: BorderRadius.circular(NyayaRadii.pill),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
             children: [
-              FittedBox(
-                alignment: Alignment.centerLeft,
-                fit: BoxFit.scaleDown,
-                child: SizedBox(
-                  width: 168,
-                  height: 38,
-                  child: Image.asset(
-                    wordmarkAsset,
-                    fit: BoxFit.contain,
-                    excludeFromSemantics: true,
-                  ),
-                ),
+              const Icon(
+                Icons.local_fire_department_rounded,
+                size: 18,
+                color: HomePage.heroHighlight,
               ),
-              const SizedBox(height: 2),
-              FittedBox(
-                alignment: Alignment.centerLeft,
-                fit: BoxFit.scaleDown,
-                child: Text(
-                  context.l10n.brandTagline,
-                  style: const TextStyle(
-                    color: HomePage.heroHighlight,
-                    fontSize: 11,
-                    fontWeight: FontWeight.w700,
-                    letterSpacing: 1.3,
-                  ),
+              const SizedBox(width: 4),
+              Text(
+                '$days',
+                style: const TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w700,
+                  color: HomePage.heroBackground,
                 ),
               ),
             ],
           ),
         ),
-      ],
+      ),
     );
   }
 }
 
-class _HeroBanner extends StatelessWidget {
-  const _HeroBanner({
-    required this.leadLine,
-    required this.accentLine,
-    required this.trailLine,
-    required this.supportingCopy,
-    required this.ctaLabel,
-    required this.onPressed,
-  });
+class _NotificationBell extends StatelessWidget {
+  const _NotificationBell({required this.hasUnread, required this.onPressed});
 
-  final String leadLine;
-  final String accentLine;
-  final String trailLine;
-  final String supportingCopy;
-  final String ctaLabel;
+  final bool hasUnread;
   final VoidCallback onPressed;
 
   @override
   Widget build(BuildContext context) {
-    final width = MediaQuery.sizeOf(context).width;
-    final compact = width <= 400;
-    final heroHeight = (width * (compact ? 0.86 : 0.76))
-        .clamp(324.0, 360.0)
-        .toDouble();
-    final heroArtWidth = (width * (compact ? 0.62 : 0.68))
-        .clamp(210.0, 320.0)
-        .toDouble();
-    final heroTextWidth = width * (compact ? 0.58 : 0.52);
-    final leadSize = compact ? 22.0 : 29.0;
-    final accentSize = compact ? 23.0 : 30.0;
-    final trailSize = compact ? 22.0 : 29.0;
-    final supportSize = compact ? 13.0 : 15.0;
-
-    return Container(
-      key: const ValueKey('home.hero'),
-      // A minimum, so large text grows the banner instead of overflowing.
-      constraints: BoxConstraints(minHeight: heroHeight),
-      clipBehavior: Clip.antiAlias,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(30),
-        gradient: const LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [HomePage.heroBackground, Color(0xFF0F2036)],
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        DecoratedBox(
+          decoration: BoxDecoration(
+            color: Colors.white.withValues(alpha: 0.78),
+            shape: BoxShape.circle,
+            boxShadow: [
+              BoxShadow(
+                color: HomePage.heroBackground.withValues(alpha: 0.06),
+                blurRadius: 16,
+                offset: const Offset(0, 8),
+              ),
+            ],
+          ),
+          child: IconButton(
+            key: const ValueKey('home.notification.button'),
+            onPressed: onPressed,
+            tooltip: context.l10n.homeNotifications,
+            icon: const Icon(
+              Icons.notifications_none_rounded,
+              size: 28,
+              color: HomePage.heroBackground,
+            ),
+            splashRadius: 24,
+          ),
         ),
-        boxShadow: [
-          BoxShadow(
-            color: HomePage.heroBackground.withValues(alpha: 0.12),
-            blurRadius: 28,
-            offset: const Offset(0, 16),
-          ),
-        ],
-      ),
-      child: Stack(
-        fit: StackFit.passthrough,
-        children: [
-          Positioned(
-            right: -20,
-            top: 38,
-            child: Opacity(
-              opacity: 0.09,
-              child: Image.asset(
-                'assets/backgrounds/temple_bg.png',
-                width: heroArtWidth * 0.72,
-                fit: BoxFit.contain,
-                excludeFromSemantics: true,
+        if (hasUnread)
+          const Positioned(
+            key: ValueKey('home.notification.badge'),
+            right: 6,
+            top: 8,
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                color: HomePage.heroHighlight,
+                shape: BoxShape.circle,
               ),
+              child: SizedBox(width: 10, height: 10),
             ),
           ),
-          Positioned(
-            right: -28,
-            bottom: -8,
-            child: Image.asset(
-              'assets/onboarding/onboarding_2_hero.png',
-              width: heroArtWidth,
-              fit: BoxFit.contain,
-              excludeFromSemantics: true,
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(24, 22, 24, 22),
-            child: ConstrainedBox(
-              constraints: BoxConstraints(maxWidth: heroTextWidth),
-              // Lets the Spacer push the CTA down in a min-height banner.
-              child: IntrinsicHeight(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      leadLine,
-                      key: const ValueKey('home.hero.title.lead'),
-                      style: TextStyle(
-                        fontSize: leadSize,
-                        fontWeight: FontWeight.w700,
-                        height: 1.06,
-                        color: Colors.white,
-                        fontFamily: 'serif',
-                        letterSpacing: -0.8,
-                      ),
-                    ),
-                    const SizedBox(height: 6),
-                    Text(
-                      accentLine,
-                      key: const ValueKey('home.hero.title.accent'),
-                      style: TextStyle(
-                        fontSize: accentSize,
-                        fontWeight: FontWeight.w700,
-                        height: 1.06,
-                        color: HomePage.heroHighlight,
-                        fontFamily: 'serif',
-                        letterSpacing: -0.8,
-                      ),
-                    ),
-                    const SizedBox(height: 6),
-                    Text(
-                      trailLine,
-                      key: const ValueKey('home.hero.title.trail'),
-                      style: TextStyle(
-                        fontSize: trailSize,
-                        fontWeight: FontWeight.w700,
-                        height: 1.06,
-                        color: Colors.white,
-                        fontFamily: 'serif',
-                        letterSpacing: -0.8,
-                      ),
-                    ),
-                    const Spacer(),
-                    Text(
-                      supportingCopy,
-                      key: const ValueKey('home.hero.support'),
-                      style: TextStyle(
-                        fontSize: supportSize,
-                        height: 1.45,
-                        color: Color(0xFFF2F3F5),
-                      ),
-                    ),
-                    const SizedBox(height: 18),
-                    SizedBox(
-                      height: compact ? 50 : 56,
-                      child: ElevatedButton(
-                        key: const ValueKey('home.hero.cta'),
-                        onPressed: onPressed,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: HomePage.heroHighlight,
-                          foregroundColor: Colors.white,
-                          elevation: 0,
-                          shadowColor: Colors.transparent,
-                          padding: const EdgeInsets.symmetric(horizontal: 18),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                        ),
-                        child: FittedBox(
-                          fit: BoxFit.scaleDown,
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Container(
-                                width: 30,
-                                height: 30,
-                                decoration: const BoxDecoration(
-                                  color: Colors.white,
-                                  shape: BoxShape.circle,
-                                ),
-                                alignment: Alignment.center,
-                                child: const Padding(
-                                  padding: EdgeInsets.only(left: 2),
-                                  child: Icon(
-                                    Icons.play_arrow_rounded,
-                                    size: 20,
-                                    color: HomePage.heroHighlight,
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(width: 12),
-                              Text(
-                                ctaLabel,
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
+      ],
     );
   }
 }
@@ -619,17 +458,7 @@ class _SectionHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Expanded(
-          child: Text(
-            title,
-            style: const TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.w700,
-              color: HomePage.heroBackground,
-              letterSpacing: -0.3,
-            ),
-          ),
-        ),
+        Expanded(child: Text(title, style: _sectionTitleStyle)),
         TextButton(
           key: actionKey,
           onPressed: onPressed,
@@ -659,86 +488,6 @@ class _SectionHeader extends StatelessWidget {
   }
 }
 
-class _CategoryStrip extends StatelessWidget {
-  const _CategoryStrip({
-    required this.categories,
-    required this.onCategorySelected,
-  });
-
-  final List<HomeCategoryData> categories;
-  final ValueChanged<HomeCategoryData> onCategorySelected;
-
-  @override
-  Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Row(
-        children: [
-          for (var i = 0; i < categories.length; i++) ...[
-            _CategoryTile(
-              category: categories[i],
-              onTap: () => onCategorySelected(categories[i]),
-            ),
-            if (i != categories.length - 1) const SizedBox(width: 14),
-          ],
-        ],
-      ),
-    );
-  }
-}
-
-class _CategoryTile extends StatelessWidget {
-  const _CategoryTile({required this.category, required this.onTap});
-
-  final HomeCategoryData category;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: 108,
-      child: InkWell(
-        key: ValueKey('home.category.${category.id}'),
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(22),
-        child: Column(
-          children: [
-            Container(
-              width: 108,
-              height: 96,
-              decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.88),
-                borderRadius: BorderRadius.circular(22),
-                border: Border.all(color: HomePage.cardBorder),
-              ),
-              alignment: Alignment.center,
-              child: NyayaIcon(
-                type: category.icon,
-                size: 38,
-                color: HomePage.heroBackground,
-                accentColor: HomePage.heroHighlight,
-              ),
-            ),
-            const SizedBox(height: 10),
-            Text(
-              category.label,
-              textAlign: TextAlign.center,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-              style: const TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
-                color: HomePage.heroBackground,
-                height: 1.35,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
 class _PopularQuizCard extends StatelessWidget {
   const _PopularQuizCard({required this.quiz, required this.onPressed});
 
@@ -747,121 +496,118 @@ class _PopularQuizCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: Colors.white,
-      borderRadius: BorderRadius.circular(24),
-      child: InkWell(
-        key: ValueKey('home.quiz.${quiz.id}'),
-        onTap: onPressed,
-        borderRadius: BorderRadius.circular(24),
-        child: Ink(
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(24),
-            border: Border.all(color: HomePage.cardBorder),
-            boxShadow: [
-              BoxShadow(
-                color: HomePage.heroBackground.withValues(alpha: 0.05),
-                blurRadius: 22,
-                offset: const Offset(0, 10),
-              ),
-            ],
-          ),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                width: 94,
-                height: 94,
-                decoration: BoxDecoration(
-                  color: Color(quiz.tileBackgroundHex),
-                  borderRadius: BorderRadius.circular(18),
+    // The shadow sits outside the Material; drawn inside an unfilled Ink it
+    // tinted the card grey and clipped to square corners (audit §3.3).
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(NyayaRadii.md),
+        boxShadow: NyayaShadows.card,
+      ),
+      child: Material(
+        color: NyayaColors.surface,
+        borderRadius: BorderRadius.circular(NyayaRadii.md),
+        child: InkWell(
+          key: ValueKey('home.quiz.${quiz.id}'),
+          onTap: onPressed,
+          borderRadius: BorderRadius.circular(NyayaRadii.md),
+          child: Ink(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: NyayaColors.surface,
+              borderRadius: BorderRadius.circular(NyayaRadii.md),
+              border: Border.all(color: HomePage.cardBorder),
+            ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  width: 94,
+                  height: 94,
+                  decoration: BoxDecoration(
+                    color: Color(quiz.tileBackgroundHex),
+                    borderRadius: BorderRadius.circular(NyayaRadii.md),
+                  ),
+                  alignment: Alignment.center,
+                  child: NyayaIcon(
+                    type: quiz.icon,
+                    size: 40,
+                    color: Color(quiz.tileForegroundHex),
+                    accentColor: Color(quiz.tileForegroundHex),
+                  ),
                 ),
-                alignment: Alignment.center,
-                child: NyayaIcon(
-                  type: quiz.icon,
-                  size: 40,
-                  color: Color(quiz.tileForegroundHex),
-                  accentColor: Color(quiz.tileForegroundHex),
-                ),
-              ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Expanded(
-                          child: Text(
-                            quiz.title,
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Full width, so long titles wrap between words
+                      // instead of mid-word next to the rating (spec 037).
+                      Text(
+                        quiz.title,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w700,
+                          color: HomePage.heroBackground,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Wrap(
+                        spacing: 8,
+                        crossAxisAlignment: WrapCrossAlignment.center,
+                        children: [
+                          Text(
+                            context.l10n.questionCount(quiz.questionCount),
                             style: const TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w700,
-                              color: HomePage.heroBackground,
-                              letterSpacing: -0.3,
+                              fontSize: 14,
+                              color: HomePage.supportText,
                             ),
                           ),
-                        ),
-                        const SizedBox(width: 8),
-                        _RatingPill(rating: quiz.rating),
-                      ],
-                    ),
-                    const SizedBox(height: 8),
-                    Wrap(
-                      spacing: 8,
-                      crossAxisAlignment: WrapCrossAlignment.center,
-                      children: [
-                        Text(
-                          context.l10n.questionCount(quiz.questionCount),
-                          style: const TextStyle(
-                            fontSize: 14,
-                            color: HomePage.supportText,
+                          const Text(
+                            '•',
+                            style: TextStyle(
+                              color: HomePage.supportText,
+                              fontWeight: FontWeight.w700,
+                            ),
                           ),
-                        ),
-                        const Text(
-                          '•',
-                          style: TextStyle(
-                            color: HomePage.supportText,
-                            fontWeight: FontWeight.w700,
+                          Text(
+                            _difficultyLabel(context.l10n, quiz.difficulty),
+                            key: ValueKey('home.quiz.${quiz.id}.difficulty'),
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                              color: _difficultyColor(quiz.difficulty),
+                            ),
                           ),
-                        ),
-                        Text(
-                          _difficultyLabel(context.l10n, quiz.difficulty),
-                          key: ValueKey('home.quiz.${quiz.id}.difficulty'),
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            color: _difficultyColor(quiz.difficulty),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      quiz.description,
-                      maxLines: 3,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        fontSize: 14,
-                        height: 1.45,
-                        color: HomePage.heroBackground,
+                          _RatingPill(rating: quiz.rating),
+                        ],
                       ),
-                    ),
-                  ],
+                      const SizedBox(height: 8),
+                      Text(
+                        quiz.description,
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                          fontSize: 14,
+                          height: 1.45,
+                          color: HomePage.heroBackground,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              const SizedBox(width: 8),
-              const Padding(
-                padding: EdgeInsets.only(top: 28),
-                child: Icon(
-                  Icons.chevron_right_rounded,
-                  color: HomePage.heroBackground,
-                  size: 26,
+                const SizedBox(width: 8),
+                const Padding(
+                  padding: EdgeInsets.only(top: 28),
+                  child: Icon(
+                    Icons.chevron_right_rounded,
+                    color: HomePage.heroBackground,
+                    size: 26,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -888,25 +634,25 @@ class _RatingPill extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
       decoration: BoxDecoration(
-        color: const Color(0xFFFFF8EE),
-        borderRadius: BorderRadius.circular(16),
+        color: NyayaColors.goldWash,
+        borderRadius: BorderRadius.circular(NyayaRadii.sm),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           const Icon(
             Icons.star_rounded,
-            size: 18,
+            size: 15,
             color: HomePage.heroHighlight,
           ),
-          const SizedBox(width: 6),
+          const SizedBox(width: 4),
           Text(
             rating.toStringAsFixed(1),
             style: const TextStyle(
-              fontSize: 15,
-              fontWeight: FontWeight.w700,
+              fontSize: 13,
+              fontWeight: FontWeight.w600,
               color: HomePage.heroBackground,
             ),
           ),

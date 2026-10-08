@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../app/theme/app_motion.dart';
+
 import '../../../core/presentation/widgets/nyaya_bottom_nav.dart';
 import '../../../core/presentation/widgets/nyaya_icon.dart';
 
@@ -48,9 +50,18 @@ class TabShellPage extends StatelessWidget {
           }
         },
         child: Scaffold(
+          // Tabs keep their state; the one coming in fades up (spec 039).
           body: IndexedStack(
             index: index,
-            children: [for (final tab in tabs) Builder(builder: tab.builder)],
+            children: [
+              for (final (i, tab) in tabs.indexed)
+                AnimatedOpacity(
+                  opacity: i == index ? 1 : 0,
+                  duration: NyayaMotion.of(context, NyayaMotion.medium),
+                  curve: NyayaMotion.curve,
+                  child: Builder(builder: tab.builder),
+                ),
+            ],
           ),
           bottomNavigationBar: NyayaBottomNavBar(
             items: [
@@ -58,7 +69,10 @@ class TabShellPage extends StatelessWidget {
                 HomeNavItemData(id: tab.id, label: tab.label, icon: tab.icon),
             ],
             activeIndex: index,
-            onSelected: controller.select,
+            onSelected: (selected) {
+              if (selected != index) NyayaHaptics.select();
+              controller.select(selected);
+            },
           ),
         ),
       ),

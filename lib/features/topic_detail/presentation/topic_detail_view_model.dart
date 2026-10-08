@@ -1,88 +1,66 @@
-enum TopicDifficulty { easy, medium, hard }
+import '../../../core/presentation/load_state.dart';
+import '../../../core/presentation/load_state_notifier.dart';
+import '../data/topic_repository.dart';
 
-enum QuizStatus { completed, inProgress, notStarted }
+export '../data/topic_repository.dart'
+    show QuizStatus, TopicDifficulty, TopicQuiz;
 
-class TopicQuiz {
-  const TopicQuiz({
-    required this.id,
+/// A topic (backend category) and its quizzes with the learner's progress
+/// (spec 038). Replaces the sample BNSS topic from spec 010.
+class TopicDetailViewModel extends LoadStateNotifier<List<TopicQuiz>> {
+  TopicDetailViewModel({
+    required TopicRepository repository,
+    required this.categoryId,
     required this.title,
-    required this.questionCount,
-    required this.difficulty,
-    required this.status,
-  });
+    this.description,
+  }) : _repository = repository;
 
-  final String id;
+  final TopicRepository _repository;
+  final int categoryId;
   final String title;
-  final int questionCount;
-  final TopicDifficulty difficulty;
-  final QuizStatus status;
-}
+  final String? description;
 
-class TopicDetailViewModel {
-  String get featureId => '010-topic-detail';
+  @override
+  Future<List<TopicQuiz>> fetch() => _repository.fetchQuizzes(categoryId);
 
-  String get title => 'Arrest, Bail & Police Powers';
+  @override
+  bool isEmpty(List<TopicQuiz> data) => data.isEmpty;
 
-  String get subtitle => 'Under BNSS — formerly CrPC';
+  List<TopicQuiz> get quizzes => switch (state) {
+    Loaded(:final data) => data,
+    _ => const [],
+  };
 
-  int get quizCount => 6;
+  int get completedCount =>
+      quizzes.where((quiz) => quiz.status == QuizStatus.completed).length;
 
-  TopicDifficulty get difficulty => TopicDifficulty.medium;
+  /// Share of this topic's quizzes completed, 0–1.
+  double get progress => quizzes.isEmpty ? 0 : completedCount / quizzes.length;
 
-  double get progress => 0.33;
-
-  String get description =>
-      'What the police can and cannot do — your rights during FIR, arrest, '
-      'custody and bail, under the new BNSS code.';
-
-  String get sectionReference =>
-      'Sections referenced: BNSS §35–§62 (formerly CrPC §41–§60)';
-
-  bool isBookmarked = false;
-
-  void toggleBookmark() {
-    isBookmarked = !isBookmarked;
+  /// The topic's typical difficulty: the most common one (medium on a tie).
+  TopicDifficulty get difficulty {
+    final counts = {for (final d in TopicDifficulty.values) d: 0};
+    for (final quiz in quizzes) {
+      counts[quiz.difficulty] = counts[quiz.difficulty]! + 1;
+    }
+    final top = counts.values.fold(0, (a, b) => a > b ? a : b);
+    if (counts[TopicDifficulty.medium] == top) return TopicDifficulty.medium;
+    return counts.entries.firstWhere((entry) => entry.value == top).key;
   }
 
-  String get continueQuizId => _continueTarget.id;
+  /// The quiz the bottom button opens: an open attempt first, then the
+  /// first not started, then (all done) the first one again. Locked
+  /// quizzes are skipped; null when every quiz is locked.
+  TopicQuiz? get continueTarget {
+    final open = quizzes.where((quiz) => !quiz.isLocked);
+    return open.where((q) => q.status == QuizStatus.inProgress).firstOrNull ??
+        open.where((q) => q.status == QuizStatus.notStarted).firstOrNull ??
+        open.firstOrNull;
+  }
 
-  /// 1-based position of the quiz the Continue button opens.
-  int get continueQuizNumber => quizzes.indexOf(_continueTarget) + 1;
-
-  TopicQuiz get _continueTarget => quizzes.firstWhere(
-        (quiz) => quiz.status == QuizStatus.inProgress,
-        orElse: () => quizzes
-            .firstWhere((quiz) => quiz.status == QuizStatus.notStarted),
-      );
-
-  final List<TopicQuiz> quizzes = const [
-    TopicQuiz(
-      id: 'fir-basics',
-      title: 'FIR Basics',
-      questionCount: 10,
-      difficulty: TopicDifficulty.easy,
-      status: QuizStatus.completed,
-    ),
-    TopicQuiz(
-      id: 'arrest-your-rights',
-      title: 'Arrest & Your Rights',
-      questionCount: 12,
-      difficulty: TopicDifficulty.medium,
-      status: QuizStatus.inProgress,
-    ),
-    TopicQuiz(
-      id: 'custody-remand',
-      title: 'Custody & Remand',
-      questionCount: 10,
-      difficulty: TopicDifficulty.medium,
-      status: QuizStatus.notStarted,
-    ),
-    TopicQuiz(
-      id: 'bail-when-how',
-      title: 'Bail: When & How',
-      questionCount: 14,
-      difficulty: TopicDifficulty.hard,
-      status: QuizStatus.notStarted,
-    ),
-  ];
+  /// 1-based position of [continueTarget] in the list.
+  int get continueNumber {
+    final target = continueTarget;
+    return target == null ? 0 : quizzes.indexOf(target) + 1;
+  }
 }

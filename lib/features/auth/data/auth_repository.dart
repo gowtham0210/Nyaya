@@ -1,3 +1,4 @@
+import '../../../core/network/api_exception.dart';
 import 'auth_api_client.dart';
 import 'auth_token_store.dart';
 
@@ -7,7 +8,8 @@ import 'auth_token_store.dart';
 /// [AuthTokenStore] directly, so the "how a session gets saved/cleared"
 /// logic exists in exactly one spot.
 class AuthRepository {
-  AuthRepository({AuthApiClient? apiClient}) : _apiClient = apiClient ?? AuthApiClient();
+  AuthRepository({AuthApiClient? apiClient})
+    : _apiClient = apiClient ?? AuthApiClient();
 
   final AuthApiClient _apiClient;
 
@@ -33,12 +35,63 @@ class AuthRepository {
     return session.user;
   }
 
+  /// Creates an email account and signs in (spec 041), then saves the
+  /// profession. A failed profession save is ignored: the account exists,
+  /// and Edit profile can set it later.
+  Future<AuthUser?> register({
+    required String fullName,
+    required String email,
+    required String password,
+    required String profession,
+    String? phone,
+  }) async {
+    final session = await _apiClient.register(
+      fullName: fullName,
+      email: email,
+      password: password,
+      phone: phone,
+    );
+    _saveSession(session);
+    try {
+      await _apiClient.updateProfession(profession);
+    } on AuthApiException {
+      // Kept as is; see above.
+    }
+    return session.user;
+  }
+
+  /// Signs in with an OTP-verified phone (spec 042). Throws
+  /// [PhoneLoginUnavailableException] while the backend lacks the endpoint.
+  Future<AuthUser?> phoneLogin({
+    required String firebaseIdToken,
+    required String phone,
+  }) async {
+    final AuthSession session;
+    try {
+      session = await _apiClient.phoneLogin(
+        firebaseIdToken: firebaseIdToken,
+        phone: phone,
+      );
+    } on AuthApiException catch (error) {
+      if (error.cause is ApiNotFoundException) {
+        throw PhoneLoginUnavailableException(error);
+      }
+      rethrow;
+    }
+    _saveSession(session);
+    return session.user;
+  }
+
   Future<AuthUser?> login({
     String? email,
     String? phone,
     required String password,
   }) async {
-    final session = await _apiClient.login(email: email, phone: phone, password: password);
+    final session = await _apiClient.login(
+      email: email,
+      phone: phone,
+      password: password,
+    );
     _saveSession(session);
     return session.user;
   }

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
@@ -56,7 +58,12 @@ void main() {
     final dailyQuestions = DailyQuestionsViewModel(
       repository: DailyQuestionsRepository(
         fakeBackend({
-          '/daily-questions/random': {'items': []},
+          '/daily-questions/today': {
+            'date': '2026-10-06',
+            'answered': false,
+            'question': null,
+            'result': null,
+          },
         }),
       ),
     );
@@ -161,7 +168,7 @@ void main() {
         ),
       );
 
-      expect(find.byKey(const ValueKey('home.hero')), findsOneWidget);
+      expect(find.byKey(const ValueKey('home.continue.card')), findsOneWidget);
       await scrollToSection(tester);
       expect(
         find.text(
@@ -169,7 +176,7 @@ void main() {
         ),
         findsOneWidget,
       );
-      expect(find.text('Contract Act Quiz'), findsOneWidget);
+      expect(find.text('Explore by Category'), findsOneWidget);
 
       online = true;
       final retry = find.byKey(const ValueKey('loadState.retry'));
@@ -185,21 +192,20 @@ void main() {
   testWidgets('AC-004 the section shows a spinner while loading', (
     tester,
   ) async {
+    // Reduced motion holds the skeleton still, so the pump can settle
+    // while the request is still open.
+    tester.platformDispatcher.accessibilityFeaturesTestValue =
+        const FakeAccessibilityFeatures(disableAnimations: true);
+    addTearDown(tester.platformDispatcher.clearAccessibilityFeaturesTestValue);
+    final pending = Completer<http.Response>();
     await pumpHome(
       tester,
-      ApiClient(
-        httpClient: MockClient(
-          (request) => Future<http.Response>.delayed(
-            const Duration(seconds: 1),
-            () => http.Response('{"items":[]}', 200),
-          ),
-        ),
-      ),
+      ApiClient(httpClient: MockClient((request) => pending.future)),
     );
 
     await scrollToSection(tester);
     expect(find.byKey(const ValueKey('loadState.loading')), findsOneWidget);
-    await tester.pump(const Duration(seconds: 1));
+    pending.complete(http.Response('{"items":[]}', 200));
     await tester.pumpAndSettle();
   });
 

@@ -442,31 +442,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homePopularQuizzes => 'Popular Quizzes';
 
   @override
-  String get homeDailyQuestions => 'Daily Questions';
-
-  @override
-  String get homeDailyQuestionsSubtitle =>
-      'Sharpen your mind with today\'s random questions';
-
-  @override
-  String get homeDailyQuestionsEmpty => 'No questions available yet.';
-
-  @override
-  String get homeDailyShowAnswer => 'Show answer';
-
-  @override
-  String get homeDailyHideAnswer => 'Hide answer';
-
-  @override
-  String homeDailyQuestionSemantics(
-    int number,
-    String question,
-    String category,
-  ) {
-    return 'Question $number: $question. $category';
-  }
-
-  @override
   String get categoriesSubtitle =>
       'Explore topics and strengthen your legal knowledge.';
 
@@ -492,6 +467,30 @@ class AppLocalizationsEn extends AppLocalizations {
   String topicContinueQuiz(int number) {
     return 'Continue quiz $number';
   }
+
+  @override
+  String topicStartQuiz(int number) {
+    return 'Start quiz $number';
+  }
+
+  @override
+  String get topicPracticeAgain => 'Practice again';
+
+  @override
+  String get topicNoQuizzes => 'No quizzes in this topic yet.';
+
+  @override
+  String quizUnlocksAt(int points) {
+    return 'Unlocks at $points points';
+  }
+
+  @override
+  String get quizAnswerFailed =>
+      'Couldn\'t save your answer. Check your connection and try again.';
+
+  @override
+  String get quizSubmitFailed =>
+      'Couldn\'t submit your quiz. Check your connection and try again.';
 
   @override
   String get quizStatusCompleted => 'completed';
@@ -551,6 +550,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get resultHeadline => 'Well Done!';
+
+  @override
+  String get resultHeadlineGood => 'Good progress!';
+
+  @override
+  String get resultHeadlineKeepGoing => 'Keep going!';
 
   @override
   String resultCompleted(String topic) {
@@ -617,6 +622,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get legalUpdatesCategoryNotices => 'Notices';
 
   @override
+  String get legalUpdateViewImage => 'View image';
+
+  @override
   String get commonSoon => 'Soon';
 
   @override
@@ -655,9 +663,6 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get homeAskNyayaBody =>
       'Ask your legal questions in simple language. Get clear answers.';
-
-  @override
-  String get homeRecommended => 'Recommended for you';
 
   @override
   String get articlesHeroTitle => 'Learn & Stay Updated';
@@ -968,4 +973,84 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get searchTypeQuizTopics => 'Quiz topics';
+
+  @override
+  String get homeGreetingMorning => 'Good morning';
+
+  @override
+  String get homeGreetingAfternoon => 'Good afternoon';
+
+  @override
+  String get homeGreetingEvening => 'Good evening';
+
+  @override
+  String homeStreakDays(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count-day streak',
+      one: '1-day streak',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get authMethodEmail => 'Email';
+
+  @override
+  String get authMethodPhone => 'Phone';
+
+  @override
+  String get fieldEmailLabel => 'Email Address';
+
+  @override
+  String get fieldEmailHint => 'Enter your email';
+
+  @override
+  String get validationEmailRequired => 'Email is required';
+
+  @override
+  String get validationEmailInvalid => 'Enter a valid email';
+
+  @override
+  String get fieldPhoneOptionalLabel => 'Phone Number (optional)';
+
+  @override
+  String get signUpCreateAccount => 'Create account';
+
+  @override
+  String get authPhoneLoginUnavailable =>
+      'Phone sign-in isn\'t available yet. Please use email.';
+
+  @override
+  String get homeDailyTitle => 'Today\'s Question';
+
+  @override
+  String get homeDailySubtitle =>
+      'One question a day. Answer to keep your streak.';
+
+  @override
+  String homeDailyPoints(int points) {
+    return '+$points points';
+  }
+
+  @override
+  String homeDailyEarned(int points) {
+    return '+$points earned';
+  }
+
+  @override
+  String get homeDailyComeBack => 'Come back tomorrow for a new question.';
+
+  @override
+  String get homeDailyNone => 'No question today. Check back tomorrow.';
+
+  @override
+  String get homeDailyAnswerNow => 'Answer now';
+
+  @override
+  String get homeDailyAnswered => 'Answered';
+
+  @override
+  String get homeDailyTomorrow => 'New question tomorrow';
 }

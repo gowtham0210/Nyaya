@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
 
+import '../../../app/theme/app_tokens.dart';
+
+import '../../../app/theme/app_typography.dart';
+
 import '../../../core/localization/l10n.dart';
 import '../../../core/presentation/widgets/initials_avatar.dart';
 import '../../../core/presentation/widgets/load_state_view.dart';
 import 'profile_view_model.dart';
 
-const _pageBackground = Color(0xFFF8F6F2);
-const _navy = Color(0xFF11233B);
-const _gold = Color(0xFFB9823A);
-const _supportText = Color(0xFF5E6878);
-const _cardBorder = Color(0xFFECE5DB);
-const _danger = Color(0xFFD64545);
+const _pageBackground = NyayaColors.ivory;
+const _navy = NyayaColors.ink;
+const _gold = NyayaColors.goldDeep;
+const _supportText = NyayaColors.inkMuted;
+const _cardBorder = NyayaColors.hairline;
+const _danger = NyayaColors.danger;
 
 /// Places Profile links to (spec 021); each is a later screen.
 enum ProfileEntry {
@@ -116,8 +120,9 @@ class _Header extends StatelessWidget {
               Text(
                 profile.fullName,
                 style: const TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.w800,
+                  fontSize: 30,
+                  fontFamily: NyayaFonts.display,
+                  fontWeight: FontWeight.w700,
                   color: _navy,
                 ),
               ),
@@ -160,7 +165,8 @@ class _Heading extends StatelessWidget {
       child: Text(
         text,
         style: const TextStyle(
-          fontSize: 18,
+          fontSize: 26,
+          fontFamily: NyayaFonts.display,
           fontWeight: FontWeight.w700,
           color: _navy,
         ),
@@ -244,7 +250,7 @@ class _StatTile extends StatelessWidget {
         padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(18),
+          borderRadius: BorderRadius.circular(NyayaRadii.md),
           border: Border.all(color: _cardBorder),
         ),
         child: Column(
@@ -255,8 +261,9 @@ class _StatTile extends StatelessWidget {
             Text(
               '$value',
               style: const TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.w800,
+                fontSize: 32,
+                fontFamily: NyayaFonts.display,
+                fontWeight: FontWeight.w700,
                 color: _navy,
               ),
             ),
@@ -395,7 +402,7 @@ class _Card extends StatelessWidget {
     return Material(
       color: Colors.white,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(NyayaRadii.md),
         side: const BorderSide(color: _cardBorder),
       ),
       clipBehavior: Clip.antiAlias,

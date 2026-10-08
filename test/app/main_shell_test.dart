@@ -15,12 +15,17 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../support/fake_backend.dart';
 import '../support/fake_reminder_scheduler.dart';
 import '../support/profile_backend.dart';
+import '../support/quiz_backend.dart';
 
 void main() {
   late FakeReminderScheduler reminderScheduler;
   late List<Uri> openedLinks;
 
-  Future<void> pumpMainShell(WidgetTester tester, {Locale? locale}) async {
+  Future<void> pumpMainShell(
+    WidgetTester tester, {
+    Locale? locale,
+    Map<String, Object> routes = const {},
+  }) async {
     reminderScheduler = FakeReminderScheduler();
     openedLinks = [];
     tester.view.physicalSize = const Size(393, 852);
@@ -69,6 +74,7 @@ void main() {
                 },
               ],
             },
+            ...routes,
           }),
         ),
       ),
@@ -103,24 +109,7 @@ void main() {
     tester,
   ) async {
     await pumpMainShell(tester);
-
-    await tester.tap(
-      find.descendant(
-        of: find.byKey(const ValueKey('home.section.explore')),
-        matching: find.text('View All'),
-      ),
-    );
-    await tester.pumpAndSettle();
-
-    expect(find.byKey(const ValueKey('nav.categories.active')), findsOneWidget);
-    expect(find.byKey(const ValueKey('categories.search')), findsOneWidget);
-  });
-
-  testWidgets('026 AC-007 View All recommended opens the grid', (tester) async {
-    await pumpMainShell(tester);
-    final viewAll = find.byKey(
-      const ValueKey('home.section.recommended.viewAll'),
-    );
+    final viewAll = find.byKey(const ValueKey('home.section.explore.viewAll'));
     await tester.scrollUntilVisible(
       viewAll,
       300,
@@ -136,13 +125,99 @@ void main() {
     await tester.tap(viewAll);
     await tester.pumpAndSettle();
 
+    expect(find.byKey(const ValueKey('nav.categories.active')), findsOneWidget);
+    expect(find.byKey(const ValueKey('categories.search')), findsOneWidget);
+  });
+
+  Map<String, Object> topicRoutes({
+    List<Map<String, Object?>>? attempts,
+    void Function()? onProgress,
+  }) => {
+    '/categories': {
+      'items': [
+        {
+          'id': 3,
+          'name': 'Criminal Procedure',
+          'slug': 'criminal-procedure',
+          'isActive': true,
+        },
+      ],
+    },
+    ...quizRoutes(attempts: attempts),
+    '/users/me/progress': (http.Request _) {
+      onProgress?.call();
+      return profileRoutes()['/users/me/progress']!;
+    },
+  };
+
+  testWidgets('spec 038 a category opens its topic and a played quiz '
+      'refreshes progress', (tester) async {
+    var progressLoads = 0;
+    await pumpMainShell(
+      tester,
+      routes: topicRoutes(onProgress: () => progressLoads++),
+    );
+    await tester.tap(find.text('Categories').last);
+    await tester.pumpAndSettle();
+    await tester.tap(
+      find.byKey(const ValueKey('categories.card.criminal-procedure')),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.byKey(const ValueKey('topic.title')), findsOneWidget);
+    expect(find.text('Continue quiz 2'), findsOneWidget);
+    final loadsBefore = progressLoads;
+
+    await tester.tap(find.byKey(const ValueKey('topic.continue')));
+    await tester.pumpAndSettle();
+    for (var i = 0; i < 2; i++) {
+      final option = find.byKey(const ValueKey('quiz.option.B'));
+      await tester.ensureVisible(option);
+      await tester.tap(option);
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const ValueKey('quiz.next')));
+      await tester.pumpAndSettle();
+    }
+
+    expect(find.byKey(const ValueKey('result.backtotopic')), findsOneWidget);
+    expect(progressLoads, greaterThan(loadsBefore));
+  });
+
+  testWidgets('spec 038 Continue Learning opens the latest attempt topic', (
+    tester,
+  ) async {
+    await pumpMainShell(tester, routes: topicRoutes());
+
+    await tester.tap(find.byKey(const ValueKey('home.continue.resume')));
+    await tester.pumpAndSettle();
+
+    expect(find.byKey(const ValueKey('topic.title')), findsOneWidget);
+  });
+
+  testWidgets('spec 038 with no attempts, Continue goes to Categories', (
+    tester,
+  ) async {
+    await pumpMainShell(tester, routes: topicRoutes(attempts: []));
+
+    await tester.tap(find.byKey(const ValueKey('home.continue.resume')));
+    await tester.pumpAndSettle();
+
+    expect(find.byKey(const ValueKey('nav.categories.active')), findsOneWidget);
+  });
+
+  testWidgets('spec 040 AC-006 Home greets the learner by name', (
+    tester,
+  ) async {
+    await pumpMainShell(tester);
+
     expect(
       find.descendant(
-        of: find.byType(AppBar),
-        matching: find.text('Recommended for you'),
+        of: find.byKey(const ValueKey('home.header')),
+        matching: find.text('Asha'),
       ),
       findsOneWidget,
     );
+    expect(find.byKey(const ValueKey('home.streak')), findsOneWidget);
   });
 
   testWidgets('020 AC-005 View All legal updates opens the full list', (
@@ -361,7 +436,7 @@ void main() {
     // The shell builds every tab up front, so all four had loaded.
     for (final path in [
       '/categories',
-      '/daily-questions/random',
+      '/daily-questions/today',
       '/legal-updates',
       '/articles',
     ]) {
@@ -459,22 +534,6 @@ void main() {
     await tester.tap(call);
 
     expect(openedLinks, [Uri.parse('tel:181')]);
-  });
-
-  testWidgets('033 Home search finds and opens an article', (tester) async {
-    await pumpMainShell(tester);
-
-    await tester.tap(find.byKey(const ValueKey('home.search')));
-    await tester.pumpAndSettle();
-    await tester.enterText(
-      find.byKey(const ValueKey('search.field')),
-      'equality',
-    );
-    await tester.pumpAndSettle();
-    await tester.tap(find.text('Right to Equality'));
-    await tester.pumpAndSettle();
-
-    expect(find.text('Why it matters'), findsOneWidget);
   });
 
   testWidgets('030 About shows the app version', (tester) async {

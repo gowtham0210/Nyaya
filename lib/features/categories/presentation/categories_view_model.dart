@@ -1,3 +1,4 @@
+import '../../../app/theme/app_tokens.dart';
 import '../../../core/presentation/load_state_notifier.dart';
 import '../../../core/presentation/widgets/nyaya_icon.dart';
 import '../data/categories_repository.dart';
@@ -49,14 +50,43 @@ CategoryData _toCard(LawCategory category, int index) {
 
 typedef _CardStyle = ({HomeIconType icon, int tintHex, int iconHex});
 
-const _palette = <_CardStyle>[
-  (icon: HomeIconType.temple, tintHex: 0xFFE8F1FC, iconHex: 0xFF2F6FED),
-  (icon: HomeIconType.gavel, tintHex: 0xFFFBEAEA, iconHex: 0xFFD64545),
-  (icon: HomeIconType.scales, tintHex: 0xFFE8F5EC, iconHex: 0xFF1FA35B),
-  (icon: HomeIconType.document, tintHex: 0xFFF1EAFB, iconHex: 0xFF7C4DFF),
-  (icon: HomeIconType.community, tintHex: 0xFFFDF1DF, iconHex: 0xFFE08A2B),
-  (icon: HomeIconType.handcuffs, tintHex: 0xFFE6F6F5, iconHex: 0xFF1C9C90),
-  (icon: HomeIconType.book, tintHex: 0xFFFBEAF0, iconHex: 0xFFD6467D),
+// Muted brand tones (spec 036), not rainbow pastels.
+final _palette = <_CardStyle>[
+  (
+    icon: HomeIconType.temple,
+    tintHex: NyayaTones.navyTint.toARGB32(),
+    iconHex: NyayaTones.navyInk.toARGB32(),
+  ),
+  (
+    icon: HomeIconType.gavel,
+    tintHex: NyayaTones.clayTint.toARGB32(),
+    iconHex: NyayaTones.clayInk.toARGB32(),
+  ),
+  (
+    icon: HomeIconType.scales,
+    tintHex: NyayaTones.oliveTint.toARGB32(),
+    iconHex: NyayaTones.oliveInk.toARGB32(),
+  ),
+  (
+    icon: HomeIconType.document,
+    tintHex: NyayaTones.plumTint.toARGB32(),
+    iconHex: NyayaTones.plumInk.toARGB32(),
+  ),
+  (
+    icon: HomeIconType.community,
+    tintHex: NyayaTones.bronzeTint.toARGB32(),
+    iconHex: NyayaTones.bronzeInk.toARGB32(),
+  ),
+  (
+    icon: HomeIconType.handcuffs,
+    tintHex: NyayaTones.tealTint.toARGB32(),
+    iconHex: NyayaTones.tealInk.toARGB32(),
+  ),
+  (
+    icon: HomeIconType.book,
+    tintHex: NyayaTones.slateTint.toARGB32(),
+    iconHex: NyayaTones.slateInk.toARGB32(),
+  ),
 ];
 
 /// Designed looks for known slugs, as indexes into [_palette].

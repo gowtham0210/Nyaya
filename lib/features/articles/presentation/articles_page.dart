@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
 
+import '../../../app/theme/app_tokens.dart';
+
+import '../../../app/theme/app_typography.dart';
+
 import '../../../core/localization/l10n.dart';
 import '../../../core/presentation/widgets/load_state_view.dart';
 import 'article_text.dart';
 import 'articles_view_model.dart';
 import 'widgets/article_list_item.dart';
 
-const _pageBackground = Color(0xFFF8F6F2);
-const _navy = Color(0xFF11233B);
-const _gold = Color(0xFFB9823A);
+const _pageBackground = NyayaColors.ivory;
+const _navy = NyayaColors.ink;
+const _gold = NyayaColors.goldDeep;
 
 /// The Articles tab (spec 019): a hero, then articles grouped by part.
 class ArticlesPage extends StatefulWidget {
@@ -94,7 +98,9 @@ class _Hero extends StatelessWidget {
       // A minimum, so large text grows the hero instead of overflowing.
       constraints: const BoxConstraints(minHeight: 140),
       clipBehavior: Clip.antiAlias,
-      decoration: BoxDecoration(borderRadius: BorderRadius.circular(24)),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(NyayaRadii.md),
+      ),
       child: Stack(
         alignment: Alignment.centerLeft,
         children: [
@@ -130,9 +136,9 @@ class _Hero extends StatelessWidget {
                   child: Text(
                     l10n.articlesHeroTitle,
                     style: const TextStyle(
-                      fontSize: 21,
+                      fontSize: 26,
                       fontWeight: FontWeight.w800,
-                      fontFamily: 'serif',
+                      fontFamily: NyayaFonts.display,
                       color: Colors.white,
                     ),
                   ),

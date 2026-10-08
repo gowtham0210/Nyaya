@@ -1,6 +1,8 @@
 # 018-daily-questions Daily Questions on Home
 
 Status: Implemented
+Note (2026-10-06): spec 043 made this a swipeable quick quiz; the answer
+reveal stays as the fallback for questions without options.
 Last Updated: 2026-09-28
 Owner: Gowtham
 Related ADRs: `../../adr/0002-data-layer.md`, `../../adr/0003-localization.md`

@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
 
+import '../../../app/theme/app_motion.dart';
+import '../../../app/theme/app_tokens.dart';
+
 import '../../../core/localization/l10n.dart';
+import '../../../core/presentation/show_message.dart';
 import '../../../core/presentation/widgets/nyaya_widgets.dart';
 import 'quiz_session_view_model.dart';
 
-const _correctGreen = Color(0xFF1FA35B);
-const _correctTint = Color(0xFFE9F7EF);
-const _wrongRed = Color(0xFFD64545);
-const _wrongTint = Color(0xFFFDEEEE);
-const _cardBorder = Color(0xFFECE5DB);
-const _disabledGrey = Color(0xFFBFC5CE);
+const _correctGreen = NyayaColors.success;
+const _correctTint = NyayaColors.successTint;
+const _wrongRed = NyayaColors.danger;
+const _wrongTint = NyayaColors.dangerTint;
+const _cardBorder = NyayaColors.hairline;
+const _disabledGrey = NyayaColors.inkDisabled;
 
 class QuizQuestionPage extends StatefulWidget {
   const QuizQuestionPage({
@@ -18,29 +22,81 @@ class QuizQuestionPage extends StatefulWidget {
     this.session,
   });
 
+  /// Called after [QuizSession.finish] succeeds.
   final ValueChanged<List<QuizOutcome>> onQuizCompleted;
-  final QuizSessionViewModel? session;
+
+  /// Defaults to the sample session; the app passes a backend attempt.
+  final QuizSession? session;
 
   @override
   State<QuizQuestionPage> createState() => _QuizQuestionPageState();
 }
 
 class _QuizQuestionPageState extends State<QuizQuestionPage> {
-  late final QuizSessionViewModel _session =
-      widget.session ?? QuizSessionViewModel();
+  late final QuizSession _session = widget.session ?? QuizSessionViewModel();
 
-  void _answer(int option) {
-    if (_session.isAnswered) {
-      return;
-    }
-    setState(() => _session.answer(option));
+  /// True while an answer or the final submit is with the server.
+  var _busy = false;
+
+  final _scrollController = ScrollController();
+  final _explanationKey = GlobalKey();
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 
-  void _next() {
-    setState(() => _session.next());
-    if (_session.isComplete) {
-      widget.onQuizCompleted(_session.outcomes);
+  Future<void> _answer(int option) async {
+    if (_session.isAnswered || _busy) {
+      return;
     }
+    NyayaHaptics.select();
+    setState(() => _busy = true);
+    try {
+      await _session.answer(option);
+    } catch (_) {
+      // The question stays open so the learner can tap again.
+      if (mounted) showMessage(context, context.l10n.quizAnswerFailed);
+    }
+    if (!mounted) return;
+    setState(() => _busy = false);
+    if (!_session.isAnswered) return;
+    _session.isCorrect ? NyayaHaptics.correct() : NyayaHaptics.wrong();
+    // The explanation lands below the options, often under the footer
+    // button; bring it into view (spec 037).
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final explanation = _explanationKey.currentContext;
+      if (explanation == null || !mounted) return;
+      Scrollable.ensureVisible(
+        explanation,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeOutCubic,
+        alignmentPolicy: ScrollPositionAlignmentPolicy.keepVisibleAtEnd,
+      );
+    });
+  }
+
+  Future<void> _next() async {
+    if (_busy) return;
+    if (!_session.isComplete) setState(_session.next);
+    if (_session.isComplete) {
+      setState(() => _busy = true);
+      try {
+        await _session.finish();
+      } catch (_) {
+        // Next stays on screen; tapping it again retries the submit.
+        if (mounted) {
+          setState(() => _busy = false);
+          showMessage(context, context.l10n.quizSubmitFailed);
+        }
+        return;
+      }
+      if (mounted) widget.onQuizCompleted(_session.outcomes);
+      return;
+    }
+    // Each question starts at the top.
+    if (_scrollController.hasClients) _scrollController.jumpTo(0);
   }
 
   @override
@@ -101,6 +157,7 @@ class _QuizQuestionPageState extends State<QuizQuestionPage> {
             ),
             Expanded(
               child: SingleChildScrollView(
+                controller: _scrollController,
                 padding: const EdgeInsets.symmetric(
                   horizontal: 24,
                   vertical: 12,
@@ -112,10 +169,10 @@ class _QuizQuestionPageState extends State<QuizQuestionPage> {
                       padding: const EdgeInsets.all(20),
                       decoration: BoxDecoration(
                         color: Colors.white,
-                        borderRadius: BorderRadius.circular(20),
+                        borderRadius: BorderRadius.circular(NyayaRadii.md),
                         boxShadow: const [
                           BoxShadow(
-                            color: Color(0x14000000),
+                            color: NyayaColors.shadowMid,
                             blurRadius: 12,
                             offset: Offset(0, 4),
                           ),
@@ -125,8 +182,8 @@ class _QuizQuestionPageState extends State<QuizQuestionPage> {
                         question.stem,
                         style: const TextStyle(
                           color: navy,
-                          fontSize: 19,
-                          fontWeight: FontWeight.w700,
+                          fontSize: 20,
+                          fontWeight: FontWeight.w600,
                           height: 1.4,
                         ),
                       ),
@@ -143,6 +200,7 @@ class _QuizQuestionPageState extends State<QuizQuestionPage> {
                     ],
                     if (_session.isAnswered)
                       _ExplanationCard(
+                        key: _explanationKey,
                         isCorrect: _session.isCorrect,
                         explanation: question.explanation,
                       ),
@@ -162,15 +220,17 @@ class _QuizQuestionPageState extends State<QuizQuestionPage> {
                           backgroundColor: gold,
                           foregroundColor: Colors.white,
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30),
+                            borderRadius: BorderRadius.circular(
+                              NyayaRadii.pill,
+                            ),
                           ),
                         ),
-                        onPressed: _next,
+                        onPressed: _busy ? null : _next,
                         child: Text(
-                          l10n.commonNext.toUpperCase(),
+                          l10n.commonNext,
                           style: const TextStyle(
-                            fontWeight: FontWeight.w700,
-                            letterSpacing: 2,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
                       )
@@ -179,14 +239,14 @@ class _QuizQuestionPageState extends State<QuizQuestionPage> {
                         alignment: Alignment.center,
                         decoration: BoxDecoration(
                           color: _disabledGrey.withValues(alpha: 0.4),
-                          borderRadius: BorderRadius.circular(30),
+                          borderRadius: BorderRadius.circular(NyayaRadii.pill),
                         ),
                         child: Text(
-                          l10n.quizSelectAnswer.toUpperCase(),
+                          l10n.quizSelectAnswer,
                           style: const TextStyle(
                             color: _disabledGrey,
-                            fontWeight: FontWeight.w700,
-                            letterSpacing: 2,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
                       ),
@@ -202,8 +262,7 @@ class _QuizQuestionPageState extends State<QuizQuestionPage> {
     if (!_session.isAnswered) {
       return _OptionState.neutral;
     }
-    final question = _session.currentQuestion;
-    if (index == question.correctOption) {
+    if (index == _session.correctOption) {
       return index == _session.selectedOption
           ? _OptionState.lockedCorrect
           : _OptionState.revealedCorrect;
@@ -261,14 +320,17 @@ class _OptionCard extends StatelessWidget {
       label: stateLabel == null ? optionLabel : '$optionLabel. $stateLabel',
       child: InkWell(
         key: ValueKey('quiz.option.$letter'),
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(NyayaRadii.sm),
         onTap: onTap,
         child: ExcludeSemantics(
-          child: Container(
+          // Color and border ease into the verdict (spec 039).
+          child: AnimatedContainer(
+            duration: NyayaMotion.of(context, NyayaMotion.medium),
+            curve: NyayaMotion.curve,
             padding: const EdgeInsets.all(14),
             decoration: BoxDecoration(
               color: fill,
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(NyayaRadii.sm),
               border: Border.all(
                 color: border,
                 width: state == _OptionState.neutral ? 1 : 1.6,
@@ -352,7 +414,11 @@ class _OptionCard extends StatelessWidget {
 enum _LetterBadge { neutral, check, cross }
 
 class _ExplanationCard extends StatelessWidget {
-  const _ExplanationCard({required this.isCorrect, required this.explanation});
+  const _ExplanationCard({
+    super.key,
+    required this.isCorrect,
+    required this.explanation,
+  });
 
   final bool isCorrect;
   final QuizExplanation explanation;
@@ -360,16 +426,33 @@ class _ExplanationCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final verdictColor = isCorrect ? _correctGreen : _wrongRed;
+    // Slides and fades up into place (spec 039).
+    return TweenAnimationBuilder<double>(
+      tween: Tween(begin: 0, end: 1),
+      duration: NyayaMotion.of(context, NyayaMotion.medium),
+      curve: NyayaMotion.curve,
+      builder: (context, t, child) => Opacity(
+        opacity: t,
+        child: Transform.translate(
+          offset: Offset(0, 16 * (1 - t)),
+          child: child,
+        ),
+      ),
+      child: _card(context, verdictColor),
+    );
+  }
+
+  Widget _card(BuildContext context, Color verdictColor) {
     return Container(
       key: const ValueKey('quiz.explanation'),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(NyayaRadii.sm),
         border: const Border(left: BorderSide(color: gold, width: 4)),
         boxShadow: const [
           BoxShadow(
-            color: Color(0x14000000),
+            color: NyayaColors.shadowMid,
             blurRadius: 12,
             offset: Offset(0, 4),
           ),

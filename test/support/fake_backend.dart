@@ -7,7 +7,8 @@ import 'package:nyaya/core/network/api_client.dart';
 /// Canned JSON responses keyed by request path (`/api/v1` stripped), for
 /// tests that fake the backend at the [ApiClient] seam (ADR 0002).
 /// A path mapped to an [http.Response] returns it as is; a missing path
-/// returns 404.
+/// returns 404. A `'POST /path'` key wins over a plain path for that method,
+/// and a route may be a function of the request (e.g. to read its body).
 ApiClient fakeBackend(Map<String, Object> routes) => ApiClient(
   readAccessToken: () => 'test-token',
   httpClient: fakeBackendClient(routes),
@@ -21,7 +22,10 @@ http.Client fakeBackendClient(
   return MockClient((request) async {
     final path = request.url.path.replaceFirst('/api/v1', '');
     onRequest?.call(path);
-    final route = routes[path];
+    var route = routes['${request.method} $path'] ?? routes[path];
+    if (route is Object Function(http.Request)) {
+      route = route(request);
+    }
     if (route == null) {
       return http.Response(jsonEncode({'message': 'No route $path'}), 404);
     }

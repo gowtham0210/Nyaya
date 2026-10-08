@@ -24,7 +24,6 @@ import '../features/home/presentation/daily_questions_view_model.dart';
 import '../features/home/presentation/home_page.dart';
 import '../features/home/presentation/home_view_model.dart';
 import '../features/home/presentation/learning_progress_view_model.dart';
-import '../features/home/presentation/recommended_page.dart';
 import '../features/legal_updates/data/legal_updates_repository.dart';
 import '../features/legal_updates/presentation/legal_updates_page.dart';
 import '../features/legal_updates/presentation/legal_updates_view_model.dart';
@@ -36,11 +35,11 @@ import '../features/profile/presentation/edit_profile_page.dart';
 import '../features/profile/presentation/edit_profile_view_model.dart';
 import '../features/profile/presentation/profile_page.dart';
 import '../features/profile/presentation/profile_view_model.dart';
-import '../features/quiz_question/presentation/quiz_question_page.dart';
+import '../features/quiz_question/data/quiz_play_repository.dart';
+import '../features/quiz_question/presentation/quiz_play_page.dart';
+import '../features/quiz_question/presentation/quiz_session_view_model.dart';
 import '../features/quiz_result/presentation/quiz_result_page.dart';
 import '../features/quiz_result/presentation/quiz_result_view_model.dart';
-import '../features/search/presentation/search_page.dart';
-import '../features/search/presentation/search_view_model.dart';
 import '../features/settings/data/app_version.dart';
 import '../features/settings/data/reminder_scheduler.dart';
 import '../features/settings/data/security_repository.dart';
@@ -53,9 +52,9 @@ import '../features/settings/presentation/reminders_page.dart';
 import '../features/settings/presentation/reminders_view_model.dart';
 import '../features/shell/presentation/coming_soon_tab.dart';
 import '../features/shell/presentation/tab_shell_page.dart';
+import '../features/topic_detail/data/topic_repository.dart';
 import '../features/topic_detail/presentation/topic_detail_page.dart';
 import '../features/topic_detail/presentation/topic_detail_view_model.dart';
-import '../core/presentation/show_message.dart';
 import 'app_services.dart';
 import 'session_actions.dart';
 import 'session_expiry_listener.dart';
@@ -111,6 +110,11 @@ class _MainShellState extends State<MainShell> {
   );
   late final _dailyQuestionsViewModel = DailyQuestionsViewModel(
     repository: DailyQuestionsRepository(_apiClient),
+    // A graded answer adds points and a streak day (spec 045).
+    onAnswered: () {
+      _progressViewModel.load();
+      _profileViewModel.load();
+    },
   );
   late final _articlesViewModel = ArticlesViewModel(
     repository: ArticlesRepository(_apiClient),
@@ -124,6 +128,8 @@ class _MainShellState extends State<MainShell> {
   late final _legalUpdatesViewModel = LegalUpdatesViewModel(
     repository: LegalUpdatesRepository(_apiClient),
   );
+  late final _topicRepository = TopicRepository(_apiClient);
+  late final _quizPlayRepository = QuizPlayRepository(_apiClient);
 
   @override
   void initState() {
@@ -172,7 +178,10 @@ class _MainShellState extends State<MainShell> {
             MainTab.categories,
             l10n.navCategories,
             HomeIconType.navCategories,
-            (_) => CategoriesPage(viewModel: _categoriesViewModel),
+            (context) => CategoriesPage(
+              viewModel: _categoriesViewModel,
+              onCategorySelected: (category) => _openTopic(context, category),
+            ),
           ),
           _comingSoon(
             MainTab.leaderboard,
@@ -267,35 +276,6 @@ class _MainShellState extends State<MainShell> {
         .whenComplete(viewModel.dispose);
   }
 
-  void _openSearch(BuildContext context) {
-    final viewModel = SearchViewModel(
-      categories: _categoriesViewModel,
-      articles: _articlesViewModel,
-      legalUpdates: _legalUpdatesViewModel,
-    );
-    Navigator.of(context)
-        .push(
-          MaterialPageRoute<void>(
-            builder: (pageContext) => SearchPage(
-              viewModel: viewModel,
-              // Category screens don't exist yet; same message as on Home.
-              onCategorySelected: (category) => showMessage(
-                pageContext,
-                pageContext.l10n.featureComingSoon(category.label),
-              ),
-              onArticleOpened: (article, number) =>
-                  Navigator.of(pageContext).push(
-                    MaterialPageRoute<void>(
-                      builder: (_) =>
-                          ArticleDetailPage(number: number, article: article),
-                    ),
-                  ),
-            ),
-          ),
-        )
-        .whenComplete(viewModel.dispose);
-  }
-
   void _openAbout(BuildContext context) {
     Navigator.of(context).push(
       MaterialPageRoute<void>(
@@ -383,6 +363,76 @@ class _MainShellState extends State<MainShell> {
         .whenComplete(viewModel.dispose);
   }
 
+  /// Opens a topic (backend category) with its real quizzes (spec 038).
+  void _openTopic(BuildContext context, CategoryData category) {
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (topicContext) => _TopicRoute(
+          repository: _topicRepository,
+          category: category,
+          onQuizSelected: (quiz, topic) => _playQuiz(topicContext, quiz, topic),
+        ),
+      ),
+    );
+  }
+
+  /// Plays a quiz as a backend attempt; once submitted, the topic, Home and
+  /// Profile reload so they show the same progress (spec 038).
+  void _playQuiz(
+    BuildContext context,
+    TopicQuiz quiz,
+    TopicDetailViewModel topic,
+  ) {
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (quizContext) => QuizPlayPage(
+          start: () => RemoteQuizSession.start(_quizPlayRepository, quiz.id),
+          onQuizCompleted: (outcomes) {
+            topic.load();
+            _progressViewModel.load();
+            _profileViewModel.load();
+            Navigator.of(quizContext).pushReplacement(
+              MaterialPageRoute<void>(
+                builder: (resultContext) => QuizResultPage(
+                  viewModel: QuizResultViewModel(
+                    outcomes: outcomes,
+                    topicTitle: quiz.title,
+                  ),
+                  // No onReviewAnswers until answer review (Phase 9) exists,
+                  // so the button stays hidden (spec 035).
+                  onBackToTopic: () => Navigator.of(resultContext).pop(),
+                ),
+              ),
+            );
+          },
+        ),
+      ),
+    );
+  }
+
+  /// Continue Learning: the topic of the latest attempt, or the Categories
+  /// tab to pick a first topic.
+  Future<void> _resume(BuildContext context) async {
+    int? categoryId;
+    try {
+      categoryId = await _topicRepository.fetchLatestCategoryId();
+    } catch (_) {
+      // Fall back to Categories below.
+    }
+    await _categoriesViewModel.ensureLoaded();
+    final categories = switch (_categoriesViewModel.state) {
+      Loaded(:final data) => data,
+      _ => const <CategoryData>[],
+    };
+    final category = categories.where((c) => c.id == categoryId).firstOrNull;
+    if (!context.mounted) return;
+    if (category == null) {
+      _controller.select(MainTab.categories.index);
+    } else {
+      _openTopic(context, category);
+    }
+  }
+
   Widget _buildHome(BuildContext context) {
     return HomePage(
       viewModel: const HomeViewModel(),
@@ -390,30 +440,11 @@ class _MainShellState extends State<MainShell> {
       legalUpdates: _legalUpdatesViewModel,
       progress: _progressViewModel,
       categories: _categoriesViewModel,
-      // Provisional wire until the Topics tab exists.
-      onResumePressed: () => Navigator.of(context).push(
-        MaterialPageRoute<void>(
-          builder: (topicContext) => TopicDetailPage(
-            onQuizSelected: (quizId) => _startQuiz(topicContext, quizId),
-            onContinueQuiz: (quizId) => _startQuiz(topicContext, quizId),
-          ),
-        ),
-      ),
+      profile: _profileViewModel,
+      onResumePressed: () => _resume(context),
+      onCategorySelected: (category) => _openTopic(context, category),
       onViewAllCategoriesPressed: () =>
           _controller.select(MainTab.categories.index),
-      onViewAllRecommendedPressed: () => Navigator.of(context).push(
-        MaterialPageRoute<void>(
-          builder: (pageContext) => RecommendedPage(
-            viewModel: _categoriesViewModel,
-            // Category screens don't exist yet; same message as on Home.
-            onCategorySelected: (category) => showMessage(
-              pageContext,
-              pageContext.l10n.featureComingSoon(category.label),
-            ),
-          ),
-        ),
-      ),
-      onSearchPressed: () => _openSearch(context),
       onViewAllLegalUpdatesPressed: () => Navigator.of(context).push(
         MaterialPageRoute<void>(
           builder: (_) => LegalUpdatesPage(viewModel: _legalUpdatesViewModel),
@@ -423,35 +454,39 @@ class _MainShellState extends State<MainShell> {
   }
 }
 
-/// The sample session ignores the quiz id for its questions, but uses it to
-/// name the topic on the result screen.
-void _startQuiz(BuildContext context, String quizId) {
-  final title = _quizTitle(quizId);
-  Navigator.of(context).push(
-    MaterialPageRoute<void>(
-      builder: (quizContext) => QuizQuestionPage(
-        onQuizCompleted: (outcomes) =>
-            Navigator.of(quizContext).pushReplacement(
-              MaterialPageRoute<void>(
-                builder: (resultContext) => QuizResultPage(
-                  viewModel: QuizResultViewModel(
-                    outcomes: outcomes,
-                    topicTitle: title,
-                  ),
-                  // Review answers (Phase 9) lands next; no-op for now.
-                  onReviewAnswers: () {},
-                  onBackToTopic: () => Navigator.of(resultContext).pop(),
-                ),
-              ),
-            ),
-      ),
-    ),
-  );
+/// A topic page that owns its view model (spec 038).
+class _TopicRoute extends StatefulWidget {
+  const _TopicRoute({
+    required this.repository,
+    required this.category,
+    required this.onQuizSelected,
+  });
+
+  final TopicRepository repository;
+  final CategoryData category;
+  final void Function(TopicQuiz quiz, TopicDetailViewModel topic)
+  onQuizSelected;
+
+  @override
+  State<_TopicRoute> createState() => _TopicRouteState();
 }
 
-String _quizTitle(String quizId) {
-  final quizzes = TopicDetailViewModel().quizzes;
-  return quizzes
-      .firstWhere((quiz) => quiz.id == quizId, orElse: () => quizzes.first)
-      .title;
+class _TopicRouteState extends State<_TopicRoute> {
+  late final _viewModel = TopicDetailViewModel(
+    repository: widget.repository,
+    categoryId: widget.category.id,
+    title: widget.category.label,
+  );
+
+  @override
+  void dispose() {
+    _viewModel.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) => TopicDetailPage(
+    viewModel: _viewModel,
+    onQuizSelected: (quiz) => widget.onQuizSelected(quiz, _viewModel),
+  );
 }

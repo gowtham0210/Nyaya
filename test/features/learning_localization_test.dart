@@ -11,15 +11,21 @@ import 'package:nyaya/features/home/presentation/home_page.dart';
 import 'package:nyaya/features/home/presentation/home_view_model.dart';
 import 'package:nyaya/features/legal_updates/data/legal_updates_repository.dart';
 import 'package:nyaya/features/legal_updates/presentation/legal_updates_view_model.dart';
+import 'package:nyaya/features/profile/data/profile_repository.dart';
+import 'package:nyaya/features/profile/presentation/profile_view_model.dart';
 import 'package:nyaya/features/quiz_question/presentation/quiz_question_page.dart';
 import 'package:nyaya/features/quiz_question/presentation/quiz_session_view_model.dart';
 import 'package:nyaya/features/quiz_result/presentation/quiz_result_page.dart';
 import 'package:nyaya/features/quiz_result/presentation/quiz_result_view_model.dart';
+import 'package:nyaya/features/topic_detail/data/topic_repository.dart';
 import 'package:nyaya/features/topic_detail/presentation/topic_detail_page.dart';
+import 'package:nyaya/features/topic_detail/presentation/topic_detail_view_model.dart';
 
 import '../support/fake_backend.dart';
 import '../support/home_fixture.dart';
 import '../support/localized_app.dart';
+import '../support/profile_backend.dart';
+import '../support/quiz_backend.dart';
 
 // Issue #28: learning screens render UI text in the learner's language.
 // Sample content (quiz and topic names) stays in English.
@@ -35,22 +41,27 @@ void main() {
     expect(find.text('ಜೀವನಕ್ಕಾಗಿ ಕಾನೂನು ಕಲಿಯಿರಿ'), findsOneWidget);
     expect(find.text('ಮುಂದುವರಿಸಿ'), findsOneWidget);
     expect(find.text('What brings you'), findsNothing);
-    expect(find.text('CONTINUE'), findsNothing);
+    expect(find.text('Continue'), findsNothing);
   });
 
   testWidgets('Home renders in Hindi', (tester) async {
     final dailyQuestions = DailyQuestionsViewModel(
       repository: DailyQuestionsRepository(
         fakeBackend({
-          '/daily-questions/random': {
-            'items': [
-              {
-                'id': 1,
-                'category': 'संविधान',
-                'question': 'जीवन का अधिकार किस अनुच्छेद में है?',
-                'answer': 'अनुच्छेद 21।',
-              },
-            ],
+          '/daily-questions/today': {
+            'date': '2026-10-06',
+            'answered': false,
+            'question': {
+              'id': 1,
+              'category': 'संविधान',
+              'question': 'जीवन का अधिकार किस अनुच्छेद में है?',
+              'pointsReward': 10,
+              'options': [
+                {'id': 11, 'optionText': 'अनुच्छेद 14'},
+                {'id': 12, 'optionText': 'अनुच्छेद 21'},
+              ],
+            },
+            'result': null,
           },
         }),
       ),
@@ -65,6 +76,10 @@ void main() {
     );
     addTearDown(legalUpdates.dispose);
     final sections = quietHomeSections();
+    final profile = ProfileViewModel(
+      repository: ProfileRepository(fakeBackend(profileRoutes())),
+    );
+    addTearDown(profile.dispose);
     await pumpLocalized(
       tester,
       HomePage(
@@ -73,18 +88,23 @@ void main() {
         legalUpdates: legalUpdates,
         progress: sections.progress,
         categories: sections.categories,
+        profile: profile,
+        onQuizSelected: (_) {},
       ),
       locale: const Locale('hi'),
     );
 
-    expect(find.text('कानूनी ज्ञान को परखें।'), findsOneWidget);
-    expect(find.text('क्विज़ शुरू करें'), findsOneWidget);
-    expect(find.text('श्रेणी के अनुसार देखें'), findsOneWidget);
     expect(find.text('पढ़ाई जारी रखें'), findsOneWidget);
-    expect(find.text('कानून आधारित क्विज़ ऐप'), findsOneWidget);
     expect(find.text('Explore by Category'), findsNothing);
-    // Sample content stays as is.
-    expect(find.text('Constitutional Law'), findsOneWidget);
+    // Greeting and streak (spec 040).
+    expect(
+      find.textContaining(RegExp('सुप्रभात|शुभ दोपहर|शुभ संध्या')),
+      findsOneWidget,
+    );
+    expect(
+      tester.getSemantics(find.byKey(const ValueKey('home.streak'))),
+      isSemantics(label: '4 दिन की लगातार पढ़ाई'),
+    );
 
     final page = find
         .descendant(
@@ -92,18 +112,18 @@ void main() {
           matching: find.byType(Scrollable),
         )
         .first;
-    // 018 AC-009: the Daily Questions section is in Hindi too.
+    // Today's question is in Hindi too (specs 018, 045).
     await tester.scrollUntilVisible(
-      find.byKey(const ValueKey('home.daily.question.1')),
+      find.byKey(const ValueKey('home.section.daily')),
       300,
       scrollable: page,
     );
     // Lay out the new scroll offset before the next scroll.
     await tester.pumpAndSettle();
-    expect(find.text('दैनिक प्रश्न'), findsOneWidget);
-    expect(find.text('1 प्रश्न'), findsOneWidget);
-    expect(find.text('उत्तर देखें'), findsOneWidget);
-    expect(find.text('Daily Questions'), findsNothing);
+    expect(find.text('आज का प्रश्न'), findsOneWidget);
+    expect(find.text('संविधान · +10 अंक'), findsOneWidget);
+    expect(find.text('अभी उत्तर दें'), findsOneWidget);
+    expect(find.text("Today's Question"), findsNothing);
 
     await tester.scrollUntilVisible(
       find.text('लोकप्रिय क्विज़'),
@@ -117,6 +137,13 @@ void main() {
     );
     expect(find.text('आसान'), findsOneWidget);
     expect(find.text('12 प्रश्न'), findsOneWidget);
+
+    // Categories come after the daily question and quizzes (spec 040).
+    await tester.scrollUntilVisible(
+      find.text('श्रेणी के अनुसार देखें'),
+      300,
+      scrollable: page,
+    );
   });
 
   testWidgets('Categories renders in Tamil', (tester) async {
@@ -146,19 +173,25 @@ void main() {
   });
 
   testWidgets('Topic detail renders in Telugu', (tester) async {
+    final topic = TopicDetailViewModel(
+      repository: TopicRepository(fakeBackend(quizRoutes())),
+      categoryId: 3,
+      title: 'Criminal Procedure',
+    );
+    addTearDown(topic.dispose);
     await pumpLocalized(
       tester,
-      TopicDetailPage(onQuizSelected: (_) {}, onContinueQuiz: (_) {}),
+      TopicDetailPage(viewModel: topic, onQuizSelected: (_) {}),
       locale: const Locale('te'),
     );
+    await tester.pumpAndSettle();
 
-    expect(find.text('6 క్విజ్‌లు'), findsOneWidget);
+    expect(find.text('3 క్విజ్‌లు'), findsOneWidget);
     expect(find.text('క్విజ్‌లు'), findsOneWidget);
     expect(find.text('10 ప్రశ్నలు · సులభం'), findsOneWidget);
     expect(find.text('క్విజ్ 2 కొనసాగించండి'), findsOneWidget);
-    expect(find.byTooltip('అంశాన్ని బుక్‌మార్క్ చేయండి'), findsOneWidget);
     expect(find.text('FIR Basics'), findsOneWidget);
-    expect(find.text('CONTINUE QUIZ 2'), findsNothing);
+    expect(find.text('Continue quiz 2'), findsNothing);
   });
 
   testWidgets('Quiz question renders in Hindi', (tester) async {
@@ -172,7 +205,7 @@ void main() {
     expect(find.text('एक उत्तर चुनें'), findsOneWidget);
     expect(find.byTooltip('क्विज़ से बाहर निकलें'), findsOneWidget);
 
-    final correct = QuizSessionViewModel().questions.first.correctOption;
+    final correct = QuizSessionViewModel().questions.first.correctOption!;
     await tester.tap(
       find.byKey(ValueKey('quiz.option.${String.fromCharCode(65 + correct)}')),
     );
@@ -180,7 +213,7 @@ void main() {
 
     expect(find.text('सही!'), findsOneWidget);
     expect(find.text('आगे'), findsOneWidget);
-    expect(find.text('NEXT'), findsNothing);
+    expect(find.text('Next'), findsNothing);
   });
 
   testWidgets('Quiz result renders in Kannada', (tester) async {
@@ -196,7 +229,7 @@ void main() {
       locale: const Locale('kn'),
     );
 
-    expect(find.text('ಶಾಭಾಷ್!'), findsOneWidget);
+    expect(find.text('ಉತ್ತಮ ಪ್ರಗತಿ!'), findsOneWidget);
     expect(find.text('ಈ ವಿಷಯ — ಪೂರ್ಣಗೊಂಡಿದೆ'), findsOneWidget);
     expect(find.text('ತಪ್ಪು'), findsOneWidget);
     expect(

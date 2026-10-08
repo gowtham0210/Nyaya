@@ -52,8 +52,7 @@ void main() {
     expect(session.isCorrect, isFalse);
   });
 
-  test('next moves to a fresh unanswered question and updates the counter',
-      () {
+  test('next moves to a fresh unanswered question and updates the counter', () {
     final session = QuizSessionViewModel();
 
     session.answer(1);

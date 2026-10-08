@@ -1,6 +1,6 @@
 # 010-topic-detail Topic Detail Screen
 
-Status: Implemented
+Status: Implemented (data superseded by 038: the topic now loads a real category; bookmark removed per 035)
 Last Updated: 2026-07-19
 Owner:
 Related ADRs: `../../adr/0001-adopt-spec-driven-development.md`

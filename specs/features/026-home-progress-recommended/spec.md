@@ -1,6 +1,9 @@
 # 026-home-progress-recommended Learning Progress, Ask Nyaya and Recommended
 
 Status: Implemented
+Note (2026-10-06): spec 040 renamed the Recommended section to "Explore by
+Category", made it Home's only category section, and removed the see-all
+grid; View All opens the Categories tab.
 Last Updated: 2026-09-28
 Owner: Gowtham
 Related ADRs: `../../adr/0002-data-layer.md`, `../../adr/0003-localization.md`

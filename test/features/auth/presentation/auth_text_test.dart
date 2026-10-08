@@ -11,16 +11,19 @@ import 'package:nyaya/features/auth/presentation/profession.dart';
 void main() {
   final hi = lookupAppLocalizations(const Locale('hi'));
 
-  test('AC-007 professions send stable English values whatever the language', () {
-    expect(Profession.values.map((p) => p.value), [
-      'Law Student',
-      'Lawyer / Advocate',
-      'Judge / Judicial Officer',
-      'Legal Professional',
-      'General Citizen',
-    ]);
-    expect(Profession.lawStudent.label(hi), 'कानून का छात्र');
-  });
+  test(
+    'AC-007 professions send stable English values whatever the language',
+    () {
+      expect(Profession.values.map((p) => p.value), [
+        'Law Student',
+        'Lawyer / Advocate',
+        'Judge / Judicial Officer',
+        'Legal Professional',
+        'General Citizen',
+      ]);
+      expect(Profession.lawStudent.label(hi), 'कानून का छात्र');
+    },
+  );
 
   group('authApiErrorText', () {
     test('offline uses the localized offline text', () {
@@ -30,21 +33,31 @@ void main() {
 
     test('a backend message is shown as returned', () {
       final error = AuthApiException.from(
-        const ApiServerException(401, 'फ़ोन या पासवर्ड गलत है', serverMessage: 'फ़ोन या पासवर्ड गलत है'),
+        const ApiServerException(
+          401,
+          'फ़ोन या पासवर्ड गलत है',
+          serverMessage: 'फ़ोन या पासवर्ड गलत है',
+        ),
       );
       expect(authApiErrorText(hi, error), 'फ़ोन या पासवर्ड गलत है');
     });
 
     test('no backend message falls back to localized generic text', () {
       final error = AuthApiException.from(
-        const ApiServerException(500, 'Request failed (500). Please try again.'),
+        const ApiServerException(
+          500,
+          'Request failed (500). Please try again.',
+        ),
       );
       expect(authApiErrorText(hi, error), hi.errorGeneric);
     });
   });
 
   test('an unhandled Firebase code uses localized generic text', () {
-    final error = FirebaseAuthException(code: 'internal-error', message: 'An internal error has occurred.');
+    final error = FirebaseAuthException(
+      code: 'internal-error',
+      message: 'An internal error has occurred.',
+    );
     expect(firebaseAuthErrorText(hi, error), hi.errorGeneric);
   });
 }

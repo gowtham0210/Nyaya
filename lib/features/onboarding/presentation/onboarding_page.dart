@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+
+import '../../../app/theme/app_tokens.dart';
+
+import '../../../app/theme/app_typography.dart';
 import '../../../core/presentation/widgets/nyaya_widgets.dart';
 import '../../auth/presentation/sign_in_page.dart';
 import '../../auth/presentation/sign_up_page.dart';
@@ -215,11 +219,10 @@ class _OnboardingPageState extends State<OnboardingPage> {
                   context.l10n.onboarding1Line1,
                   textAlign: TextAlign.center,
                   style: const TextStyle(
-                    fontSize: 22,
+                    fontSize: 26,
                     fontWeight: FontWeight.w600,
-                    color: Color(0xFF1F2A37),
-                    fontFamily: 'Serif',
-                    letterSpacing: -0.5,
+                    color: NyayaColors.ink,
+                    fontFamily: NyayaFonts.display,
                   ),
                 ),
                 const SizedBox(height: 6),
@@ -227,10 +230,10 @@ class _OnboardingPageState extends State<OnboardingPage> {
                   context.l10n.onboarding1Line2,
                   textAlign: TextAlign.center,
                   style: const TextStyle(
-                    fontSize: 22,
+                    fontSize: 26,
                     fontWeight: FontWeight.w600,
                     color: gold,
-                    fontFamily: 'Serif',
+                    fontFamily: NyayaFonts.display,
                   ),
                 ),
               ],
@@ -293,11 +296,10 @@ class _OnboardingPageState extends State<OnboardingPage> {
               context.l10n.onboarding2Line1,
               textAlign: TextAlign.center,
               style: const TextStyle(
-                fontSize: 24,
+                fontSize: 28,
                 fontWeight: FontWeight.w700,
                 color: navy,
-                fontFamily: 'Serif',
-                letterSpacing: -0.5,
+                fontFamily: NyayaFonts.display,
               ),
             ),
             const SizedBox(height: 6),
@@ -305,10 +307,10 @@ class _OnboardingPageState extends State<OnboardingPage> {
               context.l10n.onboarding2Line2,
               textAlign: TextAlign.center,
               style: const TextStyle(
-                fontSize: 24,
+                fontSize: 28,
                 fontWeight: FontWeight.w700,
                 color: gold,
-                fontFamily: 'Serif',
+                fontFamily: NyayaFonts.display,
               ),
             ),
 
@@ -390,11 +392,10 @@ class _OnboardingPageState extends State<OnboardingPage> {
               context.l10n.onboarding3Line1,
               textAlign: TextAlign.center,
               style: const TextStyle(
-                fontSize: 24,
+                fontSize: 28,
                 fontWeight: FontWeight.w700,
                 color: navy,
-                fontFamily: 'Serif',
-                letterSpacing: -0.5,
+                fontFamily: NyayaFonts.display,
               ),
             ),
             const SizedBox(height: 6),
@@ -402,10 +403,10 @@ class _OnboardingPageState extends State<OnboardingPage> {
               context.l10n.onboarding3Line2,
               textAlign: TextAlign.center,
               style: const TextStyle(
-                fontSize: 24,
+                fontSize: 28,
                 fontWeight: FontWeight.w700,
                 color: gold,
-                fontFamily: 'Serif',
+                fontFamily: NyayaFonts.display,
               ),
             ),
 

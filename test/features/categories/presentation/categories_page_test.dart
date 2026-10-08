@@ -36,6 +36,7 @@ void main() {
     WidgetTester tester,
     ApiClient client, {
     ValueChanged<CategoryData>? onCategorySelected,
+    VoidCallback? onFiltersPressed,
   }) async {
     tester.view.physicalSize = const Size(393, 852);
     tester.view.devicePixelRatio = 1;
@@ -53,11 +54,34 @@ void main() {
         home: CategoriesPage(
           viewModel: viewModel,
           onCategorySelected: onCategorySelected,
+          onFiltersPressed: onFiltersPressed,
         ),
       ),
     );
     await tester.pumpAndSettle();
   }
+
+  testWidgets('spec 035 AC-002 an unwired Filters button stays hidden', (
+    tester,
+  ) async {
+    await pumpCategoriesPage(tester, fakeBackend(threeCategories));
+
+    expect(find.byKey(const ValueKey('categories.filter')), findsNothing);
+  });
+
+  testWidgets('spec 035 AC-002 a wired Filters button reports taps', (
+    tester,
+  ) async {
+    var taps = 0;
+    await pumpCategoriesPage(
+      tester,
+      fakeBackend(threeCategories),
+      onFiltersPressed: () => taps++,
+    );
+
+    await tester.tap(find.byKey(const ValueKey('categories.filter')));
+    expect(taps, 1);
+  });
 
   testWidgets('AC-001 header renders', (tester) async {
     await pumpCategoriesPage(tester, fakeBackend(threeCategories));

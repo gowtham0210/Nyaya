@@ -26,12 +26,11 @@ class OnboardingNavBar extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
               child: Text(
-                context.l10n.commonSkip.toUpperCase(),
+                context.l10n.commonSkip,
                 style: const TextStyle(
                   color: navy,
-                  fontSize: 14,
-                  fontWeight: FontWeight.w700,
-                  letterSpacing: 1.0,
+                  fontSize: 15,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
             ),
@@ -45,20 +44,15 @@ class OnboardingNavBar extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    context.l10n.commonNext.toUpperCase(),
+                    context.l10n.commonNext,
                     style: const TextStyle(
                       color: gold,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w700,
-                      letterSpacing: 1.0,
+                      fontSize: 15,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                   const SizedBox(width: 4),
-                  const Icon(
-                    Icons.chevron_right,
-                    color: gold,
-                    size: 18,
-                  ),
+                  const Icon(Icons.chevron_right, color: gold, size: 18),
                 ],
               ),
             ),

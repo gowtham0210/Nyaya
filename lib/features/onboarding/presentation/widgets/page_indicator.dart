@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+
+import '../../../../app/theme/app_tokens.dart';
 import '../../../../core/presentation/widgets/nyaya_widgets.dart';
 
 class PageIndicator extends StatelessWidget {
@@ -24,7 +26,7 @@ class PageIndicator extends StatelessWidget {
           width: isActive ? 20 : 6,
           decoration: BoxDecoration(
             color: isActive ? gold : waveBeige,
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(NyayaRadii.sm),
           ),
         );
       }),

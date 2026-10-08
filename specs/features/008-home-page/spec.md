@@ -1,6 +1,8 @@
 # 008-home-page Home Page
 
 Status: Draft
+Note (2026-10-06): spec 040 replaced the wordmark header with a greeting,
+removed the sample category strip, and reordered sections.
 Last Updated: 2026-09-28
 Owner:
 Related ADRs: `../../adr/0001-adopt-spec-driven-development.md`
